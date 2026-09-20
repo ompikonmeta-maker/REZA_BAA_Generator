@@ -14,18 +14,27 @@ from ..deps import audit, current_user, get_db, require_admin
 router = APIRouter(prefix="/api/templates", tags=["templates"])
 
 
-def _inspect_workbook(path: Path) -> list[dict]:
+def _inspect_workbook(path: Path, preview_rows: int = 60, preview_cols: int = 26) -> list[dict]:
+    """Kembalikan tiap worksheet: sel non-kosong (koordinat+nilai) + merged ranges.
+
+    Dipakai UI Template Mapping untuk memilih anchor sel per kategori foto,
+    kolom LOG, dan anchor tabel inventory.
+    """
     import openpyxl
-    wb = openpyxl.load_workbook(path, read_only=True, data_only=True)
+    wb = openpyxl.load_workbook(path, data_only=True)
     sheets = []
     for ws in wb.worksheets:
-        preview = []
-        for r_i, row in enumerate(ws.iter_rows(min_row=1, max_row=5, values_only=True)):
-            preview.append([("" if v is None else str(v)) for v in row[:12]])
-            if r_i >= 4:
-                break
+        cells = []
+        maxr = min(ws.max_row or 0, preview_rows)
+        maxc = min(ws.max_column or 0, preview_cols)
+        for r in range(1, maxr + 1):
+            for c in range(1, maxc + 1):
+                v = ws.cell(r, c).value
+                if v is not None:
+                    cells.append({"ref": ws.cell(r, c).coordinate, "text": str(v)[:120]})
+        merged = [str(rng) for rng in ws.merged_cells.ranges]
         sheets.append({"name": ws.title, "max_row": ws.max_row or 0,
-                       "max_col": ws.max_column or 0, "preview": preview})
+                       "max_col": ws.max_column or 0, "cells": cells, "merged": merged})
     wb.close()
     return sheets
 
@@ -100,4 +109,55 @@ def activate_template(tpl_id: int, conn: sqlite3.Connection = Depends(get_db),
     conn.execute("UPDATE templates SET active=CASE WHEN id=? THEN 1 ELSE 0 END", (tpl_id,))
     conn.commit()
     audit(conn, user, "activate", "template", tpl_id)
+    return {"ok": True}
+
+
+@router.get("/{tpl_id}")
+def get_template(tpl_id: int, conn: sqlite3.Connection = Depends(get_db),
+                 user=Depends(current_user)):
+    import json
+    row = conn.execute("SELECT * FROM templates WHERE id=?", (tpl_id,)).fetchone()
+    if not row:
+        raise HTTPException(404, "Template tidak ditemukan")
+    d = dict(row)
+    d["config"] = json.loads(row["config_json"]) if row["config_json"] else {}
+    d.pop("config_json", None)
+    return d
+
+
+@router.get("/{tpl_id}/sheets")
+def template_sheets(tpl_id: int, conn: sqlite3.Connection = Depends(get_db),
+                    user=Depends(require_admin)):
+    """Baca ulang worksheet template terdaftar (untuk UI mapping)."""
+    row = conn.execute("SELECT * FROM templates WHERE id=?", (tpl_id,)).fetchone()
+    if not row:
+        raise HTTPException(404, "Template tidak ditemukan")
+    if not Path(row["path"]).exists():
+        raise HTTPException(400, "File template hilang di server")
+    return {"sheets": _inspect_workbook(Path(row["path"]))}
+
+
+class MappingIn(BaseModel):
+    config: dict            # {log:{...}, detail:{...}} anchor mapping
+    sheet_log: str | None = None
+    sheet_detail: str | None = None
+
+
+@router.put("/{tpl_id}/mapping")
+def save_mapping(tpl_id: int, body: MappingIn, conn: sqlite3.Connection = Depends(get_db),
+                 user=Depends(require_admin)):
+    import json
+    row = conn.execute("SELECT * FROM templates WHERE id=?", (tpl_id,)).fetchone()
+    if not row:
+        raise HTTPException(404, "Template tidak ditemukan")
+    fields = ["config_json=?"]
+    params: list = [json.dumps(body.config, ensure_ascii=False)]
+    if body.sheet_log:
+        fields.append("sheet_log=?"); params.append(body.sheet_log)
+    if body.sheet_detail:
+        fields.append("sheet_detail=?"); params.append(body.sheet_detail)
+    params.append(tpl_id)
+    conn.execute(f"UPDATE templates SET {','.join(fields)} WHERE id=?", params)
+    conn.commit()
+    audit(conn, user, "save_mapping", "template", tpl_id)
     return {"ok": True}

@@ -10,6 +10,7 @@ import socket
 import uvicorn
 
 from app import config
+from app.main import app
 
 
 def _lan_ip() -> str:
@@ -33,7 +34,8 @@ def main() -> None:
     print(f"  Data   : {config.DATA_DIR}")
     print("  Login awal: admin / admin  (wajib ganti password)")
     print("=" * 56)
-    uvicorn.run("app.main:app", host=config.HOST, port=config.PORT, reload=False)
+    # Objek app langsung (bukan import string) supaya aman saat dibundel exe
+    uvicorn.run(app, host=config.HOST, port=config.PORT, reload=False)
 
 
 if __name__ == "__main__":

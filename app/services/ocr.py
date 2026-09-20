@@ -5,6 +5,7 @@ kosong dan ``available()`` bernilai False — app tetap jalan (OCR opsional).
 """
 from __future__ import annotations
 
+import os
 import re
 from pathlib import Path
 
@@ -14,6 +15,31 @@ try:
     _IMPORT_OK = True
 except Exception:  # pragma: no cover
     _IMPORT_OK = False
+
+
+def _configure_tesseract() -> None:
+    """Cari binary Tesseract secara portabel (tanpa install admin).
+
+    Prioritas: env REZA_BAA_TESSERACT > folder ``tesseract/`` di samping exe/app
+    > biarkan PATH sistem yang menentukan.
+    """
+    if not _IMPORT_OK:
+        return
+    from .. import config
+    candidates = []
+    env = os.environ.get("REZA_BAA_TESSERACT")
+    if env:
+        candidates.append(Path(env))
+    for name in ("tesseract.exe", "tesseract"):
+        candidates.append(config.BASE_DIR / "tesseract" / name)
+    for cand in candidates:
+        if cand and cand.exists():
+            pytesseract.pytesseract.tesseract_cmd = str(cand)
+            return
+
+
+if _IMPORT_OK:
+    _configure_tesseract()
 
 # Pola serial: token alfanumerik cukup panjang, boleh mengandung - .
 _SERIAL_RE = re.compile(r"\b[A-Z0-9][A-Z0-9\-\.]{5,}[A-Z0-9]\b")

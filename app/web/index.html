@@ -1,0 +1,320 @@
+<!doctype html>
+<html lang="id" data-theme="light">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REZA BAA Generator</title>
+<style>
+:root{
+  --primary:#006a6a;--on-primary:#fff;--primary-container:#6ff7f6;--on-primary-container:#002020;
+  --secondary-container:#cce8e7;--on-secondary-container:#051f1f;--tertiary-container:#d3e4ff;--on-tertiary-container:#041c35;
+  --error:#ba1a1a;--error-container:#ffdad6;--on-error-container:#410002;
+  --on-surface:#161d1d;--surface:#f4fbfa;--surface-low:#eff5f4;--surface-c:#e9efee;--surface-high:#e3e9e9;--surface-highest:#dde4e3;
+  --on-surface-variant:#3f4948;--outline:#6f7978;--outline-variant:#bec9c8;--ctrl-r:11px;--card-r:16px;
+}
+:root[data-theme="dark"]{
+  --primary:#4cdada;--on-primary:#003737;--primary-container:#004f4f;--on-primary-container:#6ff7f6;
+  --secondary-container:#324b4b;--on-secondary-container:#cce8e7;--tertiary-container:#334863;--on-tertiary-container:#d3e4ff;
+  --on-surface:#dde4e3;--surface:#0e1514;--surface-low:#161d1d;--surface-c:#1a2121;--surface-high:#252b2b;--surface-highest:#303636;
+  --on-surface-variant:#bec9c8;--outline:#899392;--outline-variant:#3f4948;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-high);color:var(--on-surface);font:400 15px/1.5 "Segoe UI",Roboto,system-ui,sans-serif}
+a{color:var(--primary)}
+.hidden{display:none!important}
+.btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 18px;border:none;border-radius:var(--ctrl-r);font:600 14px/1 inherit;cursor:pointer;background:var(--primary);color:var(--on-primary)}
+.btn.tonal{background:var(--secondary-container);color:var(--on-secondary-container)}
+.btn.text{background:transparent;color:var(--primary)}
+.btn.sm{height:32px;padding:0 12px;font-size:13px}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+input,select{font:inherit;height:42px;padding:0 12px;border:1px solid var(--outline);border-radius:var(--ctrl-r);background:var(--surface);color:var(--on-surface);width:100%}
+label{font-size:12px;color:var(--on-surface-variant)}
+.card{background:var(--surface);border:1px solid var(--outline-variant);border-radius:var(--card-r);padding:20px;margin-bottom:16px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:9px;background:var(--secondary-container);color:var(--on-secondary-container);font-size:12px;font-weight:600}
+.chip.warn{background:var(--error-container);color:var(--on-error-container)}
+h2{font-size:20px;margin:0 0 4px}h3{font-size:16px;margin:0 0 12px}
+.muted{color:var(--on-surface-variant);font-size:13px}
+table{width:100%;border-collapse:collapse;font-size:14px}
+th,td{text-align:left;padding:8px;border-bottom:1px solid var(--outline-variant)}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#111;color:#fff;padding:10px 16px;border-radius:10px;z-index:99;opacity:0;transition:opacity .2s}
+.toast.show{opacity:.95}
+/* login */
+#login{min-height:100vh;display:grid;place-items:center;padding:20px}
+#login .box{width:100%;max-width:360px}
+/* shell */
+.shell{display:flex;min-height:100vh}
+.nav{width:240px;flex:0 0 auto;background:var(--surface-low);padding:14px;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:18px;padding:8px;margin-bottom:8px}
+.brand .dot{width:30px;height:30px;border-radius:9px;background:var(--primary);color:var(--on-primary);display:grid;place-items:center}
+.navitem{display:flex;align-items:center;gap:10px;padding:11px 14px;border-radius:var(--ctrl-r);cursor:pointer;color:var(--on-surface-variant);font-weight:500}
+.navitem:hover{background:color-mix(in srgb,var(--primary) 8%,transparent)}
+.navitem.active{background:var(--secondary-container);color:var(--on-secondary-container);font-weight:700}
+.main{flex:1 1 auto;min-width:0;padding:24px;overflow:auto}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}
+.mono{font-family:ui-monospace,Consolas,monospace}
+.refbox{max-height:280px;overflow:auto;border:1px solid var(--outline-variant);border-radius:10px;padding:10px;font-size:12px}
+.refbox code{cursor:pointer;display:inline-block;margin:2px;padding:1px 5px;border-radius:6px;background:var(--surface-c)}
+.map-row{display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;margin-bottom:8px}
+.map-row.wide{grid-template-columns:1fr 1fr}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div id="login">
+  <div class="box card">
+    <div class="brand"><span class="dot">B</span> REZA BAA</div>
+    <h2>Masuk</h2>
+    <p class="muted">Login awal: <b>admin</b> / <b>admin</b></p>
+    <div style="margin:14px 0"><label>Username</label><input id="lg-user" autocomplete="username"></div>
+    <div style="margin:14px 0"><label>Password</label><input id="lg-pass" type="password" autocomplete="current-password"></div>
+    <button class="btn" id="lg-btn" style="width:100%">Masuk</button>
+    <p id="lg-err" class="chip warn hidden" style="margin-top:12px"></p>
+  </div>
+</div>
+
+<!-- APP -->
+<div id="app" class="shell hidden">
+  <aside class="nav">
+    <div class="brand"><span class="dot">B</span> REZA BAA</div>
+    <div class="navitem active" data-view="templates">📄 Template & Mapping</div>
+    <div class="navitem" data-view="locations">📋 Log Lokasi</div>
+    <div class="navitem" data-view="users">👥 Users</div>
+    <div style="flex:1"></div>
+    <div class="navitem" id="themeToggle">🌗 Tema</div>
+    <div class="navitem" id="logoutBtn">🚪 Logout <span id="who" class="muted"></span></div>
+  </aside>
+  <main class="main">
+    <!-- TEMPLATES -->
+    <section id="v-templates">
+      <h2>Template & Mapping</h2>
+      <p class="muted">Daftarkan template Excel, pilih worksheet LOG & detail, lalu petakan sel (mapping) untuk kolom LOG, tabel inventory, dan anchor foto per kategori.</p>
+
+      <div class="card">
+        <h3>1) Upload template baru</h3>
+        <div class="grid">
+          <div><label>File .xlsx</label><input id="tpl-file" type="file" accept=".xlsx,.xlsm"></div>
+          <div><label>Nama template</label><input id="tpl-name" placeholder="mis. BAA Starlink"></div>
+        </div>
+        <div style="margin-top:12px"><button class="btn" id="tpl-inspect">Periksa worksheet</button></div>
+        <div id="tpl-register" class="hidden" style="margin-top:14px">
+          <div class="grid">
+            <div><label>Worksheet LOG</label><select id="tpl-log"></select></div>
+            <div><label>Worksheet Detail (per lokasi)</label><select id="tpl-detail"></select></div>
+          </div>
+          <div style="margin-top:12px"><button class="btn" id="tpl-do-register">Daftarkan & aktifkan</button></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Template terdaftar</h3>
+        <table id="tpl-table"><thead><tr><th>Nama</th><th>LOG</th><th>Detail</th><th>Aktif</th><th></th></tr></thead><tbody></tbody></table>
+      </div>
+
+      <div id="mapping" class="card hidden">
+        <h3>2) Mapping — <span id="map-tpl-name" class="mono"></span></h3>
+        <div class="grid">
+          <div><label>Sheet LOG</label><select id="map-log"></select></div>
+          <div><label>Sheet Detail</label><select id="map-detail"></select></div>
+        </div>
+
+        <h3 style="margin-top:18px">Kolom LOG (huruf kolom, mis. B)</h3>
+        <div class="grid" id="map-logcols"></div>
+        <div class="map-row" style="max-width:280px;margin-top:8px"><label>Baris mulai data LOG</label><input id="map-logstart" type="number" value="3"></div>
+
+        <h3 style="margin-top:18px">Tabel Inventory (sheet detail)</h3>
+        <div class="grid" id="map-invcols"></div>
+        <div class="grid" style="margin-top:8px">
+          <div><label>Baris mulai</label><input id="map-invstart" type="number" value="32"></div>
+          <div><label>Maks baris</label><input id="map-invmax" type="number" value="5"></div>
+        </div>
+
+        <h3 style="margin-top:18px">Anchor Foto per Kategori (sel kiri-atas, mis. B27)</h3>
+        <p class="muted">Klik referensi sel di panel kanan untuk menyalin. Kosongkan bila kategori tak ditempel ke Excel.</p>
+        <div style="display:grid;grid-template-columns:1fr 300px;gap:16px">
+          <div id="map-photos"></div>
+          <div>
+            <label>Referensi sel sheet detail (klik untuk salin)</label>
+            <div class="refbox" id="map-ref"></div>
+            <div style="margin-top:8px" class="grid">
+              <div><label>Lebar foto max (px)</label><input id="map-pw" type="number" value="320"></div>
+              <div><label>Tinggi foto max (px)</label><input id="map-ph" type="number" value="240"></div>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:16px;display:flex;gap:8px">
+          <button class="btn" id="map-save">Simpan mapping</button>
+          <button class="btn text" id="map-close">Tutup</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- LOCATIONS -->
+    <section id="v-locations" class="hidden">
+      <h2>Log Lokasi</h2>
+      <div class="card"><table id="loc-table"><thead><tr><th>Kode</th><th>Nama</th><th>Inv</th><th>Foto</th><th>Status</th><th></th></tr></thead><tbody></tbody></table></div>
+    </section>
+
+    <!-- USERS -->
+    <section id="v-users" class="hidden">
+      <h2>Users</h2>
+      <div class="card"><table id="usr-table"><thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Aktif</th></tr></thead><tbody></tbody></table></div>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const $ = s => document.querySelector(s);
+const api = async (url, opts={}) => {
+  const r = await fetch(url, {credentials:'same-origin', headers:{'Content-Type':'application/json'}, ...opts});
+  if(!r.ok){ let d; try{d=await r.json()}catch{d={detail:r.statusText}} throw new Error(d.detail||('HTTP '+r.status)); }
+  const ct=r.headers.get('content-type')||''; return ct.includes('json')?r.json():r;
+};
+const toast = m => { const t=$('#toast'); t.textContent=m; t.classList.add('show'); setTimeout(()=>t.classList.remove('show'),2200); };
+
+// ---- Defaults mapping (mirror app/services/excel.py) ----
+const LOG_FIELDS = ["no","lokasi","nama_barang","merk_type","jumlah","sn_tagging","keterangan","foto_lengkap"];
+const INV_FIELDS = ["nama_barang","merk_type","jumlah","sn_tagging","keterangan"];
+const DEFAULT_MAP = {
+  log:{start_row:3, columns:{no:"A",lokasi:"B",nama_barang:"C",merk_type:"D",jumlah:"E",sn_tagging:"F",keterangan:"G",foto_lengkap:"H"}},
+  detail:{location_cells:{}, inventory:{start_row:32,max_rows:5,cols:{nama_barang:"B",merk_type:"C",jumlah:"E",sn_tagging:"F",keterangan:"H"}}, photos:{}, photo_max_w:320, photo_max_h:240}
+};
+
+let STATE = {user:null, cats:[], pending:null, mapTplId:null, sheets:[]};
+
+// ---------- AUTH ----------
+async function boot(){
+  try{ STATE.user = await api('/api/auth/me'); showApp(); }
+  catch{ $('#login').classList.remove('hidden'); $('#app').classList.add('hidden'); }
+}
+$('#lg-btn').onclick = async () => {
+  try{
+    await api('/api/auth/login',{method:'POST',body:JSON.stringify({username:$('#lg-user').value,password:$('#lg-pass').value})});
+    STATE.user = await api('/api/auth/me'); showApp();
+  }catch(e){ const el=$('#lg-err'); el.textContent=e.message; el.classList.remove('hidden'); }
+};
+$('#lg-pass').addEventListener('keydown',e=>{if(e.key==='Enter')$('#lg-btn').click()});
+$('#logoutBtn').onclick = async () => { await api('/api/auth/logout',{method:'POST'}); location.reload(); };
+$('#themeToggle').onclick = () => { const r=document.documentElement; r.dataset.theme = r.dataset.theme==='dark'?'light':'dark'; };
+
+async function showApp(){
+  $('#login').classList.add('hidden'); $('#app').classList.remove('hidden');
+  $('#who').textContent = '('+STATE.user.username+')';
+  const s = await api('/api/settings'); STATE.cats = s.photo_categories||[];
+  loadTemplates(); loadLocations();
+  if(STATE.user.role==='admin') loadUsers(); else $('.navitem[data-view=users]').classList.add('hidden');
+}
+
+// ---------- NAV ----------
+document.querySelectorAll('.navitem[data-view]').forEach(n=>n.onclick=()=>{
+  document.querySelectorAll('.navitem[data-view]').forEach(x=>x.classList.remove('active'));
+  n.classList.add('active');
+  ['templates','locations','users'].forEach(v=>$('#v-'+v).classList.toggle('hidden', v!==n.dataset.view));
+});
+
+// ---------- TEMPLATES ----------
+$('#tpl-inspect').onclick = async () => {
+  const f = $('#tpl-file').files[0]; if(!f){toast('Pilih file dulu');return;}
+  const fd = new FormData(); fd.append('file', f);
+  try{
+    const r = await fetch('/api/templates/inspect',{method:'POST',credentials:'same-origin',body:fd});
+    if(!r.ok){throw new Error((await r.json()).detail)}
+    const d = await r.json(); STATE.pending = d;
+    const opts = d.sheets.map(s=>`<option>${s.name}</option>`).join('');
+    $('#tpl-log').innerHTML = opts; $('#tpl-detail').innerHTML = opts;
+    if(d.sheets[1]) $('#tpl-detail').selectedIndex=1;
+    $('#tpl-register').classList.remove('hidden');
+    toast('Ditemukan '+d.sheets.length+' worksheet');
+  }catch(e){toast('Gagal: '+e.message)}
+};
+$('#tpl-do-register').onclick = async () => {
+  const d = STATE.pending; if(!d) return;
+  try{
+    await api('/api/templates/register',{method:'POST',body:JSON.stringify({
+      pending_file:d.pending_file, name:$('#tpl-name').value||d.orig_name, orig_name:d.orig_name,
+      sheet_log:$('#tpl-log').value, sheet_detail:$('#tpl-detail').value, activate:true})});
+    $('#tpl-register').classList.add('hidden'); $('#tpl-file').value=''; $('#tpl-name').value='';
+    toast('Template terdaftar & aktif'); loadTemplates();
+  }catch(e){toast('Gagal: '+e.message)}
+};
+async function loadTemplates(){
+  const rows = await api('/api/templates');
+  $('#tpl-table tbody').innerHTML = rows.map(t=>`<tr>
+    <td>${t.name}</td><td class="mono">${t.sheet_log}</td><td class="mono">${t.sheet_detail}</td>
+    <td>${t.active?'<span class="chip">aktif</span>':''}</td>
+    <td style="text-align:right">
+      <button class="btn sm tonal" onclick="openMapping(${t.id})">Mapping</button>
+      ${t.active?'':`<button class="btn sm text" onclick="activateTpl(${t.id})">Aktifkan</button>`}
+    </td></tr>`).join('') || '<tr><td colspan=5 class="muted">Belum ada template</td></tr>';
+}
+window.activateTpl = async id => { await api(`/api/templates/${id}/activate`,{method:'POST'}); toast('Diaktifkan'); loadTemplates(); };
+
+// ---------- MAPPING ----------
+window.openMapping = async (id) => {
+  STATE.mapTplId = id;
+  const tpl = await api(`/api/templates/${id}`);
+  const sh = await api(`/api/templates/${id}/sheets`); STATE.sheets = sh.sheets;
+  const map = deepMerge(structuredClone(DEFAULT_MAP), tpl.config||{});
+  $('#map-tpl-name').textContent = tpl.name;
+  const opts = STATE.sheets.map(s=>`<option>${s.name}</option>`).join('');
+  $('#map-log').innerHTML=opts; $('#map-detail').innerHTML=opts;
+  $('#map-log').value = tpl.sheet_log; $('#map-detail').value = tpl.sheet_detail;
+  // LOG columns
+  $('#map-logcols').innerHTML = LOG_FIELDS.map(f=>`<div><label>${f}</label><input data-log="${f}" value="${map.log.columns[f]||''}"></div>`).join('');
+  $('#map-logstart').value = map.log.start_row||3;
+  // inventory
+  $('#map-invcols').innerHTML = INV_FIELDS.map(f=>`<div><label>${f}</label><input data-inv="${f}" value="${map.detail.inventory.cols[f]||''}"></div>`).join('');
+  $('#map-invstart').value = map.detail.inventory.start_row||32;
+  $('#map-invmax').value = map.detail.inventory.max_rows||5;
+  // photos
+  $('#map-photos').innerHTML = STATE.cats.map(c=>`<div class="map-row"><label>${c.label}${c.ocr?' 🔎':''}</label><input data-photo="${c.key}" placeholder="mis. B27" value="${(map.detail.photos||{})[c.key]||''}"></div>`).join('');
+  $('#map-pw').value = map.detail.photo_max_w||320; $('#map-ph').value = map.detail.photo_max_h||240;
+  renderRef($('#map-detail').value);
+  $('#map-detail').onchange = () => renderRef($('#map-detail').value);
+  $('#mapping').classList.remove('hidden');
+  $('#mapping').scrollIntoView({behavior:'smooth'});
+};
+function renderRef(sheetName){
+  const s = STATE.sheets.find(x=>x.name===sheetName); const box=$('#map-ref');
+  if(!s){box.innerHTML='<span class="muted">—</span>';return;}
+  box.innerHTML = s.cells.map(c=>`<code title="${c.text.replace(/"/g,'&quot;')}" onclick="navigator.clipboard&&navigator.clipboard.writeText('${c.ref}');toast('Disalin: ${c.ref}')">${c.ref}: ${c.text.slice(0,22)}</code>`).join('') || '<span class="muted">kosong</span>';
+}
+$('#map-save').onclick = async () => {
+  const cfg = structuredClone(DEFAULT_MAP);
+  document.querySelectorAll('[data-log]').forEach(i=>cfg.log.columns[i.dataset.log]=i.value.trim().toUpperCase());
+  cfg.log.start_row = parseInt($('#map-logstart').value)||3;
+  document.querySelectorAll('[data-inv]').forEach(i=>cfg.detail.inventory.cols[i.dataset.inv]=i.value.trim().toUpperCase());
+  cfg.detail.inventory.start_row = parseInt($('#map-invstart').value)||32;
+  cfg.detail.inventory.max_rows = parseInt($('#map-invmax').value)||5;
+  cfg.detail.photos = {};
+  document.querySelectorAll('[data-photo]').forEach(i=>{ if(i.value.trim()) cfg.detail.photos[i.dataset.photo]=i.value.trim().toUpperCase(); });
+  cfg.detail.photo_max_w = parseInt($('#map-pw').value)||320;
+  cfg.detail.photo_max_h = parseInt($('#map-ph').value)||240;
+  try{
+    await api(`/api/templates/${STATE.mapTplId}/mapping`,{method:'PUT',body:JSON.stringify({config:cfg,sheet_log:$('#map-log').value,sheet_detail:$('#map-detail').value})});
+    toast('Mapping tersimpan'); loadTemplates();
+  }catch(e){toast('Gagal: '+e.message)}
+};
+$('#map-close').onclick = () => $('#mapping').classList.add('hidden');
+
+// ---------- LOCATIONS / USERS ----------
+async function loadLocations(){
+  const rows = await api('/api/locations');
+  $('#loc-table tbody').innerHTML = rows.map(l=>`<tr><td class="mono">${l.code}</td><td>${l.data.nama_lokasi||l.name||''}</td>
+    <td>${l.inv_count}</td><td>${l.photo_count}</td><td>${l.status}</td>
+    <td style="text-align:right"><a href="/api/export/excel?scope=one&loc_id=${l.id}">Excel</a> · <a href="/api/export/pdf?scope=one&loc_id=${l.id}">PDF</a></td></tr>`).join('')
+    || '<tr><td colspan=6 class="muted">Belum ada lokasi</td></tr>';
+}
+async function loadUsers(){
+  try{ const rows = await api('/api/users');
+    $('#usr-table tbody').innerHTML = rows.map(u=>`<tr><td>${u.username}</td><td>${u.full_name||''}</td><td>${u.role}</td><td>${u.active?'ya':'tidak'}</td></tr>`).join('');
+  }catch{}
+}
+function deepMerge(base, over){ for(const k in (over||{})){ if(over[k]&&typeof over[k]==='object'&&!Array.isArray(over[k])) base[k]=deepMerge(base[k]||{},over[k]); else base[k]=over[k]; } return base; }
+
+boot();
+</script>
+</body>
+</html>
