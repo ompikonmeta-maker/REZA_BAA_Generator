@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>REZA BAA Generator — Mockup</title>
+
+<!-- Toolkit MD3 Expressive (repo ini) -->
+<link rel="stylesheet" href="md3-tokens.css">
+<script src="md3-dynamic-color.js"></script>
+<script src="md3-components.js" defer></script>
+
+<style>
+  :root{
+    --nav-w:272px; --rail-w:80px; --card-r:16px; --ctrl-r:11px;
+    --md-sys-motion-spring-default-spatial:500ms cubic-bezier(0.38,1.21,0.22,1);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface);
+       font:var(--md-sys-typescale-body-large);-webkit-font-smoothing:antialiased}
+  md-button::part(button),md-icon-button::part(button),md-fab::part(button),
+  md-text-field::part(field),md-chip::part(chip){border-radius:var(--ctrl-r)!important}
+  md-card::part(card){border-radius:var(--card-r)!important}
+
+  .shell{display:flex;height:100vh;gap:16px;padding:16px}
+  .nav{flex:0 0 auto;width:var(--nav-w);display:flex;flex-direction:column;
+       background:var(--md-sys-color-surface-container-low);border-radius:var(--card-r);
+       box-shadow:var(--md-sys-elevation-level2);padding:12px;overflow:hidden;
+       transition:width var(--md-sys-motion-spring-default-spatial)}
+  .shell.collapsed .nav{width:var(--rail-w)}
+  .nav-head{display:flex;align-items:center;gap:12px;height:56px;padding:0 8px}
+  .brand-mark{font-size:30px;color:var(--md-sys-color-primary);font-variation-settings:'FILL' 1,'wght' 500,'opsz' 30}
+  .brand-name{font:var(--md-sys-typescale-title-large);margin-right:auto;white-space:nowrap;overflow:hidden;max-width:170px;
+       transition:opacity .25s .14s,max-width .3s .14s}
+  .nav-scroll{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;min-height:0;margin-top:8px}
+  .section-label{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);
+       padding:16px 16px 8px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;max-height:40px;overflow:hidden;
+       transition:opacity .25s,max-height .3s,padding .3s}
+  .nav-item{position:relative;display:flex;align-items:center;gap:16px;height:52px;padding:0 16px;margin:4px 0;
+       border-radius:var(--ctrl-r);color:var(--md-sys-color-on-surface-variant);cursor:pointer;text-decoration:none;
+       overflow:hidden;white-space:nowrap;transition:background .15s,color .15s,padding var(--md-sys-motion-spring-default-spatial)}
+  .nav-item::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .15s}
+  .nav-item:hover::before{opacity:.08}
+  .nav-item .md-icon{flex:0 0 auto;font-size:24px}
+  .nav-item .lbl{font:var(--md-sys-typescale-label-large);margin-right:auto;overflow:hidden;max-width:180px;white-space:nowrap;
+       transition:opacity .25s .14s,max-width .3s .14s}
+  .nav-item .badge{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--md-sys-color-primary);
+       color:var(--md-sys-color-on-primary);font:var(--md-sys-typescale-label-small);display:grid;place-items:center;overflow:hidden;
+       transition:opacity .25s .14s,max-width .3s .14s;max-width:40px}
+  .nav-item.active{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
+  .nav-item.active .md-icon{font-variation-settings:'FILL' 1,'wght' 500}
+  .nav-item.active .lbl{font-weight:700}
+  .nav-divider{height:1px;background:var(--md-sys-color-outline-variant);margin:12px 8px}
+  .nav-foot{flex:0 0 auto;padding-top:8px}
+  .profile{display:flex;align-items:center;gap:12px;height:56px;padding:0 8px;border-radius:var(--ctrl-r);overflow:hidden;white-space:nowrap;
+       transition:padding var(--md-sys-motion-spring-default-spatial)}
+  .avatar{width:40px;height:40px;border-radius:var(--ctrl-r);flex:0 0 auto;background:var(--md-sys-color-tertiary-container);
+       color:var(--md-sys-color-on-tertiary-container);display:grid;place-items:center;font:var(--md-sys-typescale-title-medium)}
+  .profile .who{display:flex;flex-direction:column;overflow:hidden;max-width:160px;transition:opacity .25s .14s,max-width .3s .14s}
+  .profile .who b{font:var(--md-sys-typescale-title-small);color:var(--md-sys-color-on-surface)}
+  .profile .who span{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant)}
+  /* collapsed */
+  .shell.collapsed .brand-name,.shell.collapsed .nav-item .lbl,.shell.collapsed .nav-item .badge,.shell.collapsed .profile .who
+    {opacity:0;max-width:0;min-width:0;margin:0}
+  .shell.collapsed .nav-item{padding-left:calc(var(--rail-w)/2 - 24px);padding-right:0;gap:0}
+  .shell.collapsed .profile{padding-left:calc(var(--rail-w)/2 - 32px);padding-right:0;gap:0}
+  .shell.collapsed .section-label{opacity:0;max-height:0;padding-top:0;padding-bottom:0}
+  .shell.collapsed .nav-head{justify-content:center;gap:0;padding:0}
+  .shell.collapsed .brand-name{display:none}
+
+  .canvas{flex:1 1 auto;min-width:0;background:var(--md-sys-color-surface);border-radius:var(--card-r);
+       box-shadow:var(--md-sys-elevation-level1);overflow:hidden;display:flex;flex-direction:column}
+  .topbar{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
+  .topbar .page-title{font:var(--md-sys-typescale-headline-small);margin-right:auto}
+  .canvas-body{padding:24px;overflow-y:auto}
+
+  .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
+  @media(max-width:1000px){.grid2{grid-template-columns:1fr}}
+  .card-head{display:flex;align-items:center;gap:8px;margin-bottom:16px}
+  .card-head h3{font:var(--md-sys-typescale-title-medium);margin:0 auto 0 0;color:var(--md-sys-color-on-surface)}
+  .field{margin-bottom:14px}
+  .field md-text-field{width:100%}
+  .serial-row{display:flex;gap:8px;align-items:flex-end}
+  .serial-row md-text-field{flex:1 1 auto}
+  .hint{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin:4px 0 0}
+
+  .dropzone{border:2px dashed var(--md-sys-color-outline);border-radius:var(--card-r);padding:24px;text-align:center;
+       color:var(--md-sys-color-on-surface-variant);cursor:pointer;transition:background .2s,border-color .2s}
+  .dropzone:hover{background:color-mix(in srgb,var(--md-sys-color-primary) 6%,transparent);border-color:var(--md-sys-color-primary)}
+  .dropzone .md-icon{font-size:40px;color:var(--md-sys-color-primary)}
+  .thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;margin-top:14px}
+  .thumb{position:relative;aspect-ratio:1;border-radius:var(--ctrl-r);overflow:hidden;background:var(--md-sys-color-surface-container-highest);
+       display:grid;place-items:center;color:var(--md-sys-color-on-surface-variant)}
+  .thumb .ocr-badge{position:absolute;left:6px;bottom:6px;background:var(--md-sys-color-tertiary-container);
+       color:var(--md-sys-color-on-tertiary-container);font:var(--md-sys-typescale-label-small);padding:2px 6px;border-radius:999px}
+  .thumb .del{position:absolute;top:4px;right:4px}
+
+  /* log list — card-reveal directional feel */
+  .log-item{display:flex;align-items:center;gap:14px;padding:12px;border-radius:var(--ctrl-r);
+       animation:rise .5s var(--md-sys-motion-easing-emphasized-decelerate) both}
+  .log-item+.log-item{margin-top:6px}
+  .log-item:hover{background:color-mix(in srgb,var(--md-sys-color-primary) 5%,transparent)}
+  @keyframes rise{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+  .log-item .li-ic{width:40px;height:40px;border-radius:var(--ctrl-r);flex:0 0 auto;display:grid;place-items:center;
+       background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
+  .li-txt{flex:1 1 auto;min-width:0}
+  .li-txt b{font:var(--md-sys-typescale-title-small);display:block}
+  .li-txt span{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant)}
+  .li-photos{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);display:inline-flex;align-items:center;gap:3px}
+
+  .banner{display:flex;align-items:center;gap:12px;background:var(--md-sys-color-primary-container);
+       color:var(--md-sys-color-on-primary-container);padding:12px 16px;border-radius:var(--card-r);margin-bottom:16px}
+  .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
+
+  /* simple dropdown menu */
+  .menu{position:fixed;z-index:80;min-width:180px;background:var(--md-sys-color-surface-container-high);
+       border-radius:var(--ctrl-r);box-shadow:var(--md-sys-elevation-level3);padding:6px;opacity:0;pointer-events:none;
+       transform-origin:top right;transform:scaleY(.5);transition:opacity .15s,transform var(--md-sys-motion-spring-fast-spatial)}
+  .menu.open{opacity:1;pointer-events:auto;transform:scaleY(1)}
+  .menu button{display:flex;align-items:center;gap:12px;width:100%;border:none;background:none;cursor:pointer;
+       padding:10px 12px;border-radius:8px;color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-medium);text-align:left}
+  .menu button:hover{background:color-mix(in srgb,var(--md-sys-color-primary) 8%,transparent)}
+  .menu .md-icon{font-size:20px;color:var(--md-sys-color-on-surface-variant)}
+</style>
+</head>
+<body>
+<div class="shell" id="shell">
+  <!-- SIDEBAR -->
+  <aside class="nav">
+    <div class="nav-head">
+      <span class="brand-mark md-icon">inventory_2</span>
+      <span class="brand-name">REZA BAA</span>
+      <md-icon-button id="railToggle" variant="standard" aria-label="Ciutkan"><span class="md-icon">menu_open</span></md-icon-button>
+    </div>
+    <div class="nav-scroll">
+      <a class="nav-item active"><span class="md-icon">edit_note</span><span class="lbl">Entry Data</span></a>
+      <a class="nav-item"><span class="md-icon">table_rows</span><span class="lbl">Log Data</span><span class="badge">128</span></a>
+      <a class="nav-item"><span class="md-icon">description</span><span class="lbl">Template</span></a>
+      <a class="nav-item"><span class="md-icon">download</span><span class="lbl">Output</span></a>
+      <div class="section-label">Admin</div>
+      <a class="nav-item"><span class="md-icon">group</span><span class="lbl">Users</span></a>
+      <a class="nav-item"><span class="md-icon">history</span><span class="lbl">Audit Log</span></a>
+    </div>
+    <div class="nav-foot">
+      <div class="nav-divider"></div>
+      <a class="nav-item"><span class="md-icon">settings</span><span class="lbl">Pengaturan</span></a>
+      <div class="profile"><div class="avatar">RZ</div><div class="who"><b>Reza</b><span>Operator</span></div></div>
+    </div>
+  </aside>
+
+  <!-- CANVAS -->
+  <main class="canvas">
+    <header class="topbar">
+      <md-icon-button id="topToggle" variant="standard" aria-label="Toggle"><span class="md-icon">menu</span></md-icon-button>
+      <span class="page-title">Entry Data</span>
+      <md-chip variant="assist" icon="verified">Template: BAA_Form.xlsx</md-chip>
+      <md-icon-button id="themeBtn" variant="tonal" aria-label="Tema"><span class="md-icon">dark_mode</span></md-icon-button>
+    </header>
+
+    <div class="canvas-body">
+      <div class="banner">
+        <span class="md-icon">info</span>
+        <span class="md-body-medium">Isi field, unggah foto, atau scan serial number dari foto. Semua tersimpan ke database pusat.</span>
+      </div>
+
+      <div class="grid2">
+        <!-- FORM -->
+        <md-card variant="outlined">
+          <div class="card-head"><span class="md-icon" style="color:var(--md-sys-color-primary)">edit_note</span><h3>Record baru</h3></div>
+
+          <div class="field serial-row">
+            <md-text-field variant="outlined" label="Serial Number" value="SN-4471-AX" leading-icon="tag"></md-text-field>
+            <md-button variant="tonal" icon="document_scanner">Scan OCR</md-button>
+          </div>
+          <p class="hint">OCR mengisi otomatis dari foto — bisa dikoreksi manual.</p>
+
+          <div class="field"><md-text-field variant="outlined" label="Nama Unit"></md-text-field></div>
+          <div class="field"><md-text-field variant="outlined" label="Lokasi"></md-text-field></div>
+          <div class="field"><md-text-field variant="outlined" label="Tanggal" type="date"></md-text-field></div>
+          <div class="field"><md-text-field variant="outlined" label="Keterangan" ></md-text-field></div>
+
+          <div class="card-head" style="margin-top:8px"><span class="md-icon" style="color:var(--md-sys-color-primary)">add_photo_alternate</span><h3>Foto (detail log)</h3></div>
+          <div class="dropzone">
+            <span class="md-icon">cloud_upload</span>
+            <p class="md-body-medium" style="margin:6px 0 0">Tarik foto ke sini atau klik untuk unggah</p>
+          </div>
+          <div class="thumbs">
+            <div class="thumb"><span class="md-icon">image</span><span class="ocr-badge">OCR</span>
+              <md-icon-button class="del" variant="standard" aria-label="Hapus"><span class="md-icon">close</span></md-icon-button></div>
+            <div class="thumb"><span class="md-icon">image</span>
+              <md-icon-button class="del" variant="standard" aria-label="Hapus"><span class="md-icon">close</span></md-icon-button></div>
+            <div class="thumb" style="border:2px dashed var(--md-sys-color-outline-variant)"><span class="md-icon">add</span></div>
+          </div>
+
+          <div class="actions">
+            <md-button variant="text">Reset</md-button>
+            <md-button variant="filled" icon="save">Simpan ke database</md-button>
+          </div>
+        </md-card>
+
+        <!-- LOG + OUTPUT -->
+        <div>
+          <md-card variant="outlined" style="margin-bottom:16px">
+            <div class="card-head"><span class="md-icon" style="color:var(--md-sys-color-primary)">table_rows</span><h3>Log terbaru</h3>
+              <md-button variant="text" trailing-icon icon="chevron_right">Semua</md-button></div>
+
+            <div class="log-item" style="animation-delay:.05s">
+              <span class="li-ic"><span class="md-icon">memory</span></span>
+              <div class="li-txt"><b>SN-4470-AX</b><span>Gudang A · Reza · 2 mnt lalu</span></div>
+              <span class="li-photos"><span class="md-icon" style="font-size:16px">photo_library</span>3</span>
+              <md-icon-button class="row-menu" variant="standard" aria-label="Aksi"><span class="md-icon">more_vert</span></md-icon-button>
+            </div>
+            <div class="log-item" style="animation-delay:.12s">
+              <span class="li-ic"><span class="md-icon">memory</span></span>
+              <div class="li-txt"><b>SN-4469-AX</b><span>Gudang B · Reza · 10 mnt lalu</span></div>
+              <span class="li-photos"><span class="md-icon" style="font-size:16px">photo_library</span>2</span>
+              <md-icon-button class="row-menu" variant="standard" aria-label="Aksi"><span class="md-icon">more_vert</span></md-icon-button>
+            </div>
+            <div class="log-item" style="animation-delay:.19s">
+              <span class="li-ic"><span class="md-icon">memory</span></span>
+              <div class="li-txt"><b>SN-4468-AX</b><span>Gudang A · Dwi · 1 jam lalu</span></div>
+              <span class="li-photos"><span class="md-icon" style="font-size:16px">photo_library</span>1</span>
+              <md-icon-button class="row-menu" variant="standard" aria-label="Aksi"><span class="md-icon">more_vert</span></md-icon-button>
+            </div>
+          </md-card>
+
+          <md-card variant="filled">
+            <div class="card-head"><span class="md-icon" style="color:var(--md-sys-color-primary)">download</span><h3>Generate output</h3></div>
+            <p class="hint" style="margin-bottom:12px">Data log → ditulis ke salinan template (format asli utuh) + PDF.</p>
+            <div style="display:flex;gap:8px;flex-wrap:wrap">
+              <md-button variant="filled" icon="grid_on">Export Excel</md-button>
+              <md-button variant="tonal" icon="picture_as_pdf">Export PDF</md-button>
+            </div>
+          </md-card>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<!-- DROPDOWN MENU (row actions) -->
+<div class="menu" id="rowMenu">
+  <button><span class="md-icon">visibility</span>Lihat detail</button>
+  <button><span class="md-icon">edit</span>Edit</button>
+  <button><span class="md-icon">picture_as_pdf</span>Export PDF</button>
+  <button><span class="md-icon">delete</span>Hapus</button>
+</div>
+
+<script>
+  window.addEventListener('DOMContentLoaded',()=>{
+    // seed color expressive #024343
+    if(window.MD3) MD3.applySeed('#024343',{style:'expressive'});
+
+    const shell=document.getElementById('shell');
+    const collapse=()=>shell.classList.toggle('collapsed');
+    document.getElementById('railToggle').addEventListener('click',collapse);
+    document.getElementById('topToggle').addEventListener('click',collapse);
+
+    // theme toggle
+    document.getElementById('themeBtn').addEventListener('click',()=>{
+      const cur=MD3.getTheme(); MD3.setTheme(cur==='dark'?'light':'dark');
+    });
+
+    // dropdown menu
+    const menu=document.getElementById('rowMenu');
+    document.querySelectorAll('.row-menu').forEach(btn=>{
+      btn.addEventListener('click',e=>{
+        e.stopPropagation();
+        const r=btn.getBoundingClientRect();
+        menu.style.top=(r.bottom+6)+'px';
+        menu.style.left=(r.right-180)+'px';
+        menu.classList.add('open');
+      });
+    });
+    document.addEventListener('click',()=>menu.classList.remove('open'));
+  });
+</script>
+</body>
+</html>
