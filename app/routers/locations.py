@@ -1,0 +1,151 @@
+"""Lokasi (BAA per lokasi) + item inventory."""
+from __future__ import annotations
+
+import re
+import sqlite3
+
+from fastapi import APIRouter, Depends, HTTPException
+from pydantic import BaseModel
+
+from .. import db
+from ..deps import audit, current_user, get_db
+
+router = APIRouter(prefix="/api/locations", tags=["locations"])
+
+
+class LocationIn(BaseModel):
+    name: str = ""
+    data: dict = {}
+    status: str = "draft"
+
+
+class InventoryItem(BaseModel):
+    nama_barang: str = ""
+    merk_type: str = ""
+    jumlah: str = ""
+    sn_tagging: str = ""
+    keterangan: str = ""
+
+
+class InventoryIn(BaseModel):
+    items: list[InventoryItem]
+
+
+def _next_code(conn: sqlite3.Connection) -> str:
+    rows = conn.execute("SELECT code FROM locations").fetchall()
+    mx = 0
+    for r in rows:
+        m = re.search(r"(\d+)$", r["code"] or "")
+        if m:
+            mx = max(mx, int(m.group(1)))
+    return f"Lokasi_{mx + 1:04d}"
+
+
+def _location_dict(conn: sqlite3.Connection, row) -> dict:
+    import json
+    inv = conn.execute(
+        "SELECT id,nama_barang,merk_type,jumlah,sn_tagging,keterangan,sort_order "
+        "FROM inventory_items WHERE location_id=? ORDER BY sort_order,id", (row["id"],)
+    ).fetchall()
+    photos = conn.execute(
+        "SELECT id,category,orig_name,filename,ocr_serial,matched_by,created_at "
+        "FROM photos WHERE location_id=? ORDER BY id", (row["id"],)
+    ).fetchall()
+    return {
+        "id": row["id"], "code": row["code"], "name": row["name"],
+        "data": json.loads(row["data_json"]), "status": row["status"],
+        "created_at": row["created_at"], "updated_at": row["updated_at"],
+        "inventory": [dict(i) for i in inv],
+        "photos": [dict(p) for p in photos],
+    }
+
+
+@router.get("")
+def list_locations(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
+    rows = conn.execute(
+        "SELECT l.*, "
+        "(SELECT COUNT(*) FROM photos p WHERE p.location_id=l.id) AS photo_count, "
+        "(SELECT COUNT(*) FROM inventory_items i WHERE i.location_id=l.id) AS inv_count "
+        "FROM locations l ORDER BY l.id DESC"
+    ).fetchall()
+    import json
+    return [
+        {"id": r["id"], "code": r["code"], "name": r["name"], "status": r["status"],
+         "data": json.loads(r["data_json"]), "photo_count": r["photo_count"],
+         "inv_count": r["inv_count"], "updated_at": r["updated_at"]}
+        for r in rows
+    ]
+
+
+@router.post("")
+def create_location(body: LocationIn, conn: sqlite3.Connection = Depends(get_db),
+                    user=Depends(current_user)):
+    import json
+    code = _next_code(conn)
+    now = db.now_iso()
+    cur = conn.execute(
+        "INSERT INTO locations(code,name,data_json,status,created_by,created_at,updated_at) "
+        "VALUES(?,?,?,?,?,?,?)",
+        (code, body.name, json.dumps(body.data, ensure_ascii=False), body.status,
+         user["id"], now, now),
+    )
+    conn.commit()
+    audit(conn, user, "create", "location", cur.lastrowid, code)
+    row = conn.execute("SELECT * FROM locations WHERE id=?", (cur.lastrowid,)).fetchone()
+    return _location_dict(conn, row)
+
+
+@router.get("/{loc_id}")
+def get_location(loc_id: int, conn: sqlite3.Connection = Depends(get_db),
+                 user=Depends(current_user)):
+    row = conn.execute("SELECT * FROM locations WHERE id=?", (loc_id,)).fetchone()
+    if not row:
+        raise HTTPException(404, "Lokasi tidak ditemukan")
+    return _location_dict(conn, row)
+
+
+@router.put("/{loc_id}")
+def update_location(loc_id: int, body: LocationIn, conn: sqlite3.Connection = Depends(get_db),
+                    user=Depends(current_user)):
+    import json
+    row = conn.execute("SELECT * FROM locations WHERE id=?", (loc_id,)).fetchone()
+    if not row:
+        raise HTTPException(404, "Lokasi tidak ditemukan")
+    conn.execute(
+        "UPDATE locations SET name=?,data_json=?,status=?,updated_at=? WHERE id=?",
+        (body.name, json.dumps(body.data, ensure_ascii=False), body.status,
+         db.now_iso(), loc_id),
+    )
+    conn.commit()
+    audit(conn, user, "update", "location", loc_id, row["code"])
+    return _location_dict(conn, conn.execute("SELECT * FROM locations WHERE id=?", (loc_id,)).fetchone())
+
+
+@router.put("/{loc_id}/inventory")
+def save_inventory(loc_id: int, body: InventoryIn, conn: sqlite3.Connection = Depends(get_db),
+                   user=Depends(current_user)):
+    if not conn.execute("SELECT 1 FROM locations WHERE id=?", (loc_id,)).fetchone():
+        raise HTTPException(404, "Lokasi tidak ditemukan")
+    conn.execute("DELETE FROM inventory_items WHERE location_id=?", (loc_id,))
+    for i, it in enumerate(body.items):
+        conn.execute(
+            "INSERT INTO inventory_items(location_id,nama_barang,merk_type,jumlah,"
+            "sn_tagging,keterangan,sort_order) VALUES(?,?,?,?,?,?,?)",
+            (loc_id, it.nama_barang, it.merk_type, it.jumlah, it.sn_tagging, it.keterangan, i),
+        )
+    conn.execute("UPDATE locations SET updated_at=? WHERE id=?", (db.now_iso(), loc_id))
+    conn.commit()
+    audit(conn, user, "save_inventory", "location", loc_id, f"{len(body.items)} item")
+    return {"ok": True, "count": len(body.items)}
+
+
+@router.delete("/{loc_id}")
+def delete_location(loc_id: int, conn: sqlite3.Connection = Depends(get_db),
+                    user=Depends(current_user)):
+    row = conn.execute("SELECT * FROM locations WHERE id=?", (loc_id,)).fetchone()
+    if not row:
+        raise HTTPException(404, "Lokasi tidak ditemukan")
+    conn.execute("DELETE FROM locations WHERE id=?", (loc_id,))
+    conn.commit()
+    audit(conn, user, "delete", "location", loc_id, row["code"])
+    return {"ok": True}

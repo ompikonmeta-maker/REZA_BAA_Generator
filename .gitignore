@@ -1,0 +1,21 @@
+# Runtime data (DB, uploaded images, generated output, templates)
+/data/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# PyInstaller
+/build/
+/dist/
+*.spec.bak
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

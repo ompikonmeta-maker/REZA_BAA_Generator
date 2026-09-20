@@ -1,0 +1,65 @@
+"""Pengaturan aplikasi: field lokasi (custom fields), kategori foto + kata kunci."""
+from __future__ import annotations
+
+import sqlite3
+
+from fastapi import APIRouter, Depends
+from pydantic import BaseModel
+
+from .. import db
+from ..deps import audit, current_user, get_db, require_admin
+
+router = APIRouter(prefix="/api/settings", tags=["settings"])
+
+
+class LocationFields(BaseModel):
+    fields: list[dict]
+
+
+class PhotoCategories(BaseModel):
+    categories: list[dict]
+
+
+class AppTitle(BaseModel):
+    title: str
+
+
+@router.get("")
+def get_settings(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
+    return {
+        "app_title": db.get_setting(conn, "app_title", "REZA BAA Generator"),
+        "location_fields": db.get_setting(conn, "location_fields", []),
+        "photo_categories": db.get_setting(conn, "photo_categories", []),
+        "ocr_available": _ocr_available(),
+    }
+
+
+def _ocr_available() -> bool:
+    from ..services import ocr
+    return ocr.available()
+
+
+@router.put("/location-fields")
+def update_location_fields(body: LocationFields, conn: sqlite3.Connection = Depends(get_db),
+                           user=Depends(require_admin)):
+    db.set_setting(conn, "location_fields", body.fields)
+    conn.commit()
+    audit(conn, user, "update", "settings", "location_fields")
+    return {"ok": True, "location_fields": body.fields}
+
+
+@router.put("/photo-categories")
+def update_photo_categories(body: PhotoCategories, conn: sqlite3.Connection = Depends(get_db),
+                            user=Depends(require_admin)):
+    db.set_setting(conn, "photo_categories", body.categories)
+    conn.commit()
+    audit(conn, user, "update", "settings", "photo_categories")
+    return {"ok": True, "photo_categories": body.categories}
+
+
+@router.put("/app-title")
+def update_app_title(body: AppTitle, conn: sqlite3.Connection = Depends(get_db),
+                     user=Depends(require_admin)):
+    db.set_setting(conn, "app_title", body.title.strip() or "REZA BAA Generator")
+    conn.commit()
+    return {"ok": True}
