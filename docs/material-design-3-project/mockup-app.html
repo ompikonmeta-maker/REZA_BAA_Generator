@@ -1,149 +1,187 @@
 <!doctype html>
-<html lang="id">
+<html lang="id" data-theme="light">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>REZA BAA Generator — Mockup</title>
-
-<!-- Toolkit MD3 Expressive (repo ini) -->
-<link rel="stylesheet" href="md3-tokens.css">
-<script src="md3-dynamic-color.js"></script>
-<script src="md3-components.js" defer></script>
-
 <style>
-  :root{
-    --nav-w:272px; --rail-w:80px; --card-r:16px; --ctrl-r:11px;
-    --md-sys-motion-spring-default-spatial:500ms cubic-bezier(0.38,1.21,0.22,1);
-  }
-  *{box-sizing:border-box}
-  body{margin:0;background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface);
-       font:var(--md-sys-typescale-body-large);-webkit-font-smoothing:antialiased}
-  md-button::part(button),md-icon-button::part(button),md-fab::part(button),
-  md-text-field::part(field),md-chip::part(chip){border-radius:var(--ctrl-r)!important}
-  md-card::part(card){border-radius:var(--card-r)!important}
+/* ============ Palet MD3 dari seed #024343 (teal) — light & dark ============ */
+:root{
+  --primary:#006a6a; --on-primary:#ffffff; --primary-container:#6ff7f6; --on-primary-container:#002020;
+  --secondary:#4a6363; --on-secondary:#ffffff; --secondary-container:#cce8e7; --on-secondary-container:#051f1f;
+  --tertiary:#4b607c; --on-tertiary:#ffffff; --tertiary-container:#d3e4ff; --on-tertiary-container:#041c35;
+  --error:#ba1a1a; --on-error:#fff; --error-container:#ffdad6; --on-error-container:#410002;
+  --surface:#f4fbfa; --on-surface:#161d1d;
+  --surface-lowest:#ffffff; --surface-low:#eff5f4; --surface:#f4fbfa; --surface-c:#e9efee;
+  --surface-high:#e3e9e9; --surface-highest:#dde4e3;
+  --surface-variant:#dae5e3; --on-surface-variant:#3f4948;
+  --outline:#6f7978; --outline-variant:#bec9c8;
+  --card-r:16px; --ctrl-r:11px;
+}
+:root[data-theme="dark"]{
+  --primary:#4cdada; --on-primary:#003737; --primary-container:#004f4f; --on-primary-container:#6ff7f6;
+  --secondary:#b0cccb; --on-secondary:#1b3535; --secondary-container:#324b4b; --on-secondary-container:#cce8e7;
+  --tertiary:#b3c8e8; --on-tertiary:#1c314b; --tertiary-container:#334863; --on-tertiary-container:#d3e4ff;
+  --error:#ffb4ab; --on-error:#690005; --error-container:#93000a; --on-error-container:#ffdad6;
+  --on-surface:#dde4e3;
+  --surface-lowest:#090f0f; --surface-low:#161d1d; --surface:#0e1514; --surface-c:#1a2121;
+  --surface-high:#252b2b; --surface-highest:#303636;
+  --surface-variant:#3f4948; --on-surface-variant:#bec9c8;
+  --outline:#899392; --outline-variant:#3f4948;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--surface-high);color:var(--on-surface);
+  font:400 15px/1.5 "Segoe UI",Roboto,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
+  transition:background .3s,color .3s}
+.ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
+.ic.dots circle{fill:currentColor;stroke:none}
+.ic.sm{width:16px;height:16px}
+.ic.lg{width:40px;height:40px}
 
-  .shell{display:flex;height:100vh;gap:16px;padding:16px}
-  .nav{flex:0 0 auto;width:var(--nav-w);display:flex;flex-direction:column;
-       background:var(--md-sys-color-surface-container-low);border-radius:var(--card-r);
-       box-shadow:var(--md-sys-elevation-level2);padding:12px;overflow:hidden;
-       transition:width var(--md-sys-motion-spring-default-spatial)}
-  .shell.collapsed .nav{width:var(--rail-w)}
-  .nav-head{display:flex;align-items:center;gap:12px;height:56px;padding:0 8px}
-  .brand-mark{font-size:30px;color:var(--md-sys-color-primary);font-variation-settings:'FILL' 1,'wght' 500,'opsz' 30}
-  .brand-name{font:var(--md-sys-typescale-title-large);margin-right:auto;white-space:nowrap;overflow:hidden;max-width:170px;
-       transition:opacity .25s .14s,max-width .3s .14s}
-  .nav-scroll{flex:1 1 auto;overflow-y:auto;overflow-x:hidden;min-height:0;margin-top:8px}
-  .section-label{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);
-       padding:16px 16px 8px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;max-height:40px;overflow:hidden;
-       transition:opacity .25s,max-height .3s,padding .3s}
-  .nav-item{position:relative;display:flex;align-items:center;gap:16px;height:52px;padding:0 16px;margin:4px 0;
-       border-radius:var(--ctrl-r);color:var(--md-sys-color-on-surface-variant);cursor:pointer;text-decoration:none;
-       overflow:hidden;white-space:nowrap;transition:background .15s,color .15s,padding var(--md-sys-motion-spring-default-spatial)}
-  .nav-item::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .15s}
-  .nav-item:hover::before{opacity:.08}
-  .nav-item .md-icon{flex:0 0 auto;font-size:24px}
-  .nav-item .lbl{font:var(--md-sys-typescale-label-large);margin-right:auto;overflow:hidden;max-width:180px;white-space:nowrap;
-       transition:opacity .25s .14s,max-width .3s .14s}
-  .nav-item .badge{min-width:20px;height:20px;padding:0 6px;border-radius:999px;background:var(--md-sys-color-primary);
-       color:var(--md-sys-color-on-primary);font:var(--md-sys-typescale-label-small);display:grid;place-items:center;overflow:hidden;
-       transition:opacity .25s .14s,max-width .3s .14s;max-width:40px}
-  .nav-item.active{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
-  .nav-item.active .md-icon{font-variation-settings:'FILL' 1,'wght' 500}
-  .nav-item.active .lbl{font-weight:700}
-  .nav-divider{height:1px;background:var(--md-sys-color-outline-variant);margin:12px 8px}
-  .nav-foot{flex:0 0 auto;padding-top:8px}
-  .profile{display:flex;align-items:center;gap:12px;height:56px;padding:0 8px;border-radius:var(--ctrl-r);overflow:hidden;white-space:nowrap;
-       transition:padding var(--md-sys-motion-spring-default-spatial)}
-  .avatar{width:40px;height:40px;border-radius:var(--ctrl-r);flex:0 0 auto;background:var(--md-sys-color-tertiary-container);
-       color:var(--md-sys-color-on-tertiary-container);display:grid;place-items:center;font:var(--md-sys-typescale-title-medium)}
-  .profile .who{display:flex;flex-direction:column;overflow:hidden;max-width:160px;transition:opacity .25s .14s,max-width .3s .14s}
-  .profile .who b{font:var(--md-sys-typescale-title-small);color:var(--md-sys-color-on-surface)}
-  .profile .who span{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant)}
-  /* collapsed */
-  .shell.collapsed .brand-name,.shell.collapsed .nav-item .lbl,.shell.collapsed .nav-item .badge,.shell.collapsed .profile .who
-    {opacity:0;max-width:0;min-width:0;margin:0}
-  .shell.collapsed .nav-item{padding-left:calc(var(--rail-w)/2 - 24px);padding-right:0;gap:0}
-  .shell.collapsed .profile{padding-left:calc(var(--rail-w)/2 - 32px);padding-right:0;gap:0}
-  .shell.collapsed .section-label{opacity:0;max-height:0;padding-top:0;padding-bottom:0}
-  .shell.collapsed .nav-head{justify-content:center;gap:0;padding:0}
-  .shell.collapsed .brand-name{display:none}
+/* ============ Shell ============ */
+.shell{display:flex;height:100vh;gap:16px;padding:16px}
+.nav{flex:0 0 auto;width:272px;display:flex;flex-direction:column;background:var(--surface-low);
+  border-radius:var(--card-r);box-shadow:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15);
+  padding:12px;overflow:hidden;transition:width .5s cubic-bezier(.38,1.21,.22,1)}
+.shell.collapsed .nav{width:80px}
+.nav-head{display:flex;align-items:center;gap:12px;height:56px;padding:0 8px}
+.brand-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--primary);color:var(--on-primary);flex:0 0 auto}
+.brand-name{font-size:20px;font-weight:600;margin-right:auto;white-space:nowrap;overflow:hidden;max-width:170px;transition:opacity .25s .14s,max-width .3s .14s}
+.nav-scroll{flex:1 1 auto;overflow:hidden auto;min-height:0;margin-top:8px}
+.section-label{font-size:11px;font-weight:600;color:var(--on-surface-variant);padding:16px 16px 8px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;max-height:40px;overflow:hidden;transition:opacity .25s,max-height .3s,padding .3s}
+.nav-item{position:relative;display:flex;align-items:center;gap:16px;height:52px;padding:0 16px;margin:4px 0;border-radius:var(--ctrl-r);color:var(--on-surface-variant);cursor:pointer;text-decoration:none;overflow:hidden;white-space:nowrap;transition:background .15s,color .15s,padding .5s cubic-bezier(.38,1.21,.22,1)}
+.nav-item::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .15s}
+.nav-item:hover::before{opacity:.08}
+.nav-item .lbl{font-size:14px;font-weight:500;margin-right:auto;overflow:hidden;max-width:180px;white-space:nowrap;transition:opacity .25s .14s,max-width .3s .14s}
+.nav-item .badge{min-width:22px;height:20px;padding:0 6px;border-radius:999px;background:var(--primary);color:var(--on-primary);font-size:11px;font-weight:600;display:grid;place-items:center;overflow:hidden;max-width:44px;transition:opacity .25s .14s,max-width .3s .14s}
+.nav-item.active{background:var(--secondary-container);color:var(--on-secondary-container)}
+.nav-item.active .lbl{font-weight:700}
+.nav-divider{height:1px;background:var(--outline-variant);margin:12px 8px}
+.nav-foot{flex:0 0 auto;padding-top:8px}
+.profile{display:flex;align-items:center;gap:12px;height:56px;padding:0 8px;border-radius:var(--ctrl-r);overflow:hidden;white-space:nowrap;transition:padding .5s cubic-bezier(.38,1.21,.22,1)}
+.avatar{width:40px;height:40px;border-radius:var(--ctrl-r);flex:0 0 auto;background:var(--tertiary-container);color:var(--on-tertiary-container);display:grid;place-items:center;font-weight:600}
+.profile .who{display:flex;flex-direction:column;overflow:hidden;max-width:160px;transition:opacity .25s .14s,max-width .3s .14s}
+.profile .who b{font-size:14px}.profile .who span{font-size:12px;color:var(--on-surface-variant)}
+.shell.collapsed .brand-name,.shell.collapsed .nav-item .lbl,.shell.collapsed .nav-item .badge,.shell.collapsed .profile .who{opacity:0;max-width:0;min-width:0;margin:0}
+.shell.collapsed .nav-item{padding-left:calc(40px - 11px);padding-right:0;gap:0}
+.shell.collapsed .profile{padding-left:calc(40px - 20px);padding-right:0;gap:0}
+.shell.collapsed .section-label{opacity:0;max-height:0;padding-top:0;padding-bottom:0}
+.shell.collapsed .nav-head{justify-content:center;gap:0;padding:0}
+.shell.collapsed .brand-name{display:none}
 
-  .canvas{flex:1 1 auto;min-width:0;background:var(--md-sys-color-surface);border-radius:var(--card-r);
-       box-shadow:var(--md-sys-elevation-level1);overflow:hidden;display:flex;flex-direction:column}
-  .topbar{display:flex;align-items:center;gap:16px;padding:16px 24px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
-  .topbar .page-title{font:var(--md-sys-typescale-headline-small);margin-right:auto}
-  .canvas-body{padding:24px;overflow-y:auto}
+/* ============ Canvas ============ */
+.canvas{flex:1 1 auto;min-width:0;background:var(--surface);border-radius:var(--card-r);box-shadow:0 1px 3px rgba(0,0,0,.15);overflow:hidden;display:flex;flex-direction:column}
+.topbar{display:flex;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--outline-variant)}
+.topbar .page-title{font-size:22px;font-weight:500;margin-right:auto}
+.canvas-body{padding:24px;overflow-y:auto}
+.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
+@media(max-width:1000px){.grid2{grid-template-columns:1fr}}
 
-  .grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
-  @media(max-width:1000px){.grid2{grid-template-columns:1fr}}
-  .card-head{display:flex;align-items:center;gap:8px;margin-bottom:16px}
-  .card-head h3{font:var(--md-sys-typescale-title-medium);margin:0 auto 0 0;color:var(--md-sys-color-on-surface)}
-  .field{margin-bottom:14px}
-  .field md-text-field{width:100%}
-  .serial-row{display:flex;gap:8px;align-items:flex-end}
-  .serial-row md-text-field{flex:1 1 auto}
-  .hint{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin:4px 0 0}
+/* ============ Komponen ============ */
+.btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 20px;border:none;border-radius:var(--ctrl-r);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s,background .15s}
+.btn.filled{background:var(--primary);color:var(--on-primary)}
+.btn.tonal{background:var(--secondary-container);color:var(--on-secondary-container)}
+.btn.text{background:transparent;color:var(--primary);padding:0 12px}
+.btn:hover{filter:brightness(1.05)}
+.btn.text:hover{background:color-mix(in srgb,var(--primary) 10%,transparent)}
+.iconbtn{width:40px;height:40px;border:none;background:transparent;color:var(--on-surface-variant);border-radius:50%;display:grid;place-items:center;cursor:pointer;transition:background .15s}
+.iconbtn:hover{background:color-mix(in srgb,var(--on-surface) 8%,transparent)}
+.iconbtn.tonal{background:var(--secondary-container);color:var(--on-secondary-container)}
+.card{background:var(--surface);border:1px solid var(--outline-variant);border-radius:var(--card-r);padding:20px}
+.card.filled{background:var(--surface-c);border-color:transparent}
+.chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:9px;border:1px solid var(--outline-variant);background:transparent;color:var(--on-surface-variant);font-size:13px;font-weight:500}
+.tf{display:flex;flex-direction:column;gap:4px}
+.tf label{font-size:12px;color:var(--on-surface-variant);padding-left:2px}
+.tf .box{display:flex;align-items:center;gap:8px;height:52px;padding:0 14px;border:1px solid var(--outline);border-radius:var(--ctrl-r);color:var(--on-surface-variant);background:var(--surface)}
+.tf .box .val{color:var(--on-surface);font-size:15px}
+.tf.focus .box{border-color:var(--primary);border-width:2px;padding:0 13px}
 
-  .dropzone{border:2px dashed var(--md-sys-color-outline);border-radius:var(--card-r);padding:24px;text-align:center;
-       color:var(--md-sys-color-on-surface-variant);cursor:pointer;transition:background .2s,border-color .2s}
-  .dropzone:hover{background:color-mix(in srgb,var(--md-sys-color-primary) 6%,transparent);border-color:var(--md-sys-color-primary)}
-  .dropzone .md-icon{font-size:40px;color:var(--md-sys-color-primary)}
-  .thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:10px;margin-top:14px}
-  .thumb{position:relative;aspect-ratio:1;border-radius:var(--ctrl-r);overflow:hidden;background:var(--md-sys-color-surface-container-highest);
-       display:grid;place-items:center;color:var(--md-sys-color-on-surface-variant)}
-  .thumb .ocr-badge{position:absolute;left:6px;bottom:6px;background:var(--md-sys-color-tertiary-container);
-       color:var(--md-sys-color-on-tertiary-container);font:var(--md-sys-typescale-label-small);padding:2px 6px;border-radius:999px}
-  .thumb .del{position:absolute;top:4px;right:4px}
+.card-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+.card-head h3{font-size:16px;font-weight:600;margin:0 auto 0 0}
+.card-head .md-icon-accent{color:var(--primary)}
+.field{margin-bottom:14px}
+.serial-row{display:flex;gap:8px;align-items:flex-end}
+.serial-row .tf{flex:1 1 auto}
+.hint{font-size:12px;color:var(--on-surface-variant);margin:4px 0 0}
+.dropzone{border:2px dashed var(--outline);border-radius:var(--card-r);padding:26px;text-align:center;color:var(--on-surface-variant);cursor:pointer;transition:background .2s,border-color .2s}
+.dropzone:hover{background:color-mix(in srgb,var(--primary) 6%,transparent);border-color:var(--primary)}
+.dropzone .ic{color:var(--primary);margin:0 auto}
+.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;margin-top:14px}
+.thumb{position:relative;aspect-ratio:1;border-radius:var(--ctrl-r);overflow:hidden;background:var(--surface-highest);display:grid;place-items:center;color:var(--on-surface-variant)}
+.thumb.add{border:2px dashed var(--outline-variant);background:transparent}
+.thumb .ocr-badge{position:absolute;left:6px;bottom:6px;background:var(--tertiary-container);color:var(--on-tertiary-container);font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px}
+.thumb .del{position:absolute;top:4px;right:4px;width:28px;height:28px;background:rgba(0,0,0,.45);color:#fff}
+.thumb .del:hover{background:rgba(0,0,0,.6)}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.banner{display:flex;align-items:center;gap:12px;background:var(--primary-container);color:var(--on-primary-container);padding:12px 16px;border-radius:var(--card-r);margin-bottom:16px;font-size:14px}
 
-  /* log list — card-reveal directional feel */
-  .log-item{display:flex;align-items:center;gap:14px;padding:12px;border-radius:var(--ctrl-r);
-       animation:rise .5s var(--md-sys-motion-easing-emphasized-decelerate) both}
-  .log-item+.log-item{margin-top:6px}
-  .log-item:hover{background:color-mix(in srgb,var(--md-sys-color-primary) 5%,transparent)}
-  @keyframes rise{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
-  .log-item .li-ic{width:40px;height:40px;border-radius:var(--ctrl-r);flex:0 0 auto;display:grid;place-items:center;
-       background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
-  .li-txt{flex:1 1 auto;min-width:0}
-  .li-txt b{font:var(--md-sys-typescale-title-small);display:block}
-  .li-txt span{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant)}
-  .li-photos{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);display:inline-flex;align-items:center;gap:3px}
+.log-item{display:flex;align-items:center;gap:14px;padding:12px;border-radius:var(--ctrl-r);animation:rise .5s cubic-bezier(.05,.7,.1,1) both}
+.log-item+.log-item{margin-top:4px}
+.log-item:hover{background:color-mix(in srgb,var(--primary) 5%,transparent)}
+@keyframes rise{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
+.li-ic{width:40px;height:40px;border-radius:var(--ctrl-r);flex:0 0 auto;display:grid;place-items:center;background:var(--secondary-container);color:var(--on-secondary-container)}
+.li-txt{flex:1 1 auto;min-width:0}.li-txt b{font-size:14px;display:block}.li-txt span{font-size:12px;color:var(--on-surface-variant)}
+.li-photos{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:500;color:var(--on-surface-variant)}
 
-  .banner{display:flex;align-items:center;gap:12px;background:var(--md-sys-color-primary-container);
-       color:var(--md-sys-color-on-primary-container);padding:12px 16px;border-radius:var(--card-r);margin-bottom:16px}
-  .actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
-
-  /* simple dropdown menu */
-  .menu{position:fixed;z-index:80;min-width:180px;background:var(--md-sys-color-surface-container-high);
-       border-radius:var(--ctrl-r);box-shadow:var(--md-sys-elevation-level3);padding:6px;opacity:0;pointer-events:none;
-       transform-origin:top right;transform:scaleY(.5);transition:opacity .15s,transform var(--md-sys-motion-spring-fast-spatial)}
-  .menu.open{opacity:1;pointer-events:auto;transform:scaleY(1)}
-  .menu button{display:flex;align-items:center;gap:12px;width:100%;border:none;background:none;cursor:pointer;
-       padding:10px 12px;border-radius:8px;color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-medium);text-align:left}
-  .menu button:hover{background:color-mix(in srgb,var(--md-sys-color-primary) 8%,transparent)}
-  .menu .md-icon{font-size:20px;color:var(--md-sys-color-on-surface-variant)}
+.menu{position:fixed;z-index:80;min-width:190px;background:var(--surface-high);border-radius:var(--ctrl-r);box-shadow:0 4px 8px 3px rgba(0,0,0,.15),0 1px 3px rgba(0,0,0,.3);padding:6px;opacity:0;pointer-events:none;transform-origin:top right;transform:scaleY(.4);transition:opacity .15s,transform .35s cubic-bezier(.42,1.67,.21,.9)}
+.menu.open{opacity:1;pointer-events:auto;transform:scaleY(1)}
+.menu button{display:flex;align-items:center;gap:12px;width:100%;border:none;background:none;cursor:pointer;padding:10px 12px;border-radius:8px;color:var(--on-surface);font-size:14px;font-family:inherit;text-align:left}
+.menu button:hover{background:color-mix(in srgb,var(--primary) 8%,transparent)}
+.menu .ic{color:var(--on-surface-variant)}
 </style>
 </head>
 <body>
+<!-- ==== SVG sprite (ikon inline, tanpa font eksternal) ==== -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
+<g id="i-menu"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></g>
+<g id="i-menuopen"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="14" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/><polyline points="18 9 21 12 18 15"/></g>
+<g id="i-edit"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"/></g>
+<g id="i-rows"><rect x="3" y="5" width="18" height="14" rx="2"/><line x1="3" y1="10" x2="21" y2="10"/><line x1="3" y1="14.5" x2="21" y2="14.5"/></g>
+<g id="i-file"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><line x1="8" y1="13" x2="16" y2="13"/><line x1="8" y1="17" x2="14" y2="17"/></g>
+<g id="i-download"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></g>
+<g id="i-users"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></g>
+<g id="i-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></g>
+<g id="i-settings"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></g>
+<g id="i-box"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5" rx="1"/><line x1="10" y1="12" x2="14" y2="12"/></g>
+<g id="i-tag"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8Z"/><circle cx="7" cy="7" r="1" fill="currentColor" stroke="none"/></g>
+<g id="i-scan"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></g>
+<g id="i-upload"><path d="M16 16l-4-4-4 4"/><path d="M12 12v9"/><path d="M20.4 18.4A5 5 0 0 0 18 9h-1.3A8 8 0 1 0 3 16.3"/></g>
+<g id="i-close"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></g>
+<g id="i-add"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></g>
+<g id="i-cpu"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></g>
+<g id="i-photos"><rect x="3" y="3" width="14" height="14" rx="2"/><circle cx="8" cy="8" r="1.6"/><path d="M17 12l-3-3-5 5"/><path d="M21 8v11a2 2 0 0 1-2 2H8"/></g>
+<g id="i-more" class="dots"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></g>
+<g id="i-info"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></g>
+<g id="i-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></g>
+<g id="i-grid"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></g>
+<g id="i-pdf"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h1a1.5 1.5 0 0 1 0 3H9v-3Zm0 0v5"/></g>
+<g id="i-chev"><polyline points="9 6 15 12 9 18"/></g>
+<g id="i-verified"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><polyline points="22 4 12 14 9 11"/></g>
+<g id="i-moon"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></g>
+<g id="i-image"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><polyline points="21 15 16 10 5 21"/></g>
+<g id="i-reset"><polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/></g>
+</defs></svg>
+
 <div class="shell" id="shell">
   <!-- SIDEBAR -->
   <aside class="nav">
     <div class="nav-head">
-      <span class="brand-mark md-icon">inventory_2</span>
+      <span class="brand-mark"><svg class="ic"><use href="#i-box"/></svg></span>
       <span class="brand-name">REZA BAA</span>
-      <md-icon-button id="railToggle" variant="standard" aria-label="Ciutkan"><span class="md-icon">menu_open</span></md-icon-button>
+      <button class="iconbtn" id="railToggle" aria-label="Ciutkan"><svg class="ic"><use href="#i-menuopen"/></svg></button>
     </div>
     <div class="nav-scroll">
-      <a class="nav-item active"><span class="md-icon">edit_note</span><span class="lbl">Entry Data</span></a>
-      <a class="nav-item"><span class="md-icon">table_rows</span><span class="lbl">Log Data</span><span class="badge">128</span></a>
-      <a class="nav-item"><span class="md-icon">description</span><span class="lbl">Template</span></a>
-      <a class="nav-item"><span class="md-icon">download</span><span class="lbl">Output</span></a>
+      <a class="nav-item active"><svg class="ic"><use href="#i-edit"/></svg><span class="lbl">Entry Data</span></a>
+      <a class="nav-item"><svg class="ic"><use href="#i-rows"/></svg><span class="lbl">Log Data</span><span class="badge">128</span></a>
+      <a class="nav-item"><svg class="ic"><use href="#i-file"/></svg><span class="lbl">Template</span></a>
+      <a class="nav-item"><svg class="ic"><use href="#i-download"/></svg><span class="lbl">Output</span></a>
       <div class="section-label">Admin</div>
-      <a class="nav-item"><span class="md-icon">group</span><span class="lbl">Users</span></a>
-      <a class="nav-item"><span class="md-icon">history</span><span class="lbl">Audit Log</span></a>
+      <a class="nav-item"><svg class="ic"><use href="#i-users"/></svg><span class="lbl">Users</span></a>
+      <a class="nav-item"><svg class="ic"><use href="#i-clock"/></svg><span class="lbl">Audit Log</span></a>
     </div>
     <div class="nav-foot">
       <div class="nav-divider"></div>
-      <a class="nav-item"><span class="md-icon">settings</span><span class="lbl">Pengaturan</span></a>
+      <a class="nav-item"><svg class="ic"><use href="#i-settings"/></svg><span class="lbl">Pengaturan</span></a>
       <div class="profile"><div class="avatar">RZ</div><div class="who"><b>Reza</b><span>Operator</span></div></div>
     </div>
   </aside>
@@ -151,129 +189,111 @@
   <!-- CANVAS -->
   <main class="canvas">
     <header class="topbar">
-      <md-icon-button id="topToggle" variant="standard" aria-label="Toggle"><span class="md-icon">menu</span></md-icon-button>
+      <button class="iconbtn" id="topToggle" aria-label="Toggle"><svg class="ic"><use href="#i-menu"/></svg></button>
       <span class="page-title">Entry Data</span>
-      <md-chip variant="assist" icon="verified">Template: BAA_Form.xlsx</md-chip>
-      <md-icon-button id="themeBtn" variant="tonal" aria-label="Tema"><span class="md-icon">dark_mode</span></md-icon-button>
+      <span class="chip"><svg class="ic sm"><use href="#i-verified"/></svg>Template: BAA_Form.xlsx</span>
+      <button class="iconbtn tonal" id="themeBtn" aria-label="Tema"><svg class="ic"><use href="#i-moon"/></svg></button>
     </header>
 
     <div class="canvas-body">
-      <div class="banner">
-        <span class="md-icon">info</span>
-        <span class="md-body-medium">Isi field, unggah foto, atau scan serial number dari foto. Semua tersimpan ke database pusat.</span>
-      </div>
+      <div class="banner"><svg class="ic"><use href="#i-info"/></svg>
+        <span>Isi field, unggah foto, atau scan serial number dari foto. Semua tersimpan ke database pusat.</span></div>
 
       <div class="grid2">
         <!-- FORM -->
-        <md-card variant="outlined">
-          <div class="card-head"><span class="md-icon" style="color:var(--md-sys-color-primary)">edit_note</span><h3>Record baru</h3></div>
+        <div class="card">
+          <div class="card-head"><svg class="ic md-icon-accent"><use href="#i-edit"/></svg><h3>Record baru</h3></div>
 
           <div class="field serial-row">
-            <md-text-field variant="outlined" label="Serial Number" value="SN-4471-AX" leading-icon="tag"></md-text-field>
-            <md-button variant="tonal" icon="document_scanner">Scan OCR</md-button>
+            <div class="tf focus"><label>Serial Number</label>
+              <div class="box"><svg class="ic sm"><use href="#i-tag"/></svg><span class="val">SN-4471-AX</span></div></div>
+            <button class="btn tonal"><svg class="ic sm"><use href="#i-scan"/></svg>Scan OCR</button>
           </div>
           <p class="hint">OCR mengisi otomatis dari foto — bisa dikoreksi manual.</p>
 
-          <div class="field"><md-text-field variant="outlined" label="Nama Unit"></md-text-field></div>
-          <div class="field"><md-text-field variant="outlined" label="Lokasi"></md-text-field></div>
-          <div class="field"><md-text-field variant="outlined" label="Tanggal" type="date"></md-text-field></div>
-          <div class="field"><md-text-field variant="outlined" label="Keterangan" ></md-text-field></div>
+          <div class="field tf" style="margin-top:14px"><label>Nama Unit</label><div class="box"><span class="val">&nbsp;</span></div></div>
+          <div class="field tf"><label>Lokasi</label><div class="box"><span class="val">&nbsp;</span></div></div>
+          <div class="field tf"><label>Tanggal</label><div class="box"><span class="val" style="color:var(--on-surface-variant)">dd / mm / yyyy</span></div></div>
+          <div class="field tf"><label>Keterangan</label><div class="box"><span class="val">&nbsp;</span></div></div>
 
-          <div class="card-head" style="margin-top:8px"><span class="md-icon" style="color:var(--md-sys-color-primary)">add_photo_alternate</span><h3>Foto (detail log)</h3></div>
+          <div class="card-head" style="margin-top:8px"><svg class="ic md-icon-accent"><use href="#i-image"/></svg><h3>Foto (detail log)</h3></div>
           <div class="dropzone">
-            <span class="md-icon">cloud_upload</span>
-            <p class="md-body-medium" style="margin:6px 0 0">Tarik foto ke sini atau klik untuk unggah</p>
+            <svg class="ic lg"><use href="#i-upload"/></svg>
+            <p style="margin:8px 0 0;font-size:14px">Tarik foto ke sini atau klik untuk unggah</p>
           </div>
           <div class="thumbs">
-            <div class="thumb"><span class="md-icon">image</span><span class="ocr-badge">OCR</span>
-              <md-icon-button class="del" variant="standard" aria-label="Hapus"><span class="md-icon">close</span></md-icon-button></div>
-            <div class="thumb"><span class="md-icon">image</span>
-              <md-icon-button class="del" variant="standard" aria-label="Hapus"><span class="md-icon">close</span></md-icon-button></div>
-            <div class="thumb" style="border:2px dashed var(--md-sys-color-outline-variant)"><span class="md-icon">add</span></div>
+            <div class="thumb"><svg class="ic lg"><use href="#i-image"/></svg><span class="ocr-badge">OCR</span>
+              <button class="iconbtn del"><svg class="ic sm"><use href="#i-close"/></svg></button></div>
+            <div class="thumb"><svg class="ic lg"><use href="#i-image"/></svg>
+              <button class="iconbtn del"><svg class="ic sm"><use href="#i-close"/></svg></button></div>
+            <div class="thumb add"><svg class="ic lg"><use href="#i-add"/></svg></div>
           </div>
 
           <div class="actions">
-            <md-button variant="text">Reset</md-button>
-            <md-button variant="filled" icon="save">Simpan ke database</md-button>
+            <button class="btn text"><svg class="ic sm"><use href="#i-reset"/></svg>Reset</button>
+            <button class="btn filled"><svg class="ic sm"><use href="#i-save"/></svg>Simpan ke database</button>
           </div>
-        </md-card>
+        </div>
 
         <!-- LOG + OUTPUT -->
         <div>
-          <md-card variant="outlined" style="margin-bottom:16px">
-            <div class="card-head"><span class="md-icon" style="color:var(--md-sys-color-primary)">table_rows</span><h3>Log terbaru</h3>
-              <md-button variant="text" trailing-icon icon="chevron_right">Semua</md-button></div>
+          <div class="card" style="margin-bottom:16px">
+            <div class="card-head"><svg class="ic md-icon-accent"><use href="#i-rows"/></svg><h3>Log terbaru</h3>
+              <button class="btn text">Semua<svg class="ic sm"><use href="#i-chev"/></svg></button></div>
 
             <div class="log-item" style="animation-delay:.05s">
-              <span class="li-ic"><span class="md-icon">memory</span></span>
+              <span class="li-ic"><svg class="ic"><use href="#i-cpu"/></svg></span>
               <div class="li-txt"><b>SN-4470-AX</b><span>Gudang A · Reza · 2 mnt lalu</span></div>
-              <span class="li-photos"><span class="md-icon" style="font-size:16px">photo_library</span>3</span>
-              <md-icon-button class="row-menu" variant="standard" aria-label="Aksi"><span class="md-icon">more_vert</span></md-icon-button>
+              <span class="li-photos"><svg class="ic sm"><use href="#i-photos"/></svg>3</span>
+              <button class="iconbtn row-menu"><svg class="ic"><use href="#i-more"/></svg></button>
             </div>
             <div class="log-item" style="animation-delay:.12s">
-              <span class="li-ic"><span class="md-icon">memory</span></span>
+              <span class="li-ic"><svg class="ic"><use href="#i-cpu"/></svg></span>
               <div class="li-txt"><b>SN-4469-AX</b><span>Gudang B · Reza · 10 mnt lalu</span></div>
-              <span class="li-photos"><span class="md-icon" style="font-size:16px">photo_library</span>2</span>
-              <md-icon-button class="row-menu" variant="standard" aria-label="Aksi"><span class="md-icon">more_vert</span></md-icon-button>
+              <span class="li-photos"><svg class="ic sm"><use href="#i-photos"/></svg>2</span>
+              <button class="iconbtn row-menu"><svg class="ic"><use href="#i-more"/></svg></button>
             </div>
             <div class="log-item" style="animation-delay:.19s">
-              <span class="li-ic"><span class="md-icon">memory</span></span>
+              <span class="li-ic"><svg class="ic"><use href="#i-cpu"/></svg></span>
               <div class="li-txt"><b>SN-4468-AX</b><span>Gudang A · Dwi · 1 jam lalu</span></div>
-              <span class="li-photos"><span class="md-icon" style="font-size:16px">photo_library</span>1</span>
-              <md-icon-button class="row-menu" variant="standard" aria-label="Aksi"><span class="md-icon">more_vert</span></md-icon-button>
+              <span class="li-photos"><svg class="ic sm"><use href="#i-photos"/></svg>1</span>
+              <button class="iconbtn row-menu"><svg class="ic"><use href="#i-more"/></svg></button>
             </div>
-          </md-card>
+          </div>
 
-          <md-card variant="filled">
-            <div class="card-head"><span class="md-icon" style="color:var(--md-sys-color-primary)">download</span><h3>Generate output</h3></div>
-            <p class="hint" style="margin-bottom:12px">Data log → ditulis ke salinan template (format asli utuh) + PDF.</p>
+          <div class="card filled">
+            <div class="card-head"><svg class="ic md-icon-accent"><use href="#i-download"/></svg><h3>Generate output</h3></div>
+            <p class="hint" style="margin-bottom:14px">Data log → ditulis ke salinan template (format asli utuh) + PDF.</p>
             <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <md-button variant="filled" icon="grid_on">Export Excel</md-button>
-              <md-button variant="tonal" icon="picture_as_pdf">Export PDF</md-button>
+              <button class="btn filled"><svg class="ic sm"><use href="#i-grid"/></svg>Export Excel</button>
+              <button class="btn tonal"><svg class="ic sm"><use href="#i-pdf"/></svg>Export PDF</button>
             </div>
-          </md-card>
+          </div>
         </div>
       </div>
     </div>
   </main>
 </div>
 
-<!-- DROPDOWN MENU (row actions) -->
+<!-- DROPDOWN MENU -->
 <div class="menu" id="rowMenu">
-  <button><span class="md-icon">visibility</span>Lihat detail</button>
-  <button><span class="md-icon">edit</span>Edit</button>
-  <button><span class="md-icon">picture_as_pdf</span>Export PDF</button>
-  <button><span class="md-icon">delete</span>Hapus</button>
+  <button><svg class="ic sm"><use href="#i-file"/></svg>Lihat detail</button>
+  <button><svg class="ic sm"><use href="#i-edit"/></svg>Edit</button>
+  <button><svg class="ic sm"><use href="#i-pdf"/></svg>Export PDF</button>
+  <button><svg class="ic sm"><use href="#i-close"/></svg>Hapus</button>
 </div>
 
 <script>
-  window.addEventListener('DOMContentLoaded',()=>{
-    // seed color expressive #024343
-    if(window.MD3) MD3.applySeed('#024343',{style:'expressive'});
-
-    const shell=document.getElementById('shell');
-    const collapse=()=>shell.classList.toggle('collapsed');
-    document.getElementById('railToggle').addEventListener('click',collapse);
-    document.getElementById('topToggle').addEventListener('click',collapse);
-
-    // theme toggle
-    document.getElementById('themeBtn').addEventListener('click',()=>{
-      const cur=MD3.getTheme(); MD3.setTheme(cur==='dark'?'light':'dark');
-    });
-
-    // dropdown menu
-    const menu=document.getElementById('rowMenu');
-    document.querySelectorAll('.row-menu').forEach(btn=>{
-      btn.addEventListener('click',e=>{
-        e.stopPropagation();
-        const r=btn.getBoundingClientRect();
-        menu.style.top=(r.bottom+6)+'px';
-        menu.style.left=(r.right-180)+'px';
-        menu.classList.add('open');
-      });
-    });
-    document.addEventListener('click',()=>menu.classList.remove('open'));
-  });
+  const shell=document.getElementById('shell');
+  const toggle=()=>shell.classList.toggle('collapsed');
+  railToggle.onclick=toggle; topToggle.onclick=toggle;
+  themeBtn.onclick=()=>{const r=document.documentElement;
+    r.dataset.theme=r.dataset.theme==='dark'?'light':'dark';};
+  const menu=document.getElementById('rowMenu');
+  document.querySelectorAll('.row-menu').forEach(b=>b.addEventListener('click',e=>{
+    e.stopPropagation();const r=b.getBoundingClientRect();
+    menu.style.top=(r.bottom+6)+'px';menu.style.left=(r.right-190)+'px';menu.classList.add('open');}));
+  document.addEventListener('click',()=>menu.classList.remove('open'));
 </script>
 </body>
 </html>
