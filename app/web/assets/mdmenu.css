@@ -1,0 +1,170 @@
+.mdm-layer { position: fixed; inset: 0; z-index: 1200; pointer-events: none; }
+.mdm-scrim { position: fixed; inset: 0; pointer-events: auto; background: transparent; }
+
+.mdm-panel {
+  --m-bg: var(--md-sys-color-surface-container-low);
+  --m-fg: var(--md-sys-color-on-surface);
+  --m-icon: var(--md-sys-color-on-surface-variant);
+  --m-sel-bg: var(--md-sys-color-tertiary-container);
+  --m-sel-fg: var(--md-sys-color-on-tertiary-container);
+  --m-radius: 12px;
+  --m-item-h: 48px;
+  --m-dur: 520ms;
+  --m-shadow: var(--md-sys-elevation-level3);
+
+  position: fixed; pointer-events: auto; box-sizing: border-box;
+  min-width: 180px; max-width: 320px;
+  background: var(--m-bg); color: var(--m-fg);
+  border-radius: var(--m-radius);
+  padding: 8px 0;
+  /* base elevation (tunable) + an extra soft ambient shadow so the menu
+     reads clearly above content in both light and dark */
+  box-shadow: var(--m-shadow),
+              0 6px 22px -6px color-mix(in srgb, var(--md-sys-color-shadow) 55%, transparent);
+  outline: none;
+  transition: border-radius var(--md-sys-motion-spring-default-spatial);
+  will-change: transform, opacity;
+}
+/* --- enter / exit --------------------------------------------------
+   Two enter styles, switchable at runtime (kept side by side):
+   • "pop"        — the original: a single uniform scale + fade.
+   • "expressive" — matches the M3 guidelines motion: the surface springs
+                    out of the trigger corner (transform-origin is set to
+                    that corner by the engine) with an overshoot, the
+                    surface fades in, and the items reveal in a quick
+                    downward stagger.
+   ------------------------------------------------------------------- */
+.mdm-panel.exit  { animation: mdm-close 140ms cubic-bezier(0.3,0,1,1) both; }
+@keyframes mdm-close { from { opacity: 1; transform: scale(1); } to { opacity: 0; transform: scale(.9); } }
+
+/* expressive exit = reverse of the expressive enter: the surface + content
+   collapse scaleY back toward the TOP edge while fading, so the menu retracts
+   upward the way it grew down. */
+/* Two independent animations so each keeps its OWN easing/timing:
+   • fade  — linear, over the full close duration (so it's actually visible)
+   • collapse — accelerate, DELAYED by --m-coldelay so the fade LEADS it. */
+.mdm-panel.exit-exp {
+  transform-origin: top center;
+  animation:
+    mdm-fade-out var(--m-cdur, 300ms) linear both,
+    mdm-collapse var(--m-coldur, 165ms) cubic-bezier(0.3,0,0.8,0.15) var(--m-coldelay, 135ms) both;
+}
+@keyframes mdm-fade-out { from { opacity: 1; } to { opacity: 0; } }
+@keyframes mdm-collapse { from { transform: scaleY(1); } to { transform: scaleY(.40); } }
+
+/* fade-out disabled: collapse only (over the full duration), stays opaque */
+.mdm-panel.exit-exp.no-fade {
+  animation: mdm-collapse var(--m-cdur, 300ms) cubic-bezier(0.3,0,0.8,0.15) both;
+}
+
+/* pop (original) */
+.mdm-panel.enter { animation: mdm-open var(--m-dur, 320ms) cubic-bezier(0.42,1.4,0.25,1) both; }
+@keyframes mdm-open  { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+
+/* expressive (video-accurate): the surface AND its content scaleY from the
+   TOP edge, so the text visibly expands downward as the menu grows — the line
+   spacing starts compressed and springs open. Because it's a transform (not a
+   clip-path), the drop shadow scales WITH the box and is present the whole
+   time — never clipped, never late. */
+.mdm-panel.enter-exp {
+  transform-origin: top center;
+  animation: mdm-open-exp var(--m-dur, 380ms) cubic-bezier(0.42,1.67,0.21,0.90) both;  /* spatial spring */
+}
+@keyframes mdm-open-exp {
+  0%   { opacity: 0; transform: scaleY(.40); }
+  55%  { opacity: 1; }
+  100% { opacity: 1; transform: scaleY(1); }
+}
+
+/* instant motion (dense desktop) + reduced-motion: no CSS animation */
+.mdm-layer.instant .mdm-panel.enter,
+.mdm-layer.instant .mdm-panel.enter-exp,
+.mdm-layer.instant .mdm-panel.exit,
+.mdm-layer.instant .mdm-panel.exit-exp { animation: none; }
+@media (prefers-reduced-motion: reduce) {
+  .mdm-panel.enter, .mdm-panel.enter-exp, .mdm-panel.exit, .mdm-panel.exit-exp { animation: none; }
+}
+
+/* scroll */
+.mdm-panel.scrollable { overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--md-sys-color-outline) transparent; }
+.mdm-panel.scrollable::-webkit-scrollbar { width: 8px; }
+.mdm-panel.scrollable::-webkit-scrollbar-thumb { background: var(--md-sys-color-outline); border-radius: 8px; }
+.mdm-panel.scrollable::-webkit-scrollbar-track { background: transparent; }
+
+.mdm-list { display: flex; flex-direction: column; }
+
+/* section label + gap group */
+.mdm-grouplabel { font: var(--md-sys-typescale-label-medium); letter-spacing: var(--md-sys-typescale-label-medium-tracking);
+  color: var(--md-sys-color-on-surface-variant); padding: 8px 16px 4px; text-transform: none; }
+.mdm-divider { height: 1px; background: var(--md-sys-color-outline-variant); margin: 8px 0; border: 0; }
+.mdm-gap { height: 8px; }
+
+/* item */
+.mdm-item {
+  position: relative; overflow: hidden; display: flex; align-items: center; gap: 12px;
+  min-height: var(--m-item-h); padding: 0 12px; cursor: pointer; color: var(--m-fg);
+  font: var(--md-sys-typescale-label-large); letter-spacing: var(--md-sys-typescale-label-large-tracking);
+  user-select: none; -webkit-tap-highlight-color: transparent;
+}
+.mdm-item .state { position: absolute; inset: 0; background: currentColor; opacity: 0; pointer-events: none;
+  transition: opacity var(--md-sys-motion-spring-default-effects); }
+.mdm-item:hover .state   { opacity: var(--md-sys-state-hover-opacity); }
+.mdm-item.focused .state { opacity: var(--md-sys-state-focus-opacity); }
+.mdm-item:active .state  { opacity: var(--md-sys-state-pressed-opacity); }
+
+.mdm-item .lead, .mdm-item .trail-ic, .mdm-item .submenu-arrow {
+  font-family: 'Material Symbols Outlined'; font-size: 24px; line-height: 1; color: var(--m-icon); flex: 0 0 auto;
+  font-variation-settings: 'FILL' 0,'wght' 400,'opsz' 24;
+}
+.mdm-item .body { flex: 1 1 auto; display: flex; flex-direction: column; min-width: 0; }
+.mdm-item .label { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mdm-item .support { font: var(--md-sys-typescale-body-small); color: var(--md-sys-color-on-surface-variant); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.mdm-item .trail-text { font: var(--md-sys-typescale-label-large); color: var(--md-sys-color-on-surface-variant); flex: 0 0 auto; margin-left: 4px; }
+.mdm-item .badge { flex: 0 0 auto; min-width: 16px; height: 16px; padding: 0 4px; border-radius: var(--md-sys-shape-corner-full);
+  background: var(--md-sys-color-error); color: var(--md-sys-color-on-error); font: var(--md-sys-typescale-label-small); display: inline-flex; align-items: center; justify-content: center; }
+.mdm-item .submenu-arrow { margin-left: 4px; }
+.mdm-item .check { flex: 0 0 auto; width: 24px; font-family: 'Material Symbols Outlined'; font-size: 22px; color: var(--md-sys-color-primary); opacity: 0; }
+
+/* leading swatch / progress slot examples */
+.mdm-item .swatch { flex: 0 0 auto; width: 20px; height: 20px; border-radius: var(--md-sys-shape-corner-full); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-on-surface) 20%, transparent); }
+
+/* selected state */
+.mdm-item.selected { background: var(--m-sel-bg); color: var(--m-sel-fg); }
+.mdm-item.selected .lead, .mdm-item.selected .trail-ic, .mdm-item.selected .submenu-arrow { color: var(--m-sel-fg); }
+.mdm-item.selected .check { opacity: 1; color: var(--m-sel-fg); }
+.mdm-item.selected .trail-text { color: color-mix(in srgb, var(--m-sel-fg) 80%, transparent); }
+
+/* disabled */
+.mdm-item.disabled { cursor: default; color: color-mix(in srgb, var(--m-fg) 38%, transparent); pointer-events: none; }
+.mdm-item.disabled .lead, .mdm-item.disabled .trail-ic, .mdm-item.disabled .trail-text, .mdm-item.disabled .submenu-arrow { color: color-mix(in srgb, var(--m-fg) 38%, transparent); }
+
+/* has-open-submenu parent item stays highlighted */
+.mdm-item.branch-open { background: color-mix(in srgb, var(--m-fg) 8%, transparent); }
+
+/* ripple */
+.mdm-ripple { position: absolute; border-radius: 50%; transform: scale(0); background: currentColor; opacity: .12; pointer-events: none; animation: mdm-ripple 480ms cubic-bezier(0.2,0,0,1); }
+@keyframes mdm-ripple { to { transform: scale(2.4); opacity: 0; } }
+@media (prefers-reduced-motion: reduce){ .mdm-ripple{ animation-duration:1ms; } }
+
+/* =====================================================================
+   TUNER
+   ===================================================================== */
+.tuner-fab { position: fixed; right: 24px; bottom: 24px; z-index: 1400; }
+.tuner {
+  position: fixed; right: 24px; bottom: 92px; z-index: 1400; width: 320px; max-width: calc(100vw - 32px);
+  max-height: min(72vh, 640px); overflow: auto;
+  background: var(--md-sys-color-surface-container-high); color: var(--md-sys-color-on-surface);
+  border-radius: var(--md-sys-shape-corner-extra-large); box-shadow: var(--md-sys-elevation-level3);
+  padding: 20px; transform-origin: bottom right;
+  animation: mdm-open 300ms cubic-bezier(0.42,1.4,0.25,1) both;
+}
+.tuner[hidden] { display: none; }
+.tuner h3 { margin: 0 0 4px; color: var(--md-sys-color-primary); }
+.tuner .grp { margin-top: 18px; }
+.tuner .grp > .lbl { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; color: var(--md-sys-color-on-surface-variant); }
+.tuner .grp > .lbl .val { color: var(--md-sys-color-primary); font: var(--md-sys-typescale-label-large); }
+.tuner .seg-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.tuner .swatches { display: flex; gap: 10px; flex-wrap: wrap; }
+.tuner .seed { width: 30px; height: 30px; border-radius: var(--md-sys-shape-corner-full); cursor: pointer; border: 2px solid transparent; padding: 0; }
+.tuner .seed[aria-pressed="true"] { border-color: var(--md-sys-color-on-surface); }
+.tuner .row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }

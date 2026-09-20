@@ -6,8 +6,10 @@
 <title>BAA Generator</title>
 <link rel="stylesheet" href="/assets/fonts.css">
 <link rel="stylesheet" href="/assets/md3-tokens.css">
+<link rel="stylesheet" href="/assets/mdmenu.css">
 <script defer src="/assets/md3-dynamic-color.js"></script>
 <script defer src="/assets/md3-components.js"></script>
+<script defer src="/assets/mdmenu.js"></script>
 <style>
   :root{ --nav-w:248px; --rail-w:76px; }
   *{box-sizing:border-box}
@@ -57,18 +59,16 @@
     box-shadow:var(--md-sys-elevation-level1);display:flex;flex-direction:column;overflow:hidden}
   .topbar{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
   .topbar .page-title{font:var(--md-sys-typescale-headline-small);margin:0}
-  .canvas-body{padding:22px;overflow-y:auto}
+  .canvas-body{padding:22px;overflow-y:scroll;scrollbar-gutter:stable}
   .code-chip{display:inline-flex;align-items:center;gap:6px;background:var(--md-sys-color-surface-container-highest);
     color:var(--md-sys-color-on-surface-variant);border-radius:9px;padding:4px 10px;font:var(--md-sys-typescale-label-medium)}
   .code-chip .mi{font-size:16px}
 
   /* ---- Card (token-styled, reveal + focus-grow) ---- */
+  /* Kartu statis — tidak berubah ukuran saat field aktif (tanpa flicker) */
   .card{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);
-    border-radius:20px;padding:20px;padding-bottom:20px;margin-bottom:16px;
-    transition:padding-bottom .5s cubic-bezier(0.34,1.35,0.4,1), box-shadow .28s var(--md-sys-motion-easing-standard),
-      border-color .2s}
+    border-radius:20px;padding:20px;margin-bottom:16px}
   .card.filled{background:var(--md-sys-color-surface-container);border-color:transparent}
-  .card:focus-within{padding-bottom:40px;box-shadow:var(--md-sys-elevation-level3);border-color:transparent}
   .sec{display:flex;align-items:center;gap:10px;margin-bottom:16px}
   .grow{flex:1}
   .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
@@ -275,8 +275,6 @@
   </main>
 </div>
 
-<!-- shared MD3 dropdown -->
-<md-menu id="sharedMenu"></md-menu>
 <!-- delete dialog -->
 <md-dialog id="delDlg">
   <span slot="headline">Hapus entry ini?</span>
@@ -330,18 +328,11 @@ function bindTips(){$$('[data-tip]').forEach(el=>{if(el._tip)return;el._tip=1;
   const hide=()=>{clearTimeout(ttmr);tip.classList.remove('show');};
   el.addEventListener('mouseenter',show);el.addEventListener('mouseleave',hide);el.addEventListener('click',hide);});}
 
-/* ===== shared MD3 dropdown ===== */
-const menu=$('#sharedMenu');
+/* ===== MD3 Expressive dropdown (engine dari template dropdown-menu) ===== */
 function openMenu(anchor,items){
-  menu.innerHTML=items.map((it,i)=>`<md-menu-item icon="${it.icon}" data-i="${i}">${esc(it.label)}</md-menu-item>`).join('');
-  menu.querySelectorAll('md-menu-item').forEach(mi=>mi.addEventListener('select',()=>items[+mi.dataset.i].fn()));
-  const r=anchor.getBoundingClientRect();menu.style.position='fixed';
-  menu.style.left=Math.min(r.left,innerWidth-210)+'px';menu.style.top=(r.bottom+4)+'px';menu.show();
-  requestAnimationFrame(()=>{const mh=menu.offsetHeight||220;let top=r.bottom+4;
-    if(top+mh>innerHeight-8)top=Math.max(8,r.top-mh-4);menu.style.top=top+'px';});
-  setTimeout(()=>document.addEventListener('click',closeMenuOnce),0);
+  const model=items.map(it=>({label:it.label,icon:it.icon,onSelect:it.fn}));
+  if(window.MDMenu) MDMenu.open(anchor,model,{openerEl:anchor});
 }
-function closeMenuOnce(){menu.close();document.removeEventListener('click',closeMenuOnce);}
 
 /* ===== AUTH ===== */
 async function boot(){paint();try{S.user=await api('/api/auth/me');showApp();}catch{$('#login').classList.remove('hidden');bindTips();}}
