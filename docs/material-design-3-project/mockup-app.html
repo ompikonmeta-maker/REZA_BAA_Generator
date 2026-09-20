@@ -5,48 +5,34 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>REZA BAA Generator — Mockup</title>
 <style>
-/* ============ Palet MD3 dari seed #024343 (teal) — light & dark ============ */
 :root{
-  --primary:#006a6a; --on-primary:#ffffff; --primary-container:#6ff7f6; --on-primary-container:#002020;
-  --secondary:#4a6363; --on-secondary:#ffffff; --secondary-container:#cce8e7; --on-secondary-container:#051f1f;
-  --tertiary:#4b607c; --on-tertiary:#ffffff; --tertiary-container:#d3e4ff; --on-tertiary-container:#041c35;
-  --error:#ba1a1a; --on-error:#fff; --error-container:#ffdad6; --on-error-container:#410002;
-  --surface:#f4fbfa; --on-surface:#161d1d;
-  --surface-lowest:#ffffff; --surface-low:#eff5f4; --surface:#f4fbfa; --surface-c:#e9efee;
-  --surface-high:#e3e9e9; --surface-highest:#dde4e3;
-  --surface-variant:#dae5e3; --on-surface-variant:#3f4948;
-  --outline:#6f7978; --outline-variant:#bec9c8;
-  --card-r:16px; --ctrl-r:11px;
+  --primary:#006a6a;--on-primary:#fff;--primary-container:#6ff7f6;--on-primary-container:#002020;
+  --secondary:#4a6363;--on-secondary:#fff;--secondary-container:#cce8e7;--on-secondary-container:#051f1f;
+  --tertiary:#4b607c;--on-tertiary:#fff;--tertiary-container:#d3e4ff;--on-tertiary-container:#041c35;
+  --error:#ba1a1a;--error-container:#ffdad6;--on-error-container:#410002;
+  --on-surface:#161d1d;--surface-lowest:#fff;--surface-low:#eff5f4;--surface:#f4fbfa;--surface-c:#e9efee;
+  --surface-high:#e3e9e9;--surface-highest:#dde4e3;--surface-variant:#dae5e3;--on-surface-variant:#3f4948;
+  --outline:#6f7978;--outline-variant:#bec9c8;--card-r:16px;--ctrl-r:11px;
 }
 :root[data-theme="dark"]{
-  --primary:#4cdada; --on-primary:#003737; --primary-container:#004f4f; --on-primary-container:#6ff7f6;
-  --secondary:#b0cccb; --on-secondary:#1b3535; --secondary-container:#324b4b; --on-secondary-container:#cce8e7;
-  --tertiary:#b3c8e8; --on-tertiary:#1c314b; --tertiary-container:#334863; --on-tertiary-container:#d3e4ff;
-  --error:#ffb4ab; --on-error:#690005; --error-container:#93000a; --on-error-container:#ffdad6;
-  --on-surface:#dde4e3;
-  --surface-lowest:#090f0f; --surface-low:#161d1d; --surface:#0e1514; --surface-c:#1a2121;
-  --surface-high:#252b2b; --surface-highest:#303636;
-  --surface-variant:#3f4948; --on-surface-variant:#bec9c8;
-  --outline:#899392; --outline-variant:#3f4948;
+  --primary:#4cdada;--on-primary:#003737;--primary-container:#004f4f;--on-primary-container:#6ff7f6;
+  --secondary:#b0cccb;--on-secondary:#1b3535;--secondary-container:#324b4b;--on-secondary-container:#cce8e7;
+  --tertiary:#b3c8e8;--on-tertiary:#1c314b;--tertiary-container:#334863;--on-tertiary-container:#d3e4ff;
+  --error:#ffb4ab;--error-container:#93000a;--on-error-container:#ffdad6;
+  --on-surface:#dde4e3;--surface-lowest:#090f0f;--surface-low:#161d1d;--surface:#0e1514;--surface-c:#1a2121;
+  --surface-high:#252b2b;--surface-highest:#303636;--surface-variant:#3f4948;--on-surface-variant:#bec9c8;
+  --outline:#899392;--outline-variant:#3f4948;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--surface-high);color:var(--on-surface);
-  font:400 15px/1.5 "Segoe UI",Roboto,system-ui,-apple-system,sans-serif;-webkit-font-smoothing:antialiased;
-  transition:background .3s,color .3s}
+body{margin:0;background:var(--surface-high);color:var(--on-surface);font:400 15px/1.5 "Segoe UI",Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased;transition:background .3s,color .3s}
 .ic{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}
-.ic.dots circle{fill:currentColor;stroke:none}
-.ic.sm{width:16px;height:16px}
-.ic.lg{width:40px;height:40px}
-
-/* ============ Shell ============ */
+.ic.dots circle{fill:currentColor;stroke:none}.ic.sm{width:16px;height:16px}.ic.lg{width:34px;height:34px}
 .shell{display:flex;height:100vh;gap:16px;padding:16px}
-.nav{flex:0 0 auto;width:272px;display:flex;flex-direction:column;background:var(--surface-low);
-  border-radius:var(--card-r);box-shadow:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15);
-  padding:12px;overflow:hidden;transition:width .5s cubic-bezier(.38,1.21,.22,1)}
+.nav{flex:0 0 auto;width:272px;display:flex;flex-direction:column;background:var(--surface-low);border-radius:var(--card-r);box-shadow:0 1px 2px rgba(0,0,0,.3),0 2px 6px 2px rgba(0,0,0,.15);padding:12px;overflow:hidden;transition:width .5s cubic-bezier(.38,1.21,.22,1)}
 .shell.collapsed .nav{width:80px}
 .nav-head{display:flex;align-items:center;gap:12px;height:56px;padding:0 8px}
 .brand-mark{width:34px;height:34px;display:grid;place-items:center;border-radius:10px;background:var(--primary);color:var(--on-primary);flex:0 0 auto}
-.brand-name{font-size:20px;font-weight:600;margin-right:auto;white-space:nowrap;overflow:hidden;max-width:170px;transition:opacity .25s .14s,max-width .3s .14s}
+.brand-name{font-size:19px;font-weight:600;margin-right:auto;white-space:nowrap;overflow:hidden;max-width:170px;transition:opacity .25s .14s,max-width .3s .14s}
 .nav-scroll{flex:1 1 auto;overflow:hidden auto;min-height:0;margin-top:8px}
 .section-label{font-size:11px;font-weight:600;color:var(--on-surface-variant);padding:16px 16px 8px;text-transform:uppercase;letter-spacing:.08em;white-space:nowrap;max-height:40px;overflow:hidden;transition:opacity .25s,max-height .3s,padding .3s}
 .nav-item{position:relative;display:flex;align-items:center;gap:16px;height:52px;padding:0 16px;margin:4px 0;border-radius:var(--ctrl-r);color:var(--on-surface-variant);cursor:pointer;text-decoration:none;overflow:hidden;white-space:nowrap;transition:background .15s,color .15s,padding .5s cubic-bezier(.38,1.21,.22,1)}
@@ -63,75 +49,66 @@ body{margin:0;background:var(--surface-high);color:var(--on-surface);
 .profile .who{display:flex;flex-direction:column;overflow:hidden;max-width:160px;transition:opacity .25s .14s,max-width .3s .14s}
 .profile .who b{font-size:14px}.profile .who span{font-size:12px;color:var(--on-surface-variant)}
 .shell.collapsed .brand-name,.shell.collapsed .nav-item .lbl,.shell.collapsed .nav-item .badge,.shell.collapsed .profile .who{opacity:0;max-width:0;min-width:0;margin:0}
-.shell.collapsed .nav-item{padding-left:calc(40px - 11px);padding-right:0;gap:0}
-.shell.collapsed .profile{padding-left:calc(40px - 20px);padding-right:0;gap:0}
+.shell.collapsed .nav-item{padding-left:29px;padding-right:0;gap:0}
+.shell.collapsed .profile{padding-left:20px;padding-right:0;gap:0}
 .shell.collapsed .section-label{opacity:0;max-height:0;padding-top:0;padding-bottom:0}
-.shell.collapsed .nav-head{justify-content:center;gap:0;padding:0}
-.shell.collapsed .brand-name{display:none}
-
-/* ============ Canvas ============ */
+.shell.collapsed .nav-head{justify-content:center;gap:0;padding:0}.shell.collapsed .brand-name{display:none}
 .canvas{flex:1 1 auto;min-width:0;background:var(--surface);border-radius:var(--card-r);box-shadow:0 1px 3px rgba(0,0,0,.15);overflow:hidden;display:flex;flex-direction:column}
 .topbar{display:flex;align-items:center;gap:14px;padding:14px 24px;border-bottom:1px solid var(--outline-variant)}
 .topbar .page-title{font-size:22px;font-weight:500;margin-right:auto}
 .canvas-body{padding:24px;overflow-y:auto}
-.grid2{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
-@media(max-width:1000px){.grid2{grid-template-columns:1fr}}
-
-/* ============ Komponen ============ */
 .btn{display:inline-flex;align-items:center;gap:8px;height:40px;padding:0 20px;border:none;border-radius:var(--ctrl-r);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:filter .15s,background .15s}
 .btn.filled{background:var(--primary);color:var(--on-primary)}
 .btn.tonal{background:var(--secondary-container);color:var(--on-secondary-container)}
 .btn.text{background:transparent;color:var(--primary);padding:0 12px}
-.btn:hover{filter:brightness(1.05)}
-.btn.text:hover{background:color-mix(in srgb,var(--primary) 10%,transparent)}
+.btn.sm{height:32px;padding:0 12px;font-size:13px;border-radius:9px}
+.btn:hover{filter:brightness(1.05)}.btn.text:hover{background:color-mix(in srgb,var(--primary) 10%,transparent)}
 .iconbtn{width:40px;height:40px;border:none;background:transparent;color:var(--on-surface-variant);border-radius:50%;display:grid;place-items:center;cursor:pointer;transition:background .15s}
 .iconbtn:hover{background:color-mix(in srgb,var(--on-surface) 8%,transparent)}
 .iconbtn.tonal{background:var(--secondary-container);color:var(--on-secondary-container)}
-.card{background:var(--surface);border:1px solid var(--outline-variant);border-radius:var(--card-r);padding:20px}
+.iconbtn.sm{width:32px;height:32px}
+.card{background:var(--surface);border:1px solid var(--outline-variant);border-radius:var(--card-r);padding:20px;margin-bottom:16px}
 .card.filled{background:var(--surface-c);border-color:transparent}
 .chip{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:9px;border:1px solid var(--outline-variant);background:transparent;color:var(--on-surface-variant);font-size:13px;font-weight:500}
-.tf{display:flex;flex-direction:column;gap:4px}
-.tf label{font-size:12px;color:var(--on-surface-variant);padding-left:2px}
-.tf .box{display:flex;align-items:center;gap:8px;height:52px;padding:0 14px;border:1px solid var(--outline);border-radius:var(--ctrl-r);color:var(--on-surface-variant);background:var(--surface)}
-.tf .box .val{color:var(--on-surface);font-size:15px}
-.tf.focus .box{border-color:var(--primary);border-width:2px;padding:0 13px}
-
 .card-head{display:flex;align-items:center;gap:10px;margin-bottom:16px}
 .card-head h3{font-size:16px;font-weight:600;margin:0 auto 0 0}
-.card-head .md-icon-accent{color:var(--primary)}
-.field{margin-bottom:14px}
-.serial-row{display:flex;gap:8px;align-items:flex-end}
-.serial-row .tf{flex:1 1 auto}
-.hint{font-size:12px;color:var(--on-surface-variant);margin:4px 0 0}
-.dropzone{border:2px dashed var(--outline);border-radius:var(--card-r);padding:26px;text-align:center;color:var(--on-surface-variant);cursor:pointer;transition:background .2s,border-color .2s}
-.dropzone:hover{background:color-mix(in srgb,var(--primary) 6%,transparent);border-color:var(--primary)}
-.dropzone .ic{color:var(--primary);margin:0 auto}
-.thumbs{display:grid;grid-template-columns:repeat(auto-fill,minmax(92px,1fr));gap:10px;margin-top:14px}
-.thumb{position:relative;aspect-ratio:1;border-radius:var(--ctrl-r);overflow:hidden;background:var(--surface-highest);display:grid;place-items:center;color:var(--on-surface-variant)}
-.thumb.add{border:2px dashed var(--outline-variant);background:transparent}
-.thumb .ocr-badge{position:absolute;left:6px;bottom:6px;background:var(--tertiary-container);color:var(--on-tertiary-container);font-size:11px;font-weight:600;padding:2px 7px;border-radius:999px}
-.thumb .del{position:absolute;top:4px;right:4px;width:28px;height:28px;background:rgba(0,0,0,.45);color:#fff}
-.thumb .del:hover{background:rgba(0,0,0,.6)}
-.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:12px}
+.acc{color:var(--primary)}
+.hint{font-size:12px;color:var(--on-surface-variant)}
 .banner{display:flex;align-items:center;gap:12px;background:var(--primary-container);color:var(--on-primary-container);padding:12px 16px;border-radius:var(--card-r);margin-bottom:16px;font-size:14px}
-
-.log-item{display:flex;align-items:center;gap:14px;padding:12px;border-radius:var(--ctrl-r);animation:rise .5s cubic-bezier(.05,.7,.1,1) both}
-.log-item+.log-item{margin-top:4px}
-.log-item:hover{background:color-mix(in srgb,var(--primary) 5%,transparent)}
-@keyframes rise{from{opacity:0;transform:translateX(26px)}to{opacity:1;transform:none}}
-.li-ic{width:40px;height:40px;border-radius:var(--ctrl-r);flex:0 0 auto;display:grid;place-items:center;background:var(--secondary-container);color:var(--on-secondary-container)}
-.li-txt{flex:1 1 auto;min-width:0}.li-txt b{font-size:14px;display:block}.li-txt span{font-size:12px;color:var(--on-surface-variant)}
-.li-photos{display:inline-flex;align-items:center;gap:4px;font-size:13px;font-weight:500;color:var(--on-surface-variant)}
-
+/* text fields */
+.frow{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+.tf{display:flex;flex-direction:column;gap:4px}
+.tf label{font-size:12px;color:var(--on-surface-variant);padding-left:2px}
+.tf .box{display:flex;align-items:center;gap:8px;height:50px;padding:0 14px;border:1px solid var(--outline);border-radius:var(--ctrl-r);color:var(--on-surface-variant);background:var(--surface)}
+.tf .box .val{color:var(--on-surface)}.tf .box .ph{color:var(--on-surface-variant)}
+/* inventory table */
+.inv{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:14px}
+.inv th{text-align:left;font-size:12px;font-weight:600;color:var(--on-surface-variant);padding:0 8px}
+.inv td{padding:0}
+.inv .cell{display:flex;align-items:center;height:46px;padding:0 12px;border:1px solid var(--outline-variant);background:var(--surface);border-radius:9px}
+.inv td:first-child .cell{border-radius:9px 0 0 9px}
+.inv .sn .cell{border-color:var(--tertiary);position:relative}
+.inv .sn .ocrtag{position:absolute;right:8px;font-size:10px;font-weight:700;color:var(--on-tertiary-container);background:var(--tertiary-container);padding:1px 6px;border-radius:999px}
+/* photo grid */
+.pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
+.pslot{border:1.5px dashed var(--outline-variant);border-radius:var(--card-r);padding:12px;display:flex;flex-direction:column;gap:8px;min-height:150px;transition:border-color .2s,background .2s}
+.pslot:hover{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 5%,transparent)}
+.pslot .plabel{font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px}
+.pslot .pdrop{flex:1 1 auto;display:grid;place-items:center;color:var(--on-surface-variant);text-align:center;gap:4px;font-size:12px}
+.pslot .pdrop .ic{color:var(--primary)}
+.pslot.sn{border-color:var(--tertiary)}
+.pslot.sn .plabel{color:var(--tertiary)}
+.pslot.filled{border-style:solid;border-color:var(--outline-variant)}
+.pslot .thumb{flex:1 1 auto;border-radius:9px;background:var(--surface-highest);display:grid;place-items:center;color:var(--on-surface-variant);position:relative;overflow:hidden}
+.pslot .snread{background:var(--tertiary-container);color:var(--on-tertiary-container);font-size:12px;font-weight:600;padding:4px 8px;border-radius:8px;display:flex;align-items:center;gap:6px}
+.actions{display:flex;gap:8px;justify-content:flex-end;margin-top:8px}
 .menu{position:fixed;z-index:80;min-width:190px;background:var(--surface-high);border-radius:var(--ctrl-r);box-shadow:0 4px 8px 3px rgba(0,0,0,.15),0 1px 3px rgba(0,0,0,.3);padding:6px;opacity:0;pointer-events:none;transform-origin:top right;transform:scaleY(.4);transition:opacity .15s,transform .35s cubic-bezier(.42,1.67,.21,.9)}
 .menu.open{opacity:1;pointer-events:auto;transform:scaleY(1)}
 .menu button{display:flex;align-items:center;gap:12px;width:100%;border:none;background:none;cursor:pointer;padding:10px 12px;border-radius:8px;color:var(--on-surface);font-size:14px;font-family:inherit;text-align:left}
-.menu button:hover{background:color-mix(in srgb,var(--primary) 8%,transparent)}
-.menu .ic{color:var(--on-surface-variant)}
+.menu button:hover{background:color-mix(in srgb,var(--primary) 8%,transparent)}.menu .ic{color:var(--on-surface-variant)}
 </style>
 </head>
 <body>
-<!-- ==== SVG sprite (ikon inline, tanpa font eksternal) ==== -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true"><defs>
 <g id="i-menu"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></g>
 <g id="i-menuopen"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="14" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/><polyline points="18 9 21 12 18 15"/></g>
@@ -143,36 +120,35 @@ body{margin:0;background:var(--surface-high);color:var(--on-surface);
 <g id="i-clock"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></g>
 <g id="i-settings"><line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/></g>
 <g id="i-box"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5" rx="1"/><line x1="10" y1="12" x2="14" y2="12"/></g>
-<g id="i-tag"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8Z"/><circle cx="7" cy="7" r="1" fill="currentColor" stroke="none"/></g>
 <g id="i-scan"><path d="M3 7V5a2 2 0 0 1 2-2h2"/><path d="M17 3h2a2 2 0 0 1 2 2v2"/><path d="M21 17v2a2 2 0 0 1-2 2h-2"/><path d="M7 21H5a2 2 0 0 1-2-2v-2"/><line x1="7" y1="12" x2="17" y2="12"/></g>
-<g id="i-upload"><path d="M16 16l-4-4-4 4"/><path d="M12 12v9"/><path d="M20.4 18.4A5 5 0 0 0 18 9h-1.3A8 8 0 1 0 3 16.3"/></g>
 <g id="i-close"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></g>
 <g id="i-add"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></g>
-<g id="i-cpu"><rect x="4" y="4" width="16" height="16" rx="2"/><rect x="9" y="9" width="6" height="6"/><line x1="9" y1="1" x2="9" y2="4"/><line x1="15" y1="1" x2="15" y2="4"/><line x1="9" y1="20" x2="9" y2="23"/><line x1="15" y1="20" x2="15" y2="23"/><line x1="20" y1="9" x2="23" y2="9"/><line x1="20" y1="14" x2="23" y2="14"/><line x1="1" y1="9" x2="4" y2="9"/><line x1="1" y1="14" x2="4" y2="14"/></g>
-<g id="i-photos"><rect x="3" y="3" width="14" height="14" rx="2"/><circle cx="8" cy="8" r="1.6"/><path d="M17 12l-3-3-5 5"/><path d="M21 8v11a2 2 0 0 1-2 2H8"/></g>
 <g id="i-more" class="dots"><circle cx="12" cy="5" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="12" cy="19" r="1.6"/></g>
 <g id="i-info"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></g>
 <g id="i-save"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2Z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></g>
 <g id="i-grid"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></g>
-<g id="i-pdf"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/><path d="M9 13h1a1.5 1.5 0 0 1 0 3H9v-3Zm0 0v5"/></g>
+<g id="i-pdf"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z"/><polyline points="14 2 14 8 20 8"/></g>
 <g id="i-chev"><polyline points="9 6 15 12 9 18"/></g>
-<g id="i-verified"><path d="M22 11.1V12a10 10 0 1 1-5.9-9.1"/><polyline points="22 4 12 14 9 11"/></g>
 <g id="i-moon"><path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z"/></g>
 <g id="i-image"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.6"/><polyline points="21 15 16 10 5 21"/></g>
+<g id="i-camera"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></g>
+<g id="i-pin"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></g>
+<g id="i-cal"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></g>
+<g id="i-check"><polyline points="20 6 9 17 4 12"/></g>
+<g id="i-tag"><path d="M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L2 12V2h10l8.6 8.6a2 2 0 0 1 0 2.8Z"/><circle cx="7" cy="7" r="1" fill="currentColor" stroke="none"/></g>
 <g id="i-reset"><polyline points="1 4 1 10 7 10"/><path d="M3.5 15a9 9 0 1 0 2.1-9.4L1 10"/></g>
 </defs></svg>
 
 <div class="shell" id="shell">
-  <!-- SIDEBAR -->
   <aside class="nav">
     <div class="nav-head">
       <span class="brand-mark"><svg class="ic"><use href="#i-box"/></svg></span>
       <span class="brand-name">REZA BAA</span>
-      <button class="iconbtn" id="railToggle" aria-label="Ciutkan"><svg class="ic"><use href="#i-menuopen"/></svg></button>
+      <button class="iconbtn" id="railToggle"><svg class="ic"><use href="#i-menuopen"/></svg></button>
     </div>
     <div class="nav-scroll">
-      <a class="nav-item active"><svg class="ic"><use href="#i-edit"/></svg><span class="lbl">Entry Data</span></a>
-      <a class="nav-item"><svg class="ic"><use href="#i-rows"/></svg><span class="lbl">Log Data</span><span class="badge">128</span></a>
+      <a class="nav-item active"><svg class="ic"><use href="#i-edit"/></svg><span class="lbl">Entry BAA</span></a>
+      <a class="nav-item"><svg class="ic"><use href="#i-rows"/></svg><span class="lbl">Log Lokasi</span><span class="badge">42</span></a>
       <a class="nav-item"><svg class="ic"><use href="#i-file"/></svg><span class="lbl">Template</span></a>
       <a class="nav-item"><svg class="ic"><use href="#i-download"/></svg><span class="lbl">Output</span></a>
       <div class="section-label">Admin</div>
@@ -182,100 +158,127 @@ body{margin:0;background:var(--surface-high);color:var(--on-surface);
     <div class="nav-foot">
       <div class="nav-divider"></div>
       <a class="nav-item"><svg class="ic"><use href="#i-settings"/></svg><span class="lbl">Pengaturan</span></a>
-      <div class="profile"><div class="avatar">RZ</div><div class="who"><b>Reza</b><span>Operator</span></div></div>
+      <div class="profile"><div class="avatar">RZ</div><div class="who"><b>Reza</b><span>Teknisi</span></div></div>
     </div>
   </aside>
 
-  <!-- CANVAS -->
   <main class="canvas">
     <header class="topbar">
-      <button class="iconbtn" id="topToggle" aria-label="Toggle"><svg class="ic"><use href="#i-menu"/></svg></button>
-      <span class="page-title">Entry Data</span>
-      <span class="chip"><svg class="ic sm"><use href="#i-verified"/></svg>Template: BAA_Form.xlsx</span>
-      <button class="iconbtn tonal" id="themeBtn" aria-label="Tema"><svg class="ic"><use href="#i-moon"/></svg></button>
+      <button class="iconbtn" id="topToggle"><svg class="ic"><use href="#i-menu"/></svg></button>
+      <span class="page-title">Entry BAA — Lokasi_0043</span>
+      <span class="chip"><svg class="ic sm"><use href="#i-file"/></svg>Template_BAA.xlsx</span>
+      <button class="iconbtn tonal" id="themeBtn"><svg class="ic"><use href="#i-moon"/></svg></button>
     </header>
 
     <div class="canvas-body">
       <div class="banner"><svg class="ic"><use href="#i-info"/></svg>
-        <span>Isi field, unggah foto, atau scan serial number dari foto. Semua tersimpan ke database pusat.</span></div>
+        <span>Berita Acara Aktivasi Starlink. Isi data lokasi, inventory, & foto per kategori. Foto SN otomatis dibaca OCR → isi kolom SN/Tagging. Semua tersimpan ke database pusat.</span></div>
 
-      <div class="grid2">
-        <!-- FORM -->
-        <div class="card">
-          <div class="card-head"><svg class="ic md-icon-accent"><use href="#i-edit"/></svg><h3>Record baru</h3></div>
-
-          <div class="field serial-row">
-            <div class="tf focus"><label>Serial Number</label>
-              <div class="box"><svg class="ic sm"><use href="#i-tag"/></svg><span class="val">SN-4471-AX</span></div></div>
-            <button class="btn tonal"><svg class="ic sm"><use href="#i-scan"/></svg>Scan OCR</button>
-          </div>
-          <p class="hint">OCR mengisi otomatis dari foto — bisa dikoreksi manual.</p>
-
-          <div class="field tf" style="margin-top:14px"><label>Nama Unit</label><div class="box"><span class="val">&nbsp;</span></div></div>
-          <div class="field tf"><label>Lokasi</label><div class="box"><span class="val">&nbsp;</span></div></div>
-          <div class="field tf"><label>Tanggal</label><div class="box"><span class="val" style="color:var(--on-surface-variant)">dd / mm / yyyy</span></div></div>
-          <div class="field tf"><label>Keterangan</label><div class="box"><span class="val">&nbsp;</span></div></div>
-
-          <div class="card-head" style="margin-top:8px"><svg class="ic md-icon-accent"><use href="#i-image"/></svg><h3>Foto (detail log)</h3></div>
-          <div class="dropzone">
-            <svg class="ic lg"><use href="#i-upload"/></svg>
-            <p style="margin:8px 0 0;font-size:14px">Tarik foto ke sini atau klik untuk unggah</p>
-          </div>
-          <div class="thumbs">
-            <div class="thumb"><svg class="ic lg"><use href="#i-image"/></svg><span class="ocr-badge">OCR</span>
-              <button class="iconbtn del"><svg class="ic sm"><use href="#i-close"/></svg></button></div>
-            <div class="thumb"><svg class="ic lg"><use href="#i-image"/></svg>
-              <button class="iconbtn del"><svg class="ic sm"><use href="#i-close"/></svg></button></div>
-            <div class="thumb add"><svg class="ic lg"><use href="#i-add"/></svg></div>
-          </div>
-
-          <div class="actions">
-            <button class="btn text"><svg class="ic sm"><use href="#i-reset"/></svg>Reset</button>
-            <button class="btn filled"><svg class="ic sm"><use href="#i-save"/></svg>Simpan ke database</button>
-          </div>
+      <!-- DATA LOKASI -->
+      <div class="card">
+        <div class="card-head"><svg class="ic acc"><use href="#i-pin"/></svg><h3>Data Lokasi</h3></div>
+        <div class="frow">
+          <div class="tf"><label>Nama Lokasi / Koperasi</label><div class="box"><span class="val">Kopdes Merah Putih — Sukamaju</span></div></div>
+          <div class="tf"><label>Tanggal Aktivasi</label><div class="box"><svg class="ic sm"><use href="#i-cal"/></svg><span class="val">20 / 09 / 2026</span></div></div>
+          <div class="tf"><label>Teknisi</label><div class="box"><span class="val">Reza</span></div></div>
+          <div class="tf"><label>PIC Lokasi</label><div class="box"><span class="ph">— isi —</span></div></div>
         </div>
+      </div>
 
-        <!-- LOG + OUTPUT -->
-        <div>
-          <div class="card" style="margin-bottom:16px">
-            <div class="card-head"><svg class="ic md-icon-accent"><use href="#i-rows"/></svg><h3>Log terbaru</h3>
-              <button class="btn text">Semua<svg class="ic sm"><use href="#i-chev"/></svg></button></div>
-
-            <div class="log-item" style="animation-delay:.05s">
-              <span class="li-ic"><svg class="ic"><use href="#i-cpu"/></svg></span>
-              <div class="li-txt"><b>SN-4470-AX</b><span>Gudang A · Reza · 2 mnt lalu</span></div>
-              <span class="li-photos"><svg class="ic sm"><use href="#i-photos"/></svg>3</span>
-              <button class="iconbtn row-menu"><svg class="ic"><use href="#i-more"/></svg></button>
-            </div>
-            <div class="log-item" style="animation-delay:.12s">
-              <span class="li-ic"><svg class="ic"><use href="#i-cpu"/></svg></span>
-              <div class="li-txt"><b>SN-4469-AX</b><span>Gudang B · Reza · 10 mnt lalu</span></div>
-              <span class="li-photos"><svg class="ic sm"><use href="#i-photos"/></svg>2</span>
-              <button class="iconbtn row-menu"><svg class="ic"><use href="#i-more"/></svg></button>
-            </div>
-            <div class="log-item" style="animation-delay:.19s">
-              <span class="li-ic"><svg class="ic"><use href="#i-cpu"/></svg></span>
-              <div class="li-txt"><b>SN-4468-AX</b><span>Gudang A · Dwi · 1 jam lalu</span></div>
-              <span class="li-photos"><svg class="ic sm"><use href="#i-photos"/></svg>1</span>
-              <button class="iconbtn row-menu"><svg class="ic"><use href="#i-more"/></svg></button>
-            </div>
-          </div>
-
-          <div class="card filled">
-            <div class="card-head"><svg class="ic md-icon-accent"><use href="#i-download"/></svg><h3>Generate output</h3></div>
-            <p class="hint" style="margin-bottom:14px">Data log → ditulis ke salinan template (format asli utuh) + PDF.</p>
-            <div style="display:flex;gap:8px;flex-wrap:wrap">
-              <button class="btn filled"><svg class="ic sm"><use href="#i-grid"/></svg>Export Excel</button>
-              <button class="btn tonal"><svg class="ic sm"><use href="#i-pdf"/></svg>Export PDF</button>
-            </div>
-          </div>
+      <!-- FORM INVENTORY -->
+      <div class="card">
+        <div class="card-head"><svg class="ic acc"><use href="#i-rows"/></svg><h3>Form Inventory</h3>
+          <button class="btn tonal sm"><svg class="ic sm"><use href="#i-add"/></svg>Tambah baris</button></div>
+        <div style="overflow-x:auto">
+        <table class="inv">
+          <thead><tr><th>Nama Barang</th><th>Merk / Type</th><th>Jumlah</th><th>SN / Tagging</th><th>Keterangan</th><th></th></tr></thead>
+          <tbody>
+            <tr>
+              <td><div class="cell">Kit Starlink</div></td>
+              <td><div class="cell">Standard Gen 3</div></td>
+              <td><div class="cell">1</div></td>
+              <td class="sn"><div class="cell"><span>KITX-7788-AX</span><span class="ocrtag">OCR</span></div></td>
+              <td><div class="cell">Baik</div></td>
+              <td><button class="iconbtn sm"><svg class="ic sm"><use href="#i-close"/></svg></button></td>
+            </tr>
+            <tr>
+              <td><div class="cell">Router</div></td>
+              <td><div class="cell">Starlink Router</div></td>
+              <td><div class="cell">1</div></td>
+              <td class="sn"><div class="cell"><span>RTR-2231-QK</span><span class="ocrtag">OCR</span></div></td>
+              <td><div class="cell">Baik</div></td>
+              <td><button class="iconbtn sm"><svg class="ic sm"><use href="#i-close"/></svg></button></td>
+            </tr>
+            <tr>
+              <td><div class="cell">Access Point</div></td>
+              <td><div class="cell">—</div></td>
+              <td><div class="cell">1</div></td>
+              <td class="sn"><div class="cell" style="color:var(--on-surface-variant)"><span>menunggu scan…</span><span class="ocrtag">OCR</span></div></td>
+              <td><div class="cell"></div></td>
+              <td><button class="iconbtn sm"><svg class="ic sm"><use href="#i-close"/></svg></button></td>
+            </tr>
+          </tbody>
+        </table>
         </div>
+      </div>
+
+      <!-- FOTO BERKATEGORI -->
+      <div class="card">
+        <div class="card-head"><svg class="ic acc"><use href="#i-camera"/></svg><h3>Foto & Capture (11 kategori)</h3>
+          <span class="chip"><svg class="ic sm"><use href="#i-check"/></svg>3 / 11 terisi</span></div>
+        <div class="pgrid">
+          <!-- SN slots (OCR) -->
+          <div class="pslot sn filled">
+            <div class="plabel"><svg class="ic sm"><use href="#i-tag"/></svg>SN Kit Starlink</div>
+            <div class="thumb"><svg class="ic lg"><use href="#i-image"/></svg></div>
+            <div class="snread"><svg class="ic sm"><use href="#i-scan"/></svg>KITX-7788-AX</div>
+          </div>
+          <div class="pslot sn filled">
+            <div class="plabel"><svg class="ic sm"><use href="#i-tag"/></svg>SN Router</div>
+            <div class="thumb"><svg class="ic lg"><use href="#i-image"/></svg></div>
+            <div class="snread"><svg class="ic sm"><use href="#i-scan"/></svg>RTR-2231-QK</div>
+          </div>
+          <div class="pslot sn">
+            <div class="plabel"><svg class="ic sm"><use href="#i-tag"/></svg>SN Access Point</div>
+            <div class="pdrop"><svg class="ic lg"><use href="#i-scan"/></svg>Unggah → OCR baca serial</div>
+          </div>
+          <!-- regular slots -->
+          <div class="pslot filled">
+            <div class="plabel"><svg class="ic sm"><use href="#i-camera"/></svg>Dashboard (STARMON)</div>
+            <div class="thumb"><svg class="ic lg"><use href="#i-image"/></svg></div>
+          </div>
+          <div class="pslot"><div class="plabel"><svg class="ic sm"><use href="#i-camera"/></svg>Tampak Depan / Plang</div><div class="pdrop"><svg class="ic lg"><use href="#i-add"/></svg>Unggah foto</div></div>
+          <div class="pslot"><div class="plabel"><svg class="ic sm"><use href="#i-camera"/></svg>Teknisi + PIC</div><div class="pdrop"><svg class="ic lg"><use href="#i-add"/></svg>Unggah foto</div></div>
+          <div class="pslot"><div class="plabel"><svg class="ic sm"><use href="#i-camera"/></svg>Perangkat Outdoor</div><div class="pdrop"><svg class="ic lg"><use href="#i-add"/></svg>Unggah foto</div></div>
+          <div class="pslot"><div class="plabel"><svg class="ic sm"><use href="#i-camera"/></svg>Perangkat Indoor</div><div class="pdrop"><svg class="ic lg"><use href="#i-add"/></svg>Unggah foto</div></div>
+          <div class="pslot"><div class="plabel"><svg class="ic sm"><use href="#i-camera"/></svg>Capture Tes Ping</div><div class="pdrop"><svg class="ic lg"><use href="#i-add"/></svg>Unggah foto</div></div>
+          <div class="pslot"><div class="plabel"><svg class="ic sm"><use href="#i-camera"/></svg>Tes Bandwidth / Speed</div><div class="pdrop"><svg class="ic lg"><use href="#i-add"/></svg>Unggah foto</div></div>
+          <div class="pslot"><div class="plabel"><svg class="ic sm"><use href="#i-camera"/></svg>Buka Situs SIMKOPDES</div><div class="pdrop"><svg class="ic lg"><use href="#i-add"/></svg>Unggah foto</div></div>
+        </div>
+      </div>
+
+      <!-- GENERATE -->
+      <div class="card filled">
+        <div class="card-head"><svg class="ic acc"><use href="#i-download"/></svg><h3>Generate output</h3></div>
+        <p class="hint" style="margin-bottom:14px">Ditulis ke salinan Template_BAA.xlsx — baris baru di sheet <b>LOG</b> + sheet detail <b>Lokasi_00xx</b> (inventory + foto ditempel per kategori), lalu PDF.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center">
+          <span class="chip">Cakupan:</span>
+          <button class="btn tonal sm">Lokasi ini</button>
+          <button class="btn tonal sm">Semua lokasi (gabung)</button>
+          <span style="flex:1"></span>
+          <button class="btn filled"><svg class="ic sm"><use href="#i-grid"/></svg>Export Excel</button>
+          <button class="btn tonal"><svg class="ic sm"><use href="#i-pdf"/></svg>Export PDF</button>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn text"><svg class="ic sm"><use href="#i-reset"/></svg>Reset</button>
+        <button class="btn filled"><svg class="ic sm"><use href="#i-save"/></svg>Simpan ke database</button>
       </div>
     </div>
   </main>
 </div>
 
-<!-- DROPDOWN MENU -->
 <div class="menu" id="rowMenu">
   <button><svg class="ic sm"><use href="#i-file"/></svg>Lihat detail</button>
   <button><svg class="ic sm"><use href="#i-edit"/></svg>Edit</button>
@@ -287,13 +290,7 @@ body{margin:0;background:var(--surface-high);color:var(--on-surface);
   const shell=document.getElementById('shell');
   const toggle=()=>shell.classList.toggle('collapsed');
   railToggle.onclick=toggle; topToggle.onclick=toggle;
-  themeBtn.onclick=()=>{const r=document.documentElement;
-    r.dataset.theme=r.dataset.theme==='dark'?'light':'dark';};
-  const menu=document.getElementById('rowMenu');
-  document.querySelectorAll('.row-menu').forEach(b=>b.addEventListener('click',e=>{
-    e.stopPropagation();const r=b.getBoundingClientRect();
-    menu.style.top=(r.bottom+6)+'px';menu.style.left=(r.right-190)+'px';menu.classList.add('open');}));
-  document.addEventListener('click',()=>menu.classList.remove('open'));
+  themeBtn.onclick=()=>{const r=document.documentElement;r.dataset.theme=r.dataset.theme==='dark'?'light':'dark';};
 </script>
 </body>
 </html>
