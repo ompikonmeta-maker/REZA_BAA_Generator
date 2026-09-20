@@ -1,0 +1,10 @@
+/* Font lokal untuk operasi offline (tanpa Google Fonts).
+   Material Symbols = variable font (mendukung axis FILL/wght/GRAD/opsz).
+   Teks memakai font sistem (Segoe UI/Roboto/system-ui) sebagai fallback. */
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 100 700;
+  src: url('fonts/MaterialSymbolsOutlined.woff2') format('woff2');
+  font-display: block;
+}

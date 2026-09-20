@@ -1,16 +1,20 @@
 """Lokasi (BAA per lokasi) + item inventory."""
 from __future__ import annotations
 
-import re
+import secrets
+import shutil
 import sqlite3
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
 
-from .. import db
+from .. import config, db
 from ..deps import audit, current_user, get_db
 
 router = APIRouter(prefix="/api/locations", tags=["locations"])
+
+# Alfabet tanpa karakter ambigu (tanpa I, L, O, 0, 1)
+_CODE_ALPHABET = "ABCDEFGHJKMNPQRSTUVWXYZ23456789"
 
 
 class LocationIn(BaseModel):
@@ -31,14 +35,15 @@ class InventoryIn(BaseModel):
     items: list[InventoryItem]
 
 
-def _next_code(conn: sqlite3.Connection) -> str:
-    rows = conn.execute("SELECT code FROM locations").fetchall()
-    mx = 0
-    for r in rows:
-        m = re.search(r"(\d+)$", r["code"] or "")
-        if m:
-            mx = max(mx, int(m.group(1)))
-    return f"Lokasi_{mx + 1:04d}"
+def _gen_code(conn: sqlite3.Connection) -> str:
+    """Kode unik acak (mis. LOK-7F3K9Q). Aman dibuat paralel oleh banyak user
+    tanpa koordinasi, dan valid sebagai nama sheet Excel (<=31 char, tanpa
+    karakter terlarang)."""
+    for _ in range(30):
+        code = "LOK-" + "".join(secrets.choice(_CODE_ALPHABET) for _ in range(6))
+        if not conn.execute("SELECT 1 FROM locations WHERE code=?", (code,)).fetchone():
+            return code
+    return "LOK-" + secrets.token_hex(6).upper()  # fallback
 
 
 def _location_dict(conn: sqlite3.Connection, row) -> dict:
@@ -69,10 +74,13 @@ def list_locations(conn: sqlite3.Connection = Depends(get_db), user=Depends(curr
         "FROM locations l ORDER BY l.id DESC"
     ).fetchall()
     import json
+    is_admin = user["role"] == "admin"
     return [
         {"id": r["id"], "code": r["code"], "name": r["name"], "status": r["status"],
          "data": json.loads(r["data_json"]), "photo_count": r["photo_count"],
-         "inv_count": r["inv_count"], "updated_at": r["updated_at"]}
+         "inv_count": r["inv_count"], "updated_at": r["updated_at"],
+         "created_by": r["created_by"],
+         "can_delete": is_admin or r["created_by"] == user["id"]}
         for r in rows
     ]
 
@@ -81,7 +89,7 @@ def list_locations(conn: sqlite3.Connection = Depends(get_db), user=Depends(curr
 def create_location(body: LocationIn, conn: sqlite3.Connection = Depends(get_db),
                     user=Depends(current_user)):
     import json
-    code = _next_code(conn)
+    code = _gen_code(conn)
     now = db.now_iso()
     cur = conn.execute(
         "INSERT INTO locations(code,name,data_json,status,created_by,created_at,updated_at) "
@@ -145,7 +153,11 @@ def delete_location(loc_id: int, conn: sqlite3.Connection = Depends(get_db),
     row = conn.execute("SELECT * FROM locations WHERE id=?", (loc_id,)).fetchone()
     if not row:
         raise HTTPException(404, "Lokasi tidak ditemukan")
-    conn.execute("DELETE FROM locations WHERE id=?", (loc_id,))
+    if user["role"] != "admin" and row["created_by"] != user["id"]:
+        raise HTTPException(403, "Hanya admin atau pembuat entry yang boleh menghapus")
+    conn.execute("DELETE FROM locations WHERE id=?", (loc_id,))  # cascade -> inventory & photos
     conn.commit()
+    # Hapus folder foto fisik lokasi ini dari storage terpusat
+    shutil.rmtree(config.IMAGES_DIR / row["code"], ignore_errors=True)
     audit(conn, user, "delete", "location", loc_id, row["code"])
     return {"ok": True}
