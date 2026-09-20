@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Tool Saya — MD3</title>
+
+<!-- 1) Toolkit MD3 Expressive -->
+<link rel="stylesheet" href="md3-tokens.css">
+<script src="md3-dynamic-color.js"></script>
+<script src="md3-components.js" defer></script>
+
+<!-- 2) Style tool kamu — pakai TOKEN, bukan hex, agar ikut tema & dynamic color -->
+<style>
+  body { margin: 0; }
+  .app { max-width: 880px; margin: 0 auto; padding: 24px; }
+
+  .bar {
+    display: flex; align-items: center; gap: 12px; margin-bottom: 24px;
+    padding-bottom: 16px; border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  }
+  .bar h1 { font: var(--md-sys-typescale-title-large); margin: 0; margin-right: auto; }
+
+  .panel {
+    background: var(--md-sys-color-surface-container);
+    color: var(--md-sys-color-on-surface);
+    border-radius: var(--md-sys-shape-corner-large);
+    padding: var(--md-sys-spacing-5);
+    box-shadow: var(--md-sys-elevation-level1);
+    margin-bottom: var(--md-sys-spacing-4);
+  }
+  .panel h2 { font: var(--md-sys-typescale-title-medium); margin: 0 0 12px; color: var(--md-sys-color-primary); }
+  .field-row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 16px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="bar">
+    <h1>Tool Saya</h1>
+    <!-- kontrol tema + warna brand -->
+    <md-icon-button id="theme" variant="tonal"><span>dark_mode</span></md-icon-button>
+  </div>
+
+  <!-- Ganti isi di bawah ini dengan UI tool kamu -->
+  <div class="panel">
+    <h2>Contoh form</h2>
+    <div class="field-row">
+      <md-text-field variant="outlined" label="Judul" leading-icon="title"></md-text-field>
+      <md-text-field variant="outlined" label="Email" type="email" trailing-icon="mail"></md-text-field>
+    </div>
+    <div class="field-row" style="margin-top:16px">
+      <label class="md-body-medium" style="display:flex;align-items:center;gap:8px">
+        <md-switch selected></md-switch> Aktifkan notifikasi
+      </label>
+    </div>
+    <div class="actions">
+      <md-button variant="text">Batal</md-button>
+      <md-button variant="filled" icon="save">Simpan</md-button>
+    </div>
+  </div>
+
+  <div class="panel" style="background:var(--md-sys-color-surface-container-low)">
+    <h2>Contoh pengaturan</h2>
+    <label class="md-body-medium" style="display:block;margin-bottom:8px">Tingkat kepekaan</label>
+    <md-slider min="0" max="100" value="60" step="10" labeled></md-slider>
+  </div>
+
+</div>
+
+<script>
+  // 3) Terapkan warna brand kamu saat load (ganti hex sesuai brand)
+  window.addEventListener('DOMContentLoaded', () => {
+    MD3.applySeed('#6750A4', { style: 'expressive' });
+
+    // Toggle tema
+    const btn = document.getElementById('theme');
+    btn.addEventListener('click', () => {
+      const next = MD3.getTheme() === 'dark' ? 'light' : 'dark';
+      MD3.setTheme(next);
+      btn.querySelector('span').textContent = next === 'dark' ? 'light_mode' : 'dark_mode';
+    });
+  });
+</script>
+</body>
+</html>

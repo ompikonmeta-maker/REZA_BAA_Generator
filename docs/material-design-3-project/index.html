@@ -1,0 +1,540 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Material Design 3 Expressive — Showcase</title>
+<link rel="stylesheet" href="md3-tokens.css">
+<style>
+  .app { max-width: 1080px; margin: 0 auto; padding: 0 24px 96px; }
+  header.top {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 14px 24px; margin-bottom: 24px;
+    background: color-mix(in srgb, var(--md-sys-color-surface) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  }
+  header.top .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; }
+  header.top .dot { width: 28px; height: 28px; border-radius: 8px; background: var(--md-sys-color-primary); }
+  .controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .controls label { font: var(--md-sys-typescale-label-large); color: var(--md-sys-color-on-surface-variant); }
+  .controls input[type=color] { width: 40px; height: 40px; border: none; border-radius: 12px; background: none; cursor: pointer; padding: 0; }
+  .controls select { height: 40px; border-radius: 12px; border: 1px solid var(--md-sys-color-outline);
+    background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); padding: 0 12px; font: var(--md-sys-typescale-label-large); }
+
+  section { margin: 56px 0; scroll-margin-top: 80px; }
+  section > h2 { font: var(--md-sys-typescale-headline-medium); margin: 0 0 6px; color: var(--md-sys-color-on-surface); }
+  section > .lead { font: var(--md-sys-typescale-body-medium); color: var(--md-sys-color-on-surface-variant); margin: 0 0 24px; max-width: 60ch; }
+  h3.sub { font: var(--md-sys-typescale-title-medium); margin: 28px 0 14px; color: var(--md-sys-color-primary); }
+
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .grid { display: grid; gap: 16px; }
+  .panel { background: var(--md-sys-color-surface-container-low); border-radius: 16px; padding: 20px; }
+
+  /* Color role swatches */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .sw { border-radius: 12px; padding: 12px; min-height: 76px; display: flex; flex-direction: column; justify-content: space-between;
+    font: var(--md-sys-typescale-label-small); border: 1px solid var(--md-sys-color-outline-variant); }
+  .sw b { font: var(--md-sys-typescale-label-medium); }
+  .sw code { opacity: .8; font-family: ui-monospace, monospace; font-size: 10px; }
+
+  /* Type specimens */
+  .type-row { display: flex; align-items: baseline; gap: 20px; padding: 10px 0; border-bottom: 1px solid var(--md-sys-color-surface-variant); }
+  .type-row .tag { width: 150px; flex: none; font: var(--md-sys-typescale-label-small); color: var(--md-sys-color-on-surface-variant); }
+
+  /* Elevation tiles */
+  .elev-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 24px; }
+  .elev-tile { height: 96px; border-radius: 16px; background: var(--md-sys-color-surface-container); display: grid; place-items: center;
+    font: var(--md-sys-typescale-label-medium); color: var(--md-sys-color-on-surface-variant); }
+
+  /* Shape tiles */
+  .shape-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 20px; }
+  .shape-tile { height: 90px; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);
+    display: grid; place-items: center; text-align: center; font: var(--md-sys-typescale-label-small); padding: 6px; }
+
+  /* Motion demo */
+  .motion-demo { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .track-demo { background: var(--md-sys-color-surface-container); border-radius: 16px; padding: 16px; overflow: hidden; }
+  .ball { width: 32px; height: 32px; border-radius: 50%; background: var(--md-sys-color-primary); }
+  .track-demo.run .ball { transform: translateX(calc(100% + 120px)); }
+
+  /* Easing & duration */
+  .easing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .ease-card { background: var(--md-sys-color-surface-container); border-radius: 16px; padding: 16px; cursor: pointer;
+    border: 1px solid var(--md-sys-color-outline-variant); }
+  .ease-card svg { width: 100%; height: 96px; display: block; }
+  .ease-card .curve { fill: none; stroke: var(--md-sys-color-primary); stroke-width: 3; stroke-linecap: round; }
+  .ease-card .grid-l { stroke: var(--md-sys-color-outline-variant); stroke-width: 1; }
+  .ease-card .dot { fill: var(--md-sys-color-tertiary); }
+  .ease-card .name { font: var(--md-sys-typescale-title-small); margin: 10px 0 2px; }
+  .ease-card .val { font-family: ui-monospace, monospace; font-size: 10px; color: var(--md-sys-color-on-surface-variant); word-break: break-all; }
+  .ease-card .demo { height: 10px; margin-top: 12px; position: relative; }
+  .ease-card .demo i { position: absolute; left: 0; top: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--md-sys-color-primary); }
+
+  .dur-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 20px; }
+  .dur-cell { display: flex; flex-direction: column; gap: 6px; }
+  .dur-cell .bar { height: 8px; border-radius: 9999px; background: var(--md-sys-color-primary); }
+  .dur-cell .lab { font: var(--md-sys-typescale-label-small); color: var(--md-sys-color-on-surface-variant); }
+
+  #easing select { height: 40px; border-radius: 12px; border: 1px solid var(--md-sys-color-outline);
+    background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); padding: 0 12px; font: var(--md-sys-typescale-label-large); }
+  .pg-track { position: relative; height: 40px; background: var(--md-sys-color-surface-container); border-radius: 9999px; overflow: hidden; }
+  .pg-ball { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; background: var(--md-sys-color-primary); }
+
+  /* Spacing */
+  .space-row { display: flex; align-items: flex-end; gap: 12px; }
+  .space-bar { background: var(--md-sys-color-tertiary); border-radius: 4px 4px 0 0; width: 28px; }
+  .space-bar span { display: block; text-align: center; font-size: 10px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px; }
+
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  nav.toc a { text-decoration: none; padding: 6px 14px; border-radius: 9999px; font: var(--md-sys-typescale-label-large);
+    background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+  .fieldrow { display: flex; gap: 16px; flex-wrap: wrap; }
+  .opt { display: flex; align-items: center; gap: 8px; color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-body-medium); }
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="brand"><div class="dot"></div><strong class="md-title-large">M3 Expressive</strong></div>
+  <div class="controls">
+    <label for="seed">Seed</label>
+    <input type="color" id="seed" value="#6750A4">
+    <label for="style">Style</label>
+    <select id="style">
+      <option value="expressive" selected>Expressive</option>
+      <option value="vibrant">Vibrant</option>
+      <option value="tonalSpot">Tonal Spot</option>
+      <option value="content">Content</option>
+      <option value="neutral">Neutral</option>
+    </select>
+    <md-button id="themeBtn" variant="tonal" icon="dark_mode">Dark</md-button>
+    <md-button id="resetBtn" variant="text">Reset</md-button>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="toc">
+    <a href="#color">Color</a><a href="#type">Typography</a><a href="#elevation">Elevation</a>
+    <a href="#shape">Shape</a><a href="#motion">Motion</a><a href="#easing">Easing</a><a href="#spacing">Spacing</a>
+    <a href="#buttons">Buttons</a><a href="#fab">FAB</a><a href="#selection">Selection</a>
+    <a href="#slider">Slider</a><a href="#chips">Chips</a><a href="#fields">Text fields</a>
+    <a href="#cards">Cards</a><a href="#menu">Menu</a><a href="#tabs">Tabs</a>
+    <a href="#lists">Lists</a><a href="#progress">Progress</a><a href="#dialog">Dialog</a>
+  </nav>
+
+  <!-- ============ STYLES ============ -->
+  <section id="color">
+    <h2>Color system</h2>
+    <p class="lead">Semua peran warna diturunkan dari satu seed melalui tonal palette (tone = CIELAB L*). Ganti seed atau style di atas untuk melihat seluruh skema beregenerasi — Material You.</p>
+    <div id="swatches" class="swatches"></div>
+  </section>
+
+  <section id="type">
+    <h2>Typography</h2>
+    <p class="lead">Type scale MD3 penuh: Display, Headline, Title, Body, Label — masing-masing large/medium/small dengan ukuran, tinggi baris, bobot, dan tracking yang tepat.</p>
+    <div id="typeSpecimens" class="panel"></div>
+  </section>
+
+  <section id="elevation">
+    <h2>Elevation</h2>
+    <p class="lead">Enam tingkat elevasi (Level 0–5) sebagai bayangan berlapis.</p>
+    <div class="elev-tiles">
+      <div class="elev-tile md-elevation-0">Level 0</div>
+      <div class="elev-tile md-elevation-1">Level 1</div>
+      <div class="elev-tile md-elevation-2">Level 2</div>
+      <div class="elev-tile md-elevation-3">Level 3</div>
+      <div class="elev-tile md-elevation-4">Level 4</div>
+      <div class="elev-tile md-elevation-5">Level 5</div>
+    </div>
+  </section>
+
+  <section id="shape">
+    <h2>Shape scale</h2>
+    <p class="lead">Skala sudut termasuk ukuran <em>-increased</em> baru dari Expressive. Komponen memorf bentuk saat ditekan — coba tekan tombol.</p>
+    <div id="shapeTiles" class="shape-tiles"></div>
+  </section>
+
+  <section id="motion">
+    <h2>Motion physics</h2>
+    <p class="lead">Sistem pegas (spring) Expressive menggantikan duration+easing. Spatial spring membawa overshoot halus; effect spring tidak. Klik untuk menjalankan.</p>
+    <div class="motion-demo" id="motionDemo">
+      <div class="track-demo"><div class="ball" style="transition: transform var(--md-sys-motion-spring-fast-spatial)"></div><div class="md-label-small" style="margin-top:8px">Fast spatial</div></div>
+      <div class="track-demo"><div class="ball" style="transition: transform var(--md-sys-motion-spring-default-spatial)"></div><div class="md-label-small" style="margin-top:8px">Default spatial</div></div>
+      <div class="track-demo"><div class="ball" style="transition: transform var(--md-sys-motion-spring-slow-spatial)"></div><div class="md-label-small" style="margin-top:8px">Slow spatial</div></div>
+    </div>
+    <md-button id="motionBtn" variant="filled" style="margin-top:16px">Play motion</md-button>
+  </section>
+
+  <section id="easing">
+    <h2>Easing &amp; duration</h2>
+    <p class="lead">Sistem kurva klasik MD3. <strong>Standard</strong> untuk gerakan UI umum, <strong>Emphasized</strong> untuk momen penting/hero, <strong>Linear</strong> hanya untuk progres indeterminate. Klik kartu untuk memutar kurvanya.</p>
+
+    <h3 class="sub">Easing tokens</h3>
+    <div id="easingGrid" class="easing-grid"></div>
+    <p class="md-body-small" style="color:var(--md-sys-color-on-surface-variant);margin:12px 0 0">* <em>Emphasized</em> aslinya kurva dua-bagian; di web diaproksimasi ke satu <code>cubic-bezier</code>. Untuk fidelitas penuh, pisah jadi <code>emphasized-decelerate</code> (masuk) &amp; <code>emphasized-accelerate</code> (keluar).</p>
+
+    <h3 class="sub">Duration tokens</h3>
+    <div class="panel">
+      <div id="durationRow" class="dur-row"></div>
+      <p class="md-body-small" style="color:var(--md-sys-color-on-surface-variant);margin:16px 0 0">Prinsip: gerakan lebih besar → durasi lebih panjang (proporsional). Pasangkan masuk (decelerate) &amp; keluar (accelerate).</p>
+    </div>
+
+    <h3 class="sub">Playground</h3>
+    <div class="panel">
+      <div class="row" style="margin-bottom:16px">
+        <label class="md-label-large" style="color:var(--md-sys-color-on-surface-variant)">Easing</label>
+        <select id="pgEase"></select>
+        <label class="md-label-large" style="color:var(--md-sys-color-on-surface-variant)">Duration</label>
+        <select id="pgDur"></select>
+        <md-button id="pgPlay" variant="tonal" icon="play_arrow">Play</md-button>
+      </div>
+      <div class="pg-track"><div class="pg-ball" id="pgBall"></div></div>
+    </div>
+  </section>
+
+  <section id="spacing">
+    <h2>Spacing scale</h2>
+    <p class="lead">Grid dasar 8dp (grid halus 4dp). Token dari 0 hingga 64px.</p>
+    <div class="space-row panel" id="spaceRow"></div>
+  </section>
+
+  <!-- ============ COMPONENTS ============ -->
+  <section id="buttons">
+    <h2>Buttons</h2>
+    <p class="lead">Lima jenis penekanan (Filled, Tonal, Elevated, Outlined, Text) dan lima ukuran Expressive (XS 32 → XL 64px).</p>
+    <h3 class="sub">Variants</h3>
+    <div class="row">
+      <md-button variant="filled" icon="add">Filled</md-button>
+      <md-button variant="tonal">Tonal</md-button>
+      <md-button variant="elevated">Elevated</md-button>
+      <md-button variant="outlined" icon="download">Outlined</md-button>
+      <md-button variant="text">Text</md-button>
+      <md-button variant="filled" disabled>Disabled</md-button>
+    </div>
+    <h3 class="sub">Sizes (Expressive)</h3>
+    <div class="row">
+      <md-button variant="filled" size="xs">XS</md-button>
+      <md-button variant="filled" size="s">S</md-button>
+      <md-button variant="filled" size="m">M</md-button>
+      <md-button variant="filled" size="l">L</md-button>
+      <md-button variant="filled" size="xl">XL</md-button>
+    </div>
+    <h3 class="sub">Icon buttons</h3>
+    <div class="row">
+      <md-icon-button variant="standard"><span>favorite</span></md-icon-button>
+      <md-icon-button variant="filled"><span>bookmark</span></md-icon-button>
+      <md-icon-button variant="tonal"><span>settings</span></md-icon-button>
+      <md-icon-button variant="outlined"><span>share</span></md-icon-button>
+      <md-icon-button variant="filled" toggle><span>star</span></md-icon-button>
+    </div>
+    <h3 class="sub">Segmented button</h3>
+    <md-segmented-button>
+      <button data-value="day" selected>Day</button>
+      <button data-value="week">Week</button>
+      <button data-value="month">Month</button>
+    </md-segmented-button>
+  </section>
+
+  <section id="fab">
+    <h2>Floating action buttons</h2>
+    <div class="row">
+      <md-fab size="small" variant="surface" icon="edit"></md-fab>
+      <md-fab size="medium" variant="primary" icon="add"></md-fab>
+      <md-fab size="large" variant="secondary" icon="navigation"></md-fab>
+      <md-fab variant="tertiary" extended label="Compose" icon="edit"></md-fab>
+    </div>
+  </section>
+
+  <section id="selection">
+    <h2>Selection controls</h2>
+    <div class="fieldrow">
+      <div class="panel">
+        <h3 class="sub" style="margin-top:0">Switch</h3>
+        <div class="row" style="gap:24px">
+          <md-switch selected></md-switch>
+          <md-switch selected icons></md-switch>
+        </div>
+        <p class="md-body-small" style="color:var(--md-sys-color-on-surface-variant);margin:12px 0 0">
+          Flutter sample: dua switch default ON — polos, dan dengan thumbIcon check/close.
+        </p>
+        <div class="row" style="gap:24px;margin-top:12px">
+          <md-switch></md-switch>
+          <md-switch icons></md-switch>
+          <md-switch disabled></md-switch>
+        </div>
+      </div>
+      <div class="panel">
+        <h3 class="sub" style="margin-top:0">Checkbox</h3>
+        <div class="row">
+          <label class="opt"><md-checkbox checked></md-checkbox> Checked</label>
+          <label class="opt"><md-checkbox></md-checkbox> Unchecked</label>
+          <label class="opt"><md-checkbox indeterminate></md-checkbox> Mixed</label>
+        </div>
+      </div>
+      <div class="panel">
+        <h3 class="sub" style="margin-top:0">Radio</h3>
+        <div class="row">
+          <label class="opt"><md-radio name="demo" checked></md-radio> One</label>
+          <label class="opt"><md-radio name="demo"></md-radio> Two</label>
+          <label class="opt"><md-radio name="demo"></md-radio> Three</label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="slider">
+    <h2>Slider</h2>
+    <div class="panel grid" style="max-width:520px">
+      <md-slider min="0" max="100" value="40"></md-slider>
+      <md-slider min="0" max="100" value="70" step="10" labeled></md-slider>
+    </div>
+  </section>
+
+  <section id="chips">
+    <h2>Chips</h2>
+    <div class="row">
+      <md-chip variant="assist" icon="event">Assist</md-chip>
+      <md-chip variant="filter">Filter</md-chip>
+      <md-chip variant="filter" selected>Selected</md-chip>
+      <md-chip variant="input" removable>Input</md-chip>
+      <md-chip variant="suggestion">Suggestion</md-chip>
+    </div>
+  </section>
+
+  <section id="fields">
+    <h2>Text fields</h2>
+    <div class="row">
+      <md-text-field variant="outlined" label="Name" leading-icon="person" supporting-text="Helper text"></md-text-field>
+      <md-text-field variant="filled" label="Email" trailing-icon="mail" type="email"></md-text-field>
+      <md-text-field variant="outlined" label="Password" type="password" error error-text="Required"></md-text-field>
+    </div>
+  </section>
+
+  <section id="cards">
+    <h2>Cards</h2>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+      <md-card variant="elevated"><h3 class="md-title-medium" style="margin:0 0 8px">Elevated</h3><p class="md-body-medium" style="margin:0;color:var(--md-sys-color-on-surface-variant)">Surface container low with a level-1 shadow.</p></md-card>
+      <md-card variant="filled"><h3 class="md-title-medium" style="margin:0 0 8px">Filled</h3><p class="md-body-medium" style="margin:0;color:var(--md-sys-color-on-surface-variant)">Surface container highest, no border.</p></md-card>
+      <md-card variant="outlined"><h3 class="md-title-medium" style="margin:0 0 8px">Outlined</h3><p class="md-body-medium" style="margin:0;color:var(--md-sys-color-on-surface-variant)">Surface with an outline-variant border.</p></md-card>
+    </div>
+  </section>
+
+  <section id="menu">
+    <h2>Menu</h2>
+    <md-button id="menuAnchor" variant="tonal" trailing-icon icon="arrow_drop_down">Open menu</md-button>
+    <md-menu id="theMenu">
+      <md-menu-item icon="content_copy">Copy</md-menu-item>
+      <md-menu-item icon="content_paste">Paste</md-menu-item>
+      <md-menu-item icon="edit">Rename</md-menu-item>
+      <md-menu-item icon="delete">Delete</md-menu-item>
+    </md-menu>
+  </section>
+
+  <section id="tabs">
+    <h2>Tabs</h2>
+    <md-tabs style="max-width:520px">
+      <md-tab value="a" active icon="home">Home</md-tab>
+      <md-tab value="b" icon="search">Explore</md-tab>
+      <md-tab value="c" icon="notifications">Alerts</md-tab>
+    </md-tabs>
+  </section>
+
+  <section id="lists">
+    <h2>Lists</h2>
+    <md-list style="max-width:520px">
+      <md-list-item icon="person" supporting-text="Software engineer" trailing="09:32" interactive>Ada Lovelace</md-list-item>
+      <md-divider inset></md-divider>
+      <md-list-item icon="person" supporting-text="Designer" trailing="Yesterday" interactive>Grace Hopper</md-list-item>
+      <md-divider inset></md-divider>
+      <md-list-item icon="person" supporting-text="Researcher" trailing="Mon" interactive>Alan Turing</md-list-item>
+    </md-list>
+  </section>
+
+  <section id="progress">
+    <h2>Progress indicators</h2>
+    <div class="row" style="gap:32px">
+      <div class="grid" style="flex:1;min-width:240px;gap:20px">
+        <md-progress variant="linear" value="60"></md-progress>
+        <md-progress variant="linear" indeterminate></md-progress>
+      </div>
+      <md-progress variant="circular" value="70"></md-progress>
+      <md-progress variant="circular" indeterminate></md-progress>
+    </div>
+  </section>
+
+  <section id="dialog">
+    <h2>Dialog</h2>
+    <md-button id="dlgBtn" variant="filled">Open dialog</md-button>
+    <md-dialog id="theDialog">
+      <span slot="headline">Reset settings?</span>
+      This will restore all settings to their default values. This action cannot be undone.
+      <div slot="actions">
+        <md-button variant="text" id="dlgCancel">Cancel</md-button>
+        <md-button variant="filled" id="dlgOk">Reset</md-button>
+      </div>
+    </md-dialog>
+  </section>
+</div>
+
+<script src="md3-dynamic-color.js"></script>
+<script src="md3-components.js"></script>
+<script>
+  /* ---- Build token galleries ---- */
+  const ROLE_PAIRS = [
+    ['primary','on-primary'],['primary-container','on-primary-container'],
+    ['secondary','on-secondary'],['secondary-container','on-secondary-container'],
+    ['tertiary','on-tertiary'],['tertiary-container','on-tertiary-container'],
+    ['error','on-error'],['error-container','on-error-container'],
+    ['surface','on-surface'],['surface-variant','on-surface-variant'],
+    ['surface-container','on-surface'],['surface-container-high','on-surface'],
+    ['inverse-surface','inverse-on-surface'],['outline','surface'],
+  ];
+  function hexOf(role){ return getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-'+role).trim(); }
+  function renderSwatches(){
+    const el = document.getElementById('swatches'); el.innerHTML='';
+    ROLE_PAIRS.forEach(([bg,fg])=>{
+      const d=document.createElement('div'); d.className='sw';
+      d.style.background='var(--md-sys-color-'+bg+')';
+      d.style.color='var(--md-sys-color-'+fg+')';
+      d.innerHTML='<b>'+bg+'</b><code>'+hexOf(bg)+'</code>';
+      el.appendChild(d);
+    });
+  }
+  const TYPE=['display-large','display-medium','display-small','headline-large','headline-medium','headline-small','title-large','title-medium','title-small','body-large','body-medium','body-small','label-large','label-medium','label-small'];
+  (function(){
+    const el=document.getElementById('typeSpecimens');
+    TYPE.forEach(t=>{
+      const r=document.createElement('div'); r.className='type-row';
+      r.innerHTML='<span class="tag">'+t+'</span><span class="md-'+t+'">Aa Bb Cc</span>';
+      el.appendChild(r);
+    });
+  })();
+  const SHAPES=[['none','0'],['extra-small','4'],['small','8'],['medium','12'],['large','16'],['large-increased','20'],['extra-large','28'],['extra-large-increased','32'],['extra-extra-large','48']];
+  (function(){
+    const el=document.getElementById('shapeTiles');
+    SHAPES.forEach(([n,px])=>{
+      const d=document.createElement('div'); d.className='shape-tile';
+      d.style.borderRadius='var(--md-sys-shape-corner-'+n+')';
+      d.innerHTML=n+'<br>'+px+'px';
+      el.appendChild(d);
+    });
+  })();
+  const SPACES=[['1','4'],['2','8'],['3','12'],['4','16'],['5','20'],['6','24'],['8','32'],['10','40'],['12','48'],['16','64']];
+  (function(){
+    const el=document.getElementById('spaceRow');
+    SPACES.forEach(([n,px])=>{
+      const b=document.createElement('div');
+      b.innerHTML='<div class="space-bar" style="height:'+px+'px"></div><span>'+px+'</span>';
+      el.appendChild(b);
+    });
+  })();
+  renderSwatches();
+
+  /* ---- Easing & duration ---- */
+  const EASINGS = [
+    ['linear', 'linear', [0,0,1,1]],
+    ['standard', 'standard', [0.2,0,0,1]],
+    ['standard-decelerate', 'standard-decelerate', [0,0,0,1]],
+    ['standard-accelerate', 'standard-accelerate', [0.3,0,1,1]],
+    ['emphasized', 'emphasized', [0.2,0,0,1]],
+    ['emphasized-decelerate', 'emphasized-decelerate', [0.05,0.7,0.1,1]],
+    ['emphasized-accelerate', 'emphasized-accelerate', [0.3,0,0.8,0.15]],
+  ];
+  const DURATIONS = [
+    ['short1',50],['short2',100],['short3',150],['short4',200],
+    ['medium1',250],['medium2',300],['medium3',350],['medium4',400],
+    ['long1',450],['long2',500],['long3',550],['long4',600],
+    ['extra-long1',700],['extra-long2',800],['extra-long3',900],['extra-long4',1000],
+  ];
+  function curvePath([x1,y1,x2,y2]){
+    // CSS bezier (0,0)->(1,1); SVG box 100x100 with y flipped.
+    return `M0,100 C${(x1*100).toFixed(1)},${(100-y1*100).toFixed(1)} ${(x2*100).toFixed(1)},${(100-y2*100).toFixed(1)} 100,0`;
+  }
+  (function(){
+    const grid = document.getElementById('easingGrid');
+    EASINGS.forEach(([name,varname,pts])=>{
+      const cb = `cubic-bezier(${pts.join(', ')})`;
+      const card = document.createElement('div'); card.className='ease-card';
+      card.innerHTML = `
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <line class="grid-l" x1="0" y1="0" x2="100" y2="0"></line>
+          <line class="grid-l" x1="0" y1="100" x2="100" y2="100"></line>
+          <path class="curve" d="${curvePath(pts)}"></path>
+          <circle class="dot" cx="0" cy="100" r="3"></circle>
+          <circle class="dot" cx="100" cy="0" r="3"></circle>
+        </svg>
+        <div class="name">${name==='emphasized'?'emphasized *':name}</div>
+        <div class="val">${cb}</div>
+        <div class="demo"><i></i></div>`;
+      const ball = card.querySelector('.demo i');
+      function play(){
+        ball.style.transition='none'; ball.style.transform='translateX(0)';
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          ball.style.transition=`transform 800ms ${cb}`;
+          ball.style.transform='translateX(calc(100% - 10px))';
+          const p = card.parentElement; // width of demo track ~ card width
+          ball.style.transform=`translateX(${card.querySelector('.demo').clientWidth-10}px)`;
+        }));
+      }
+      card.addEventListener('click', play);
+      grid.appendChild(card);
+    });
+    // duration bars (scaled: 1000ms -> 100%)
+    const dr = document.getElementById('durationRow');
+    DURATIONS.forEach(([n,ms])=>{
+      const c=document.createElement('div'); c.className='dur-cell';
+      c.innerHTML=`<div class="bar" style="width:${(ms/1000*100).toFixed(0)}%"></div><div class="lab">${n} · ${ms}ms</div>`;
+      dr.appendChild(c);
+    });
+    // playground selects
+    const pe=document.getElementById('pgEase'), pd=document.getElementById('pgDur');
+    EASINGS.forEach(([name,,pts])=>{ const o=document.createElement('option'); o.value=`cubic-bezier(${pts.join(',')})`; o.textContent=name; pe.appendChild(o); });
+    pe.selectedIndex=4; // emphasized
+    DURATIONS.forEach(([n,ms])=>{ const o=document.createElement('option'); o.value=ms; o.textContent=`${n} (${ms}ms)`; pd.appendChild(o); });
+    pd.selectedIndex=7; // medium4 400ms
+    const pb=document.getElementById('pgBall');
+    document.getElementById('pgPlay').addEventListener('click', ()=>{
+      const track=pb.parentElement; const dist=track.clientWidth-28-12;
+      const atStart = pb.dataset.at!=='end';
+      pb.style.transition=`transform ${pd.value}ms ${pe.value}`;
+      pb.style.transform=`translate(${atStart?dist:0}px,-50%)`;
+      pb.dataset.at = atStart?'end':'start';
+    });
+  })();
+
+  /* ---- Controls ---- */
+  const seed=document.getElementById('seed'), styleSel=document.getElementById('style');
+  function apply(){ MD3.applySeed(seed.value,{style:styleSel.value}); renderSwatches(); }
+  seed.addEventListener('input', apply);
+  styleSel.addEventListener('change', apply);
+  apply(); // generate from default seed on load
+
+  const themeBtn=document.getElementById('themeBtn');
+  themeBtn.addEventListener('click', ()=>{
+    const next = MD3.getTheme()==='dark' ? 'light' : 'dark';
+    MD3.setTheme(next);
+    themeBtn.setAttribute('icon', next==='dark'?'light_mode':'dark_mode');
+    themeBtn.textContent = next==='dark'?'Light':'Dark';
+    renderSwatches();
+  });
+  document.getElementById('resetBtn').addEventListener('click', ()=>{ MD3.reset(); renderSwatches(); });
+
+  /* ---- Motion ---- */
+  document.getElementById('motionBtn').addEventListener('click', ()=>{
+    document.querySelectorAll('#motionDemo .track-demo').forEach(t=>{
+      t.classList.remove('run'); void t.offsetWidth; t.classList.add('run');
+      setTimeout(()=>t.classList.remove('run'), 1400);
+    });
+  });
+
+  /* ---- Menu / Dialog wiring ---- */
+  MD3Menu.attach(document.getElementById('menuAnchor'), document.getElementById('theMenu'));
+  const dlg=document.getElementById('theDialog');
+  document.getElementById('dlgBtn').addEventListener('click', ()=>dlg.show());
+  document.getElementById('dlgCancel').addEventListener('click', ()=>dlg.close());
+  document.getElementById('dlgOk').addEventListener('click', ()=>dlg.close());
+</script>
+</body>
+</html>

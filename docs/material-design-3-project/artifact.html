@@ -1,0 +1,1919 @@
+<title>Material Design 3 Expressive</title>
+<style>
+/* =====================================================================
+   Material Design 3 · Expressive — Design Tokens
+   ---------------------------------------------------------------------
+   System tokens exposed as CSS custom properties.
+   Naming follows the official convention:
+     --md-sys-color-*        color roles
+     --md-sys-typescale-*    type scale
+     --md-sys-shape-*        corner radii
+     --md-sys-elevation-*    elevation shadows
+     --md-sys-motion-*       easing / duration / spring
+     --md-sys-spacing-*      4dp spacing scale
+     --md-sys-state-*        state-layer opacities
+
+   The color roles below are the Material baseline (seed #6750A4).
+   md3-dynamic-color.js overrides them at runtime from any seed color.
+   Light is the default :root palette; dark is applied via
+   [data-theme="dark"] and via prefers-color-scheme when theme = system.
+   ===================================================================== */
+
+/* ---------- Fonts ---------- */
+/* Roboto is Material's default typeface, Roboto Flex the expressive one.
+   Falls back gracefully to the system UI stack if unavailable offline. */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Roboto+Flex:opsz,wght@8..144,300..900&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=swap');
+
+:root {
+  /* =================================================================
+     COLOR — Light scheme (baseline)
+     ================================================================= */
+  --md-sys-color-primary: #6750a4;
+  --md-sys-color-on-primary: #ffffff;
+  --md-sys-color-primary-container: #eaddff;
+  --md-sys-color-on-primary-container: #4f378b;
+
+  --md-sys-color-secondary: #625b71;
+  --md-sys-color-on-secondary: #ffffff;
+  --md-sys-color-secondary-container: #e8def8;
+  --md-sys-color-on-secondary-container: #4a4458;
+
+  --md-sys-color-tertiary: #7d5260;
+  --md-sys-color-on-tertiary: #ffffff;
+  --md-sys-color-tertiary-container: #ffd8e4;
+  --md-sys-color-on-tertiary-container: #633b48;
+
+  --md-sys-color-error: #b3261e;
+  --md-sys-color-on-error: #ffffff;
+  --md-sys-color-error-container: #f9dedc;
+  --md-sys-color-on-error-container: #8c1d18;
+
+  --md-sys-color-background: #fef7ff;
+  --md-sys-color-on-background: #1d1b20;
+
+  --md-sys-color-surface: #fef7ff;
+  --md-sys-color-on-surface: #1d1b20;
+  --md-sys-color-surface-variant: #e7e0ec;
+  --md-sys-color-on-surface-variant: #49454f;
+
+  --md-sys-color-surface-dim: #ded8e1;
+  --md-sys-color-surface-bright: #fef7ff;
+  --md-sys-color-surface-container-lowest: #ffffff;
+  --md-sys-color-surface-container-low: #f7f2fa;
+  --md-sys-color-surface-container: #f3edf7;
+  --md-sys-color-surface-container-high: #ece6f0;
+  --md-sys-color-surface-container-highest: #e6e0e9;
+
+  --md-sys-color-outline: #79747e;
+  --md-sys-color-outline-variant: #cac4d0;
+
+  --md-sys-color-inverse-surface: #322f35;
+  --md-sys-color-inverse-on-surface: #f5eff7;
+  --md-sys-color-inverse-primary: #d0bcff;
+
+  --md-sys-color-shadow: #000000;
+  --md-sys-color-scrim: #000000;
+
+  /* Fixed accent roles (identical in light & dark) */
+  --md-sys-color-primary-fixed: #eaddff;
+  --md-sys-color-primary-fixed-dim: #d0bcff;
+  --md-sys-color-on-primary-fixed: #21005d;
+  --md-sys-color-on-primary-fixed-variant: #4f378b;
+  --md-sys-color-secondary-fixed: #e8def8;
+  --md-sys-color-secondary-fixed-dim: #ccc2dc;
+  --md-sys-color-on-secondary-fixed: #1d192b;
+  --md-sys-color-on-secondary-fixed-variant: #4a4458;
+  --md-sys-color-tertiary-fixed: #ffd8e4;
+  --md-sys-color-tertiary-fixed-dim: #efb8c8;
+  --md-sys-color-on-tertiary-fixed: #31111d;
+  --md-sys-color-on-tertiary-fixed-variant: #633b48;
+
+  /* =================================================================
+     TYPOGRAPHY — Type scale (Roboto)
+     Each role: font / weight / size / line-height / letter-spacing
+     ================================================================= */
+  --md-sys-typescale-font-brand: 'Roboto Flex', 'Roboto', system-ui, sans-serif;
+  --md-sys-typescale-font-plain: 'Roboto', system-ui, sans-serif;
+
+  /* Display */
+  --md-sys-typescale-display-large: 400 3.5625rem/4rem var(--md-sys-typescale-font-brand);
+  --md-sys-typescale-display-large-tracking: -0.015625rem;
+  --md-sys-typescale-display-medium: 400 2.8125rem/3.25rem var(--md-sys-typescale-font-brand);
+  --md-sys-typescale-display-medium-tracking: 0;
+  --md-sys-typescale-display-small: 400 2.25rem/2.75rem var(--md-sys-typescale-font-brand);
+  --md-sys-typescale-display-small-tracking: 0;
+
+  /* Headline */
+  --md-sys-typescale-headline-large: 400 2rem/2.5rem var(--md-sys-typescale-font-brand);
+  --md-sys-typescale-headline-large-tracking: 0;
+  --md-sys-typescale-headline-medium: 400 1.75rem/2.25rem var(--md-sys-typescale-font-brand);
+  --md-sys-typescale-headline-medium-tracking: 0;
+  --md-sys-typescale-headline-small: 400 1.5rem/2rem var(--md-sys-typescale-font-brand);
+  --md-sys-typescale-headline-small-tracking: 0;
+
+  /* Title */
+  --md-sys-typescale-title-large: 400 1.375rem/1.75rem var(--md-sys-typescale-font-brand);
+  --md-sys-typescale-title-large-tracking: 0;
+  --md-sys-typescale-title-medium: 500 1rem/1.5rem var(--md-sys-typescale-font-plain);
+  --md-sys-typescale-title-medium-tracking: 0.009375rem;
+  --md-sys-typescale-title-small: 500 0.875rem/1.25rem var(--md-sys-typescale-font-plain);
+  --md-sys-typescale-title-small-tracking: 0.00625rem;
+
+  /* Body */
+  --md-sys-typescale-body-large: 400 1rem/1.5rem var(--md-sys-typescale-font-plain);
+  --md-sys-typescale-body-large-tracking: 0.03125rem;
+  --md-sys-typescale-body-medium: 400 0.875rem/1.25rem var(--md-sys-typescale-font-plain);
+  --md-sys-typescale-body-medium-tracking: 0.015625rem;
+  --md-sys-typescale-body-small: 400 0.75rem/1rem var(--md-sys-typescale-font-plain);
+  --md-sys-typescale-body-small-tracking: 0.025rem;
+
+  /* Label */
+  --md-sys-typescale-label-large: 500 0.875rem/1.25rem var(--md-sys-typescale-font-plain);
+  --md-sys-typescale-label-large-tracking: 0.00625rem;
+  --md-sys-typescale-label-medium: 500 0.75rem/1rem var(--md-sys-typescale-font-plain);
+  --md-sys-typescale-label-medium-tracking: 0.03125rem;
+  --md-sys-typescale-label-small: 500 0.6875rem/1rem var(--md-sys-typescale-font-plain);
+  --md-sys-typescale-label-small-tracking: 0.03125rem;
+
+  /* Emphasized weight used by Expressive for active/important content */
+  --md-sys-typescale-weight-emphasized: 700;
+
+  /* =================================================================
+     SHAPE — Corner radius scale (incl. Expressive -increased sizes)
+     ================================================================= */
+  --md-sys-shape-corner-none: 0;
+  --md-sys-shape-corner-extra-small: 4px;
+  --md-sys-shape-corner-extra-small-top: 4px 4px 0 0;
+  --md-sys-shape-corner-small: 8px;
+  --md-sys-shape-corner-medium: 12px;
+  --md-sys-shape-corner-large: 16px;
+  --md-sys-shape-corner-large-increased: 20px;    /* Expressive */
+  --md-sys-shape-corner-extra-large: 28px;
+  --md-sys-shape-corner-extra-large-increased: 32px; /* Expressive */
+  --md-sys-shape-corner-extra-extra-large: 48px;  /* Expressive */
+  --md-sys-shape-corner-full: 9999px;
+
+  /* =================================================================
+     ELEVATION — Levels 0–5 (dp tiers) as layered shadows
+     ================================================================= */
+  --md-sys-elevation-level0: none;
+  --md-sys-elevation-level1:
+    0 1px 2px 0 rgba(0, 0, 0, 0.30),
+    0 1px 3px 1px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level2:
+    0 1px 2px 0 rgba(0, 0, 0, 0.30),
+    0 2px 6px 2px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level3:
+    0 1px 3px 0 rgba(0, 0, 0, 0.30),
+    0 4px 8px 3px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level4:
+    0 2px 3px 0 rgba(0, 0, 0, 0.30),
+    0 6px 10px 4px rgba(0, 0, 0, 0.15);
+  --md-sys-elevation-level5:
+    0 4px 4px 0 rgba(0, 0, 0, 0.30),
+    0 8px 12px 6px rgba(0, 0, 0, 0.15);
+
+  /* =================================================================
+     MOTION — Easing & duration tokens (legacy curve system)
+     ================================================================= */
+  --md-sys-motion-easing-linear: cubic-bezier(0, 0, 1, 1);
+  --md-sys-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-standard-accelerate: cubic-bezier(0.3, 0, 1, 1);
+  --md-sys-motion-easing-standard-decelerate: cubic-bezier(0, 0, 0, 1);
+  --md-sys-motion-easing-emphasized: cubic-bezier(0.2, 0, 0, 1);
+  --md-sys-motion-easing-emphasized-accelerate: cubic-bezier(0.3, 0, 0.8, 0.15);
+  --md-sys-motion-easing-emphasized-decelerate: cubic-bezier(0.05, 0.7, 0.1, 1);
+
+  --md-sys-motion-duration-short1: 50ms;
+  --md-sys-motion-duration-short2: 100ms;
+  --md-sys-motion-duration-short3: 150ms;
+  --md-sys-motion-duration-short4: 200ms;
+  --md-sys-motion-duration-medium1: 250ms;
+  --md-sys-motion-duration-medium2: 300ms;
+  --md-sys-motion-duration-medium3: 350ms;
+  --md-sys-motion-duration-medium4: 400ms;
+  --md-sys-motion-duration-long1: 450ms;
+  --md-sys-motion-duration-long2: 500ms;
+  --md-sys-motion-duration-long3: 550ms;
+  --md-sys-motion-duration-long4: 600ms;
+  --md-sys-motion-duration-extra-long1: 700ms;
+  --md-sys-motion-duration-extra-long2: 800ms;
+  --md-sys-motion-duration-extra-long3: 900ms;
+  --md-sys-motion-duration-extra-long4: 1000ms;
+
+  /* =================================================================
+     MOTION PHYSICS — Expressive spring system (CSS approximations)
+     Springs replace duration+easing. Spatial springs carry a subtle
+     overshoot/bounce; effect springs (color/opacity) never overshoot.
+     ================================================================= */
+  /* Spatial — expressive scheme (with bounce) */
+  --md-sys-motion-spring-fast-spatial: 350ms cubic-bezier(0.42, 1.67, 0.21, 0.90);
+  --md-sys-motion-spring-default-spatial: 500ms cubic-bezier(0.38, 1.21, 0.22, 1.00);
+  --md-sys-motion-spring-slow-spatial: 650ms cubic-bezier(0.39, 1.29, 0.35, 0.98);
+  /* Effects — no overshoot */
+  --md-sys-motion-spring-fast-effects: 150ms cubic-bezier(0.31, 0.00, 0.35, 1.00);
+  --md-sys-motion-spring-default-effects: 200ms cubic-bezier(0.34, 0.00, 0.30, 1.00);
+  --md-sys-motion-spring-slow-effects: 300ms cubic-bezier(0.34, 0.00, 0.20, 1.00);
+
+  /* =================================================================
+     SPACING — 4dp scale (base grid 8dp, fine grid 4dp)
+     ================================================================= */
+  --md-sys-spacing-0: 0;
+  --md-sys-spacing-1: 4px;
+  --md-sys-spacing-2: 8px;
+  --md-sys-spacing-3: 12px;
+  --md-sys-spacing-4: 16px;
+  --md-sys-spacing-5: 20px;
+  --md-sys-spacing-6: 24px;
+  --md-sys-spacing-7: 28px;
+  --md-sys-spacing-8: 32px;
+  --md-sys-spacing-9: 36px;
+  --md-sys-spacing-10: 40px;
+  --md-sys-spacing-12: 48px;
+  --md-sys-spacing-14: 56px;
+  --md-sys-spacing-16: 64px;
+
+  /* =================================================================
+     STATE — State-layer opacities
+     ================================================================= */
+  --md-sys-state-hover-opacity: 0.08;
+  --md-sys-state-focus-opacity: 0.10;
+  --md-sys-state-pressed-opacity: 0.10;
+  --md-sys-state-dragged-opacity: 0.16;
+  --md-sys-state-disabled-container-opacity: 0.12;
+  --md-sys-state-disabled-content-opacity: 0.38;
+}
+
+/* =====================================================================
+   DARK SCHEME
+   Applied explicitly via [data-theme="dark"], and automatically when
+   the viewer's OS prefers dark and no explicit theme is set.
+   ===================================================================== */
+:root[data-theme="dark"] {
+  --md-sys-color-primary: #d0bcff;
+  --md-sys-color-on-primary: #381e72;
+  --md-sys-color-primary-container: #4f378b;
+  --md-sys-color-on-primary-container: #eaddff;
+
+  --md-sys-color-secondary: #ccc2dc;
+  --md-sys-color-on-secondary: #332d41;
+  --md-sys-color-secondary-container: #4a4458;
+  --md-sys-color-on-secondary-container: #e8def8;
+
+  --md-sys-color-tertiary: #efb8c8;
+  --md-sys-color-on-tertiary: #492532;
+  --md-sys-color-tertiary-container: #633b48;
+  --md-sys-color-on-tertiary-container: #ffd8e4;
+
+  --md-sys-color-error: #f2b8b5;
+  --md-sys-color-on-error: #601410;
+  --md-sys-color-error-container: #8c1d18;
+  --md-sys-color-on-error-container: #f9dedc;
+
+  --md-sys-color-background: #141218;
+  --md-sys-color-on-background: #e6e0e9;
+
+  --md-sys-color-surface: #141218;
+  --md-sys-color-on-surface: #e6e0e9;
+  --md-sys-color-surface-variant: #49454f;
+  --md-sys-color-on-surface-variant: #cac4d0;
+
+  --md-sys-color-surface-dim: #141218;
+  --md-sys-color-surface-bright: #3b383e;
+  --md-sys-color-surface-container-lowest: #0f0d13;
+  --md-sys-color-surface-container-low: #1d1b20;
+  --md-sys-color-surface-container: #211f26;
+  --md-sys-color-surface-container-high: #2b2930;
+  --md-sys-color-surface-container-highest: #36343b;
+
+  --md-sys-color-outline: #938f99;
+  --md-sys-color-outline-variant: #49454f;
+
+  --md-sys-color-inverse-surface: #e6e0e9;
+  --md-sys-color-inverse-on-surface: #322f35;
+  --md-sys-color-inverse-primary: #6750a4;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --md-sys-color-primary: #d0bcff;
+    --md-sys-color-on-primary: #381e72;
+    --md-sys-color-primary-container: #4f378b;
+    --md-sys-color-on-primary-container: #eaddff;
+
+    --md-sys-color-secondary: #ccc2dc;
+    --md-sys-color-on-secondary: #332d41;
+    --md-sys-color-secondary-container: #4a4458;
+    --md-sys-color-on-secondary-container: #e8def8;
+
+    --md-sys-color-tertiary: #efb8c8;
+    --md-sys-color-on-tertiary: #492532;
+    --md-sys-color-tertiary-container: #633b48;
+    --md-sys-color-on-tertiary-container: #ffd8e4;
+
+    --md-sys-color-error: #f2b8b5;
+    --md-sys-color-on-error: #601410;
+    --md-sys-color-error-container: #8c1d18;
+    --md-sys-color-on-error-container: #f9dedc;
+
+    --md-sys-color-background: #141218;
+    --md-sys-color-on-background: #e6e0e9;
+
+    --md-sys-color-surface: #141218;
+    --md-sys-color-on-surface: #e6e0e9;
+    --md-sys-color-surface-variant: #49454f;
+    --md-sys-color-on-surface-variant: #cac4d0;
+
+    --md-sys-color-surface-dim: #141218;
+    --md-sys-color-surface-bright: #3b383e;
+    --md-sys-color-surface-container-lowest: #0f0d13;
+    --md-sys-color-surface-container-low: #1d1b20;
+    --md-sys-color-surface-container: #211f26;
+    --md-sys-color-surface-container-high: #2b2930;
+    --md-sys-color-surface-container-highest: #36343b;
+
+    --md-sys-color-outline: #938f99;
+    --md-sys-color-outline-variant: #49454f;
+
+    --md-sys-color-inverse-surface: #e6e0e9;
+    --md-sys-color-inverse-on-surface: #322f35;
+    --md-sys-color-inverse-primary: #6750a4;
+  }
+}
+
+/* =====================================================================
+   BASE + TYPOGRAPHY UTILITY CLASSES
+   ===================================================================== */
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-surface);
+  font: var(--md-sys-typescale-body-large);
+  letter-spacing: var(--md-sys-typescale-body-large-tracking);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.md-display-large   { font: var(--md-sys-typescale-display-large);   letter-spacing: var(--md-sys-typescale-display-large-tracking);   margin: 0; }
+.md-display-medium  { font: var(--md-sys-typescale-display-medium);  letter-spacing: var(--md-sys-typescale-display-medium-tracking);  margin: 0; }
+.md-display-small   { font: var(--md-sys-typescale-display-small);   letter-spacing: var(--md-sys-typescale-display-small-tracking);   margin: 0; }
+.md-headline-large  { font: var(--md-sys-typescale-headline-large);  letter-spacing: var(--md-sys-typescale-headline-large-tracking);  margin: 0; }
+.md-headline-medium { font: var(--md-sys-typescale-headline-medium); letter-spacing: var(--md-sys-typescale-headline-medium-tracking); margin: 0; }
+.md-headline-small  { font: var(--md-sys-typescale-headline-small);  letter-spacing: var(--md-sys-typescale-headline-small-tracking);  margin: 0; }
+.md-title-large     { font: var(--md-sys-typescale-title-large);     letter-spacing: var(--md-sys-typescale-title-large-tracking);     margin: 0; }
+.md-title-medium    { font: var(--md-sys-typescale-title-medium);    letter-spacing: var(--md-sys-typescale-title-medium-tracking);    margin: 0; }
+.md-title-small     { font: var(--md-sys-typescale-title-small);     letter-spacing: var(--md-sys-typescale-title-small-tracking);     margin: 0; }
+.md-body-large      { font: var(--md-sys-typescale-body-large);      letter-spacing: var(--md-sys-typescale-body-large-tracking);      margin: 0; }
+.md-body-medium     { font: var(--md-sys-typescale-body-medium);     letter-spacing: var(--md-sys-typescale-body-medium-tracking);     margin: 0; }
+.md-body-small      { font: var(--md-sys-typescale-body-small);      letter-spacing: var(--md-sys-typescale-body-small-tracking);      margin: 0; }
+.md-label-large     { font: var(--md-sys-typescale-label-large);     letter-spacing: var(--md-sys-typescale-label-large-tracking);     margin: 0; }
+.md-label-medium    { font: var(--md-sys-typescale-label-medium);    letter-spacing: var(--md-sys-typescale-label-medium-tracking);    margin: 0; }
+.md-label-small     { font: var(--md-sys-typescale-label-small);     letter-spacing: var(--md-sys-typescale-label-small-tracking);     margin: 0; }
+
+/* Material Symbols icon font helper */
+.md-icon {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+  font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  user-select: none;
+}
+.md-icon.filled { font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+
+/* Elevation & shape utility classes */
+.md-elevation-0 { box-shadow: var(--md-sys-elevation-level0); }
+.md-elevation-1 { box-shadow: var(--md-sys-elevation-level1); }
+.md-elevation-2 { box-shadow: var(--md-sys-elevation-level2); }
+.md-elevation-3 { box-shadow: var(--md-sys-elevation-level3); }
+.md-elevation-4 { box-shadow: var(--md-sys-elevation-level4); }
+.md-elevation-5 { box-shadow: var(--md-sys-elevation-level5); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+
+  .app { max-width: 1080px; margin: 0 auto; padding: 0 24px 96px; }
+  header.top {
+    position: sticky; top: 0; z-index: 50;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+    padding: 14px 24px; margin-bottom: 24px;
+    background: color-mix(in srgb, var(--md-sys-color-surface) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  }
+  header.top .brand { display: flex; align-items: center; gap: 12px; margin-right: auto; }
+  header.top .dot { width: 28px; height: 28px; border-radius: 8px; background: var(--md-sys-color-primary); }
+  .controls { display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .controls label { font: var(--md-sys-typescale-label-large); color: var(--md-sys-color-on-surface-variant); }
+  .controls input[type=color] { width: 40px; height: 40px; border: none; border-radius: 12px; background: none; cursor: pointer; padding: 0; }
+  .controls select { height: 40px; border-radius: 12px; border: 1px solid var(--md-sys-color-outline);
+    background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); padding: 0 12px; font: var(--md-sys-typescale-label-large); }
+
+  section { margin: 56px 0; scroll-margin-top: 80px; }
+  section > h2 { font: var(--md-sys-typescale-headline-medium); margin: 0 0 6px; color: var(--md-sys-color-on-surface); }
+  section > .lead { font: var(--md-sys-typescale-body-medium); color: var(--md-sys-color-on-surface-variant); margin: 0 0 24px; max-width: 60ch; }
+  h3.sub { font: var(--md-sys-typescale-title-medium); margin: 28px 0 14px; color: var(--md-sys-color-primary); }
+
+  .row { display: flex; flex-wrap: wrap; gap: 16px; align-items: center; }
+  .grid { display: grid; gap: 16px; }
+  .panel { background: var(--md-sys-color-surface-container-low); border-radius: 16px; padding: 20px; }
+
+  /* Color role swatches */
+  .swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 8px; }
+  .sw { border-radius: 12px; padding: 12px; min-height: 76px; display: flex; flex-direction: column; justify-content: space-between;
+    font: var(--md-sys-typescale-label-small); border: 1px solid var(--md-sys-color-outline-variant); }
+  .sw b { font: var(--md-sys-typescale-label-medium); }
+  .sw code { opacity: .8; font-family: ui-monospace, monospace; font-size: 10px; }
+
+  /* Type specimens */
+  .type-row { display: flex; align-items: baseline; gap: 20px; padding: 10px 0; border-bottom: 1px solid var(--md-sys-color-surface-variant); }
+  .type-row .tag { width: 150px; flex: none; font: var(--md-sys-typescale-label-small); color: var(--md-sys-color-on-surface-variant); }
+
+  /* Elevation tiles */
+  .elev-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(120px, 1fr)); gap: 24px; }
+  .elev-tile { height: 96px; border-radius: 16px; background: var(--md-sys-color-surface-container); display: grid; place-items: center;
+    font: var(--md-sys-typescale-label-medium); color: var(--md-sys-color-on-surface-variant); }
+
+  /* Shape tiles */
+  .shape-tiles { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 20px; }
+  .shape-tile { height: 90px; background: var(--md-sys-color-primary-container); color: var(--md-sys-color-on-primary-container);
+    display: grid; place-items: center; text-align: center; font: var(--md-sys-typescale-label-small); padding: 6px; }
+
+  /* Motion demo */
+  .motion-demo { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .track-demo { background: var(--md-sys-color-surface-container); border-radius: 16px; padding: 16px; overflow: hidden; }
+  .ball { width: 32px; height: 32px; border-radius: 50%; background: var(--md-sys-color-primary); }
+  .track-demo.run .ball { transform: translateX(calc(100% + 120px)); }
+
+  /* Easing & duration */
+  .easing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 16px; }
+  .ease-card { background: var(--md-sys-color-surface-container); border-radius: 16px; padding: 16px; cursor: pointer;
+    border: 1px solid var(--md-sys-color-outline-variant); }
+  .ease-card svg { width: 100%; height: 96px; display: block; }
+  .ease-card .curve { fill: none; stroke: var(--md-sys-color-primary); stroke-width: 3; stroke-linecap: round; }
+  .ease-card .grid-l { stroke: var(--md-sys-color-outline-variant); stroke-width: 1; }
+  .ease-card .dot { fill: var(--md-sys-color-tertiary); }
+  .ease-card .name { font: var(--md-sys-typescale-title-small); margin: 10px 0 2px; }
+  .ease-card .val { font-family: ui-monospace, monospace; font-size: 10px; color: var(--md-sys-color-on-surface-variant); word-break: break-all; }
+  .ease-card .demo { height: 10px; margin-top: 12px; position: relative; }
+  .ease-card .demo i { position: absolute; left: 0; top: 0; width: 10px; height: 10px; border-radius: 50%; background: var(--md-sys-color-primary); }
+
+  .dur-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px 20px; }
+  .dur-cell { display: flex; flex-direction: column; gap: 6px; }
+  .dur-cell .bar { height: 8px; border-radius: 9999px; background: var(--md-sys-color-primary); }
+  .dur-cell .lab { font: var(--md-sys-typescale-label-small); color: var(--md-sys-color-on-surface-variant); }
+
+  #easing select { height: 40px; border-radius: 12px; border: 1px solid var(--md-sys-color-outline);
+    background: var(--md-sys-color-surface); color: var(--md-sys-color-on-surface); padding: 0 12px; font: var(--md-sys-typescale-label-large); }
+  .pg-track { position: relative; height: 40px; background: var(--md-sys-color-surface-container); border-radius: 9999px; overflow: hidden; }
+  .pg-ball { position: absolute; left: 6px; top: 50%; transform: translateY(-50%); width: 28px; height: 28px; border-radius: 50%; background: var(--md-sys-color-primary); }
+
+  /* Spacing */
+  .space-row { display: flex; align-items: flex-end; gap: 12px; }
+  .space-bar { background: var(--md-sys-color-tertiary); border-radius: 4px 4px 0 0; width: 28px; }
+  .space-bar span { display: block; text-align: center; font-size: 10px; color: var(--md-sys-color-on-surface-variant); margin-top: 4px; }
+
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  nav.toc a { text-decoration: none; padding: 6px 14px; border-radius: 9999px; font: var(--md-sys-typescale-label-large);
+    background: var(--md-sys-color-secondary-container); color: var(--md-sys-color-on-secondary-container); }
+  .fieldrow { display: flex; gap: 16px; flex-wrap: wrap; }
+  .opt { display: flex; align-items: center; gap: 8px; color: var(--md-sys-color-on-surface); font: var(--md-sys-typescale-body-medium); }
+
+</style>
+
+
+<header class="top">
+  <div class="brand"><div class="dot"></div><strong class="md-title-large">M3 Expressive</strong></div>
+  <div class="controls">
+    <label for="seed">Seed</label>
+    <input type="color" id="seed" value="#6750A4">
+    <label for="style">Style</label>
+    <select id="style">
+      <option value="expressive" selected>Expressive</option>
+      <option value="vibrant">Vibrant</option>
+      <option value="tonalSpot">Tonal Spot</option>
+      <option value="content">Content</option>
+      <option value="neutral">Neutral</option>
+    </select>
+    <md-button id="themeBtn" variant="tonal" icon="dark_mode">Dark</md-button>
+    <md-button id="resetBtn" variant="text">Reset</md-button>
+  </div>
+</header>
+
+<div class="app">
+  <nav class="toc">
+    <a href="#color">Color</a><a href="#type">Typography</a><a href="#elevation">Elevation</a>
+    <a href="#shape">Shape</a><a href="#motion">Motion</a><a href="#easing">Easing</a><a href="#spacing">Spacing</a>
+    <a href="#buttons">Buttons</a><a href="#fab">FAB</a><a href="#selection">Selection</a>
+    <a href="#slider">Slider</a><a href="#chips">Chips</a><a href="#fields">Text fields</a>
+    <a href="#cards">Cards</a><a href="#menu">Menu</a><a href="#tabs">Tabs</a>
+    <a href="#lists">Lists</a><a href="#progress">Progress</a><a href="#dialog">Dialog</a>
+  </nav>
+
+  <!-- ============ STYLES ============ -->
+  <section id="color">
+    <h2>Color system</h2>
+    <p class="lead">Semua peran warna diturunkan dari satu seed melalui tonal palette (tone = CIELAB L*). Ganti seed atau style di atas untuk melihat seluruh skema beregenerasi — Material You.</p>
+    <div id="swatches" class="swatches"></div>
+  </section>
+
+  <section id="type">
+    <h2>Typography</h2>
+    <p class="lead">Type scale MD3 penuh: Display, Headline, Title, Body, Label — masing-masing large/medium/small dengan ukuran, tinggi baris, bobot, dan tracking yang tepat.</p>
+    <div id="typeSpecimens" class="panel"></div>
+  </section>
+
+  <section id="elevation">
+    <h2>Elevation</h2>
+    <p class="lead">Enam tingkat elevasi (Level 0–5) sebagai bayangan berlapis.</p>
+    <div class="elev-tiles">
+      <div class="elev-tile md-elevation-0">Level 0</div>
+      <div class="elev-tile md-elevation-1">Level 1</div>
+      <div class="elev-tile md-elevation-2">Level 2</div>
+      <div class="elev-tile md-elevation-3">Level 3</div>
+      <div class="elev-tile md-elevation-4">Level 4</div>
+      <div class="elev-tile md-elevation-5">Level 5</div>
+    </div>
+  </section>
+
+  <section id="shape">
+    <h2>Shape scale</h2>
+    <p class="lead">Skala sudut termasuk ukuran <em>-increased</em> baru dari Expressive. Komponen memorf bentuk saat ditekan — coba tekan tombol.</p>
+    <div id="shapeTiles" class="shape-tiles"></div>
+  </section>
+
+  <section id="motion">
+    <h2>Motion physics</h2>
+    <p class="lead">Sistem pegas (spring) Expressive menggantikan duration+easing. Spatial spring membawa overshoot halus; effect spring tidak. Klik untuk menjalankan.</p>
+    <div class="motion-demo" id="motionDemo">
+      <div class="track-demo"><div class="ball" style="transition: transform var(--md-sys-motion-spring-fast-spatial)"></div><div class="md-label-small" style="margin-top:8px">Fast spatial</div></div>
+      <div class="track-demo"><div class="ball" style="transition: transform var(--md-sys-motion-spring-default-spatial)"></div><div class="md-label-small" style="margin-top:8px">Default spatial</div></div>
+      <div class="track-demo"><div class="ball" style="transition: transform var(--md-sys-motion-spring-slow-spatial)"></div><div class="md-label-small" style="margin-top:8px">Slow spatial</div></div>
+    </div>
+    <md-button id="motionBtn" variant="filled" style="margin-top:16px">Play motion</md-button>
+  </section>
+
+  <section id="easing">
+    <h2>Easing &amp; duration</h2>
+    <p class="lead">Sistem kurva klasik MD3. <strong>Standard</strong> untuk gerakan UI umum, <strong>Emphasized</strong> untuk momen penting/hero, <strong>Linear</strong> hanya untuk progres indeterminate. Klik kartu untuk memutar kurvanya.</p>
+
+    <h3 class="sub">Easing tokens</h3>
+    <div id="easingGrid" class="easing-grid"></div>
+    <p class="md-body-small" style="color:var(--md-sys-color-on-surface-variant);margin:12px 0 0">* <em>Emphasized</em> aslinya kurva dua-bagian; di web diaproksimasi ke satu <code>cubic-bezier</code>. Untuk fidelitas penuh, pisah jadi <code>emphasized-decelerate</code> (masuk) &amp; <code>emphasized-accelerate</code> (keluar).</p>
+
+    <h3 class="sub">Duration tokens</h3>
+    <div class="panel">
+      <div id="durationRow" class="dur-row"></div>
+      <p class="md-body-small" style="color:var(--md-sys-color-on-surface-variant);margin:16px 0 0">Prinsip: gerakan lebih besar → durasi lebih panjang (proporsional). Pasangkan masuk (decelerate) &amp; keluar (accelerate).</p>
+    </div>
+
+    <h3 class="sub">Playground</h3>
+    <div class="panel">
+      <div class="row" style="margin-bottom:16px">
+        <label class="md-label-large" style="color:var(--md-sys-color-on-surface-variant)">Easing</label>
+        <select id="pgEase"></select>
+        <label class="md-label-large" style="color:var(--md-sys-color-on-surface-variant)">Duration</label>
+        <select id="pgDur"></select>
+        <md-button id="pgPlay" variant="tonal" icon="play_arrow">Play</md-button>
+      </div>
+      <div class="pg-track"><div class="pg-ball" id="pgBall"></div></div>
+    </div>
+  </section>
+
+  <section id="spacing">
+    <h2>Spacing scale</h2>
+    <p class="lead">Grid dasar 8dp (grid halus 4dp). Token dari 0 hingga 64px.</p>
+    <div class="space-row panel" id="spaceRow"></div>
+  </section>
+
+  <!-- ============ COMPONENTS ============ -->
+  <section id="buttons">
+    <h2>Buttons</h2>
+    <p class="lead">Lima jenis penekanan (Filled, Tonal, Elevated, Outlined, Text) dan lima ukuran Expressive (XS 32 → XL 64px).</p>
+    <h3 class="sub">Variants</h3>
+    <div class="row">
+      <md-button variant="filled" icon="add">Filled</md-button>
+      <md-button variant="tonal">Tonal</md-button>
+      <md-button variant="elevated">Elevated</md-button>
+      <md-button variant="outlined" icon="download">Outlined</md-button>
+      <md-button variant="text">Text</md-button>
+      <md-button variant="filled" disabled>Disabled</md-button>
+    </div>
+    <h3 class="sub">Sizes (Expressive)</h3>
+    <div class="row">
+      <md-button variant="filled" size="xs">XS</md-button>
+      <md-button variant="filled" size="s">S</md-button>
+      <md-button variant="filled" size="m">M</md-button>
+      <md-button variant="filled" size="l">L</md-button>
+      <md-button variant="filled" size="xl">XL</md-button>
+    </div>
+    <h3 class="sub">Icon buttons</h3>
+    <div class="row">
+      <md-icon-button variant="standard"><span>favorite</span></md-icon-button>
+      <md-icon-button variant="filled"><span>bookmark</span></md-icon-button>
+      <md-icon-button variant="tonal"><span>settings</span></md-icon-button>
+      <md-icon-button variant="outlined"><span>share</span></md-icon-button>
+      <md-icon-button variant="filled" toggle><span>star</span></md-icon-button>
+    </div>
+    <h3 class="sub">Segmented button</h3>
+    <md-segmented-button>
+      <button data-value="day" selected>Day</button>
+      <button data-value="week">Week</button>
+      <button data-value="month">Month</button>
+    </md-segmented-button>
+  </section>
+
+  <section id="fab">
+    <h2>Floating action buttons</h2>
+    <div class="row">
+      <md-fab size="small" variant="surface" icon="edit"></md-fab>
+      <md-fab size="medium" variant="primary" icon="add"></md-fab>
+      <md-fab size="large" variant="secondary" icon="navigation"></md-fab>
+      <md-fab variant="tertiary" extended label="Compose" icon="edit"></md-fab>
+    </div>
+  </section>
+
+  <section id="selection">
+    <h2>Selection controls</h2>
+    <div class="fieldrow">
+      <div class="panel">
+        <h3 class="sub" style="margin-top:0">Switch</h3>
+        <div class="row" style="gap:24px">
+          <md-switch selected></md-switch>
+          <md-switch selected icons></md-switch>
+        </div>
+        <p class="md-body-small" style="color:var(--md-sys-color-on-surface-variant);margin:12px 0 0">
+          Flutter sample: dua switch default ON — polos, dan dengan thumbIcon check/close.
+        </p>
+        <div class="row" style="gap:24px;margin-top:12px">
+          <md-switch></md-switch>
+          <md-switch icons></md-switch>
+          <md-switch disabled></md-switch>
+        </div>
+      </div>
+      <div class="panel">
+        <h3 class="sub" style="margin-top:0">Checkbox</h3>
+        <div class="row">
+          <label class="opt"><md-checkbox checked></md-checkbox> Checked</label>
+          <label class="opt"><md-checkbox></md-checkbox> Unchecked</label>
+          <label class="opt"><md-checkbox indeterminate></md-checkbox> Mixed</label>
+        </div>
+      </div>
+      <div class="panel">
+        <h3 class="sub" style="margin-top:0">Radio</h3>
+        <div class="row">
+          <label class="opt"><md-radio name="demo" checked></md-radio> One</label>
+          <label class="opt"><md-radio name="demo"></md-radio> Two</label>
+          <label class="opt"><md-radio name="demo"></md-radio> Three</label>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="slider">
+    <h2>Slider</h2>
+    <div class="panel grid" style="max-width:520px">
+      <md-slider min="0" max="100" value="40"></md-slider>
+      <md-slider min="0" max="100" value="70" step="10" labeled></md-slider>
+    </div>
+  </section>
+
+  <section id="chips">
+    <h2>Chips</h2>
+    <div class="row">
+      <md-chip variant="assist" icon="event">Assist</md-chip>
+      <md-chip variant="filter">Filter</md-chip>
+      <md-chip variant="filter" selected>Selected</md-chip>
+      <md-chip variant="input" removable>Input</md-chip>
+      <md-chip variant="suggestion">Suggestion</md-chip>
+    </div>
+  </section>
+
+  <section id="fields">
+    <h2>Text fields</h2>
+    <div class="row">
+      <md-text-field variant="outlined" label="Name" leading-icon="person" supporting-text="Helper text"></md-text-field>
+      <md-text-field variant="filled" label="Email" trailing-icon="mail" type="email"></md-text-field>
+      <md-text-field variant="outlined" label="Password" type="password" error error-text="Required"></md-text-field>
+    </div>
+  </section>
+
+  <section id="cards">
+    <h2>Cards</h2>
+    <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">
+      <md-card variant="elevated"><h3 class="md-title-medium" style="margin:0 0 8px">Elevated</h3><p class="md-body-medium" style="margin:0;color:var(--md-sys-color-on-surface-variant)">Surface container low with a level-1 shadow.</p></md-card>
+      <md-card variant="filled"><h3 class="md-title-medium" style="margin:0 0 8px">Filled</h3><p class="md-body-medium" style="margin:0;color:var(--md-sys-color-on-surface-variant)">Surface container highest, no border.</p></md-card>
+      <md-card variant="outlined"><h3 class="md-title-medium" style="margin:0 0 8px">Outlined</h3><p class="md-body-medium" style="margin:0;color:var(--md-sys-color-on-surface-variant)">Surface with an outline-variant border.</p></md-card>
+    </div>
+  </section>
+
+  <section id="menu">
+    <h2>Menu</h2>
+    <md-button id="menuAnchor" variant="tonal" trailing-icon icon="arrow_drop_down">Open menu</md-button>
+    <md-menu id="theMenu">
+      <md-menu-item icon="content_copy">Copy</md-menu-item>
+      <md-menu-item icon="content_paste">Paste</md-menu-item>
+      <md-menu-item icon="edit">Rename</md-menu-item>
+      <md-menu-item icon="delete">Delete</md-menu-item>
+    </md-menu>
+  </section>
+
+  <section id="tabs">
+    <h2>Tabs</h2>
+    <md-tabs style="max-width:520px">
+      <md-tab value="a" active icon="home">Home</md-tab>
+      <md-tab value="b" icon="search">Explore</md-tab>
+      <md-tab value="c" icon="notifications">Alerts</md-tab>
+    </md-tabs>
+  </section>
+
+  <section id="lists">
+    <h2>Lists</h2>
+    <md-list style="max-width:520px">
+      <md-list-item icon="person" supporting-text="Software engineer" trailing="09:32" interactive>Ada Lovelace</md-list-item>
+      <md-divider inset></md-divider>
+      <md-list-item icon="person" supporting-text="Designer" trailing="Yesterday" interactive>Grace Hopper</md-list-item>
+      <md-divider inset></md-divider>
+      <md-list-item icon="person" supporting-text="Researcher" trailing="Mon" interactive>Alan Turing</md-list-item>
+    </md-list>
+  </section>
+
+  <section id="progress">
+    <h2>Progress indicators</h2>
+    <div class="row" style="gap:32px">
+      <div class="grid" style="flex:1;min-width:240px;gap:20px">
+        <md-progress variant="linear" value="60"></md-progress>
+        <md-progress variant="linear" indeterminate></md-progress>
+      </div>
+      <md-progress variant="circular" value="70"></md-progress>
+      <md-progress variant="circular" indeterminate></md-progress>
+    </div>
+  </section>
+
+  <section id="dialog">
+    <h2>Dialog</h2>
+    <md-button id="dlgBtn" variant="filled">Open dialog</md-button>
+    <md-dialog id="theDialog">
+      <span slot="headline">Reset settings?</span>
+      This will restore all settings to their default values. This action cannot be undone.
+      <div slot="actions">
+        <md-button variant="text" id="dlgCancel">Cancel</md-button>
+        <md-button variant="filled" id="dlgOk">Reset</md-button>
+      </div>
+    </md-dialog>
+  </section>
+</div>
+
+
+<script>
+/* =====================================================================
+   Material Design 3 · Expressive — Dynamic Color Engine
+   (self-contained, no dependencies) — see md3-dynamic-color.js for docs.
+   ===================================================================== */
+(function (global) {
+  'use strict';
+
+  /* ---------- sRGB <-> CIE Lab/LCh ---------- */
+  const clamp = (x, a, b) => Math.min(b, Math.max(a, x));
+
+  function hexToRgb(hex) {
+    hex = hex.replace('#', '').trim();
+    if (hex.length === 3) hex = hex.split('').map(c => c + c).join('');
+    const n = parseInt(hex, 16);
+    return [(n >> 16) & 255, (n >> 8) & 255, n & 255];
+  }
+  function rgbToHex(r, g, b) {
+    const h = v => clamp(Math.round(v), 0, 255).toString(16).padStart(2, '0');
+    return '#' + h(r) + h(g) + h(b);
+  }
+  const lin = c => { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
+  const gam = c => { const v = c <= 0.0031308 ? 12.92 * c : 1.055 * Math.pow(c, 1 / 2.4) - 0.055; return v * 255; };
+
+  // D65 reference white
+  const Xn = 95.047, Yn = 100.0, Zn = 108.883;
+
+  function rgbToXyz(r, g, b) {
+    r = lin(r); g = lin(g); b = lin(b);
+    return [
+      (r * 0.4124564 + g * 0.3575761 + b * 0.1804375) * 100,
+      (r * 0.2126729 + g * 0.7151522 + b * 0.0721750) * 100,
+      (r * 0.0193339 + g * 0.1191920 + b * 0.9503041) * 100,
+    ];
+  }
+  function xyzToRgb(x, y, z) {
+    x /= 100; y /= 100; z /= 100;
+    return [
+      gam(x * 3.2404542 + y * -1.5371385 + z * -0.4985314),
+      gam(x * -0.9692660 + y * 1.8760108 + z * 0.0415560),
+      gam(x * 0.0556434 + y * -0.2040259 + z * 1.0572252),
+    ];
+  }
+  const f = t => t > 0.008856 ? Math.cbrt(t) : (7.787 * t + 16 / 116);
+  const fInv = t => { const t3 = t * t * t; return t3 > 0.008856 ? t3 : (t - 16 / 116) / 7.787; };
+
+  function xyzToLab(x, y, z) {
+    const fx = f(x / Xn), fy = f(y / Yn), fz = f(z / Zn);
+    return [116 * fy - 16, 500 * (fx - fy), 200 * (fy - fz)];
+  }
+  function labToXyz(L, a, b) {
+    const fy = (L + 16) / 116, fx = fy + a / 500, fz = fy - b / 200;
+    return [fInv(fx) * Xn, fInv(fy) * Yn, fInv(fz) * Zn];
+  }
+  function rgbToLch(r, g, b) {
+    const [x, y, z] = rgbToXyz(r, g, b);
+    const [L, A, B] = xyzToLab(x, y, z);
+    const C = Math.sqrt(A * A + B * B);
+    let H = Math.atan2(B, A) * 180 / Math.PI;
+    if (H < 0) H += 360;
+    return [L, C, H];
+  }
+  function lchToRgb(L, C, H) {
+    const hr = H * Math.PI / 180;
+    const a = Math.cos(hr) * C, b = Math.sin(hr) * C;
+    const [x, y, z] = labToXyz(L, a, b);
+    return xyzToRgb(x, y, z);
+  }
+  const inGamut = ([r, g, b]) => r >= -0.5 && r <= 255.5 && g >= -0.5 && g <= 255.5 && b >= -0.5 && b <= 255.5;
+
+  function toneColor(hue, chroma, tone) {
+    let lo = 0, hi = chroma, best = lchToRgb(tone, 0, hue);
+    for (let i = 0; i < 24; i++) {
+      const mid = (lo + hi) / 2;
+      const rgb = lchToRgb(tone, mid, hue);
+      if (inGamut(rgb)) { best = rgb; lo = mid; } else { hi = mid; }
+    }
+    return rgbToHex(best[0], best[1], best[2]);
+  }
+
+  const STYLES = {
+    tonalSpot:  [48, 18, 42, 60, 5, 12],
+    vibrant:    [80, 32, 56, 48, 8, 16],
+    expressive: [70, 34, 64, 90, 8, 18],
+    neutral:    [12, 8, 14, 60, 3, 6],
+    content:    [60, 26, 48, 40, 6, 12],
+  };
+  const ERROR_HUE = 25, ERROR_CHROMA = 78;
+
+  const MAP = {
+    light: {
+      primary: ['p', 40], 'on-primary': ['p', 100], 'primary-container': ['p', 90], 'on-primary-container': ['p', 30],
+      secondary: ['s', 40], 'on-secondary': ['s', 100], 'secondary-container': ['s', 90], 'on-secondary-container': ['s', 30],
+      tertiary: ['t', 40], 'on-tertiary': ['t', 100], 'tertiary-container': ['t', 90], 'on-tertiary-container': ['t', 30],
+      error: ['e', 40], 'on-error': ['e', 100], 'error-container': ['e', 90], 'on-error-container': ['e', 30],
+      background: ['n', 98], 'on-background': ['n', 10],
+      surface: ['n', 98], 'on-surface': ['n', 10],
+      'surface-variant': ['nv', 90], 'on-surface-variant': ['nv', 30],
+      'surface-dim': ['n', 87], 'surface-bright': ['n', 98],
+      'surface-container-lowest': ['n', 100], 'surface-container-low': ['n', 96],
+      'surface-container': ['n', 94], 'surface-container-high': ['n', 92], 'surface-container-highest': ['n', 90],
+      outline: ['nv', 50], 'outline-variant': ['nv', 80],
+      'inverse-surface': ['n', 20], 'inverse-on-surface': ['n', 95], 'inverse-primary': ['p', 80],
+    },
+    dark: {
+      primary: ['p', 80], 'on-primary': ['p', 20], 'primary-container': ['p', 30], 'on-primary-container': ['p', 90],
+      secondary: ['s', 80], 'on-secondary': ['s', 20], 'secondary-container': ['s', 30], 'on-secondary-container': ['s', 90],
+      tertiary: ['t', 80], 'on-tertiary': ['t', 20], 'tertiary-container': ['t', 30], 'on-tertiary-container': ['t', 90],
+      error: ['e', 80], 'on-error': ['e', 20], 'error-container': ['e', 30], 'on-error-container': ['e', 90],
+      background: ['n', 6], 'on-background': ['n', 90],
+      surface: ['n', 6], 'on-surface': ['n', 90],
+      'surface-variant': ['nv', 30], 'on-surface-variant': ['nv', 80],
+      'surface-dim': ['n', 6], 'surface-bright': ['n', 24],
+      'surface-container-lowest': ['n', 4], 'surface-container-low': ['n', 10],
+      'surface-container': ['n', 12], 'surface-container-high': ['n', 17], 'surface-container-highest': ['n', 22],
+      outline: ['nv', 60], 'outline-variant': ['nv', 30],
+      'inverse-surface': ['n', 90], 'inverse-on-surface': ['n', 20], 'inverse-primary': ['p', 40],
+    },
+  };
+  const FIXED = {
+    'primary-fixed': ['p', 90], 'primary-fixed-dim': ['p', 80], 'on-primary-fixed': ['p', 10], 'on-primary-fixed-variant': ['p', 30],
+    'secondary-fixed': ['s', 90], 'secondary-fixed-dim': ['s', 80], 'on-secondary-fixed': ['s', 10], 'on-secondary-fixed-variant': ['s', 30],
+    'tertiary-fixed': ['t', 90], 'tertiary-fixed-dim': ['t', 80], 'on-tertiary-fixed': ['t', 10], 'on-tertiary-fixed-variant': ['t', 30],
+  };
+
+  function palettesFromSeed(hex, style) {
+    const [, seedC, seedH] = rgbToLch(...hexToRgb(hex));
+    const s = STYLES[style] || STYLES.expressive;
+    const pC = Math.max(seedC, s[0]);
+    return {
+      p:  { h: seedH, c: pC },
+      s:  { h: seedH, c: s[1] },
+      t:  { h: (seedH + s[3]) % 360, c: s[2] },
+      e:  { h: ERROR_HUE, c: ERROR_CHROMA },
+      n:  { h: seedH, c: s[4] },
+      nv: { h: seedH, c: s[5] },
+    };
+  }
+
+  function buildScheme(pal, roleMap) {
+    const out = {};
+    for (const role in roleMap) {
+      const [pk, tone] = roleMap[role];
+      out[role] = toneColor(pal[pk].h, pal[pk].c, tone);
+    }
+    return out;
+  }
+
+  function schemeFromSeed(hex, style) {
+    const pal = palettesFromSeed(hex, style || 'expressive');
+    const fixed = buildScheme(pal, FIXED);
+    return {
+      light: Object.assign(buildScheme(pal, MAP.light), fixed),
+      dark: Object.assign(buildScheme(pal, MAP.dark), fixed),
+    };
+  }
+
+  let _scheme = null;
+
+  function resolveTheme() {
+    const t = document.documentElement.getAttribute('data-theme');
+    if (t === 'dark') return 'dark';
+    if (t === 'light') return 'light';
+    return global.matchMedia && global.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function paint() {
+    if (!_scheme) return;
+    const roles = _scheme[resolveTheme()];
+    const root = document.documentElement;
+    for (const role in roles) root.style.setProperty('--md-sys-color-' + role, roles[role]);
+  }
+
+  const MD3 = {
+    schemeFromSeed,
+    applySeed(hex, opts) {
+      _scheme = schemeFromSeed(hex, (opts && opts.style) || 'expressive');
+      paint();
+      return _scheme;
+    },
+    setTheme(mode) {
+      const root = document.documentElement;
+      if (mode === 'system') root.removeAttribute('data-theme');
+      else root.setAttribute('data-theme', mode);
+      paint();
+      return this.getTheme();
+    },
+    getTheme: resolveTheme,
+    reset() {
+      _scheme = null;
+      const root = document.documentElement;
+      [...root.style].filter(p => p.startsWith('--md-sys-color-')).forEach(p => root.style.removeProperty(p));
+    },
+  };
+
+  if (global.matchMedia) {
+    global.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', paint);
+  }
+
+  global.MD3 = MD3;
+})(window);
+
+/* =====================================================================
+   Material Design 3 · Expressive — Web Components
+   (self-contained) — see md3-components.js for full docs.
+   ===================================================================== */
+(function () {
+  'use strict';
+
+  const SPRING_FAST = '350ms cubic-bezier(0.42,1.67,0.21,0.90)';
+  const SPRING_STD = '500ms cubic-bezier(0.38,1.21,0.22,1.00)';
+  const EASE_STD = '200ms cubic-bezier(0.2,0,0,1)';
+
+  const STATE_LAYER = `
+    .state {
+      position:absolute; inset:0; border-radius:inherit;
+      background:currentColor; opacity:0; pointer-events:none;
+      transition:opacity var(--md-sys-motion-spring-default-effects, ${EASE_STD});
+    }
+    :host(:not([disabled])) .surface:hover .state { opacity:0.08; }
+    :host(:not([disabled])) .surface:focus-visible .state { opacity:0.10; }
+    .ripple {
+      position:absolute; border-radius:50%; transform:scale(0);
+      background:currentColor; opacity:0.12; pointer-events:none;
+      animation:ripple 500ms cubic-bezier(0.2,0,0,1);
+    }
+    @keyframes ripple { to { transform:scale(2.2); opacity:0; } }
+    @media (prefers-reduced-motion: reduce){ .ripple{ animation-duration:1ms; } }
+  `;
+
+  function addRipple(host, surface) {
+    surface.addEventListener('pointerdown', e => {
+      if (host.hasAttribute('disabled')) return;
+      const r = surface.getBoundingClientRect();
+      const size = Math.max(r.width, r.height);
+      const rip = document.createElement('span');
+      rip.className = 'ripple';
+      rip.style.width = rip.style.height = size + 'px';
+      rip.style.left = (e.clientX - r.left - size / 2) + 'px';
+      rip.style.top = (e.clientY - r.top - size / 2) + 'px';
+      surface.appendChild(rip);
+      rip.addEventListener('animationend', () => rip.remove());
+    });
+  }
+
+  const define = (name, cls) => { if (!customElements.get(name)) customElements.define(name, cls); };
+
+  class MdButton extends HTMLElement {
+    static get observedAttributes() { return ['variant', 'size', 'disabled', 'trailing-icon', 'icon', 'href']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const variant = this.getAttribute('variant') || 'filled';
+      const size = this.getAttribute('size') || 's';
+      const icon = this.getAttribute('icon');
+      const trailing = this.hasAttribute('trailing-icon');
+      const href = this.getAttribute('href');
+      const heights = { xs: 32, s: 40, m: 48, l: 56, xl: 64 };
+      const h = heights[size] || 40;
+      const pad = { xs: 12, s: 16, m: 24, l: 32, xl: 40 }[size] || 16;
+      const fs = { xs: 14, s: 14, m: 16, l: 20, xl: 24 }[size] || 14;
+      const bg = {
+        filled: 'var(--md-sys-color-primary)', tonal: 'var(--md-sys-color-secondary-container)',
+        elevated: 'var(--md-sys-color-surface-container-low)', outlined: 'transparent', text: 'transparent',
+      }[variant];
+      const fg = {
+        filled: 'var(--md-sys-color-on-primary)', tonal: 'var(--md-sys-color-on-secondary-container)',
+        elevated: 'var(--md-sys-color-primary)', outlined: 'var(--md-sys-color-primary)', text: 'var(--md-sys-color-primary)',
+      }[variant];
+      const border = variant === 'outlined' ? '1px solid var(--md-sys-color-outline)' : 'none';
+      const shadow = variant === 'elevated' ? 'var(--md-sys-elevation-level1)' : 'none';
+      const tag = href ? 'a' : 'button';
+      const iconSpan = icon ? `<span class="md-ic" aria-hidden="true">${icon}</span>` : '';
+      root.innerHTML = `
+        <style>
+          :host{ display:inline-flex; vertical-align:middle; }
+          :host([disabled]){ pointer-events:none; }
+          .surface{
+            position:relative; overflow:hidden; box-sizing:border-box;
+            display:inline-flex; align-items:center; justify-content:center; gap:8px;
+            height:${h}px; padding:0 ${pad}px; min-width:48px;
+            border:${border}; background:${bg}; color:${fg};
+            border-radius:var(--md-sys-shape-corner-full);
+            box-shadow:${shadow}; cursor:pointer; text-decoration:none;
+            font:500 ${fs}px/1 var(--md-sys-typescale-font-plain); letter-spacing:.1px;
+            transition:border-radius ${SPRING_FAST}, box-shadow ${EASE_STD}, background ${EASE_STD};
+            -webkit-tap-highlight-color:transparent;
+          }
+          .surface:active{ border-radius:var(--md-sys-shape-corner-medium); }
+          :host([disabled]) .surface{
+            background:${variant === 'outlined' || variant === 'text' ? 'transparent' : 'color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent)'};
+            color:color-mix(in srgb, var(--md-sys-color-on-surface) 38%, transparent);
+            border-color:color-mix(in srgb, var(--md-sys-color-on-surface) 12%, transparent);
+            box-shadow:none; cursor:default;
+          }
+          .md-ic{ font-family:'Material Symbols Outlined'; font-size:${Math.round(fs * 1.3)}px; line-height:1;
+                  font-variation-settings:'FILL' 0,'wght' 400,'opsz' ${Math.round(fs*1.3)}; }
+          .lbl{ display:inline-flex; align-items:center; white-space:nowrap; }
+          ${STATE_LAYER}
+        </style>
+        <${tag} class="surface" ${href ? `href="${href}"` : ''} ${this.hasAttribute('disabled') ? 'disabled aria-disabled="true"' : ''} part="button">
+          <span class="state"></span>
+          ${!trailing ? iconSpan : ''}
+          <span class="lbl"><slot></slot></span>
+          ${trailing ? iconSpan : ''}
+        </${tag}>`;
+      addRipple(this, root.querySelector('.surface'));
+    }
+  }
+  define('md-button', MdButton);
+
+  class MdIconButton extends HTMLElement {
+    static get observedAttributes() { return ['variant', 'disabled', 'toggle', 'selected']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const variant = this.getAttribute('variant') || 'standard';
+      const selected = this.hasAttribute('selected');
+      const toggle = this.hasAttribute('toggle');
+      const styles = {
+        standard: ['transparent', 'var(--md-sys-color-on-surface-variant)'],
+        filled: [selected || !toggle ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-surface-container-highest)',
+                 selected || !toggle ? 'var(--md-sys-color-on-primary)' : 'var(--md-sys-color-primary)'],
+        tonal: ['var(--md-sys-color-secondary-container)', 'var(--md-sys-color-on-secondary-container)'],
+        outlined: ['transparent', 'var(--md-sys-color-on-surface-variant)'],
+      };
+      const [bg, fg] = styles[variant] || styles.standard;
+      const border = variant === 'outlined' ? '1px solid var(--md-sys-color-outline)' : 'none';
+      root.innerHTML = `
+        <style>
+          :host{ display:inline-flex; }
+          .surface{
+            position:relative; overflow:hidden; box-sizing:border-box;
+            width:40px; height:40px; display:inline-flex; align-items:center; justify-content:center;
+            border:${border}; background:${bg}; color:${fg}; cursor:pointer;
+            border-radius:var(--md-sys-shape-corner-full);
+            transition:border-radius ${SPRING_FAST}, background ${EASE_STD};
+            -webkit-tap-highlight-color:transparent;
+          }
+          .surface:active{ border-radius:var(--md-sys-shape-corner-small); }
+          :host([disabled]){ pointer-events:none; }
+          :host([disabled]) .surface{ color:color-mix(in srgb,var(--md-sys-color-on-surface) 38%,transparent); background:transparent; border-color:color-mix(in srgb,var(--md-sys-color-on-surface) 12%,transparent);}
+          ::slotted(*), .md-ic{ font-family:'Material Symbols Outlined'; font-size:24px; line-height:1;
+            font-variation-settings:'FILL' ${selected ? 1 : 0},'wght' 400,'opsz' 24; }
+          ${STATE_LAYER}
+        </style>
+        <button class="surface" part="button" aria-pressed="${toggle ? selected : 'undefined'}" ${this.hasAttribute('disabled') ? 'disabled' : ''}>
+          <span class="state"></span><slot></slot>
+        </button>`;
+      const btn = root.querySelector('.surface');
+      addRipple(this, btn);
+      if (toggle) btn.addEventListener('click', () => { this.toggleAttribute('selected'); this.dispatchEvent(new Event('change')); });
+    }
+  }
+  define('md-icon-button', MdIconButton);
+
+  class MdFab extends HTMLElement {
+    static get observedAttributes() { return ['size', 'variant', 'extended', 'icon', 'label']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const size = this.getAttribute('size') || 'medium';
+      const variant = this.getAttribute('variant') || 'primary';
+      const extended = this.hasAttribute('extended');
+      const icon = this.getAttribute('icon') || 'add';
+      const label = this.getAttribute('label') || '';
+      const dims = { small: 40, medium: 56, large: 96 }[size] || 56;
+      const iconSz = { small: 24, medium: 24, large: 36 }[size] || 24;
+      const radius = { small: 'var(--md-sys-shape-corner-medium)', medium: 'var(--md-sys-shape-corner-large)', large: 'var(--md-sys-shape-corner-extra-large)' }[size];
+      const colors = {
+        surface: ['var(--md-sys-color-surface-container-high)', 'var(--md-sys-color-primary)'],
+        primary: ['var(--md-sys-color-primary-container)', 'var(--md-sys-color-on-primary-container)'],
+        secondary: ['var(--md-sys-color-secondary-container)', 'var(--md-sys-color-on-secondary-container)'],
+        tertiary: ['var(--md-sys-color-tertiary-container)', 'var(--md-sys-color-on-tertiary-container)'],
+      }[variant] || ['var(--md-sys-color-primary-container)', 'var(--md-sys-color-on-primary-container)'];
+      root.innerHTML = `
+        <style>
+          :host{ display:inline-flex; }
+          .surface{
+            position:relative; overflow:hidden; box-sizing:border-box; cursor:pointer; border:none;
+            display:inline-flex; align-items:center; justify-content:center; gap:12px;
+            ${extended ? `height:56px; padding:0 20px; border-radius:var(--md-sys-shape-corner-large);`
+                       : `width:${dims}px; height:${dims}px; border-radius:${radius};`}
+            background:${colors[0]}; color:${colors[1]};
+            box-shadow:var(--md-sys-elevation-level3);
+            font:500 14px/1 var(--md-sys-typescale-font-plain); letter-spacing:.1px;
+            transition:border-radius ${SPRING_FAST}, box-shadow ${EASE_STD};
+            -webkit-tap-highlight-color:transparent;
+          }
+          .surface:hover{ box-shadow:var(--md-sys-elevation-level4); }
+          .surface:active{ border-radius:var(--md-sys-shape-corner-small); }
+          .md-ic{ font-family:'Material Symbols Outlined'; font-size:${iconSz}px; line-height:1; font-variation-settings:'opsz' ${iconSz}; }
+          ${STATE_LAYER}
+        </style>
+        <button class="surface" part="button" aria-label="${label || icon}">
+          <span class="state"></span>
+          <span class="md-ic" aria-hidden="true">${icon}</span>
+          ${extended && label ? `<span>${label}</span>` : ''}
+        </button>`;
+      addRipple(this, root.querySelector('.surface'));
+    }
+  }
+  define('md-fab', MdFab);
+
+  class MdChip extends HTMLElement {
+    static get observedAttributes() { return ['variant', 'selected', 'removable', 'icon', 'disabled']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const variant = this.getAttribute('variant') || 'assist';
+      const selected = this.hasAttribute('selected');
+      const removable = this.hasAttribute('removable');
+      const icon = this.getAttribute('icon');
+      const filterCheck = variant === 'filter' && selected;
+      const bg = selected && (variant === 'filter' || variant === 'input')
+        ? 'var(--md-sys-color-secondary-container)' : 'transparent';
+      const fg = selected && (variant === 'filter' || variant === 'input')
+        ? 'var(--md-sys-color-on-secondary-container)' : 'var(--md-sys-color-on-surface-variant)';
+      const border = bg === 'transparent' ? '1px solid var(--md-sys-color-outline-variant)' : 'none';
+      root.innerHTML = `
+        <style>
+          :host{ display:inline-flex; }
+          .surface{
+            position:relative; overflow:hidden; box-sizing:border-box; cursor:pointer;
+            display:inline-flex; align-items:center; gap:8px; height:32px; padding:0 16px;
+            border:${border}; background:${bg}; color:${fg};
+            border-radius:var(--md-sys-shape-corner-small);
+            font:var(--md-sys-typescale-label-large); letter-spacing:.1px;
+            transition:border-radius ${SPRING_FAST}, background ${EASE_STD};
+            -webkit-tap-highlight-color:transparent;
+          }
+          .surface:active{ border-radius:var(--md-sys-shape-corner-large); }
+          :host([disabled]){ pointer-events:none; opacity:.38; }
+          .md-ic{ font-family:'Material Symbols Outlined'; font-size:18px; line-height:1; font-variation-settings:'opsz' 20; margin-left:-4px; }
+          .rm{ font-family:'Material Symbols Outlined'; font-size:18px; margin-right:-6px; cursor:pointer; }
+          ${STATE_LAYER}
+        </style>
+        <button class="surface" part="chip" role="${variant === 'filter' ? 'checkbox' : 'button'}" aria-checked="${selected}">
+          <span class="state"></span>
+          ${filterCheck ? '<span class="md-ic">check</span>' : (icon ? `<span class="md-ic">${icon}</span>` : '')}
+          <slot></slot>
+          ${removable ? '<span class="rm" part="remove">close</span>' : ''}
+        </button>`;
+      const surf = root.querySelector('.surface');
+      addRipple(this, surf);
+      if (variant === 'filter' || variant === 'input') {
+        surf.addEventListener('click', e => {
+          if (e.target.classList.contains('rm')) return;
+          this.toggleAttribute('selected'); this.dispatchEvent(new Event('change'));
+        });
+      }
+      const rm = root.querySelector('.rm');
+      if (rm) rm.addEventListener('click', e => { e.stopPropagation(); this.dispatchEvent(new Event('remove')); this.remove(); });
+    }
+  }
+  define('md-chip', MdChip);
+
+  class MdSwitch extends HTMLElement {
+    static get observedAttributes() { return ['selected', 'disabled']; }
+    get selected() { return this.hasAttribute('selected'); }
+    set selected(v) { this.toggleAttribute('selected', !!v); }
+    connectedCallback() {
+      if (this._built) return;
+      this._built = true;
+      const root = this.attachShadow({ mode: 'open' });
+      root.innerHTML = `
+        <style>
+          :host{ display:inline-flex; }
+          .track{
+            position:relative; box-sizing:border-box; width:52px; height:32px; cursor:pointer;
+            border-radius:var(--md-sys-shape-corner-full);
+            background:var(--md-sys-color-surface-container-highest);
+            border:2px solid var(--md-sys-color-outline);
+            transition:background 250ms cubic-bezier(0.2,0,0,1), border-color 250ms cubic-bezier(0.2,0,0,1);
+            padding:0; -webkit-tap-highlight-color:transparent;
+          }
+          .handle{
+            position:absolute; top:50%; left:0;
+            width:16px; height:16px; border-radius:50%;
+            background:var(--md-sys-color-outline);
+            display:grid; place-items:center;
+            transform:translate(6px,-50%);
+            transition:transform 300ms cubic-bezier(0.2,0,0,1),
+                       width 300ms cubic-bezier(0.2,0,0,1),
+                       height 300ms cubic-bezier(0.2,0,0,1),
+                       background 250ms cubic-bezier(0.2,0,0,1);
+          }
+          :host([icons]) .handle{ width:24px; height:24px; transform:translate(4px,-50%); }
+          :host([selected]) .track{ background:var(--md-sys-color-primary); border-color:var(--md-sys-color-primary); }
+          :host([selected]) .handle{ width:24px; height:24px; background:var(--md-sys-color-on-primary);
+            transform:translate(24px,-50%); }
+          .track:active .handle{ width:28px; height:28px; }
+          :host(:not([selected])) .track:active .handle{ transform:translate(2px,-50%); }
+          :host([selected]) .track:active .handle{ transform:translate(22px,-50%); }
+          .ic{ position:absolute; font-family:'Material Symbols Outlined'; font-size:16px; line-height:1;
+            opacity:0; transition:opacity 100ms cubic-bezier(0.2,0,0,1); }
+          .ic.on{ color:var(--md-sys-color-on-primary-container); }
+          .ic.off{ color:var(--md-sys-color-surface-container-highest); }
+          :host([icons]:not([selected])) .ic.off{ opacity:1; }
+          :host([icons][selected]) .ic.on{ opacity:1; }
+          :host([disabled]){ pointer-events:none; opacity:.4; }
+          @media (prefers-reduced-motion: reduce){ .track,.handle,.ic{ transition-duration:1ms; } }
+        </style>
+        <button class="track" role="switch" part="switch" aria-checked="${this.selected}"
+          ${this.hasAttribute('disabled') ? 'disabled' : ''}>
+          <span class="handle">
+            <span class="ic off" aria-hidden="true">close</span>
+            <span class="ic on" aria-hidden="true">check</span>
+          </span>
+        </button>`;
+      root.querySelector('.track').addEventListener('click', () => {
+        if (this.hasAttribute('disabled')) return;
+        this.toggleAttribute('selected');
+        this.dispatchEvent(new Event('change'));
+      });
+    }
+    attributeChangedCallback(name) {
+      if (!this.shadowRoot) return;
+      const btn = this.shadowRoot.querySelector('.track');
+      if (!btn) return;
+      if (name === 'selected') btn.setAttribute('aria-checked', this.selected);
+      if (name === 'disabled') this.hasAttribute('disabled') ? btn.setAttribute('disabled', '') : btn.removeAttribute('disabled');
+    }
+  }
+  define('md-switch', MdSwitch);
+
+  class MdCheckbox extends HTMLElement {
+    static get observedAttributes() { return ['checked', 'indeterminate', 'disabled']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    get checked() { return this.hasAttribute('checked'); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const on = this.hasAttribute('checked') || this.hasAttribute('indeterminate');
+      const ind = this.hasAttribute('indeterminate');
+      root.innerHTML = `
+        <style>
+          :host{ display:inline-flex; }
+          .box{ position:relative; width:18px; height:18px; margin:11px; cursor:pointer;
+            border-radius:2px;
+            border:2px solid ${on ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-on-surface-variant)'};
+            background:${on ? 'var(--md-sys-color-primary)' : 'transparent'};
+            transition:background ${EASE_STD}, border-color ${EASE_STD}; }
+          .box::after{ content:'${ind ? '\\e15b' : '\\e5ca'}'; font-family:'Material Symbols Outlined';
+            position:absolute; inset:-2px; display:${on ? 'flex' : 'none'}; align-items:center; justify-content:center;
+            font-size:18px; color:var(--md-sys-color-on-primary); font-variation-settings:'wght' 600; }
+          :host([disabled]){ pointer-events:none; opacity:.38; }
+        </style>
+        <button class="box" role="checkbox" aria-checked="${ind ? 'mixed' : on}" part="checkbox" ${this.hasAttribute('disabled') ? 'disabled' : ''}></button>`;
+      root.querySelector('.box').addEventListener('click', () => {
+        if (this.hasAttribute('disabled')) return;
+        this.removeAttribute('indeterminate'); this.toggleAttribute('checked'); this.dispatchEvent(new Event('change'));
+      });
+    }
+  }
+  define('md-checkbox', MdCheckbox);
+
+  class MdRadio extends HTMLElement {
+    static get observedAttributes() { return ['checked', 'disabled', 'name', 'value']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const on = this.hasAttribute('checked');
+      root.innerHTML = `
+        <style>
+          :host{ display:inline-flex; }
+          .r{ position:relative; width:20px; height:20px; margin:10px; cursor:pointer; border-radius:50%;
+            border:2px solid ${on ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-on-surface-variant)'};
+            transition:border-color ${EASE_STD}; }
+          .r::after{ content:''; position:absolute; inset:3px; border-radius:50%;
+            background:var(--md-sys-color-primary); transform:scale(${on ? 1 : 0});
+            transition:transform ${SPRING_FAST}; }
+          :host([disabled]){ pointer-events:none; opacity:.38; }
+        </style>
+        <button class="r" role="radio" aria-checked="${on}" part="radio" ${this.hasAttribute('disabled') ? 'disabled' : ''}></button>`;
+      root.querySelector('.r').addEventListener('click', () => {
+        if (this.hasAttribute('disabled') || this.hasAttribute('checked')) return;
+        const name = this.getAttribute('name');
+        if (name) document.querySelectorAll(`md-radio[name="${name}"]`).forEach(r => r.removeAttribute('checked'));
+        this.setAttribute('checked', ''); this.dispatchEvent(new Event('change', { bubbles: true }));
+      });
+    }
+  }
+  define('md-radio', MdRadio);
+
+  class MdSlider extends HTMLElement {
+    static get observedAttributes() { return ['min', 'max', 'value', 'step', 'labeled', 'disabled']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback(n) { if (this.shadowRoot && n !== 'value') this.render(); else if (this.shadowRoot) this.update(); }
+    get value() { return parseFloat(this.getAttribute('value') || '0'); }
+    set value(v) { this.setAttribute('value', v); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const labeled = this.hasAttribute('labeled');
+      root.innerHTML = `
+        <style>
+          :host{ display:block; padding:16px 0; --p:0%; }
+          .wrap{ position:relative; height:44px; display:flex; align-items:center; }
+          .track{ position:relative; flex:1; height:16px; display:flex; align-items:center; }
+          .rail{ position:absolute; left:0; right:0; height:16px; border-radius:var(--md-sys-shape-corner-full);
+            background:var(--md-sys-color-secondary-container); overflow:hidden; }
+          .active{ position:absolute; left:0; height:16px; width:var(--p);
+            background:var(--md-sys-color-primary); border-radius:var(--md-sys-shape-corner-full);
+            transition:width ${EASE_STD}; }
+          .handle{ position:absolute; left:var(--p); top:50%; transform:translate(-50%,-50%);
+            width:4px; height:44px; border-radius:var(--md-sys-shape-corner-full);
+            background:var(--md-sys-color-primary); transition:left ${EASE_STD}, height ${SPRING_FAST};
+            box-shadow:0 0 0 6px transparent; }
+          .wrap:active .handle{ height:52px; }
+          input{ position:absolute; inset:0; width:100%; margin:0; opacity:0; cursor:pointer; height:44px; }
+          .lbl{ position:absolute; left:var(--p); bottom:100%; transform:translateX(-50%);
+            background:var(--md-sys-color-primary); color:var(--md-sys-color-on-primary);
+            padding:4px 10px; border-radius:var(--md-sys-shape-corner-full);
+            font:var(--md-sys-typescale-label-medium); opacity:0; transition:opacity ${EASE_STD};
+            white-space:nowrap; pointer-events:none; }
+          .wrap:active .lbl{ opacity:${labeled ? 1 : 0}; }
+          :host([disabled]){ pointer-events:none; opacity:.38; }
+        </style>
+        <div class="wrap">
+          <div class="track">
+            <div class="rail"></div><div class="active"></div>
+          </div>
+          <div class="handle"></div>
+          ${labeled ? '<div class="lbl">0</div>' : ''}
+          <input type="range" min="${this.getAttribute('min') || 0}" max="${this.getAttribute('max') || 100}"
+                 step="${this.getAttribute('step') || 'any'}" value="${this.getAttribute('value') || 0}"
+                 aria-label="slider">
+        </div>`;
+      const input = root.querySelector('input');
+      input.addEventListener('input', () => { this.setAttribute('value', input.value); this.update(); this.dispatchEvent(new Event('input')); });
+      this.update();
+    }
+    update() {
+      const root = this.shadowRoot; if (!root) return;
+      const min = parseFloat(this.getAttribute('min') || 0), max = parseFloat(this.getAttribute('max') || 100);
+      const v = parseFloat(this.getAttribute('value') || 0);
+      const p = ((v - min) / (max - min)) * 100;
+      root.host.style.setProperty('--p', p + '%');
+      const lbl = root.querySelector('.lbl'); if (lbl) lbl.textContent = v;
+    }
+  }
+  define('md-slider', MdSlider);
+
+  class MdTextField extends HTMLElement {
+    static get observedAttributes() { return ['variant', 'label', 'value', 'type', 'supporting-text', 'error', 'error-text', 'leading-icon', 'trailing-icon', 'disabled']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    get value() { return this.shadowRoot ? this.shadowRoot.querySelector('input,textarea').value : this.getAttribute('value'); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const variant = this.getAttribute('variant') || 'outlined';
+      const label = this.getAttribute('label') || '';
+      const val = this.getAttribute('value') || '';
+      const type = this.getAttribute('type') || 'text';
+      const support = this.getAttribute('supporting-text') || '';
+      const error = this.hasAttribute('error');
+      const errorText = this.getAttribute('error-text') || '';
+      const lead = this.getAttribute('leading-icon');
+      const trail = this.getAttribute('trailing-icon');
+      const outlined = variant === 'outlined';
+      const bg = outlined ? 'transparent' : 'var(--md-sys-color-surface-container-highest)';
+      const accent = error ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-primary)';
+      root.innerHTML = `
+        <style>
+          :host{ display:inline-flex; flex-direction:column; min-width:210px; }
+          .field{ position:relative; display:flex; align-items:center; gap:12px; min-height:56px; padding:0 16px;
+            background:${bg}; cursor:text;
+            border-radius:${outlined ? 'var(--md-sys-shape-corner-extra-small)' : 'var(--md-sys-shape-corner-extra-small-top)'};
+            ${outlined ? `border:1px solid ${error ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-outline)'};`
+                       : `border-bottom:1px solid ${error ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-on-surface-variant)'};`}
+            transition:border-color ${EASE_STD}; }
+          .field:focus-within{ ${outlined ? `border:2px solid ${accent}; padding:0 15px;` : `border-bottom:2px solid ${accent};`} }
+          label{ position:absolute; left:${lead ? '48px' : '16px'}; top:50%; transform:translateY(-50%);
+            color:${error ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-on-surface-variant)'};
+            font:var(--md-sys-typescale-body-large); pointer-events:none; background:${outlined ? 'var(--md-sys-color-surface)' : 'transparent'}; padding:0 4px;
+            transition:all ${EASE_STD}; }
+          .field:focus-within label, label.float{
+            top:${outlined ? '0' : '8px'}; transform:translateY(-50%) scale(.75); transform-origin:left;
+            left:${outlined ? '12px' : '12px'}; color:${accent}; }
+          input,textarea{ flex:1; border:none; outline:none; background:transparent; color:var(--md-sys-color-on-surface);
+            font:var(--md-sys-typescale-body-large); padding:16px 0 8px; min-width:0; resize:vertical; font-family:inherit; }
+          .md-ic{ font-family:'Material Symbols Outlined'; font-size:24px; color:var(--md-sys-color-on-surface-variant); }
+          .support{ font:var(--md-sys-typescale-body-small); color:${error ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-on-surface-variant)'};
+            padding:4px 16px 0; }
+          :host([disabled]){ opacity:.38; pointer-events:none; }
+        </style>
+        <div class="field" part="field">
+          ${lead ? `<span class="md-ic">${lead}</span>` : ''}
+          ${label ? `<label class="${val ? 'float' : ''}">${label}</label>` : ''}
+          ${type === 'textarea'
+            ? `<textarea rows="3">${val}</textarea>`
+            : `<input type="${type}" value="${val}">`}
+          ${trail ? `<span class="md-ic">${trail}</span>` : ''}
+        </div>
+        ${(error && errorText) || support ? `<div class="support">${error && errorText ? errorText : support}</div>` : ''}`;
+      const inp = root.querySelector('input,textarea');
+      const lab = root.querySelector('label');
+      inp.addEventListener('input', () => { if (lab) lab.classList.toggle('float', !!inp.value); this.dispatchEvent(new Event('input')); });
+      root.querySelector('.field').addEventListener('click', () => inp.focus());
+    }
+  }
+  define('md-text-field', MdTextField);
+
+  class MdCard extends HTMLElement {
+    static get observedAttributes() { return ['variant']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const v = this.getAttribute('variant') || 'elevated';
+      const map = {
+        elevated: ['var(--md-sys-color-surface-container-low)', 'var(--md-sys-elevation-level1)', 'none'],
+        filled: ['var(--md-sys-color-surface-container-highest)', 'var(--md-sys-elevation-level0)', 'none'],
+        outlined: ['var(--md-sys-color-surface)', 'var(--md-sys-elevation-level0)', '1px solid var(--md-sys-color-outline-variant)'],
+      }[v];
+      root.innerHTML = `
+        <style>
+          :host{ display:block; }
+          .card{ background:${map[0]}; box-shadow:${map[1]}; border:${map[2]};
+            border-radius:var(--md-sys-shape-corner-medium); padding:16px;
+            color:var(--md-sys-color-on-surface); transition:box-shadow ${EASE_STD}; }
+        </style>
+        <div class="card" part="card"><slot></slot></div>`;
+    }
+  }
+  define('md-card', MdCard);
+
+  class MdDivider extends HTMLElement {
+    connectedCallback() {
+      const root = this.attachShadow({ mode: 'open' });
+      const inset = this.hasAttribute('inset');
+      root.innerHTML = `<style>:host{ display:block; }
+        hr{ border:none; height:1px; background:var(--md-sys-color-outline-variant);
+        margin:0 ${inset ? '16px' : '0'}; }</style><hr>`;
+    }
+  }
+  define('md-divider', MdDivider);
+
+  class MdMenu extends HTMLElement {
+    connectedCallback() {
+      const root = this.attachShadow({ mode: 'open' });
+      root.innerHTML = `
+        <style>
+          :host{ position:absolute; z-index:1000; display:none; }
+          :host([open]){ display:block; }
+          .menu{ min-width:180px; background:var(--md-sys-color-surface-container);
+            border-radius:var(--md-sys-shape-corner-extra-small); padding:8px 0;
+            box-shadow:var(--md-sys-elevation-level2);
+            transform-origin:top; animation:open ${SPRING_FAST}; }
+          @keyframes open{ from{ opacity:0; transform:scaleY(.8); } to{ opacity:1; transform:scaleY(1); } }
+        </style>
+        <div class="menu" role="menu"><slot></slot></div>`;
+    }
+    show() { this.setAttribute('open', ''); }
+    close() { this.removeAttribute('open'); }
+  }
+  define('md-menu', MdMenu);
+
+  class MdMenuItem extends HTMLElement {
+    connectedCallback() {
+      const root = this.attachShadow({ mode: 'open' });
+      const icon = this.getAttribute('icon');
+      root.innerHTML = `
+        <style>
+          :host{ display:block; }
+          .item{ position:relative; overflow:hidden; display:flex; align-items:center; gap:12px;
+            min-height:48px; padding:0 16px; cursor:pointer; color:var(--md-sys-color-on-surface);
+            font:var(--md-sys-typescale-body-large); }
+          .item:hover{ background:color-mix(in srgb, var(--md-sys-color-on-surface) 8%, transparent); }
+          .md-ic{ font-family:'Material Symbols Outlined'; font-size:24px; color:var(--md-sys-color-on-surface-variant); }
+        </style>
+        <div class="item" role="menuitem">${icon ? `<span class="md-ic">${icon}</span>` : ''}<slot></slot></div>`;
+      this.addEventListener('click', () => {
+        this.dispatchEvent(new Event('select', { bubbles: true }));
+        const menu = this.closest('md-menu'); if (menu) menu.close();
+      });
+    }
+  }
+  define('md-menu-item', MdMenuItem);
+
+  class MdTabs extends HTMLElement {
+    connectedCallback() {
+      const root = this.attachShadow({ mode: 'open' });
+      root.innerHTML = `
+        <style>
+          :host{ display:block; border-bottom:1px solid var(--md-sys-color-surface-variant); }
+          .row{ display:flex; position:relative; }
+          ::slotted(md-tab){ flex:1; }
+        </style>
+        <div class="row"><slot></slot></div>`;
+      this.addEventListener('tab-select', e => {
+        this.querySelectorAll('md-tab').forEach(t => t.removeAttribute('active'));
+        e.target.setAttribute('active', '');
+        this.dispatchEvent(new CustomEvent('change', { detail: { value: e.target.getAttribute('value') } }));
+      });
+    }
+  }
+  define('md-tabs', MdTabs);
+
+  class MdTab extends HTMLElement {
+    static get observedAttributes() { return ['active', 'variant', 'icon']; }
+    connectedCallback() { this.render(); this.addEventListener('click', () => this.dispatchEvent(new Event('tab-select', { bubbles: true }))); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const active = this.hasAttribute('active');
+      const icon = this.getAttribute('icon');
+      root.innerHTML = `
+        <style>
+          :host{ display:block; }
+          .tab{ position:relative; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:2px;
+            min-height:48px; padding:0 16px; cursor:pointer;
+            color:${active ? 'var(--md-sys-color-primary)' : 'var(--md-sys-color-on-surface-variant)'};
+            font:var(--md-sys-typescale-title-small); transition:color ${EASE_STD}; }
+          .tab::after{ content:''; position:absolute; bottom:0; left:50%; transform:translateX(-50%);
+            width:${active ? '100%' : '0'}; max-width:60px; height:3px;
+            background:var(--md-sys-color-primary);
+            border-radius:3px 3px 0 0; transition:width ${SPRING_FAST}; }
+          .md-ic{ font-family:'Material Symbols Outlined'; font-size:24px; font-variation-settings:'FILL' ${active ? 1 : 0}; }
+        </style>
+        <div class="tab" role="tab" aria-selected="${active}">
+          ${icon ? `<span class="md-ic">${icon}</span>` : ''}<slot></slot>
+        </div>`;
+    }
+  }
+  define('md-tab', MdTab);
+
+  class MdList extends HTMLElement {
+    connectedCallback() {
+      const root = this.attachShadow({ mode: 'open' });
+      root.innerHTML = `<style>:host{ display:block; background:var(--md-sys-color-surface);
+        border-radius:var(--md-sys-shape-corner-medium); padding:8px 0; }</style><slot></slot>`;
+    }
+  }
+  define('md-list', MdList);
+
+  class MdListItem extends HTMLElement {
+    connectedCallback() {
+      const root = this.attachShadow({ mode: 'open' });
+      const icon = this.getAttribute('icon');
+      const supporting = this.getAttribute('supporting-text');
+      const trailing = this.getAttribute('trailing');
+      const interactive = this.hasAttribute('interactive') || this.hasAttribute('href');
+      root.innerHTML = `
+        <style>
+          :host{ display:block; }
+          .li{ position:relative; overflow:hidden; display:flex; align-items:center; gap:16px;
+            min-height:${supporting ? 72 : 56}px; padding:8px 16px; color:var(--md-sys-color-on-surface);
+            cursor:${interactive ? 'pointer' : 'default'}; }
+          ${interactive ? `.li:hover{ background:color-mix(in srgb,var(--md-sys-color-on-surface) 8%,transparent);}` : ''}
+          .md-ic{ font-family:'Material Symbols Outlined'; font-size:24px; color:var(--md-sys-color-on-surface-variant); }
+          .txt{ flex:1; display:flex; flex-direction:column; }
+          .head{ font:var(--md-sys-typescale-body-large); }
+          .sup{ font:var(--md-sys-typescale-body-medium); color:var(--md-sys-color-on-surface-variant); }
+          .trail{ font:var(--md-sys-typescale-label-small); color:var(--md-sys-color-on-surface-variant); }
+        </style>
+        <div class="li" part="item">
+          ${icon ? `<span class="md-ic">${icon}</span>` : ''}
+          <span class="txt"><span class="head"><slot></slot></span>
+          ${supporting ? `<span class="sup">${supporting}</span>` : ''}</span>
+          ${trailing ? `<span class="trail">${trailing}</span>` : ''}
+        </div>`;
+    }
+  }
+  define('md-list-item', MdListItem);
+
+  class MdProgress extends HTMLElement {
+    static get observedAttributes() { return ['variant', 'value', 'indeterminate']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const circular = this.getAttribute('variant') === 'circular';
+      const ind = this.hasAttribute('indeterminate');
+      const val = parseFloat(this.getAttribute('value') || 0);
+      if (circular) {
+        const r = 18, c = 2 * Math.PI * r;
+        root.innerHTML = `
+          <style>
+            :host{ display:inline-flex; }
+            svg{ width:48px; height:48px; ${ind ? `animation:spin 1.2s linear infinite;` : `transform:rotate(-90deg);`} }
+            circle{ fill:none; stroke:var(--md-sys-color-primary); stroke-width:4; stroke-linecap:round;
+              ${ind ? 'stroke-dasharray:80 200; animation:dash 1.4s ease-in-out infinite;' : `stroke-dasharray:${c}; stroke-dashoffset:${c * (1 - val / 100)}; transition:stroke-dashoffset ${EASE_STD};`} }
+            @keyframes spin{ to{ transform:rotate(360deg);} }
+            @keyframes dash{ 0%{stroke-dashoffset:${c};} 50%{stroke-dashoffset:${c/4};} 100%{stroke-dashoffset:${c};} }
+          </style>
+          <svg viewBox="0 0 48 48" role="progressbar"><circle cx="24" cy="24" r="${r}"></circle></svg>`;
+      } else {
+        root.innerHTML = `
+          <style>
+            :host{ display:block; }
+            .rail{ height:4px; border-radius:var(--md-sys-shape-corner-full); background:var(--md-sys-color-secondary-container); overflow:hidden; position:relative; }
+            .bar{ position:absolute; left:0; top:0; height:100%; background:var(--md-sys-color-primary); border-radius:inherit;
+              ${ind ? 'width:40%; animation:slide 1.5s cubic-bezier(0.2,0,0,1) infinite;' : `width:${val}%; transition:width ${EASE_STD};`} }
+            @keyframes slide{ 0%{left:-40%;} 100%{left:100%;} }
+          </style>
+          <div class="rail" role="progressbar"><div class="bar"></div></div>`;
+      }
+    }
+  }
+  define('md-progress', MdProgress);
+
+  class MdDialog extends HTMLElement {
+    static get observedAttributes() { return ['open']; }
+    connectedCallback() { this.render(); }
+    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    show() { this.setAttribute('open', ''); }
+    close() { this.removeAttribute('open'); }
+    render() {
+      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+      const open = this.hasAttribute('open');
+      root.innerHTML = `
+        <style>
+          :host{ position:fixed; inset:0; z-index:2000; display:${open ? 'grid' : 'none'}; place-items:center; }
+          .scrim{ position:absolute; inset:0; background:color-mix(in srgb,var(--md-sys-color-scrim) 32%,transparent);
+            animation:fade ${EASE_STD}; }
+          .dlg{ position:relative; max-width:560px; min-width:280px; width:calc(100% - 48px);
+            background:var(--md-sys-color-surface-container-high); color:var(--md-sys-color-on-surface);
+            border-radius:var(--md-sys-shape-corner-extra-large); padding:24px;
+            box-shadow:var(--md-sys-elevation-level3); animation:pop ${SPRING_STD}; }
+          .headline{ font:var(--md-sys-typescale-headline-small); margin-bottom:16px; }
+          .content{ font:var(--md-sys-typescale-body-medium); color:var(--md-sys-color-on-surface-variant); }
+          .actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:24px; }
+          @keyframes fade{ from{opacity:0;} }
+          @keyframes pop{ from{opacity:0; transform:scale(.85);} }
+        </style>
+        <div class="scrim" part="scrim"></div>
+        <div class="dlg" role="dialog" aria-modal="true">
+          <div class="headline"><slot name="headline"></slot></div>
+          <div class="content"><slot></slot></div>
+          <div class="actions"><slot name="actions"></slot></div>
+        </div>`;
+      const scrim = root.querySelector('.scrim');
+      if (scrim) scrim.addEventListener('click', () => this.close());
+    }
+  }
+  define('md-dialog', MdDialog);
+
+  class MdSegmentedButton extends HTMLElement {
+    connectedCallback() {
+      const multi = this.hasAttribute('multi');
+      const items = [...this.querySelectorAll('button')];
+      const root = this.attachShadow({ mode: 'open' });
+      root.innerHTML = `
+        <style>
+          :host{ display:inline-flex; }
+          .seg{ display:inline-flex; border-radius:var(--md-sys-shape-corner-full); overflow:hidden;
+            border:1px solid var(--md-sys-color-outline); }
+          ::slotted(button){ appearance:none; border:none; background:transparent; cursor:pointer;
+            padding:10px 16px; min-height:40px; color:var(--md-sys-color-on-surface);
+            font:var(--md-sys-typescale-label-large); border-left:1px solid var(--md-sys-color-outline);
+            transition:background ${EASE_STD}; }
+          ::slotted(button:first-child){ border-left:none; }
+          ::slotted(button[selected]){ background:var(--md-sys-color-secondary-container);
+            color:var(--md-sys-color-on-secondary-container); }
+        </style>
+        <div class="seg"><slot></slot></div>`;
+      items.forEach(btn => btn.addEventListener('click', () => {
+        if (!multi) items.forEach(b => b.removeAttribute('selected'));
+        btn.toggleAttribute('selected');
+        this.dispatchEvent(new CustomEvent('change', { detail: { value: btn.dataset.value, selected: btn.hasAttribute('selected') } }));
+      }));
+    }
+  }
+  define('md-segmented-button', MdSegmentedButton);
+
+  window.MD3Menu = {
+    attach(anchorEl, menuEl) {
+      anchorEl.addEventListener('click', e => {
+        e.stopPropagation();
+        const r = anchorEl.getBoundingClientRect();
+        menuEl.style.position = 'fixed';
+        menuEl.style.top = r.bottom + 4 + 'px';
+        menuEl.style.left = r.left + 'px';
+        menuEl.show();
+        const closer = () => { menuEl.close(); document.removeEventListener('click', closer); };
+        setTimeout(() => document.addEventListener('click', closer), 0);
+      });
+    },
+  };
+})();
+
+  /* ---- Build token galleries ---- */
+  const ROLE_PAIRS = [
+    ['primary','on-primary'],['primary-container','on-primary-container'],
+    ['secondary','on-secondary'],['secondary-container','on-secondary-container'],
+    ['tertiary','on-tertiary'],['tertiary-container','on-tertiary-container'],
+    ['error','on-error'],['error-container','on-error-container'],
+    ['surface','on-surface'],['surface-variant','on-surface-variant'],
+    ['surface-container','on-surface'],['surface-container-high','on-surface'],
+    ['inverse-surface','inverse-on-surface'],['outline','surface'],
+  ];
+  function hexOf(role){ return getComputedStyle(document.documentElement).getPropertyValue('--md-sys-color-'+role).trim(); }
+  function renderSwatches(){
+    const el = document.getElementById('swatches'); el.innerHTML='';
+    ROLE_PAIRS.forEach(([bg,fg])=>{
+      const d=document.createElement('div'); d.className='sw';
+      d.style.background='var(--md-sys-color-'+bg+')';
+      d.style.color='var(--md-sys-color-'+fg+')';
+      d.innerHTML='<b>'+bg+'</b><code>'+hexOf(bg)+'</code>';
+      el.appendChild(d);
+    });
+  }
+  const TYPE=['display-large','display-medium','display-small','headline-large','headline-medium','headline-small','title-large','title-medium','title-small','body-large','body-medium','body-small','label-large','label-medium','label-small'];
+  (function(){
+    const el=document.getElementById('typeSpecimens');
+    TYPE.forEach(t=>{
+      const r=document.createElement('div'); r.className='type-row';
+      r.innerHTML='<span class="tag">'+t+'</span><span class="md-'+t+'">Aa Bb Cc</span>';
+      el.appendChild(r);
+    });
+  })();
+  const SHAPES=[['none','0'],['extra-small','4'],['small','8'],['medium','12'],['large','16'],['large-increased','20'],['extra-large','28'],['extra-large-increased','32'],['extra-extra-large','48']];
+  (function(){
+    const el=document.getElementById('shapeTiles');
+    SHAPES.forEach(([n,px])=>{
+      const d=document.createElement('div'); d.className='shape-tile';
+      d.style.borderRadius='var(--md-sys-shape-corner-'+n+')';
+      d.innerHTML=n+'<br>'+px+'px';
+      el.appendChild(d);
+    });
+  })();
+  const SPACES=[['1','4'],['2','8'],['3','12'],['4','16'],['5','20'],['6','24'],['8','32'],['10','40'],['12','48'],['16','64']];
+  (function(){
+    const el=document.getElementById('spaceRow');
+    SPACES.forEach(([n,px])=>{
+      const b=document.createElement('div');
+      b.innerHTML='<div class="space-bar" style="height:'+px+'px"></div><span>'+px+'</span>';
+      el.appendChild(b);
+    });
+  })();
+  renderSwatches();
+
+  /* ---- Easing & duration ---- */
+  const EASINGS = [
+    ['linear', 'linear', [0,0,1,1]],
+    ['standard', 'standard', [0.2,0,0,1]],
+    ['standard-decelerate', 'standard-decelerate', [0,0,0,1]],
+    ['standard-accelerate', 'standard-accelerate', [0.3,0,1,1]],
+    ['emphasized', 'emphasized', [0.2,0,0,1]],
+    ['emphasized-decelerate', 'emphasized-decelerate', [0.05,0.7,0.1,1]],
+    ['emphasized-accelerate', 'emphasized-accelerate', [0.3,0,0.8,0.15]],
+  ];
+  const DURATIONS = [
+    ['short1',50],['short2',100],['short3',150],['short4',200],
+    ['medium1',250],['medium2',300],['medium3',350],['medium4',400],
+    ['long1',450],['long2',500],['long3',550],['long4',600],
+    ['extra-long1',700],['extra-long2',800],['extra-long3',900],['extra-long4',1000],
+  ];
+  function curvePath([x1,y1,x2,y2]){
+    return `M0,100 C${(x1*100).toFixed(1)},${(100-y1*100).toFixed(1)} ${(x2*100).toFixed(1)},${(100-y2*100).toFixed(1)} 100,0`;
+  }
+  (function(){
+    const grid = document.getElementById('easingGrid');
+    EASINGS.forEach(([name,varname,pts])=>{
+      const cb = `cubic-bezier(${pts.join(', ')})`;
+      const card = document.createElement('div'); card.className='ease-card';
+      card.innerHTML = `
+        <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          <line class="grid-l" x1="0" y1="0" x2="100" y2="0"></line>
+          <line class="grid-l" x1="0" y1="100" x2="100" y2="100"></line>
+          <path class="curve" d="${curvePath(pts)}"></path>
+          <circle class="dot" cx="0" cy="100" r="3"></circle>
+          <circle class="dot" cx="100" cy="0" r="3"></circle>
+        </svg>
+        <div class="name">${name==='emphasized'?'emphasized *':name}</div>
+        <div class="val">${cb}</div>
+        <div class="demo"><i></i></div>`;
+      const ball = card.querySelector('.demo i');
+      function play(){
+        ball.style.transition='none'; ball.style.transform='translateX(0)';
+        requestAnimationFrame(()=>requestAnimationFrame(()=>{
+          ball.style.transition=`transform 800ms ${cb}`;
+          ball.style.transform='translateX(calc(100% - 10px))';
+          const p = card.parentElement;
+          ball.style.transform=`translateX(${card.querySelector('.demo').clientWidth-10}px)`;
+        }));
+      }
+      card.addEventListener('click', play);
+      grid.appendChild(card);
+    });
+    const dr = document.getElementById('durationRow');
+    DURATIONS.forEach(([n,ms])=>{
+      const c=document.createElement('div'); c.className='dur-cell';
+      c.innerHTML=`<div class="bar" style="width:${(ms/1000*100).toFixed(0)}%"></div><div class="lab">${n} · ${ms}ms</div>`;
+      dr.appendChild(c);
+    });
+    const pe=document.getElementById('pgEase'), pd=document.getElementById('pgDur');
+    EASINGS.forEach(([name,,pts])=>{ const o=document.createElement('option'); o.value=`cubic-bezier(${pts.join(',')})`; o.textContent=name; pe.appendChild(o); });
+    pe.selectedIndex=4;
+    DURATIONS.forEach(([n,ms])=>{ const o=document.createElement('option'); o.value=ms; o.textContent=`${n} (${ms}ms)`; pd.appendChild(o); });
+    pd.selectedIndex=7;
+    const pb=document.getElementById('pgBall');
+    document.getElementById('pgPlay').addEventListener('click', ()=>{
+      const track=pb.parentElement; const dist=track.clientWidth-28-12;
+      const atStart = pb.dataset.at!=='end';
+      pb.style.transition=`transform ${pd.value}ms ${pe.value}`;
+      pb.style.transform=`translate(${atStart?dist:0}px,-50%)`;
+      pb.dataset.at = atStart?'end':'start';
+    });
+  })();
+
+  /* ---- Controls ---- */
+  const seed=document.getElementById('seed'), styleSel=document.getElementById('style');
+  function apply(){ MD3.applySeed(seed.value,{style:styleSel.value}); renderSwatches(); }
+  seed.addEventListener('input', apply);
+  styleSel.addEventListener('change', apply);
+  apply();
+
+  const themeBtn=document.getElementById('themeBtn');
+  themeBtn.addEventListener('click', ()=>{
+    const next = MD3.getTheme()==='dark' ? 'light' : 'dark';
+    MD3.setTheme(next);
+    themeBtn.setAttribute('icon', next==='dark'?'light_mode':'dark_mode');
+    themeBtn.textContent = next==='dark'?'Light':'Dark';
+    renderSwatches();
+  });
+  document.getElementById('resetBtn').addEventListener('click', ()=>{ MD3.reset(); renderSwatches(); });
+
+  /* ---- Motion ---- */
+  document.getElementById('motionBtn').addEventListener('click', ()=>{
+    document.querySelectorAll('#motionDemo .track-demo').forEach(t=>{
+      t.classList.remove('run'); void t.offsetWidth; t.classList.add('run');
+      setTimeout(()=>t.classList.remove('run'), 1400);
+    });
+  });
+
+  /* ---- Menu / Dialog wiring ---- */
+  MD3Menu.attach(document.getElementById('menuAnchor'), document.getElementById('theMenu'));
+  const dlg=document.getElementById('theDialog');
+  document.getElementById('dlgBtn').addEventListener('click', ()=>dlg.show());
+  document.getElementById('dlgCancel').addEventListener('click', ()=>dlg.close());
+  document.getElementById('dlgOk').addEventListener('click', ()=>dlg.close());
+
+</script>
