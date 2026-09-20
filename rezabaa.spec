@@ -39,7 +39,7 @@ exe = EXE(
     a.binaries,
     a.datas,
     [],
-    name="REZA_BAA_Generator",
+    name="BAA_Generator",
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

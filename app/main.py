@@ -8,7 +8,7 @@ from fastapi.staticfiles import StaticFiles
 from . import config, db
 from .routers import (auth, export, locations, photos, settings, templates, users)
 
-app = FastAPI(title="REZA BAA Generator", version="0.1.0")
+app = FastAPI(title="BAA Generator", version="0.1.0")
 
 
 @app.on_event("startup")

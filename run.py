@@ -28,7 +28,7 @@ def main() -> None:
     config.ensure_dirs()
     ip = _lan_ip()
     print("=" * 56)
-    print("  REZA BAA Generator")
+    print("  BAA Generator")
     print(f"  Lokal  : http://localhost:{config.PORT}")
     print(f"  LAN    : http://{ip}:{config.PORT}")
     print(f"  Data   : {config.DATA_DIR}")

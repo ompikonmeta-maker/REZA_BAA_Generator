@@ -40,12 +40,12 @@ jobs:
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path release | Out-Null
-          Copy-Item dist/REZA_BAA_Generator.exe release/
+          Copy-Item dist/BAA_Generator.exe release/
           Copy-Item docs/Template_BAA.xlsx release/ -ErrorAction SilentlyContinue
           @"
-          REZA BAA Generator — cara pakai
+          BAA Generator — cara pakai
           ================================
-          1. Jalankan REZA_BAA_Generator.exe (klik dua kali). Tanpa install, tanpa admin.
+          1. Jalankan BAA_Generator.exe (klik dua kali). Tanpa install, tanpa admin.
           2. Buka browser: http://localhost:8000  (login awal: admin / admin, wajib ganti).
           3. User lain di jaringan yang sama: buka http://<IP-komputer-ini>:8000
           4. Data tersimpan di folder 'data' yang muncul di samping .exe.
@@ -57,6 +57,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
-          name: REZA_BAA_Generator-windows
+          name: BAA_Generator-windows
           path: release/
           retention-days: 30

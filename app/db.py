@@ -161,8 +161,9 @@ def init_db() -> None:
             set_setting(conn, "photo_categories", DEFAULT_PHOTO_CATEGORIES)
         if get_setting(conn, "location_fields") is None:
             set_setting(conn, "location_fields", DEFAULT_LOCATION_FIELDS)
-        if get_setting(conn, "app_title") is None:
-            set_setting(conn, "app_title", "REZA BAA Generator")
+        _title = get_setting(conn, "app_title")
+        if _title is None or _title == "REZA BAA Generator":
+            set_setting(conn, "app_title", "BAA Generator")
         # Seed admin default (admin/admin, wajib ganti saat login pertama)
         has_user = conn.execute("SELECT 1 FROM users LIMIT 1").fetchone()
         if not has_user:
