@@ -11,7 +11,8 @@
 <script defer src="/assets/md3-components.js"></script>
 <script defer src="/assets/mdmenu.js"></script>
 <style>
-  :root{ --nav-w:248px; --rail-w:76px; }
+  :root{ --nav-w:248px; --rail-w:76px; --warn:#9a5b00; --warn-bg:#fff3e0; }
+  :root[data-theme="dark"]{ --warn:#ffb877; --warn-bg:#3a2a12; }
   *{box-sizing:border-box}
   body{margin:0;background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-medium);-webkit-font-smoothing:antialiased}
   .hidden{display:none!important}
@@ -81,12 +82,15 @@
   .md-select[data-menu-open] .arrow{transform:translateY(-50%) rotate(180deg)}
 
   /* inventory */
-  .tbl{display:flex;flex-direction:column;gap:8px;overflow-x:auto}
-  .tr{display:grid;grid-template-columns:1.5fr 1.2fr 56px 1.5fr 1.2fr 40px;gap:8px;align-items:center;min-width:640px}
-  .tr.th>div{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);padding:0 6px}
-  .tr input{height:44px;border:1px solid var(--md-sys-color-outline-variant);border-radius:11px;background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);padding:0 12px;font:var(--md-sys-typescale-body-medium);width:100%}
-  .tr input:focus{outline:2px solid var(--md-sys-color-primary);outline-offset:-1px;border-color:transparent}
-  .tr input.sn{border-color:var(--md-sys-color-tertiary)}
+  /* inventory — gaya tabel tenang (borderless + garis pemisah tipis) */
+  .tbl{display:flex;flex-direction:column;overflow-x:auto}
+  .tr{display:grid;grid-template-columns:1.6fr 1.3fr 60px 1.6fr 1.3fr 40px;gap:10px;align-items:center;min-width:660px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
+  .tr.th>div{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);padding:6px 8px}
+  .tr:not(.th):hover{background:color-mix(in srgb,var(--md-sys-color-primary) 4%,transparent)}
+  .tr input{height:46px;border:none;background:transparent;border-radius:8px;padding:0 8px;color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-medium);width:100%}
+  .tr input::placeholder{color:var(--md-sys-color-on-surface-variant)}
+  .tr input:focus{outline:none;background:color-mix(in srgb,var(--md-sys-color-primary) 5%,transparent);box-shadow:inset 0 -2px 0 var(--md-sys-color-primary)}
+  .tr input.sn:focus{box-shadow:inset 0 -2px 0 var(--md-sys-color-tertiary);background:color-mix(in srgb,var(--md-sys-color-tertiary) 5%,transparent)}
 
   /* foto — uniform cards */
   .drop{border:2px dashed var(--md-sys-color-outline-variant);border-radius:16px;padding:16px;text-align:center;color:var(--md-sys-color-on-surface-variant);margin-bottom:14px}
@@ -116,12 +120,18 @@
   .sum-pct{font:var(--md-sys-typescale-title-medium)}
   .bar{height:10px;border-radius:5px;background:var(--md-sys-color-surface-container-highest);overflow:hidden;margin:8px 0 12px}
   .bar>span{display:block;height:100%;background:var(--md-sys-color-primary);border-radius:5px;transition:width .4s var(--md-sys-motion-easing-emphasized-decelerate)}
-  .crow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--md-sys-color-outline-variant);font:var(--md-sys-typescale-body-medium)}
-  .crow .st{font-weight:600}.crow .st.ok{color:var(--md-sys-color-primary)}.crow .st.no{color:var(--md-sys-color-on-surface-variant)}
-  .sum-actions{margin-top:16px;display:flex;flex-direction:column;gap:8px}
-  .sum-actions md-button{width:100%}
+  .crow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 8px;margin:0 -8px;border-top:1px solid var(--md-sys-color-outline-variant);border-radius:8px;font:var(--md-sys-typescale-body-medium)}
+  .crow.warn{background:var(--warn-bg)}
+  .crow .st{font-weight:700;text-align:right}.crow .st.ok{color:var(--md-sys-color-primary)}.crow .st.no{color:var(--md-sys-color-on-surface-variant)}.crow .st.warn{color:var(--warn)}
+  .miss{font:var(--md-sys-typescale-body-small);color:var(--warn);margin:-4px 0 4px;padding:0 8px}
+  .card.warn-outline{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn)}
+  .sum-actions{margin-top:16px;display:flex;flex-direction:column;gap:0}
+  .sum-actions #save-btn{width:100%}
+  .exp-group{margin-top:14px;padding-top:14px;border-top:1px solid var(--md-sys-color-outline-variant)}
+  .exp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+  .exp-head span{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
   .exp2{display:flex;gap:8px}.exp2 md-button{flex:1}
-  .hint{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin-top:10px}
+  .hint{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin-top:12px}
 
   table{width:100%;border-collapse:collapse;font:var(--md-sys-typescale-body-medium)}
   th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
@@ -219,18 +229,22 @@
               <p class="sum-sub" id="sum-status">Status: draft</p>
               <div class="sum-pct"><span id="sum-pct">0%</span> lengkap</div>
               <div class="bar"><span id="sum-bar" style="width:0%"></span></div>
-              <div class="crow"><span>Informasi lokasi</span><span class="st no" id="sum-loc">Belum</span></div>
+              <div class="crow" id="sum-loc-row"><span>Informasi lokasi</span><span class="st no" id="sum-loc">Belum</span></div>
               <div class="crow"><span>Inventory</span><span class="st" id="sum-inv">0 item</span></div>
-              <div class="crow"><span>Foto wajib</span><span class="st" id="sum-foto">0 / 0</span></div>
+              <div class="crow" id="sum-foto-row"><span>Foto wajib</span><span class="st" id="sum-foto">0 / 0</span></div>
+              <div class="miss hidden" id="sum-foto-miss"></div>
               <div class="sum-actions">
-                <md-segmented-button id="scope"><button data-value="one" selected>Lokasi ini</button><button data-value="all">Semua</button></md-segmented-button>
                 <md-button variant="filled" size="m" icon="save" id="save-btn">Simpan BAA</md-button>
-                <div class="exp2">
-                  <md-button variant="outlined" icon="grid_on" id="exp-xlsx">Excel</md-button>
-                  <md-button variant="outlined" icon="picture_as_pdf" id="exp-pdf">PDF</md-button>
+                <div class="exp-group">
+                  <div class="exp-head"><span>Export</span>
+                    <md-segmented-button id="scope"><button data-value="one" selected>Lokasi ini</button><button data-value="all">Semua</button></md-segmented-button></div>
+                  <div class="exp2">
+                    <md-button variant="outlined" icon="grid_on" id="exp-xlsx">Excel</md-button>
+                    <md-button variant="outlined" icon="picture_as_pdf" id="exp-pdf">PDF</md-button>
+                  </div>
                 </div>
               </div>
-              <p class="hint">Export aktif setelah data wajib lengkap. Pada praktiknya tombol tetap dapat dicoba.</p>
+              <p class="hint">Export sebaiknya setelah data wajib lengkap; tombol tetap dapat dicoba.</p>
             </div>
           </aside>
         </div>
@@ -360,22 +374,23 @@ $('#themeBtn').addEventListener('click',()=>{const c=MD3.getTheme();MD3.setTheme
 $('#railBtn').addEventListener('click',()=>$('#app').classList.toggle('rail'));
 
 async function showApp(){$('#login').classList.add('hidden');$('#app').classList.remove('hidden');
-  const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;
+  const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;S.invItems=s.default_inventory_items||[];
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
   refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();}
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
   const v=n.dataset.view;['entry','locations','templates','users'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
   $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');
+  if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
   revealCards($('#v-'+v));}));
 
-function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats.filter(c=>['sn_kit','sn_router','sn_ap'].includes(c.key));}
+function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats;} /* semua kategori wajib */
 
 /* ENTRY */
 async function refreshPicker(){const rows=await api('/api/locations');$('#loc-count').textContent=rows.length||'';
   pickerSel.setOptions(rows.map(l=>({value:String(l.id),label:l.code+' · '+(l.data.nama_lokasi||l.name||'')})));
   if(S.loc)pickerSel.setValue(String(S.loc.id));}
-$('#entry-new').addEventListener('click',async()=>{const loc=await api('/api/locations',{method:'POST',body:JSON.stringify({name:'',data:{},status:'draft'})});await refreshPicker();openLoc(loc.id);toast('Lokasi '+loc.code+' dibuat');});
+$('#entry-new').addEventListener('click',async()=>{const loc=await api('/api/locations',{method:'POST',body:JSON.stringify({name:'',data:{},status:'draft'})});await refreshPicker();loadLocations();openLoc(loc.id);toast('Lokasi '+loc.code+' dibuat');});
 $('#entry-del').addEventListener('click',()=>{if(S.loc)confirmDelete(S.loc.id,S.loc.code,true);});
 
 async function openLoc(id){S.loc=await api('/api/locations/'+id);pickerSel.setValue(String(id));
@@ -390,29 +405,44 @@ function invRow(it={}){return `<div class="tr">
   <input data-iv="jumlah" value="${esc(it.jumlah)}"><input data-iv="sn_tagging" class="sn" value="${esc(it.sn_tagging)}">
   <input data-iv="keterangan" value="${esc(it.keterangan)}">
   <md-icon-button data-tip="Hapus baris" onclick="this.closest('.tr').remove();updateSummary()"><span>close</span></md-icon-button></div>`;}
-function renderInventory(){$('#inv-body').innerHTML=(S.loc.inventory.length?S.loc.inventory:[{}]).map(invRow).join('');bindTips();}
+function renderInventory(){let rows=S.loc.inventory;
+  if(!rows.length)rows=(S.invItems.length?S.invItems:['','','']).map(n=>({nama_barang:n}));
+  $('#inv-body').innerHTML=rows.map(invRow).join('');bindTips();}
 $('#inv-add').addEventListener('click',()=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow());bindTips();updateSummary();});
 function collectInventory(){return $$('#inv-body .tr').map(tr=>{const o={};tr.querySelectorAll('[data-iv]').forEach(i=>o[i.dataset.iv]=i.value);return o;}).filter(o=>Object.values(o).some(v=>v&&v.trim()));}
 function collectData(){const d={};$$('[data-lf]').forEach(el=>d[el.dataset.lf]=el.value);return d;}
 $('#entry-form').addEventListener('input',updateSummary);
 
 /* progress summary */
-function updateSummary(){
-  if(!S.loc)return;
-  const data=collectData();
-  const reqF=S.locFields.filter(f=>f.required);
-  const locDone=reqF.length?reqF.every(f=>(data[f.key]||'').trim()):Object.values(data).some(v=>(v||'').trim());
-  const inv=collectInventory().length;
+function computeState(){
+  const data=collectData();const fields=S.locFields;
+  const filledF=fields.filter(f=>(data[f.key]||'').trim()).length;
+  const locDone=fields.length?filledF===fields.length:Object.values(data).some(v=>(v||'').trim());
+  const rows=$$('#inv-body .tr');let cells=0,filledCells=0,items=0;
+  rows.forEach(tr=>{const vals=[...tr.querySelectorAll('[data-iv]')].map(i=>i.value.trim());if(vals.some(v=>v)){items++;cells+=vals.length;filledCells+=vals.filter(v=>v).length;}});
   const rc=requiredCats();const byCat={};(S.loc.photos||[]).forEach(p=>byCat[p.category]=1);
-  const fotoDone=rc.filter(c=>byCat[c.key]).length;
-  const total=(reqF.length||1)+1+rc.length;
-  const done=(reqF.length?reqF.filter(f=>(data[f.key]||'').trim()).length:(locDone?1:0))+(inv>0?1:0)+fotoDone;
+  const fotoDone=rc.filter(c=>byCat[c.key]).length;const missing=rc.filter(c=>!byCat[c.key]).map(c=>c.label);
+  const invOk=items>0&&filledCells===cells;const fotoOk=rc.length>0&&fotoDone>=rc.length;
+  return {data,fields,filledF,locDone,items,cells,filledCells,invOk,rc,fotoDone,fotoOk,missing,complete:locDone&&invOk&&fotoOk};
+}
+function updateSummary(){
+  if(!S.loc)return;const s=computeState();
+  const total=(s.fields.length||1)+1+s.rc.length;
+  const done=(s.fields.length?s.filledF:(s.locDone?1:0))+(s.invOk?1:(s.items>0?0.5:0))+s.fotoDone;
   const pct=Math.round(done/total*100);
   $('#sum-pct').textContent=pct+'%';$('#sum-bar').style.width=pct+'%';
   $('#sum-status').textContent='Status: '+(S.loc.status||'draft');
-  const l=$('#sum-loc');l.textContent=locDone?'Lengkap':'Belum';l.className='st '+(locDone?'ok':'no');
-  const iv=$('#sum-inv');iv.textContent=inv+' item';iv.className='st '+(inv>0?'ok':'no');
-  const ft=$('#sum-foto');ft.textContent=fotoDone+' / '+rc.length;ft.className='st '+(rc.length&&fotoDone>=rc.length?'ok':'no');
+  const l=$('#sum-loc');
+  if(s.locDone){l.textContent='Lengkap';l.className='st ok';}
+  else{l.textContent='Belum lengkap · '+s.filledF+'/'+s.fields.length;l.className='st warn';}
+  $('#sum-loc-row').classList.toggle('warn',!s.locDone);
+  const locCard=$('#loc-fields').closest('.card');if(locCard)locCard.classList.toggle('warn-outline',!s.locDone);
+  const iv=$('#sum-inv');iv.textContent=s.items+' item · '+s.filledCells+'/'+s.cells+' terisi';
+  iv.className='st '+(s.invOk?'ok':(s.items>0?'warn':'no'));
+  const ft=$('#sum-foto');ft.textContent=s.fotoDone+' / '+s.rc.length;ft.className='st '+(s.fotoOk?'ok':'warn');
+  $('#sum-foto-row').classList.toggle('warn',!s.fotoOk);
+  const miss=$('#sum-foto-miss');
+  if(s.missing.length){miss.textContent='kurang: '+s.missing.join(', ');miss.classList.remove('hidden');}else miss.classList.add('hidden');
 }
 
 /* photos — uniform cards */
@@ -455,10 +485,12 @@ $('#file-folder').addEventListener('change',e=>{doUpload(e.target.files,'',[]);e
 
 /* scope + save + export */
 $('#scope').addEventListener('change',e=>{S.scope=e.detail.value;});
-$('#save-btn').addEventListener('click',async()=>{try{const data=collectData();
-  await api('/api/locations/'+S.loc.id,{method:'PUT',body:JSON.stringify({name:data.nama_lokasi||'',data,status:S.loc.status})});
+$('#save-btn').addEventListener('click',async()=>{try{const st=computeState();
+  const status=st.complete?'selesai':'draft';
+  await api('/api/locations/'+S.loc.id,{method:'PUT',body:JSON.stringify({name:st.data.nama_lokasi||'',data:st.data,status})});
   await api('/api/locations/'+S.loc.id+'/inventory',{method:'PUT',body:JSON.stringify({items:collectInventory()})});
-  toast('Tersimpan');await openLoc(S.loc.id);refreshPicker();}catch(e){toast('Gagal: '+e.message);}});
+  toast(status==='selesai'?'Tersimpan — BAA lengkap ✓':'Tersimpan (draft)');
+  await openLoc(S.loc.id);refreshPicker();loadLocations();}catch(e){toast('Gagal: '+e.message);}});
 function expUrl(k){return S.scope==='all'?`/api/export/${k}?scope=all`:`/api/export/${k}?scope=one&loc_id=${S.loc?S.loc.id:''}`;}
 $('#exp-xlsx').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return toast('Pilih lokasi');location.href=expUrl('excel');});
 $('#exp-pdf').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return toast('Pilih lokasi');location.href=expUrl('pdf');});

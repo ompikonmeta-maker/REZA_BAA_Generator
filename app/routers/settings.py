@@ -27,9 +27,10 @@ class AppTitle(BaseModel):
 @router.get("")
 def get_settings(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
     return {
-        "app_title": db.get_setting(conn, "app_title", "REZA BAA Generator"),
+        "app_title": db.get_setting(conn, "app_title", "BAA Generator"),
         "location_fields": db.get_setting(conn, "location_fields", []),
         "photo_categories": db.get_setting(conn, "photo_categories", []),
+        "default_inventory_items": db.get_setting(conn, "default_inventory_items", []),
         "ocr_available": _ocr_available(),
     }
 

@@ -117,6 +117,9 @@ DEFAULT_PHOTO_CATEGORIES = [
     {"key": "simkopdes", "label": "Capture Buka Situs SIMKOPDES", "ocr": False, "keywords": ["simkopdes"]},
 ]
 
+# Default baris inventory untuk lokasi baru (prefilled nama perangkat)
+DEFAULT_INVENTORY_ITEMS = ["Kit Starlink", "Router", "Access Point"]
+
 # Field lokasi default (bisa ditambah custom field lewat Pengaturan)
 DEFAULT_LOCATION_FIELDS = [
     {"key": "nama_lokasi", "label": "Nama Lokasi / Koperasi", "type": "text", "required": True, "builtin": True},
@@ -161,6 +164,8 @@ def init_db() -> None:
             set_setting(conn, "photo_categories", DEFAULT_PHOTO_CATEGORIES)
         if get_setting(conn, "location_fields") is None:
             set_setting(conn, "location_fields", DEFAULT_LOCATION_FIELDS)
+        if get_setting(conn, "default_inventory_items") is None:
+            set_setting(conn, "default_inventory_items", DEFAULT_INVENTORY_ITEMS)
         _title = get_setting(conn, "app_title")
         if _title is None or _title == "REZA BAA Generator":
             set_setting(conn, "app_title", "BAA Generator")
