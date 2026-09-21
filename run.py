@@ -5,7 +5,10 @@ Server bind ke 0.0.0.0 agar bisa diakses user lain di LAN:
 """
 from __future__ import annotations
 
+import os
 import socket
+import threading
+import webbrowser
 
 import uvicorn
 
@@ -34,6 +37,9 @@ def main() -> None:
     print(f"  Data   : {config.DATA_DIR}")
     print("  Login awal: admin / admin  (wajib ganti password)")
     print("=" * 56)
+    # Buka browser otomatis ke localhost (set REZA_BAA_NO_BROWSER=1 untuk nonaktif)
+    if os.environ.get("REZA_BAA_NO_BROWSER") != "1":
+        threading.Timer(1.5, lambda: webbrowser.open(f"http://localhost:{config.PORT}")).start()
     # Objek app langsung (bukan import string) supaya aman saat dibundel exe
     uvicorn.run(app, host=config.HOST, port=config.PORT, reload=False)
 
