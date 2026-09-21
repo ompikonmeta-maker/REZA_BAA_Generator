@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="700" viewBox="0 0 1080 700" font-family="Segoe UI, Roboto, system-ui, sans-serif">
+  <rect width="1080" height="700" fill="#eaeced"/>
+  <text x="34" y="34" font-size="16" font-weight="700" fill="#1a1c1d">Entry BAA — hasil akhir (kartu aktif tint + panel Ringkasan)</text>
+
+  <!-- ============ LEFT: form ============ -->
+  <!-- Data Lokasi (AKTIF: tint teal lembut) -->
+  <rect x="34" y="52" width="660" height="196" rx="20" fill="#e7f4f2" stroke="#c3c7c8"/>
+  <g transform="translate(54,80)">
+    <text x="0" y="6" font-size="16" fill="#006a6a" font-family="Material Symbols Outlined">location_on</text>
+    <text x="26" y="6" font-size="15" font-weight="700" fill="#1a1c1d">Data Lokasi</text>
+    <text x="560" y="6" font-size="11.5" fill="#006a6a">● sedang diisi</text>
+  </g>
+  <!-- fields -->
+  <g>
+    <rect x="54" y="104" width="300" height="54" rx="11" fill="#fff" stroke="#006a6a" stroke-width="2"/>
+    <rect x="66" y="96" width="130" height="16" fill="#e7f4f2"/><text x="70" y="108" font-size="11" fill="#006a6a" font-weight="600">Nama Lokasi / Koperasi</text>
+    <text x="70" y="136" font-size="13.5" fill="#1a1c1d">Kopdes Merah Putih — Sukamaju</text>
+    <rect x="374" y="104" width="300" height="54" rx="11" fill="#fff" stroke="#74777a"/>
+    <rect x="386" y="96" width="120" height="16" fill="#e7f4f2"/><text x="390" y="108" font-size="11" fill="#006a6a" font-weight="600">Tanggal Aktivasi</text>
+    <text x="390" y="136" font-size="13.5" fill="#1a1c1d">21 / 09 / 2026</text>
+    <rect x="54" y="170" width="300" height="54" rx="11" fill="#fff" stroke="#74777a"/>
+    <rect x="66" y="162" width="70" height="16" fill="#e7f4f2"/><text x="70" y="174" font-size="11" fill="#006a6a" font-weight="600">Teknisi</text>
+    <text x="70" y="202" font-size="13.5" fill="#1a1c1d">Reza</text>
+    <rect x="374" y="170" width="300" height="54" rx="11" fill="#fff" stroke="#74777a"/>
+    <rect x="386" y="162" width="90" height="16" fill="#e7f4f2"/><text x="390" y="174" font-size="11" fill="#006a6a" font-weight="600">PIC Lokasi</text>
+    <text x="390" y="202" font-size="13.5" fill="#9aa0a0">—</text>
+  </g>
+
+  <!-- Inventory (gaya tabel, prefilled 3) -->
+  <rect x="34" y="262" width="660" height="256" rx="20" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <g transform="translate(54,290)">
+    <text x="0" y="6" font-size="16" fill="#006a6a" font-family="Material Symbols Outlined">inventory_2</text>
+    <text x="26" y="6" font-size="15" font-weight="700" fill="#1a1c1d">Inventory</text>
+    <circle cx="606" cy="0" r="16" fill="#6ff7f6"/><text x="606" y="6" font-size="17" fill="#00504f" text-anchor="middle">+</text>
+  </g>
+  <g font-size="11.5" fill="#43474a" font-weight="600">
+    <text x="54" y="332">Nama Barang</text><text x="250" y="332">Merk / Type</text><text x="392" y="332">Jml</text><text x="440" y="332">SN / Tagging</text><text x="590" y="332">Ket.</text>
+  </g>
+  <line x1="54" y1="342" x2="674" y2="342" stroke="#c3c7c8"/>
+  <g font-size="13.5" fill="#1a1c1d">
+    <text x="54" y="372">Kit Starlink</text><text x="250" y="372" fill="#9aa0a0">—</text><text x="392" y="372" fill="#9aa0a0">—</text><text x="440" y="372" fill="#9aa0a0">—</text><text x="590" y="372" fill="#9aa0a0">—</text>
+    <line x1="54" y1="386" x2="674" y2="386" stroke="#eceeee"/>
+    <text x="54" y="416">Router</text><text x="250" y="416" fill="#9aa0a0">—</text><text x="392" y="416" fill="#9aa0a0">—</text><text x="440" y="416" fill="#9aa0a0">—</text><text x="590" y="416" fill="#9aa0a0">—</text>
+    <line x1="54" y1="430" x2="674" y2="430" stroke="#eceeee"/>
+    <text x="54" y="460">Access Point</text><text x="250" y="460" fill="#9aa0a0">—</text><text x="392" y="460" fill="#9aa0a0">—</text><text x="440" y="460" fill="#9aa0a0">—</text><text x="590" y="460" fill="#9aa0a0">—</text>
+    <line x1="54" y1="474" x2="674" y2="474" stroke="#eceeee"/>
+  </g>
+  <text x="54" y="500" font-size="11.5" fill="#8a9090">3 baris prefilled · gaya tabel (tanpa kotak per sel)</text>
+
+  <!-- ============ RIGHT: summary panel (final) ============ -->
+  <rect x="712" y="52" width="334" height="560" rx="20" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <text x="734" y="86" font-size="18" font-weight="700" fill="#1a1c1d">Ringkasan BAA</text>
+  <text x="734" y="106" font-size="12" fill="#43474a">Status: draft</text>
+  <text x="734" y="138" font-size="15" font-weight="700" fill="#1a1c1d">18% lengkap</text>
+  <rect x="734" y="150" width="290" height="10" rx="5" fill="#dfe2e3"/>
+  <rect x="734" y="150" width="52" height="10" rx="5" fill="#006a6a"/>
+
+  <!-- highlight-only rows (no borders) -->
+  <rect x="726" y="176" width="306" height="36" rx="10" fill="#fff3e0"/>
+  <text x="736" y="199" font-size="13.5" fill="#43474a">Informasi lokasi</text>
+  <text x="1024" y="199" font-size="13.5" font-weight="700" fill="#9a5b00" text-anchor="end">Belum lengkap · 3/4</text>
+  <rect x="726" y="216" width="306" height="36" rx="10" fill="#fff3e0"/>
+  <text x="736" y="239" font-size="13.5" fill="#43474a">Inventory</text>
+  <text x="1024" y="239" font-size="13.5" font-weight="700" fill="#9a5b00" text-anchor="end">3 item · 3/15 terisi</text>
+  <rect x="726" y="256" width="306" height="36" rx="10" fill="#fff3e0"/>
+  <text x="736" y="279" font-size="13.5" fill="#43474a">Foto wajib</text>
+  <text x="1024" y="279" font-size="13.5" font-weight="700" fill="#9a5b00" text-anchor="end">0 / 11</text>
+
+  <!-- checklist foto kurang -->
+  <text x="734" y="316" font-size="12" font-weight="600" fill="#43474a">Foto yang masih kurang</text>
+  <g font-size="12.5" fill="#43474a">
+    <text x="736" y="338" font-family="Material Symbols Outlined" font-size="16" fill="#9a5b00">check_box_outline_blank</text><text x="760" y="339">Dashboard STARMON</text>
+    <text x="736" y="360" font-family="Material Symbols Outlined" font-size="16" fill="#9a5b00">check_box_outline_blank</text><text x="760" y="361">Tampak Depan / Plang</text>
+    <text x="736" y="382" font-family="Material Symbols Outlined" font-size="16" fill="#9a5b00">check_box_outline_blank</text><text x="760" y="383">Teknisi + PIC</text>
+    <text x="736" y="404" font-family="Material Symbols Outlined" font-size="16" fill="#9a5b00">check_box_outline_blank</text><text x="760" y="405">Perangkat Outdoor</text>
+    <text x="760" y="426" font-size="12" fill="#8a9090">+ 7 lainnya…</text>
+  </g>
+
+  <!-- Simpan full width, size l -->
+  <rect x="734" y="446" width="290" height="56" rx="15" fill="#006a6a"/>
+  <text x="879" y="480" font-size="15" font-weight="700" fill="#fff" text-anchor="middle" font-family="Material Symbols Outlined,Segoe UI"><tspan font-family="Material Symbols Outlined" font-size="18">save</tspan><tspan font-family="Segoe UI"> Simpan BAA</tspan></text>
+
+  <!-- Export group -->
+  <line x1="734" y1="520" x2="1024" y2="520" stroke="#e4e6e7"/>
+  <text x="734" y="542" font-size="12" font-weight="600" fill="#43474a">Cakupan</text>
+  <rect x="878" y="528" width="146" height="26" rx="13" fill="#fff" stroke="#74777a"/>
+  <rect x="878" y="528" width="80" height="26" rx="13" fill="#cce8e7"/>
+  <text x="918" y="545" font-size="11" fill="#05403f" text-anchor="middle">Lokasi ini</text>
+  <text x="992" y="545" font-size="11" fill="#43474a" text-anchor="middle">Semua</text>
+  <rect x="734" y="564" width="140" height="42" rx="11" fill="#fff" stroke="#74777a"/><text x="804" y="590" font-size="13" font-weight="600" fill="#006a6a" text-anchor="middle">Excel</text>
+  <rect x="884" y="564" width="140" height="42" rx="11" fill="#fff" stroke="#74777a"/><text x="954" y="590" font-size="13" font-weight="600" fill="#006a6a" text-anchor="middle">PDF</text>
+
+  <text x="34" y="640" font-size="12.5" fill="#43474a">Kartu aktif = tint teal (opsi C) · progress highlight-only · foto kurang = checklist · Simpan besar · Export sejajar.</text>
+  <text x="34" y="662" font-size="11.5" fill="#8a9090">Catatan: warna & ikon final mengikuti token MD3 di aplikasi; ini representasi statis.</text>
+</svg>
