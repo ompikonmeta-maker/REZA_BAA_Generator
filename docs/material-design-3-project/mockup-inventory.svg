@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1020" height="640" viewBox="0 0 1020 640" font-family="Segoe UI, Roboto, system-ui, sans-serif">
+  <rect width="1020" height="640" fill="#eaeced"/>
+
+  <!-- ============ Inventory redesign (tenang / gaya tabel) ============ -->
+  <text x="34" y="40" font-size="16" font-weight="700" fill="#1a1c1d">Redesign kartu Inventory — gaya tabel (borderless, garis pemisah tipis)</text>
+
+  <rect x="34" y="56" width="620" height="300" rx="20" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <!-- header -->
+  <g transform="translate(54,86)">
+    <rect x="-4" y="-6" width="26" height="26" rx="7" fill="#006a6a"/>
+    <text x="9" y="12" font-size="15" fill="#fff" text-anchor="middle" font-family="Material Symbols Outlined">inventory_2</text>
+    <text x="34" y="12" font-size="15" font-weight="700" fill="#1a1c1d">Inventory</text>
+    <circle cx="572" cy="6" r="17" fill="#6ff7f6"/>
+    <text x="572" y="12" font-size="18" fill="#00504f" text-anchor="middle">+</text>
+  </g>
+  <!-- column labels -->
+  <g font-size="11.5" fill="#43474a" font-weight="600">
+    <text x="54" y="132">Nama Barang</text><text x="230" y="132">Merk / Type</text>
+    <text x="356" y="132">Jml</text><text x="404" y="132">SN / Tagging</text><text x="556" y="132">Keterangan</text>
+  </g>
+  <line x1="54" y1="142" x2="634" y2="142" stroke="#c3c7c8"/>
+
+  <!-- rows: borderless cells, thin dividers -->
+  <g font-size="13.5" fill="#1a1c1d">
+    <!-- row1 -->
+    <text x="54" y="170">Kit Starlink</text>
+    <text x="230" y="170">Gen 3</text>
+    <text x="356" y="170">1</text>
+    <text x="404" y="170" fill="#3a3f52">KITX-7788-AX</text>
+    <line x1="404" y1="178" x2="540" y2="178" stroke="#006a6a" stroke-width="2"/>  <!-- fokus: garis bawah -->
+    <text x="556" y="170">Baik</text>
+    <text x="624" y="170" font-family="Material Symbols Outlined" fill="#8a9090">close</text>
+    <line x1="54" y1="186" x2="634" y2="186" stroke="#eceeee"/>
+    <!-- row2 -->
+    <text x="54" y="214">Router</text>
+    <text x="230" y="214">Starlink</text>
+    <text x="356" y="214">1</text>
+    <text x="404" y="214" fill="#3a3f52">RTR-2231-QK</text>
+    <text x="556" y="214">Baik</text>
+    <text x="624" y="214" font-family="Material Symbols Outlined" fill="#8a9090">close</text>
+    <line x1="54" y1="230" x2="634" y2="230" stroke="#eceeee"/>
+    <!-- row3 -->
+    <text x="54" y="258">Access Point</text>
+    <text x="230" y="258" fill="#9aa0a0">—</text>
+    <text x="356" y="258">1</text>
+    <text x="404" y="258" fill="#9aa0a0">menunggu scan…</text>
+    <text x="556" y="258" fill="#9aa0a0">—</text>
+    <text x="624" y="258" font-family="Material Symbols Outlined" fill="#8a9090">close</text>
+    <line x1="54" y1="274" x2="634" y2="274" stroke="#eceeee"/>
+  </g>
+  <text x="54" y="304" font-size="12" fill="#43474a">Tanpa kotak per sel · fokus = garis bawah teal · 3 baris default (dari Pengaturan)</text>
+  <text x="54" y="326" font-size="12" fill="#8a9090">Bandingkan: sebelumnya tiap sel kotak ber-outline → ramai saat baris bertambah.</text>
+
+  <!-- ============ Panel Ringkasan (wording baru) ============ -->
+  <text x="700" y="40" font-size="16" font-weight="700" fill="#1a1c1d">Panel Ringkasan</text>
+  <rect x="700" y="56" width="286" height="330" rx="20" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <text x="720" y="88" font-size="17" font-weight="700" fill="#1a1c1d">Ringkasan BAA</text>
+  <text x="720" y="108" font-size="12" fill="#43474a">Status: draft</text>
+  <text x="720" y="138" font-size="15" font-weight="700" fill="#1a1c1d">34% lengkap</text>
+  <rect x="720" y="150" width="246" height="10" rx="5" fill="#dfe2e3"/>
+  <rect x="720" y="150" width="84" height="10" rx="5" fill="#006a6a"/>
+
+  <!-- Informasi lokasi: Belum lengkap (highlight warning) -->
+  <rect x="712" y="176" width="262" height="34" rx="9" fill="#fff3e0"/>
+  <text x="722" y="198" font-size="13.5" fill="#43474a">Informasi lokasi</text>
+  <text x="966" y="198" font-size="13.5" font-weight="700" fill="#9a5b00" text-anchor="end">Belum lengkap · 3/4</text>
+
+  <line x1="720" y1="222" x2="966" y2="222" stroke="#e4e6e7"/>
+  <text x="720" y="246" font-size="13.5" fill="#43474a">Inventory</text>
+  <text x="966" y="246" font-size="13.5" font-weight="700" fill="#006a6a" text-anchor="end">3 item · 8/15 terisi</text>
+
+  <line x1="720" y1="266" x2="966" y2="266" stroke="#e4e6e7"/>
+  <text x="720" y="290" font-size="13.5" fill="#43474a">Foto wajib</text>
+  <text x="966" y="290" font-size="13.5" font-weight="700" fill="#9a5b00" text-anchor="end">2 / 11</text>
+  <text x="720" y="308" font-size="11" fill="#8a9090">kurang: Outdoor, Indoor, Teknisi, …</text>
+
+  <line x1="720" y1="322" x2="966" y2="322" stroke="#e4e6e7"/>
+  <rect x="720" y="338" width="246" height="34" rx="10" fill="#006a6a"/>
+  <text x="843" y="360" font-size="13.5" font-weight="700" fill="#fff" text-anchor="middle">Simpan BAA</text>
+
+  <!-- legend -->
+  <rect x="700" y="410" width="286" height="70" rx="14" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <rect x="714" y="424" width="16" height="16" rx="4" fill="#fff3e0" stroke="#e0b877"/>
+  <text x="740" y="437" font-size="12" fill="#43474a">Highlight "Belum lengkap" (warning lembut)</text>
+  <circle cx="722" cy="458" r="6" fill="#006a6a"/>
+  <text x="740" y="462" font-size="12" fill="#43474a">Lengkap / progres OK (teal)</text>
+
+  <text x="34" y="510" font-size="13" font-weight="700" fill="#1a1c1d">Ringkasan perubahan</text>
+  <g font-size="12.5" fill="#43474a">
+    <text x="34" y="536">• Lokasi "Lengkap" hanya jika SEMUA field terisi; jika belum → "Belum lengkap · N/Total" + highlight warning.</text>
+    <text x="34" y="558">• Inventory: tampilkan jumlah item + kelengkapan kolom terisi (X/Y).</text>
+    <text x="34" y="580">• Foto wajib = semua 11 kategori; progres X/11 + daftar yang masih kurang.</text>
+    <text x="34" y="602">• Kartu Inventory gaya tabel (borderless) biar tenang; default 3 baris (diatur di Pengaturan).</text>
+  </g>
+</svg>
