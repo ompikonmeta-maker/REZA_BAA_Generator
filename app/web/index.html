@@ -104,7 +104,7 @@
   .count{background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);border-radius:99px;padding:3px 12px;font:var(--md-sys-typescale-label-medium)}
   .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;align-items:stretch}
   .pcard{display:flex;flex-direction:column;background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:12px;height:100%}
-  .pcard.sn{border-color:var(--md-sys-color-tertiary)}
+  /* border kartu seragam; penanda SN hanya lewat ikon label, bukan warna border */
   .pcard .hd{display:flex;gap:8px;align-items:flex-start;min-height:42px;font:var(--md-sys-typescale-label-large);line-height:1.25}
   .pcard .hd .mi{font-size:18px;color:var(--md-sys-color-on-surface-variant);flex:0 0 auto;margin-top:1px}
   .pcard.sn .hd .mi{color:var(--md-sys-color-tertiary)}
@@ -133,7 +133,10 @@
   .miss .mt{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);margin-bottom:4px}
   .miss .row{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);display:flex;align-items:center;gap:7px;padding:2px 0}
   .miss .row .mi{font-size:17px;color:var(--warn)}
-  .card.warn-outline{border-color:var(--warn)}
+  /* border kartu Data Lokasi seragam dengan kartu lain (highlight cukup di panel) */
+  .card.warn-outline{border-color:var(--md-sys-color-outline-variant)}
+  /* Admin-only: sembunyikan tambah/hapus baris inventory untuk operator */
+  .is-operator #inv-add,.is-operator .tr md-icon-button{display:none}
   .sum-actions{margin-top:16px;display:flex;flex-direction:column;gap:0}
   .sum-actions #save-btn{width:100%}
   .sum-actions #save-btn::part(button){width:100%}
@@ -288,7 +291,13 @@
         <div class="card">
           <div class="sec"><span class="mi acc">upload_file</span><h3>Upload template baru</h3></div>
           <div class="fgrid">
-            <div><input id="tpl-file" type="file" accept=".xlsx,.xlsm" style="width:100%"></div>
+            <div><label class="muted">File template (.xlsx)</label>
+              <div class="rowflex" style="margin-top:6px">
+                <input id="tpl-file" type="file" accept=".xlsx,.xlsm" class="hidden">
+                <md-button id="tpl-file-btn" variant="tonal" icon="attach_file">Pilih file</md-button>
+                <span id="tpl-file-name" class="muted">Belum ada file</span>
+              </div>
+            </div>
             <md-text-field id="tpl-name" variant="outlined" label="Nama template"></md-text-field>
           </div>
           <div style="margin-top:12px"><md-button id="tpl-inspect" variant="filled">Periksa worksheet</md-button></div>
@@ -401,9 +410,29 @@
 
 <md-dialog id="galDlg">
   <span slot="headline" id="galTitle">Foto</span>
-  <div id="galBody" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;min-width:320px;max-height:60vh;overflow:auto"></div>
+  <div id="galBody" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px;min-width:320px;max-height:60vh;overflow:auto"></div>
   <div slot="actions"><md-button variant="tonal" id="galAdd" icon="add">Tambah foto</md-button><md-button variant="text" id="galClose">Tutup</md-button></div>
 </md-dialog>
+
+<md-dialog id="edDlg">
+  <span slot="headline">Edit Foto</span>
+  <div style="min-width:320px">
+    <div class="rowflex" style="margin-bottom:10px"><span class="muted">Rasio</span>
+      <md-segmented-button id="ed-aspect">
+        <button data-value="free" selected>Bebas</button><button data-value="1">1:1</button><button data-value="1.3333">4:3</button><button data-value="0.75">3:4</button><button data-value="1.7778">16:9</button>
+      </md-segmented-button></div>
+    <div id="ed-view" style="position:relative;width:100%;max-width:420px;height:300px;margin:0 auto;overflow:hidden;background:#111;border-radius:12px;touch-action:none;cursor:grab">
+      <img id="ed-img" draggable="false" style="position:absolute;left:0;top:0;transform-origin:0 0;user-select:none;pointer-events:none">
+    </div>
+    <div class="rowflex" style="margin-top:10px"><span class="mi">zoom_out</span><input id="ed-zoom" type="range" min="1" max="4" step="0.01" value="1" style="flex:1;accent-color:var(--md-sys-color-primary)"><span class="mi">zoom_in</span></div>
+  </div>
+  <div slot="actions"><md-button variant="text" id="ed-cancel">Batal</md-button><md-button variant="filled" id="ed-save" icon="check">Simpan &amp; unggah</md-button></div>
+</md-dialog>
+
+<div id="undoBar" class="hidden" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:14px;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);padding:10px 16px;border-radius:12px;box-shadow:var(--md-sys-elevation-level3)">
+  <span id="undoText">Foto dihapus</span><span id="undoCount" class="muted" style="color:var(--md-sys-color-inverse-on-surface);opacity:.7"></span>
+  <button id="undoBtn" style="border:none;background:none;color:var(--md-sys-color-inverse-primary);font:var(--md-sys-typescale-label-large);cursor:pointer">URUNGKAN</button>
+</div>
 
 <div class="tip" id="tip"></div>
 <div class="toast" id="toast"></div>
@@ -476,6 +505,7 @@ $('#railBtn').addEventListener('click',()=>$('#app').classList.toggle('rail'));
 async function showApp(){$('#login').classList.add('hidden');$('#app').classList.remove('hidden');
   const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;S.invItems=s.default_inventory_items||[];S.appTitle=s.app_title||'BAA Generator';
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
+  $('#app').classList.toggle('is-operator',S.user.role!=='admin');
   refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
   if(S.user.must_change)setTimeout(()=>openPw(true),400);}
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
@@ -498,7 +528,8 @@ async function openLoc(id){S.loc=await api('/api/locations/'+id);pickerSel.setVa
   $('#entry-empty').classList.add('hidden');$('#entry-form').classList.remove('hidden');
   $('#entryCode').classList.remove('hidden');$('#entryCode').querySelector('span:last-child').textContent=S.loc.code;
   $('#entry-del').classList.remove('hidden');
-  renderLocFields();renderInventory();renderPhotos();updateSummary();revealCards($('#v-entry'));bindTips();}
+  renderLocFields();renderInventory();renderPhotos();updateSummary();bindTips();
+  requestAnimationFrame(()=>revealCards($('#v-entry')));}
 function renderLocFields(){$('#loc-fields').innerHTML=S.locFields.map(f=>
   `<md-text-field data-lf="${f.key}" variant="outlined" label="${esc(f.label)}${f.required?' *':''}" type="${f.type==='date'?'date':'text'}" value="${esc(S.loc.data[f.key]||'')}"></md-text-field>`).join('');}
 function invRow(it={}){return `<div class="tr">
@@ -526,7 +557,7 @@ function computeState(){
   const locDone=fields.length?filledF===fields.length:Object.values(data).some(v=>(v||'').trim());
   const rows=$$('#inv-body .tr');let cells=0,filledCells=0,items=0;
   rows.forEach(tr=>{const vals=[...tr.querySelectorAll('[data-iv]')].map(i=>i.value.trim());if(vals.some(v=>v)){items++;cells+=vals.length;filledCells+=vals.filter(v=>v).length;}});
-  const rc=requiredCats();const byCat={};(S.loc.photos||[]).forEach(p=>byCat[p.category]=1);
+  const rc=requiredCats();const byCat={};activePhotos().forEach(p=>byCat[p.category]=1);
   const fotoDone=rc.filter(c=>byCat[c.key]).length;const missing=rc.filter(c=>!byCat[c.key]).map(c=>c.label);
   const invOk=items>0&&filledCells===cells;const fotoOk=rc.length>0&&fotoDone>=rc.length;
   return {data,fields,filledF,locDone,items,cells,filledCells,invOk,rc,fotoDone,fotoOk,missing,complete:locDone&&invOk&&fotoOk};
@@ -556,12 +587,12 @@ function updateSummary(){
 /* photos — uniform cards */
 function renderPhotos(){
   $('#ocr-note').textContent=S.ocr?'':'OCR nonaktif di server (Tesseract belum terpasang) — SN bisa diisi manual.';
-  const byCat={};(S.loc.photos||[]).forEach(p=>{(byCat[p.category]=byCat[p.category]||[]).push(p);});
+  const byCat={};activePhotos().forEach(p=>{(byCat[p.category]=byCat[p.category]||[]).push(p);});
   const filled=S.cats.filter(c=>(byCat[c.key]||[]).length).length;
   $('#foto-count').textContent=filled+' / '+S.cats.length;
   $('#photo-slots').innerHTML=S.cats.map(c=>{const ps=byCat[c.key]||[];const first=ps[0];
     const snap=first
-      ? `<div class="snap" onclick="openGallery('${c.key}')"><img src="/api/photos/${first.id}/file" loading="lazy">${ps.length>1?`<span class="badge">${ps.length} foto</span>`:''}<button class="x" onclick="event.stopPropagation();delPhoto(${first.id})">close</button></div>`
+      ? `<div class="snap" onclick="openGallery('${c.key}')"><img src="/api/photos/${first.id}/file" loading="lazy">${ps.length>1?`<span class="badge">${ps.length} foto</span>`:''}<button class="x" onclick="event.stopPropagation();softRemove(${first.id})">close</button></div>`
       : `<div class="snap empty" onclick="pick('${c.key}')"><span class="mi" style="font-size:30px;color:var(--md-sys-color-primary)">add_a_photo</span></div>`;
     let foot='<div class="foot"></div>';
     if(c.ocr){const sn=ps.find(p=>p.ocr_serial);
@@ -569,13 +600,63 @@ function renderPhotos(){
     return `<div class="pcard ${c.ocr?'sn':''}"><div class="hd"><span class="mi">${c.ocr?'tag':'image'}</span><span>${esc(c.label)}</span></div>${snap}${foot}</div>`;}).join('');
   const un=byCat['uncategorized']||[];$('#uncat-wrap').classList.toggle('hidden',!un.length);
   $('#uncat-slots').innerHTML=un.map(p=>`<div class="pcard"><div class="hd"><span class="mi">help</span><span>Belum terkategori</span></div>
-    <div class="snap"><img src="/api/photos/${p.id}/file"><button class="x" onclick="delPhoto(${p.id})">close</button></div>
+    <div class="snap"><img src="/api/photos/${p.id}/file"><button class="x" onclick="softRemove(${p.id})">close</button></div>
     <div class="foot"><md-button variant="tonal" size="xs" icon="drive_file_move" onclick="reassignMenu(this,${p.id})">Pindah</md-button></div></div>`).join('');
   bindTips();
 }
-window.pick=cat=>{const inp=document.createElement('input');inp.type='file';inp.multiple=true;inp.accept='image/*';inp.onchange=()=>doUpload(inp.files,cat,[]);inp.click();};
+function pickFiles(multi,cb){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=!!multi;inp.onchange=()=>cb(inp.files);inp.click();}
+window.pick=cat=>pickFiles(true,files=>{ if(files.length===1) openEditor(files[0],blob=>uploadBlob(cat,blob,files[0].name)); else doUpload(files,cat,[]); });
 window.useSerial=s=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow({sn_tagging:s}));bindTips();updateSummary();toast('Baris inventory + SN ditambah');};
-window.delPhoto=async id=>{await api('/api/photos/'+id,{method:'DELETE'});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();};
+
+/* ---- soft delete + undo (timer) ---- */
+const pendingDel=new Map();  // id -> timeoutId
+function activePhotos(){return (S.loc&&S.loc.photos||[]).filter(p=>!pendingDel.has(p.id));}
+let undoTimer=null;
+window.softRemove=id=>{
+  if(pendingDel.has(id))return;
+  pendingDel.set(id,setTimeout(()=>commitDelete(id),5000));
+  renderPhotos();updateSummary();showUndo(id);
+};
+async function commitDelete(id){pendingDel.delete(id);hideUndo();
+  try{await api('/api/photos/'+id,{method:'DELETE'});S.loc=await api('/api/locations/'+S.loc.id);}catch{}
+  renderPhotos();updateSummary();if($('#galDlg').hasAttribute('open')&&galCat)openGallery(galCat);}
+function showUndo(id){const bar=$('#undoBar');bar.classList.remove('hidden');let n=5;$('#undoCount').textContent='('+n+'s)';
+  clearInterval(undoTimer);undoTimer=setInterval(()=>{n--;$('#undoCount').textContent='('+n+'s)';if(n<=0)clearInterval(undoTimer);},1000);
+  bar._id=id;}
+function hideUndo(){$('#undoBar').classList.add('hidden');clearInterval(undoTimer);}
+$('#undoBtn').addEventListener('click',()=>{const id=$('#undoBar')._id;const t=pendingDel.get(id);if(t)clearTimeout(t);pendingDel.delete(id);hideUndo();renderPhotos();updateSummary();if($('#galDlg').hasAttribute('open')&&galCat)openGallery(galCat);});
+
+/* ---- editor: zoom + crop rasio ---- */
+let ed={};
+function openEditor(file,onDone){ed={onDone,aspect:'free',z:1,minZ:1,tx:0,ty:0};
+  const url=URL.createObjectURL(file);const img=$('#ed-img');img.onload=()=>{ed.iw=img.naturalWidth;ed.ih=img.naturalHeight;edLayout('free');$('#edDlg').show();};img.src=url;}
+function edLayout(a){ed.aspect=a;const view=$('#ed-view');const VW=Math.min(420,view.clientWidth||420);
+  const r=(a==='free')?ed.iw/ed.ih:parseFloat(a);const VH=Math.round(VW/r);
+  view.style.height=VH+'px';ed.VW=VW;ed.VH=VH;
+  ed.minZ=Math.max(VW/ed.iw,VH/ed.ih);ed.z=ed.minZ;
+  ed.tx=(VW-ed.iw*ed.z)/2;ed.ty=(VH-ed.ih*ed.z)/2;$('#ed-zoom').value=1;edApply();}
+function edClamp(){ed.tx=Math.min(0,Math.max(ed.VW-ed.iw*ed.z,ed.tx));ed.ty=Math.min(0,Math.max(ed.VH-ed.ih*ed.z,ed.ty));}
+function edApply(){edClamp();const img=$('#ed-img');img.style.width=(ed.iw*ed.z)+'px';img.style.height=(ed.ih*ed.z)+'px';img.style.transform=`translate(${ed.tx}px,${ed.ty}px)`;}
+$('#ed-aspect').addEventListener('change',e=>edLayout(e.detail.value));
+$('#ed-zoom').addEventListener('input',e=>{const mult=parseFloat(e.target.value);const nz=ed.minZ*mult;
+  const cx=ed.VW/2,cy=ed.VH/2;ed.tx=cx-(cx-ed.tx)*(nz/ed.z);ed.ty=cy-(cy-ed.ty)*(nz/ed.z);ed.z=nz;edApply();});
+(function(){const view=$('#ed-view');let drag=false,px,py;
+  view.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;view.setPointerCapture(e.pointerId);view.style.cursor='grabbing';});
+  view.addEventListener('pointermove',e=>{if(!drag)return;ed.tx+=e.clientX-px;ed.ty+=e.clientY-py;px=e.clientX;py=e.clientY;edApply();});
+  view.addEventListener('pointerup',()=>{drag=false;view.style.cursor='grab';});})();
+$('#ed-cancel').addEventListener('click',()=>$('#edDlg').close());
+$('#ed-save').addEventListener('click',()=>{
+  const sx=(0-ed.tx)/ed.z,sy=(0-ed.ty)/ed.z,sw=ed.VW/ed.z,sh=ed.VH/ed.z;
+  const cv=document.createElement('canvas');cv.width=Math.round(sw);cv.height=Math.round(sh);
+  cv.getContext('2d').drawImage($('#ed-img'),sx,sy,sw,sh,0,0,cv.width,cv.height);
+  cv.toBlob(b=>{$('#edDlg').close();if(ed.onDone)ed.onDone(b);},'image/jpeg',0.9);});
+
+function uploadBlob(cat,blob,name){const f=new File([blob],name||('foto_'+Date.now()+'.jpg'),{type:'image/jpeg'});doUpload([f],cat,[]);}
+window.replacePhoto=(oldId,cat)=>pickFiles(false,files=>{const f=files[0];if(!f)return;
+  openEditor(f,async blob=>{const nf=new File([blob],f.name,{type:'image/jpeg'});
+    const fd=new FormData();fd.append('files',nf);fd.append('category',cat);fd.append('relpaths',JSON.stringify([f.name]));
+    try{const r=await fetch('/api/locations/'+S.loc.id+'/photos',{method:'POST',credentials:'same-origin',body:fd});if(!r.ok)throw new Error((await r.json()).detail);
+      await api('/api/photos/'+oldId,{method:'DELETE'});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();openGallery(cat);toast('Foto diganti');}catch(e){toast('Gagal: '+e.message);}});});
 window.reassignMenu=(btn,pid)=>openMenu(btn,S.cats.map(c=>({icon:c.ocr?'tag':'image',label:c.label,fn:async()=>{await api('/api/photos/'+pid,{method:'PATCH',body:JSON.stringify({category:c.key})});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();toast('Dipindah');}})));
 async function doUpload(files,category,relpaths){if(!files||!files.length)return;const fd=new FormData();
   [...files].forEach(f=>fd.append('files',f));if(category)fd.append('category',category);
@@ -637,6 +718,8 @@ $('#delOk').addEventListener('click',async()=>{try{await api('/api/locations/'+d
   refreshPicker();loadLocations();}catch(e){toast('Gagal: '+e.message);$('#delDlg').close();}});
 
 /* TEMPLATES + MAPPING */
+$('#tpl-file-btn')&&$('#tpl-file-btn').addEventListener('click',()=>$('#tpl-file').click());
+$('#tpl-file')&&$('#tpl-file').addEventListener('change',e=>{$('#tpl-file-name').textContent=e.target.files[0]?.name||'Belum ada file';});
 $('#tpl-inspect')&&$('#tpl-inspect').addEventListener('click',async()=>{const f=$('#tpl-file').files[0];if(!f)return toast('Pilih file');
   const fd=new FormData();fd.append('file',f);
   try{const r=await fetch('/api/templates/inspect',{method:'POST',credentials:'same-origin',body:fd});if(!r.ok)throw new Error((await r.json()).detail);
@@ -645,7 +728,7 @@ $('#tpl-inspect')&&$('#tpl-inspect').addEventListener('click',async()=>{const f=
     $('#tpl-register').classList.remove('hidden');toast(d.sheets.length+' worksheet');}catch(e){toast('Gagal: '+e.message);}});
 $('#tpl-do-register')&&$('#tpl-do-register').addEventListener('click',async()=>{const d=S.pending;if(!d)return;
   try{await api('/api/templates/register',{method:'POST',body:JSON.stringify({pending_file:d.pending_file,name:$('#tpl-name').value||d.orig_name,orig_name:d.orig_name,sheet_log:tplLogSel.getValue(),sheet_detail:tplDetailSel.getValue(),activate:true})});
-    $('#tpl-register').classList.add('hidden');$('#tpl-file').value='';toast('Terdaftar & aktif');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
+    $('#tpl-register').classList.add('hidden');$('#tpl-file').value='';$('#tpl-file-name').textContent='Belum ada file';toast('Terdaftar & aktif');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
 async function loadTemplates(){const rows=await api('/api/templates');
   $('#tpl-table').innerHTML=rows.map(t=>`<tr><td>${esc(t.name)}</td><td class="mono">${esc(t.sheet_log)}</td><td class="mono">${esc(t.sheet_detail)}</td>
     <td>${t.active?'<span class="count">aktif</span>':''}</td><td style="text-align:right">
@@ -704,12 +787,16 @@ $('#pwSave').addEventListener('click',async()=>{try{
 /* Galeri foto per kategori */
 let galCat=null;
 window.openGallery=cat=>{galCat=cat;const c=S.cats.find(x=>x.key===cat);$('#galTitle').textContent=c?c.label:cat;
-  const ps=(S.loc.photos||[]).filter(p=>p.category===cat);
-  $('#galBody').innerHTML=ps.map(p=>`<div class="thumb" style="width:100%;height:110px"><img src="/api/photos/${p.id}/file"><button class="x" onclick="galDel(${p.id})">close</button></div>`).join('')||'<span class="muted">Belum ada foto</span>';
+  const ps=activePhotos().filter(p=>p.category===cat);
+  $('#galBody').innerHTML=ps.map(p=>`<div style="display:flex;flex-direction:column;gap:6px">
+    <div class="thumb" style="width:100%;height:120px"><img src="/api/photos/${p.id}/file"><button class="x" onclick="softRemove(${p.id})">close</button></div>
+    <div class="rowflex" style="gap:6px;justify-content:center"><md-button variant="text" size="xs" icon="swap_horiz" onclick="replacePhoto(${p.id},'${cat}')">Ganti</md-button></div>
+  </div>`).join('')||'<span class="muted">Belum ada foto</span>';
   $('#galDlg').show();};
-window.galDel=async id=>{await api('/api/photos/'+id,{method:'DELETE'});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();openGallery(galCat);};
 $('#galClose').addEventListener('click',()=>$('#galDlg').close());
-$('#galAdd').addEventListener('click',()=>{const inp=document.createElement('input');inp.type='file';inp.multiple=true;inp.accept='image/*';inp.onchange=async()=>{await doUpload(inp.files,galCat,[]);openGallery(galCat);};inp.click();});
+$('#galAdd').addEventListener('click',()=>pickFiles(true,async files=>{
+  if(files.length===1){openEditor(files[0],blob=>{uploadBlob(galCat,blob,files[0].name);setTimeout(()=>openGallery(galCat),400);});}
+  else{await doUpload(files,galCat,[]);openGallery(galCat);}}));
 
 /* Backup & restore */
 $('#bk-download').addEventListener('click',()=>{location.href='/api/backup';});
