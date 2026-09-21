@@ -97,7 +97,33 @@ def extract_serial(text: str) -> str:
     return max(scored, key=len)
 
 
+def candidates(text: str) -> list[str]:
+    """Semua token mirip-serial (huruf+angka, cukup panjang), unik, terpanjang dulu."""
+    if not text:
+        return []
+    out, seen = [], set()
+    for c in _SERIAL_RE.findall(text.upper()):
+        if c in seen:
+            continue
+        seen.add(c)
+        out.append(c)
+    out.sort(key=lambda x: (-(any(ch.isalpha() for ch in x) and any(ch.isdigit() for ch in x)), -len(x)))
+    return out
+
+
 def read_serial(image_path: str | Path) -> tuple[str, str]:
     """Kembalikan (serial, raw_text)."""
     text = read_text(image_path)
     return extract_serial(text), text
+
+
+def read_bytes(data: bytes) -> str:
+    """OCR dari bytes gambar (mis. region crop dari client)."""
+    if not available():
+        return ""
+    try:
+        from io import BytesIO
+        with Image.open(BytesIO(data)) as img:
+            return pytesseract.image_to_string(_preprocess(img)) or ""
+    except Exception:
+        return ""

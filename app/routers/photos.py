@@ -97,6 +97,13 @@ def reassign_photo(photo_id: int, payload: dict, conn: sqlite3.Connection = Depe
     row = conn.execute("SELECT * FROM photos WHERE id=?", (photo_id,)).fetchone()
     if not row:
         raise HTTPException(404, "Foto tidak ditemukan")
+    # Set serial manual (dari barcode/OCR area/edit) tanpa memindah kategori
+    if "ocr_serial" in payload and "category" not in payload:
+        conn.execute("UPDATE photos SET ocr_serial=? WHERE id=?",
+                     (str(payload.get("ocr_serial", "")), photo_id))
+        conn.commit()
+        audit(conn, user, "set_serial", "photo", photo_id, str(payload.get("ocr_serial", "")))
+        return {"ok": True, "ocr_serial": str(payload.get("ocr_serial", ""))}
     new_cat = str(payload.get("category", "")).strip()
     if not new_cat:
         raise HTTPException(400, "category wajib diisi")
