@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Editor Pengaturan (tenang)</title>
+<style>
+  :root{
+    --bg:#e9ecec;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;
+    --fill:#eef2f1;--fillh:#e6ecea;--pri:#04726f;--sec:#cfe6e5;--onsec:#00413f;--warn:#9a5b00;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--fill:#1e2322;--fillh:#232928;
+    --pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec;--warn:#ffb95c;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1000px;margin:0 auto;padding:22px}
+  .head{font-size:20px;font-weight:800;letter-spacing:-.3px;margin:0 0 4px}
+  .head .mut{color:var(--mut);font-weight:600}
+  .tabs{display:flex;gap:6px;margin:16px 0 18px;flex-wrap:wrap}
+  .tabs button{border:1px solid var(--ov);background:var(--pane);color:var(--mut);padding:9px 15px;border-radius:22px;cursor:pointer;font-weight:600;font-size:13px;display:flex;gap:8px;align-items:center}
+  .tabs button.on{background:var(--sec);color:var(--onsec);border-color:transparent}
+  .panel{background:var(--pane);border:1px solid var(--ov);border-radius:24px;padding:20px}
+  .ptop{display:flex;align-items:center;gap:10px;margin-bottom:16px}
+  .ptop h2{font-size:16px;font-weight:700;margin:0}
+  .ptop .add{margin-left:auto;border:none;background:var(--pri);color:#fff;padding:9px 16px;border-radius:20px;font-weight:600;cursor:pointer;font-size:13px}
+  /* entry cards */
+  .entry{background:var(--bg);border-radius:18px;padding:14px 16px;margin-bottom:12px;transition:box-shadow .15s}
+  .entry:hover{box-shadow:inset 0 0 0 1.5px var(--ov)}
+  .erow{display:flex;align-items:center;gap:12px}
+  .keychip{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--mut);background:var(--fill);padding:4px 9px;border-radius:8px;white-space:nowrap}
+  .label{flex:1;min-width:0;border:none;background:transparent;font-size:15px;font-weight:700;color:var(--ink);outline:none;padding:4px 2px}
+  .label::placeholder{color:var(--mut);font-weight:600}
+  .del{border:none;background:transparent;color:var(--mut);cursor:pointer;font-size:18px;width:32px;height:32px;border-radius:50%}
+  .del:hover{background:var(--fillh);color:var(--warn)}
+  /* soft field */
+  .fields{display:grid;gap:10px 14px;margin-top:12px}
+  .f3{grid-template-columns:1.4fr 1fr 1fr}
+  .f2{grid-template-columns:1fr 1fr}
+  @media(max-width:720px){.f3,.f2{grid-template-columns:1fr}}
+  .field label{display:block;font-size:10.5px;font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);margin:0 0 5px 2px}
+  .field input,.field select{width:100%;border:none;background:var(--fill);border-radius:12px;padding:11px 13px;font-size:13.5px;color:var(--ink);outline:none;transition:box-shadow .15s,background .15s}
+  .field input:focus,.field select:focus{background:var(--pane);box-shadow:0 0 0 2px var(--pri)}
+  .field input::placeholder{color:var(--mut)}
+  /* toggle pill */
+  .toggles{display:flex;gap:8px}
+  .tg{display:inline-flex;align-items:center;gap:7px;background:var(--fill);border-radius:20px;padding:6px 12px 6px 10px;cursor:pointer;font-size:12px;font-weight:600;color:var(--mut);user-select:none}
+  .tg .sw{width:34px;height:20px;border-radius:20px;background:var(--ov);position:relative;transition:background .18s}
+  .tg .sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+  .tg.on{background:var(--sec);color:var(--onsec)}
+  .tg.on .sw{background:var(--pri)}.tg.on .sw::after{transform:translateX(14px)}
+  .segt{display:inline-flex;background:var(--fill);border-radius:12px;padding:3px}
+  .segt button{border:none;background:transparent;color:var(--mut);padding:7px 13px;border-radius:9px;cursor:pointer;font-size:12.5px;font-weight:600}
+  .segt button.on{background:var(--pane);color:var(--pri);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+  .save{margin-top:6px;border:none;background:var(--pri);color:#fff;padding:11px 22px;border-radius:22px;font-weight:600;cursor:pointer;font-size:13px}
+  .note{color:var(--mut);font-size:12px;text-align:center;margin-top:16px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="head">Pengaturan · <span id="hsub">Field Photo &amp; Capture</span></div>
+  <div class="tabs">
+    <button data-t="lokasi">Field Data Lokasi</button>
+    <button data-t="inventory">Field Inventory</button>
+    <button class="on" data-t="photo">Field Photo &amp; Capture</button>
+    <button data-t="backup">BackUp &amp; Restore</button>
+  </div>
+  <div class="panel" id="panel"></div>
+  <p class="note">Redesign tenang: kartu per-entri, input soft-fill (ring hanya saat fokus), toggle pill untuk OCR/Wajib, tanpa garis tabel. Klik tab untuk lihat tiap sub-editor.</p>
+</div>
+
+<script>
+  const $=s=>document.querySelector(s);
+  const PHOTO=[
+    {key:'dashboard',label:'Capture Dashboard (STARMON)',kw:'dashboard, starmon',pre:'',item:'',ocr:false,wajib:false},
+    {key:'sn_kit',label:'Foto SN Kit Starlink',kw:'sn_kit, snkit, kit',pre:'KIT, KITX',item:'Kit Starlink',ocr:true,wajib:true},
+    {key:'sn_router',label:'Foto SN Router',kw:'sn_router, router',pre:'RTR',item:'Router',ocr:true,wajib:false},
+    {key:'ping',label:'Capture Tes Ping',kw:'ping',pre:'',item:'',ocr:false,wajib:false},
+  ];
+  const LOK=[
+    {key:'nama_lokasi',label:'Nama Lokasi / Koperasi',type:'text',wajib:true},
+    {key:'tanggal',label:'Tanggal Aktivasi',type:'date',wajib:false},
+    {key:'teknisi',label:'Teknisi',type:'text',wajib:false},
+  ];
+  const INV=[{name:'Kit Starlink',merks:'Std Actuated, Gen 3, HP'},{name:'Router',merks:'Gen 2, Gen 3'},{name:'Access Point',merks:''}];
+
+  function tg(on,label){return `<span class="tg ${on?'on':''}" onclick="this.classList.toggle('on')"><span class="sw"></span>${label}</span>`;}
+  function photoCard(c){return `<div class="entry">
+    <div class="erow">
+      <span class="keychip">${c.key}</span>
+      <input class="label" value="${c.label}">
+      <div class="toggles">${tg(c.ocr,'OCR')}${tg(c.wajib,'Wajib')}</div>
+      <button class="del">✕</button>
+    </div>
+    <div class="fields f3">
+      <div class="field"><label>Kata kunci (koma)</label><input value="${c.kw}"></div>
+      <div class="field"><label>Prefix SN (koma)</label><input value="${c.pre}" placeholder="mis. KIT, KITX"></div>
+      <div class="field"><label>Item Inventory</label><input value="${c.item}" placeholder="nama barang"></div>
+    </div></div>`;}
+  function lokCard(f){return `<div class="entry"><div class="erow">
+      <span class="keychip">${f.key}</span>
+      <input class="label" value="${f.label}">
+      <div class="segt"><button class="${f.type==='text'?'on':''}">Teks</button><button class="${f.type==='date'?'on':''}">Tanggal</button></div>
+      ${tg(f.wajib,'Wajib')}
+      <button class="del">✕</button>
+    </div></div>`;}
+  function invCard(i){return `<div class="entry"><div class="erow">
+      <input class="label" value="${i.name}" placeholder="Nama barang">
+      <button class="del">✕</button>
+    </div>
+    <div class="fields"><div class="field"><label>Opsi Merk/Type (pisah koma)</label><input value="${i.merks}" placeholder="mis. Std Actuated, Gen 3, HP"></div></div></div>`;}
+
+  const VIEWS={
+    photo:{t:'Field Photo & Capture',icon:'🖼️',add:'+ Kategori',rows:()=>PHOTO.map(photoCard).join(''),save:'Simpan kategori'},
+    lokasi:{t:'Field Data Lokasi',icon:'📍',add:'+ Field',rows:()=>LOK.map(lokCard).join(''),save:'Simpan field'},
+    inventory:{t:'Field Inventory',icon:'📦',add:'+ Item',rows:()=>INV.map(invCard).join(''),save:'Simpan default'},
+    backup:{t:'BackUp & Restore',icon:'💾',add:'',rows:()=>`<p style="color:var(--mut);margin:2px 0 16px">Cadangkan / pulihkan database, foto & template.</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap"><button class="save">⬇ Unduh backup</button><button class="save" style="background:transparent;color:var(--pri);box-shadow:inset 0 0 0 1.5px var(--ov)">⬆ Restore dari ZIP…</button></div>`,save:''},
+  };
+  function render(k){const v=VIEWS[k];$('#hsub').textContent=v.t;
+    $('#panel').innerHTML=`<div class="ptop"><span>${v.icon}</span><h2>${v.t}</h2>${v.add?`<button class="add">${v.add}</button>`:''}</div>${v.rows()}${v.save?`<button class="save">${v.save}</button>`:''}`;}
+  document.querySelectorAll('.tabs button').forEach(b=>b.addEventListener('click',()=>{
+    document.querySelectorAll('.tabs button').forEach(x=>x.classList.remove('on'));b.classList.add('on');render(b.dataset.t);}));
+  render('photo');
+</script>
+</body>
+</html>
