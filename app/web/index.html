@@ -186,6 +186,86 @@
   .loc-st{font-weight:600}.loc-st.ok{color:var(--md-sys-color-primary)}.loc-st.warn{color:var(--warn)}
   .loc-lack{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-small);max-width:280px}
 
+  /* ===== Dashboard (bento) ===== */
+  .dash{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+  .dtile{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:22px;padding:18px;min-width:0}
+  .dhero{grid-column:span 12}.dkpis{grid-column:span 8;display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+  .ddonut{grid-column:span 4;grid-row:span 2}.dtrend{grid-column:span 8}
+  .dattn{grid-column:span 6}.dheat{grid-column:span 6}
+  .dside{grid-column:span 6}.dfeed{grid-column:span 6}.dacts{grid-column:span 12}
+  @media(max-width:1000px){.dkpis,.ddonut,.dtrend,.dattn,.dheat,.dside,.dfeed{grid-column:span 12}.dkpis{grid-template-columns:repeat(2,1fr)}}
+  .dtile .th{font:var(--md-sys-typescale-title-small);font-weight:700;margin:0 0 14px;display:flex;align-items:center;gap:9px}
+  .dtile .th .grow{margin-left:auto}.dtile .th .lk{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-primary);cursor:pointer}
+  /* hero */
+  .dhero{position:relative;overflow:hidden;border:none;display:flex;align-items:center;gap:20px;min-height:128px;padding:26px 28px}
+  .dhero .sky,.dhero .stars{position:absolute;inset:0;z-index:0}
+  .dhero .orb{position:absolute;border-radius:50%;width:120px;height:120px;right:-18px;top:-30px;z-index:0;opacity:.9}
+  .dhero .star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff}
+  .dhero .htxt{position:relative;z-index:2}
+  .dhero h1{font:var(--md-sys-typescale-headline-medium);font-weight:800;margin:0;letter-spacing:-.5px}
+  .dhero .date{margin:4px 0 0;font:var(--md-sys-typescale-body-medium);opacity:.9}
+  .dhero .hstat{position:relative;z-index:2;margin-left:auto}
+  .dhero .hchip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.28);border:1px solid rgba(255,255,255,.42);backdrop-filter:blur(6px);padding:9px 15px;border-radius:20px;font:var(--md-sys-typescale-label-large);white-space:nowrap}
+  /* kpi */
+  .dkpi{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:20px;padding:16px}
+  .dkpi .top{display:flex;align-items:center;gap:9px;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-medium)}
+  .dkpi .ic{width:30px;height:30px;border-radius:10px;background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container);display:grid;place-items:center;font-size:17px}
+  .dkpi .n{font:var(--md-sys-typescale-display-small);font-weight:800;letter-spacing:-1px;margin-top:8px}
+  .dkpi .d{font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant);margin-top:2px}
+  .dkpi .d .up{color:var(--md-sys-color-primary);font-weight:700}
+  /* donut — proporsional dgn kartu (selalu bulat) */
+  .donutwrap{display:grid;place-items:center;padding:4px 0}
+  .donut{width:min(180px,64%);aspect-ratio:1;border-radius:50%;display:grid;place-items:center}
+  .donut .in{width:68%;aspect-ratio:1;border-radius:50%;background:var(--md-sys-color-surface);display:grid;place-items:center;text-align:center}
+  .donut .p{font:var(--md-sys-typescale-headline-medium);font-weight:800;letter-spacing:-1px}
+  .donut .c{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
+  .ddonut .lg{display:flex;justify-content:center;gap:18px;margin-top:12px;font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
+  .ddonut .lg .dot{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:middle}
+  /* sparkline */
+  .spark{width:100%;height:96px;display:block}
+  /* heatmap */
+  .heat{display:grid;grid-template-columns:repeat(14,1fr);gap:5px}
+  .heat .cell{aspect-ratio:1;border-radius:5px;cursor:pointer;transition:transform .1s}
+  .heat .cell:hover{transform:scale(1.18)}
+  .hs0,.heat .cell.s0{background:var(--md-sys-color-surface-container-highest)}
+  .hs1,.heat .cell.s1{background:color-mix(in srgb,var(--md-sys-color-primary) 30%,var(--md-sys-color-surface-container-highest))}
+  .hs2,.heat .cell.s2{background:color-mix(in srgb,var(--md-sys-color-primary) 55%,var(--md-sys-color-surface-container-highest))}
+  .hs3,.heat .cell.s3{background:color-mix(in srgb,var(--md-sys-color-primary) 78%,var(--md-sys-color-surface-container-highest))}
+  .hs4,.heat .cell.s4{background:var(--md-sys-color-primary)}
+  .hscale{display:flex;align-items:center;justify-content:flex-end;gap:6px;margin-top:10px;font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant)}
+  .hscale i{width:13px;height:13px;border-radius:4px;display:inline-block}
+  /* attention rows */
+  .drow{display:flex;align-items:center;gap:11px;padding:11px 6px;border-radius:12px;cursor:pointer}
+  .drow:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 5%,transparent)}
+  .drow+.drow{border-top:1px solid var(--md-sys-color-outline-variant)}
+  .drow .code{font-family:ui-monospace,Consolas,monospace;color:var(--md-sys-color-primary);font-weight:700;font-size:12.5px;min-width:98px}
+  .drow .nm{flex:1;min-width:0}.drow .nm .l{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-small)}
+  .drow .badge{font:var(--md-sys-typescale-label-small);font-weight:700;padding:3px 10px;border-radius:20px;background:var(--warn-bg);color:var(--warn)}
+  /* leaderboard */
+  .ld{display:flex;align-items:center;gap:12px;padding:10px 4px}.ld+.ld{border-top:1px solid var(--md-sys-color-outline-variant)}
+  .ld .ava{width:34px;height:34px;border-radius:12px;background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);display:grid;place-items:center;font-weight:700}
+  .ld .meta{flex:1}.ld .meta .n2{font-weight:600;font:var(--md-sys-typescale-body-medium)}.ld .meta .sub{font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant)}
+  .ld .track{width:110px;height:8px;border-radius:5px;background:var(--md-sys-color-surface-container-highest);overflow:hidden}.ld .track>i{display:block;height:100%;background:var(--md-sys-color-primary)}
+  /* streak */
+  .streak{text-align:center;padding:8px 0}.streak .fire{font-size:30px}
+  .streak .big{font:var(--md-sys-typescale-display-medium);font-weight:800;letter-spacing:-2px;margin:0 6px}
+  .streak .week{display:flex;justify-content:center;gap:7px;margin-top:14px}
+  .streak .week .d{width:28px;height:28px;border-radius:9px;background:var(--md-sys-color-surface-container-highest);display:grid;place-items:center;font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant)}
+  .streak .week .d.on{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);font-weight:700}
+  /* feed */
+  .dfeed .feed .it{display:flex;gap:11px;padding:10px 0;font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant)}
+  .dfeed .feed .it+.it{border-top:1px solid var(--md-sys-color-outline-variant)}
+  .dfeed .feed b{color:var(--md-sys-color-on-surface)}
+  .dfeed .feed .dot{width:9px;height:9px;border-radius:50%;background:var(--md-sys-color-primary);margin-top:4px;flex:0 0 auto}
+  /* actions */
+  .dacts .acts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:1000px){.dacts .acts{grid-template-columns:repeat(2,1fr)}}
+  .dact{border:1px solid var(--md-sys-color-outline-variant);border-radius:18px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:10px;background:var(--md-sys-color-surface);transition:transform .12s,border-color .12s}
+  .dact:hover{transform:translateY(-2px);border-color:var(--md-sys-color-primary)}
+  .dact .ic{width:40px;height:40px;border-radius:13px;background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container);display:grid;place-items:center;font-size:21px}
+  .dact.pri .ic{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary)}
+  .dact .t{font:var(--md-sys-typescale-label-large);font-weight:600}
+
   .tip{position:fixed;z-index:9999;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);font:var(--md-sys-typescale-body-small);padding:5px 9px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .12s;white-space:nowrap;transform:translateX(-50%)}
   .tip.show{opacity:1}
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);padding:12px 18px;border-radius:12px;z-index:9999;opacity:0;transition:opacity .2s;box-shadow:var(--md-sys-elevation-level3)}
@@ -222,7 +302,8 @@
       <md-icon-button id="railBtn" data-tip="Ciutkan menu"><span>menu</span></md-icon-button>
       <span class="name">BAA Generator</span>
     </div>
-    <a class="navitem active" data-view="entry" data-tip="Entry BAA"><span class="mi">edit_document</span><span class="lbl">Entry BAA</span></a>
+    <a class="navitem active" data-view="dashboard" data-tip="Dashboard"><span class="mi">dashboard</span><span class="lbl">Dashboard</span></a>
+    <a class="navitem" data-view="entry" data-tip="Entry BAA"><span class="mi">edit_document</span><span class="lbl">Entry BAA</span></a>
     <a class="navitem" data-view="locations" data-tip="Log Lokasi"><span class="mi">table_rows</span><span class="lbl">Log Lokasi</span><span class="pill" id="loc-count"></span></a>
     <a class="navitem admin-only" data-view="templates" data-tip="Template"><span class="mi">description</span><span class="lbl">Template</span></a>
     <a class="navitem admin-only" data-view="users" data-tip="Users"><span class="mi">group</span><span class="lbl">Users</span></a>
@@ -244,10 +325,10 @@
 
   <main class="canvas">
     <header class="topbar">
-      <span class="page-title" id="pageTitle">Entry BAA</span>
+      <span class="page-title" id="pageTitle">Dashboard</span>
       <span class="code-chip hidden" id="entryCode"><span class="mi">tag</span><span></span></span>
       <span class="grow"></span>
-      <span class="rowflex" id="entryTools">
+      <span class="rowflex hidden" id="entryTools">
         <div class="md-select" id="picker"></div>
         <md-icon-button id="entry-new" variant="tonal" data-tip="Lokasi baru"><span>add</span></md-icon-button>
         <md-icon-button id="entry-del" data-tip="Hapus entry" class="hidden"><span>delete</span></md-icon-button>
@@ -255,7 +336,52 @@
     </header>
 
     <div class="canvas-body">
-      <section id="v-entry">
+      <section id="v-dashboard">
+        <div class="dash">
+          <div class="dtile dhero" id="dHero">
+            <div class="sky" id="dSky"></div><div class="stars" id="dStars"></div><div class="orb" id="dOrb"></div>
+            <div class="htxt"><h1 id="dHello">Selamat datang</h1><p class="date" id="dDate"></p></div>
+            <div class="hstat"><span class="hchip" id="dChip"><span class="mi">bolt</span> <span id="dChipTxt"></span></span></div>
+          </div>
+          <div class="dkpis" id="dKpis"></div>
+          <div class="dtile ddonut">
+            <div class="th"><span class="mi">donut_small</span> Progress Aktivasi</div>
+            <div class="donutwrap"><div class="donut" id="dDonut"><div class="in"><div><div class="p" id="dPct">0%</div><div class="c">selesai</div></div></div></div></div>
+            <div class="lg"><span><span class="dot" style="background:var(--md-sys-color-primary)"></span>Selesai <b id="dLgDone">0</b></span><span><span class="dot" style="background:var(--md-sys-color-surface-container-highest)"></span>Draft <b id="dLgDraft">0</b></span></div>
+          </div>
+          <div class="dtile dtrend">
+            <div class="th"><span class="mi">trending_up</span> Lokasi selesai · 14 hari <span class="grow"></span><span class="muted" id="dTrendSum" style="font:var(--md-sys-typescale-label-medium)"></span></div>
+            <svg class="spark" id="dSpark" viewBox="0 0 560 96" preserveAspectRatio="none"></svg>
+          </div>
+          <div class="dtile dattn">
+            <div class="th"><span class="mi">warning</span> Butuh Perhatian <span class="grow"></span><span class="lk" id="dAttnMore">Log Lokasi ›</span></div>
+            <div id="dAttn"></div>
+          </div>
+          <div class="dtile dheat">
+            <div class="th"><span class="mi">calendar_month</span> Ritme aktivitas · 8 minggu</div>
+            <div class="heat" id="dHeat"></div>
+            <div class="hscale">jarang <i class="s0"></i><i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i> sering</div>
+          </div>
+          <div class="dtile dside" id="dLeadTile">
+            <div class="th"><span class="mi">military_tech</span> Kinerja Teknisi</div>
+            <div id="dLead"></div>
+          </div>
+          <div class="dtile dside hidden" id="dStreakTile">
+            <div class="th"><span class="mi">local_fire_department</span> Konsistensi Kamu</div>
+            <div class="streak"><span class="fire">🔥</span> <span class="big" id="dStreakN">0</span> <span class="muted">hari beruntun</span><div class="week" id="dWeek"></div></div>
+          </div>
+          <div class="dtile dfeed">
+            <div class="th"><span class="mi">history</span> Aktivitas Terbaru</div>
+            <div class="feed" id="dFeed"></div>
+          </div>
+          <div class="dtile dacts">
+            <div class="th"><span class="mi">bolt</span> Aksi Cepat</div>
+            <div class="acts" id="dActs"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="v-entry" class="hidden">
         <div id="entry-empty" class="card muted">Pilih lokasi di kanan atas, atau buat lokasi baru untuk mulai.</div>
         <div id="entry-form" class="entry-grid hidden">
           <div class="entry-main">
@@ -570,14 +696,14 @@ async function showApp(){$('#login').classList.add('hidden');$('#app').classList
   await S.settingsReady;
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
   $('#app').classList.toggle('is-operator',S.user.role!=='admin');
-  refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
+  refreshPicker();loadLocations();loadDashboard();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
   if(S.user.must_change)setTimeout(()=>openPw(true),400);}
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
   $('#setToggle').classList.remove('active');$('#navSettings').classList.remove('open');  /* tutup accordion Pengaturan */
-  const v=n.dataset.view;['entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
+  const v=n.dataset.view;['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
   $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');
-  if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
+  if(v==='dashboard')loadDashboard();if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
   revealCards($('#v-'+v));}));
 
 /* Sub-menu Pengaturan (accordion) */
@@ -592,13 +718,69 @@ function showSetSub(key){curSetSub=key;const cfg=SET_SUBS[key];
 function openSettings(sub){
   $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));
   $('#setToggle').classList.add('active');$('#navSettings').classList.add('open');
-  ['entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='settings'));
+  ['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='settings'));
   $('#entryTools').classList.add('hidden');loadSettingsPage();showSetSub(sub||curSetSub);}
 $('#setToggle').addEventListener('click',()=>{
   const wasOpen=$('#navSettings').classList.contains('open')&&$('#setToggle').classList.contains('active');
   if(wasOpen){$('#navSettings').classList.remove('open');}   /* klik lagi -> lipat, tetap di halaman */
   else openSettings(curSetSub);});
 $$('.subnav').forEach(s=>s.addEventListener('click',()=>openSettings(s.dataset.sub)));
+function navTo(v){const n=document.querySelector('.navitem[data-view="'+v+'"]');if(n)n.click();}
+
+/* ===== DASHBOARD ===== */
+function greetWord(){const h=new Date().getHours();return h<11?'Selamat pagi':h<15?'Selamat siang':h<18?'Selamat sore':'Selamat malam';}
+function paintDashSky(){
+  const h=new Date().getHours();let sky,orb,ink='#0d1f1e',stars=false;
+  if(h<11){sky='linear-gradient(120deg,#ffe6c4,#ffd0b0 32%,#9fd8cf)';orb='radial-gradient(circle,#fff3d6,#ffd27a)';}
+  else if(h<15){sky='linear-gradient(120deg,#cdeeee,#a9dced 55%,#7fc7e6)';orb='radial-gradient(circle,#fff,#ffe9a8)';}
+  else if(h<18){sky='linear-gradient(120deg,#ffd9a8,#f4a98c 55%,#c77e86)';orb='radial-gradient(circle,#fff0d0,#ff9d5c)';}
+  else{sky='linear-gradient(120deg,#0b2733,#0f3a3a 60%,#123f3e)';orb='radial-gradient(circle,#eaf6ff,#b9d6e6)';ink='#eafaf9';stars=true;}
+  $('#dSky').style.background=sky;$('#dOrb').style.background=orb;$('#dHero').style.color=ink;$('#dChip').style.color=ink;
+  $('#dStars').innerHTML=stars?Array.from({length:24},()=>`<span class="star" style="left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:${(.3+Math.random()*.6).toFixed(2)}"></span>`).join(''):'';
+  const d=new Date(),days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],mo=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  $('#dDate').textContent=`${days[d.getDay()]}, ${d.getDate()} ${mo[d.getMonth()]} ${d.getFullYear()}`;
+}
+function dSparkline(vals){const W=560,H=96,pad=6,max=Math.max(...vals,1),n=vals.length||1;
+  const x=i=>pad+i*(W-2*pad)/(n-1||1),y=v=>H-pad-(v/max)*(H-2*pad-8);
+  const pts=vals.map((v,i)=>[x(i),y(v)]);
+  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+  const area=line+` L ${x(n-1).toFixed(1)} ${H-pad} L ${x(0).toFixed(1)} ${H-pad} Z`;
+  const dots=pts.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.2" fill="var(--md-sys-color-primary)"><title>${vals[i]} lokasi · hari ke-${i+1}</title></circle>`).join('');
+  return `<defs><linearGradient id="dfill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--md-sys-color-primary)" stop-opacity=".26"/><stop offset="1" stop-color="var(--md-sys-color-primary)" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#dfill)"/><path d="${line}" fill="none" stroke="var(--md-sys-color-primary)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;
+}
+function dHeatLevel(v,max){if(v<=0)return 0;const q=v/max;return q>.75?4:q>.5?3:q>.25?2:1;}
+function actionLabel(f){const m={create:'membuat lokasi',update:'memperbarui',delete:'menghapus',upload_photos:'mengunggah foto',save_inventory:'menyimpan inventory',login:'login',set_serial:'set SN',reassign_photo:'memindah foto'};
+  const a=m[f.action]||f.action;const ref=f.detail||f.entity_id||'';return a+(ref?' '+esc(ref):'');}
+function timeAgo(iso){try{const s=(Date.now()-new Date(iso))/1000;if(s<60)return 'baru saja';if(s<3600)return Math.floor(s/60)+' mnt lalu';if(s<86400)return Math.floor(s/3600)+' jam lalu';return Math.floor(s/86400)+' hari lalu';}catch(e){return '';}}
+async function loadDashboard(){
+  let s;try{s=await api('/api/stats');}catch(e){return;}
+  S.stats=s;paintDashSky();
+  $('#dHello').textContent=`${greetWord()}, ${esc(s.name)}`;
+  const t=s.totals;
+  $('#dChipTxt').textContent=t.draft?`${t.draft} lokasi menunggu diselesaikan`:'Semua lokasi selesai 🎉';
+  const isA=s.role==='admin';
+  const kpis=isA
+    ?[['table_rows','Total Lokasi',t.locations,'semua lokasi'],['task_alt','Selesai',t.done,s.pct+'% dari total'],['group','User Aktif',t.users_active,''],['photo_camera','Total Foto',t.photos,'']]
+    :[['table_rows','Lokasi Saya',t.locations,'milik kamu'],['task_alt','Selesai',t.done,s.pct+'%'],['draft','Draft',t.draft,'perlu dilanjut'],['photo_camera','Foto Saya',t.photos,'']];
+  $('#dKpis').innerHTML=kpis.map(k=>`<div class="dkpi"><div class="top"><span class="ic"><span class="mi">${k[0]}</span></span>${k[1]}</div><div class="n">${k[2]}</div><div class="d">${k[3]?`<span class="up">${esc(k[3])}</span>`:'&nbsp;'}</div></div>`).join('');
+  $('#dDonut').style.background=`conic-gradient(var(--md-sys-color-primary) 0 ${s.pct}%,var(--md-sys-color-surface-container-highest) ${s.pct}% 100%)`;
+  $('#dPct').textContent=s.pct+'%';$('#dLgDone').textContent=t.done;$('#dLgDraft').textContent=t.draft;
+  $('#dSpark').innerHTML=dSparkline(s.trend);$('#dTrendSum').textContent='+'+s.trend.reduce((a,b)=>a+b,0)+' total';
+  $('#dAttn').innerHTML=s.attention.length?s.attention.map(a=>`<div class="drow" onclick="openFromLog(${a.id})"><span class="code">${esc(a.code)}</span><span class="nm"><b>${esc(a.data.nama_lokasi||a.name||'(tanpa nama)')}</b><div class="l">${locLack(a)}</div></span><span class="badge">draft</span></div>`).join(''):'<p class="muted" style="padding:8px 4px">Tidak ada yang tertunda 🎉</p>';
+  const hmax=Math.max(...s.heat,1);$('#dHeat').innerHTML=s.heat.map(v=>`<div class="cell s${dHeatLevel(v,hmax)}" title="${v} aktivitas"></div>`).join('');
+  $('#dLeadTile').classList.toggle('hidden',!isA);$('#dStreakTile').classList.toggle('hidden',isA);
+  if(isA){const mx=Math.max(1,...s.leaderboard.map(l=>l.total));
+    $('#dLead').innerHTML=s.leaderboard.length?s.leaderboard.map(l=>`<div class="ld"><span class="ava">${esc((l.name[0]||'?').toUpperCase())}</span><div class="meta"><div class="n2">${esc(l.name)}</div><div class="sub">${l.done}/${l.total} selesai</div></div><div class="track"><i style="width:${Math.round(l.total/mx*100)}%"></i></div></div>`).join(''):'<p class="muted" style="padding:8px 4px">Belum ada data.</p>';
+  }else{$('#dStreakN').textContent=s.streak||0;
+    $('#dWeek').innerHTML=['S','S','R','K','J','S','M'].map((x,i)=>`<div class="d ${s.week&&s.week[i]?'on':''}">${x}</div>`).join('');}
+  $('#dFeed').innerHTML=s.feed.length?s.feed.map(f=>`<div class="it"><span class="dot"></span><div><b>${esc(f.username||'—')}</b> ${actionLabel(f)}<div style="opacity:.75">${timeAgo(f.created_at)}</div></div></div>`).join(''):'<p class="muted" style="padding:8px 4px">Belum ada aktivitas.</p>';
+  const acts=isA
+    ?[['add','Lokasi baru',1,()=>{gotoEntry();$('#entry-new').click();}],['group','Kelola User',0,()=>navTo('users')],['description','Template',0,()=>navTo('templates')],['backup','Backup',0,()=>openSettings('backup')]]
+    :[['add','Lokasi baru',1,()=>{gotoEntry();$('#entry-new').click();}],['table_rows','Log Lokasi',0,()=>navTo('locations')]];
+  const wrap=$('#dActs');wrap.innerHTML=acts.map(a=>`<div class="dact ${a[2]?'pri':''}"><span class="ic"><span class="mi">${a[0]}</span></span><span class="t">${a[1]}</span></div>`).join('');
+  [...wrap.children].forEach((el,i)=>el.addEventListener('click',acts[i][3]));
+  $('#dAttnMore').onclick=()=>navTo('locations');
+}
 
 function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats;} /* semua kategori wajib */
 
@@ -895,7 +1077,7 @@ window.locMenu=(btn,l)=>{const items=[
   {icon:'picture_as_pdf',label:'Export PDF',fn:()=>location.href='/api/export/pdf?scope=one&loc_id='+l.id}];
   if(l.cd)items.push({icon:'delete',label:'Hapus',fn:()=>confirmDelete(l.id,l.code,false)});openMenu(btn,items);};
 function gotoEntry(){$$('.navitem[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view==='entry'));
-  ['entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='entry'));
+  ['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='entry'));
   $('#pageTitle').textContent='Entry BAA';$('#entryTools').classList.remove('hidden');}
 
 /* DELETE */
