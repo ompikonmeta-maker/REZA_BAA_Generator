@@ -24,6 +24,10 @@ class AppTitle(BaseModel):
     title: str
 
 
+class InvItems(BaseModel):
+    items: list[str]
+
+
 @router.get("")
 def get_settings(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
     return {
@@ -61,6 +65,16 @@ def update_photo_categories(body: PhotoCategories, conn: sqlite3.Connection = De
 @router.put("/app-title")
 def update_app_title(body: AppTitle, conn: sqlite3.Connection = Depends(get_db),
                      user=Depends(require_admin)):
-    db.set_setting(conn, "app_title", body.title.strip() or "REZA BAA Generator")
+    db.set_setting(conn, "app_title", body.title.strip() or "BAA Generator")
     conn.commit()
     return {"ok": True}
+
+
+@router.put("/default-inventory-items")
+def update_default_inventory(body: InvItems, conn: sqlite3.Connection = Depends(get_db),
+                             user=Depends(require_admin)):
+    items = [x.strip() for x in body.items if x.strip()]
+    db.set_setting(conn, "default_inventory_items", items)
+    conn.commit()
+    audit(conn, user, "update", "settings", "default_inventory_items")
+    return {"ok": True, "items": items}

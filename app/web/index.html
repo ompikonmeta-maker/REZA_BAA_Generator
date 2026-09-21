@@ -152,6 +152,16 @@
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);padding:12px 18px;border-radius:12px;z-index:9999;opacity:0;transition:opacity .2s;box-shadow:var(--md-sys-elevation-level3)}
   .toast.show{opacity:1}
   .rowflex{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+  /* Pengaturan editor rows */
+  .er{display:grid;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--md-sys-color-outline-variant)}
+  .er.lf{grid-template-columns:1fr 1.4fr 110px 90px 40px}
+  .er.pc{grid-template-columns:1fr 1.4fr 2fr 76px 84px 40px}
+  .er.di{grid-template-columns:1fr 40px}
+  .er input,.er select{height:42px;border:1px solid var(--md-sys-color-outline-variant);border-radius:10px;background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);padding:0 10px;font:var(--md-sys-typescale-body-medium);width:100%}
+  .er input:focus,.er select:focus{outline:2px solid var(--md-sys-color-primary);outline-offset:-1px;border-color:transparent}
+  .er .ck{display:flex;align-items:center;gap:6px;font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);white-space:nowrap}
+  .er .ck input{width:18px;height:18px;accent-color:var(--md-sys-color-primary)}
+  .er .head{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
 </style>
 </head>
 <body>
@@ -177,6 +187,7 @@
     <a class="navitem" data-view="locations" data-tip="Log Lokasi"><span class="mi">table_rows</span><span class="lbl">Log Lokasi</span><span class="pill" id="loc-count"></span></a>
     <a class="navitem admin-only" data-view="templates" data-tip="Template"><span class="mi">description</span><span class="lbl">Template</span></a>
     <a class="navitem admin-only" data-view="users" data-tip="Users"><span class="mi">group</span><span class="lbl">Users</span></a>
+    <a class="navitem admin-only" data-view="settings" data-tip="Pengaturan"><span class="mi">settings</span><span class="lbl">Pengaturan</span></a>
     <div class="nav-foot">
       <md-icon-button id="themeBtn" data-tip="Ganti tema"><span>dark_mode</span></md-icon-button>
       <md-icon-button id="logoutBtn" data-tip="Logout"><span>logout</span></md-icon-button>
@@ -306,6 +317,34 @@
       <section id="v-users" class="hidden">
         <div class="card"><table><thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Aktif</th></tr></thead><tbody id="usr-table"></tbody></table></div>
       </section>
+
+      <section id="v-settings" class="hidden">
+        <div class="card">
+          <div class="sec"><span class="mi acc">badge</span><h3>Judul Aplikasi</h3></div>
+          <div class="rowflex"><md-text-field id="set-title" variant="outlined" label="Judul" style="min-width:280px"></md-text-field>
+            <md-button id="set-title-save" variant="filled">Simpan</md-button></div>
+        </div>
+        <div class="card">
+          <div class="sec"><span class="mi acc">list_alt</span><h3>Field Data Lokasi</h3><span class="grow"></span>
+            <md-button id="lf-add" variant="tonal" icon="add">Field</md-button></div>
+          <div class="er lf head"><div>Key</div><div>Label</div><div>Tipe</div><div>Wajib</div><div></div></div>
+          <div id="lf-list"></div>
+          <div style="margin-top:12px"><md-button id="lf-save" variant="filled" icon="save">Simpan field</md-button></div>
+        </div>
+        <div class="card">
+          <div class="sec"><span class="mi acc">photo_library</span><h3>Kategori Foto &amp; Kata Kunci</h3><span class="grow"></span>
+            <md-button id="pc-add" variant="tonal" icon="add">Kategori</md-button></div>
+          <div class="er pc head"><div>Key</div><div>Label</div><div>Kata kunci (pisah koma)</div><div>OCR</div><div>Wajib</div><div></div></div>
+          <div id="pc-list"></div>
+          <div style="margin-top:12px"><md-button id="pc-save" variant="filled" icon="save">Simpan kategori</md-button></div>
+        </div>
+        <div class="card">
+          <div class="sec"><span class="mi acc">inventory_2</span><h3>Default Item Inventory (lokasi baru)</h3><span class="grow"></span>
+            <md-button id="di-add" variant="tonal" icon="add">Item</md-button></div>
+          <div id="di-list"></div>
+          <div style="margin-top:12px"><md-button id="di-save" variant="filled" icon="save">Simpan default</md-button></div>
+        </div>
+      </section>
     </div>
   </main>
 </div>
@@ -384,14 +423,14 @@ $('#themeBtn').addEventListener('click',()=>{const c=MD3.getTheme();MD3.setTheme
 $('#railBtn').addEventListener('click',()=>$('#app').classList.toggle('rail'));
 
 async function showApp(){$('#login').classList.add('hidden');$('#app').classList.remove('hidden');
-  const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;S.invItems=s.default_inventory_items||[];
+  const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;S.invItems=s.default_inventory_items||[];S.appTitle=s.app_title||'BAA Generator';
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
   refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();}
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
-  const v=n.dataset.view;['entry','locations','templates','users'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
+  const v=n.dataset.view;['entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
   $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');
-  if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
+  if(v==='locations')loadLocations();if(v==='templates')loadTemplates();if(v==='settings')loadSettingsPage();
   revealCards($('#v-'+v));}));
 
 function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats;} /* semua kategori wajib */
@@ -523,7 +562,7 @@ window.locMenu=(btn,l)=>{const items=[
   {icon:'picture_as_pdf',label:'Export PDF',fn:()=>location.href='/api/export/pdf?scope=one&loc_id='+l.id}];
   if(l.cd)items.push({icon:'delete',label:'Hapus',fn:()=>confirmDelete(l.id,l.code,false)});openMenu(btn,items);};
 function gotoEntry(){$$('.navitem[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view==='entry'));
-  ['entry','locations','templates','users'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='entry'));
+  ['entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='entry'));
   $('#pageTitle').textContent='Entry BAA';$('#entryTools').classList.remove('hidden');}
 
 /* DELETE */
@@ -572,6 +611,39 @@ $('#map-save')&&$('#map-save').addEventListener('click',async()=>{const cfg=stru
 $('#map-close')&&$('#map-close').addEventListener('click',()=>$('#mapping').classList.add('hidden'));
 
 async function loadUsers(){try{const rows=await api('/api/users');$('#usr-table').innerHTML=rows.map(u=>`<tr><td>${esc(u.username)}</td><td>${esc(u.full_name||'')}</td><td>${u.role}</td><td>${u.active?'ya':'tidak'}</td></tr>`).join('');}catch{}}
+
+/* ===== PENGATURAN ===== */
+function loadSettingsPage(){$('#set-title').setAttribute('value',S.appTitle||'');renderLF();renderPC();renderDI();}
+function delBtnCell(){return `<md-icon-button data-tip="Hapus" onclick="this.closest('.er').remove()"><span>close</span></md-icon-button>`;}
+function lfRow(f={}){return `<div class="er lf" data-lf>
+  <input data-k="key" placeholder="key" value="${esc(f.key)}"><input data-k="label" placeholder="Label" value="${esc(f.label)}">
+  <select data-k="type"><option value="text"${f.type!=='date'?' selected':''}>text</option><option value="date"${f.type==='date'?' selected':''}>date</option></select>
+  <label class="ck"><input type="checkbox" data-k="required" ${f.required?'checked':''}></label>${delBtnCell()}</div>`;}
+function renderLF(){$('#lf-list').innerHTML=(S.locFields||[]).map(lfRow).join('');bindTips();}
+$('#lf-add').addEventListener('click',()=>{$('#lf-list').insertAdjacentHTML('beforeend',lfRow());bindTips();});
+$('#lf-save').addEventListener('click',async()=>{const fields=$$('#lf-list .er').map(r=>{const g=k=>r.querySelector(`[data-k="${k}"]`);
+  return {key:(g('key').value||'').trim(),label:(g('label').value||'').trim(),type:g('type').value,required:g('required').checked};}).filter(f=>f.key&&f.label);
+  try{await api('/api/settings/location-fields',{method:'PUT',body:JSON.stringify({fields})});S.locFields=fields;toast('Field lokasi tersimpan');}catch(e){toast('Gagal: '+e.message);}});
+
+function pcRow(c={}){return `<div class="er pc" data-pc>
+  <input data-k="key" placeholder="key" value="${esc(c.key)}"><input data-k="label" placeholder="Label" value="${esc(c.label)}">
+  <input data-k="keywords" placeholder="kata kunci, dipisah koma" value="${esc((c.keywords||[]).join(', '))}">
+  <label class="ck"><input type="checkbox" data-k="ocr" ${c.ocr?'checked':''}></label>
+  <label class="ck"><input type="checkbox" data-k="required" ${c.required?'checked':''}></label>${delBtnCell()}</div>`;}
+function renderPC(){$('#pc-list').innerHTML=(S.cats||[]).map(pcRow).join('');bindTips();}
+$('#pc-add').addEventListener('click',()=>{$('#pc-list').insertAdjacentHTML('beforeend',pcRow());bindTips();});
+$('#pc-save').addEventListener('click',async()=>{const categories=$$('#pc-list .er').map(r=>{const g=k=>r.querySelector(`[data-k="${k}"]`);
+  return {key:(g('key').value||'').trim(),label:(g('label').value||'').trim(),ocr:g('ocr').checked,required:g('required').checked,
+    keywords:(g('keywords').value||'').split(',').map(s=>s.trim()).filter(Boolean)};}).filter(c=>c.key&&c.label);
+  try{await api('/api/settings/photo-categories',{method:'PUT',body:JSON.stringify({categories})});S.cats=categories;toast('Kategori foto tersimpan');}catch(e){toast('Gagal: '+e.message);}});
+
+function diRow(n=''){return `<div class="er di" data-di><input data-k="name" placeholder="Nama barang" value="${esc(n)}">${delBtnCell()}</div>`;}
+function renderDI(){$('#di-list').innerHTML=(S.invItems.length?S.invItems:['']).map(diRow).join('');bindTips();}
+$('#di-add').addEventListener('click',()=>{$('#di-list').insertAdjacentHTML('beforeend',diRow());bindTips();});
+$('#di-save').addEventListener('click',async()=>{const items=$$('#di-list .er input').map(i=>i.value.trim()).filter(Boolean);
+  try{await api('/api/settings/default-inventory-items',{method:'PUT',body:JSON.stringify({items})});S.invItems=items;toast('Default inventory tersimpan');}catch(e){toast('Gagal: '+e.message);}});
+$('#set-title-save').addEventListener('click',async()=>{const t=$('#set-title').value.trim();
+  try{await api('/api/settings/app-title',{method:'PUT',body:JSON.stringify({title:t})});S.appTitle=t;document.title=t;$('.nav-head .name').textContent=t;toast('Judul tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 function deepMerge(b,o){for(const k in(o||{})){if(o[k]&&typeof o[k]==='object'&&!Array.isArray(o[k]))b[k]=deepMerge(b[k]||{},o[k]);else b[k]=o[k];}return b;}
 window.addEventListener('DOMContentLoaded',boot);
 </script>
