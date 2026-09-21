@@ -284,6 +284,33 @@
   .er .ck{display:flex;align-items:center;gap:6px;font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);white-space:nowrap}
   .er .ck input{width:18px;height:18px;accent-color:var(--md-sys-color-primary)}
   .er .head{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
+
+  /* ==== Editor Pengaturan: kartu per-entri (tenang) ==== */
+  .ecard{background:var(--md-sys-color-surface-container-low);border-radius:16px;padding:14px 16px;margin-bottom:12px;transition:box-shadow .15s}
+  .ecard:hover{box-shadow:inset 0 0 0 1.5px var(--md-sys-color-outline-variant)}
+  .ecard .erow{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+  .ecard .keyf{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--md-sys-color-on-surface-variant);background:var(--md-sys-color-surface-container-high);border:none;border-radius:8px;padding:7px 9px;width:132px;outline:none}
+  .ecard .keyf:focus{box-shadow:0 0 0 2px var(--md-sys-color-primary)}
+  .ecard .labelf{flex:1;min-width:150px;border:none;background:transparent;font:var(--md-sys-typescale-title-small);font-weight:700;color:var(--md-sys-color-on-surface);outline:none;padding:5px 2px}
+  .ecard .labelf::placeholder{color:var(--md-sys-color-on-surface-variant);font-weight:600}
+  .ecard .labelf:focus{box-shadow:inset 0 -2px 0 var(--md-sys-color-primary)}
+  .ecard .efields{display:grid;gap:10px 14px;margin-top:12px}
+  .ecard .efields.f3{grid-template-columns:1.4fr 1fr 1fr}
+  @media(max-width:820px){.ecard .efields.f3{grid-template-columns:1fr}}
+  .ecard .field label{display:block;font:var(--md-sys-typescale-label-small);font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--md-sys-color-on-surface-variant);margin:0 0 5px 2px}
+  .ecard .field input{width:100%;border:none;background:var(--md-sys-color-surface);border-radius:11px;padding:11px 13px;font:var(--md-sys-typescale-body-medium);color:var(--md-sys-color-on-surface);outline:none;transition:box-shadow .15s}
+  .ecard .field input:focus{box-shadow:0 0 0 2px var(--md-sys-color-primary)}
+  .ecard-del{border:none;background:transparent;color:var(--md-sys-color-on-surface-variant);cursor:pointer;width:34px;height:34px;border-radius:50%;display:grid;place-items:center}
+  .ecard-del:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 8%,transparent);color:var(--warn)}
+  .ecard-del .mi{font-size:19px}
+  .tg{display:inline-flex;align-items:center;gap:7px;background:var(--md-sys-color-surface-container-high);border-radius:20px;padding:6px 12px 6px 10px;cursor:pointer;font:var(--md-sys-typescale-label-medium);font-weight:600;color:var(--md-sys-color-on-surface-variant);user-select:none;white-space:nowrap}
+  .tg .sw{width:34px;height:20px;border-radius:20px;background:var(--md-sys-color-outline);position:relative;transition:background .18s;flex:0 0 auto}
+  .tg .sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--md-sys-color-surface);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
+  .tg.on{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
+  .tg.on .sw{background:var(--md-sys-color-primary)}.tg.on .sw::after{transform:translateX(14px)}
+  .segt{display:inline-flex;background:var(--md-sys-color-surface-container-high);border-radius:12px;padding:3px}
+  .segt button{border:none;background:transparent;color:var(--md-sys-color-on-surface-variant);padding:7px 14px;border-radius:9px;cursor:pointer;font:var(--md-sys-typescale-label-medium);font-weight:600}
+  .segt button.on{background:var(--md-sys-color-surface);color:var(--md-sys-color-primary);box-shadow:var(--md-sys-elevation-level1)}
 </style>
 </head>
 <body>
@@ -534,7 +561,6 @@
         <div class="card setview hidden" id="set-lokasi">
           <div class="sec"><span class="mi acc">list_alt</span><h3>Field Data Lokasi</h3><span class="grow"></span>
             <md-button id="lf-add" variant="tonal" icon="add">Field</md-button></div>
-          <div class="er lf head"><div>Key</div><div>Label</div><div>Tipe</div><div>Wajib</div><div></div></div>
           <div id="lf-list"></div>
           <div style="margin-top:12px"><md-button id="lf-save" variant="filled" icon="save">Simpan field</md-button></div>
         </div>
@@ -542,14 +568,12 @@
           <div class="sec"><span class="mi acc">inventory_2</span><h3>Field Inventory</h3><span class="grow"></span>
             <md-button id="di-add" variant="tonal" icon="add">Item</md-button></div>
           <p class="muted" style="margin:0 0 12px">Item default untuk lokasi baru + opsi Merk/Type (dipakai combobox di tabel Inventory Entry BAA).</p>
-          <div class="er di head"><div>Nama barang</div><div>Opsi Merk/Type (pisah koma)</div><div></div></div>
           <div id="di-list"></div>
           <div style="margin-top:12px"><md-button id="di-save" variant="filled" icon="save">Simpan default</md-button></div>
         </div>
         <div class="card setview hidden" id="set-photo">
           <div class="sec"><span class="mi acc">photo_library</span><h3>Field Photo &amp; Capture</h3><span class="grow"></span>
             <md-button id="pc-add" variant="tonal" icon="add">Kategori</md-button></div>
-          <div class="er pc head"><div>Key</div><div>Label</div><div>Kata kunci (koma)</div><div>Prefix SN (koma)</div><div>Item Inventory</div><div>OCR</div><div>Wajib</div><div></div></div>
           <div id="pc-list"></div>
           <div style="margin-top:12px"><md-button id="pc-save" variant="filled" icon="save">Simpan kategori</md-button></div>
         </div>
@@ -1195,41 +1219,53 @@ $('#bk-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!
 
 /* ===== PENGATURAN ===== */
 function loadSettingsPage(){renderLF();renderPC();renderDI();}
-function delBtnCell(){return `<md-icon-button data-tip="Hapus" onclick="this.closest('.er').remove()"><span>close</span></md-icon-button>`;}
-function lfRow(f={}){return `<div class="er lf" data-lf>
-  <input data-k="key" placeholder="key" value="${esc(f.key)}"><input data-k="label" placeholder="Label" value="${esc(f.label)}">
-  <select data-k="type"><option value="text"${f.type!=='date'?' selected':''}>text</option><option value="date"${f.type==='date'?' selected':''}>date</option></select>
-  <label class="ck"><input type="checkbox" data-k="required" ${f.required?'checked':''}></label>${delBtnCell()}</div>`;}
+/* segmented (Teks/Tanggal) + toggle pill (OCR/Wajib) */
+document.addEventListener('click',e=>{const b=e.target.closest('.segt button');if(b){b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');}});
+document.addEventListener('change',e=>{const c=e.target;if(c.matches&&c.matches('.tg input[type="checkbox"]'))c.closest('.tg').classList.toggle('on',c.checked);});
+function delBtnCell(){return `<button type="button" class="ecard-del" data-tip="Hapus" onclick="this.closest('.ecard').remove()"><span class="mi">close</span></button>`;}
+function pill(k,label,on){return `<label class="tg ${on?'on':''}"><input type="checkbox" data-k="${k}" ${on?'checked':''} hidden><span class="sw"></span>${label}</label>`;}
+function lfRow(f={}){return `<div class="ecard lf" data-lf>
+  <div class="erow">
+    <input class="keyf" data-k="key" placeholder="key" value="${esc(f.key)}">
+    <input class="labelf" data-k="label" placeholder="Nama field" value="${esc(f.label)}">
+    <div class="segt" data-seg><button type="button" data-v="text" class="${f.type!=='date'?'on':''}">Teks</button><button type="button" data-v="date" class="${f.type==='date'?'on':''}">Tanggal</button></div>
+    ${pill('required','Wajib',f.required)}${delBtnCell()}
+  </div></div>`;}
 function renderLF(){$('#lf-list').innerHTML=(S.locFields||[]).map(lfRow).join('');bindTips();}
 $('#lf-add').addEventListener('click',()=>{$('#lf-list').insertAdjacentHTML('beforeend',lfRow());bindTips();});
-$('#lf-save').addEventListener('click',async()=>{const fields=$$('#lf-list .er').map(r=>{const g=k=>r.querySelector(`[data-k="${k}"]`);
-  return {key:(g('key').value||'').trim(),label:(g('label').value||'').trim(),type:g('type').value,required:g('required').checked};}).filter(f=>f.key&&f.label);
+$('#lf-save').addEventListener('click',async()=>{const fields=$$('#lf-list .ecard').map(r=>{const g=k=>r.querySelector(`[data-k="${k}"]`);
+  const seg=r.querySelector('.segt button.on');
+  return {key:(g('key').value||'').trim(),label:(g('label').value||'').trim(),type:seg?seg.dataset.v:'text',required:g('required').checked};}).filter(f=>f.key&&f.label);
   try{await api('/api/settings/location-fields',{method:'PUT',body:JSON.stringify({fields})});S.locFields=fields;toast('Field lokasi tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 
-function pcRow(c={}){return `<div class="er pc" data-pc>
-  <input data-k="key" placeholder="key" value="${esc(c.key)}"><input data-k="label" placeholder="Label" value="${esc(c.label)}">
-  <input data-k="keywords" placeholder="kata kunci" value="${esc((c.keywords||[]).join(', '))}">
-  <input data-k="prefixes" placeholder="mis. KIT, KITX" value="${esc((c.prefixes||[]).join(', '))}">
-  <input data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}">
-  <label class="ck"><input type="checkbox" data-k="ocr" ${c.ocr?'checked':''}></label>
-  <label class="ck"><input type="checkbox" data-k="required" ${c.required?'checked':''}></label>${delBtnCell()}</div>`;}
+function pcRow(c={}){return `<div class="ecard pc" data-pc>
+  <div class="erow">
+    <input class="keyf" data-k="key" placeholder="key" value="${esc(c.key)}">
+    <input class="labelf" data-k="label" placeholder="Nama kategori" value="${esc(c.label)}">
+    ${pill('ocr','OCR',c.ocr)}${pill('required','Wajib',c.required)}${delBtnCell()}
+  </div>
+  <div class="efields f3">
+    <div class="field"><label>Kata kunci (koma)</label><input data-k="keywords" placeholder="mis. plang, depan" value="${esc((c.keywords||[]).join(', '))}"></div>
+    <div class="field"><label>Prefix SN (koma)</label><input data-k="prefixes" placeholder="mis. KIT, KITX" value="${esc((c.prefixes||[]).join(', '))}"></div>
+    <div class="field"><label>Item Inventory</label><input data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}"></div>
+  </div></div>`;}
 function renderPC(){$('#pc-list').innerHTML=(S.cats||[]).map(pcRow).join('');bindTips();}
 $('#pc-add').addEventListener('click',()=>{$('#pc-list').insertAdjacentHTML('beforeend',pcRow());bindTips();});
-$('#pc-save').addEventListener('click',async()=>{const categories=$$('#pc-list .er').map(r=>{const g=k=>r.querySelector(`[data-k="${k}"]`);
+$('#pc-save').addEventListener('click',async()=>{const categories=$$('#pc-list .ecard').map(r=>{const g=k=>r.querySelector(`[data-k="${k}"]`);
   return {key:(g('key').value||'').trim(),label:(g('label').value||'').trim(),ocr:g('ocr').checked,required:g('required').checked,
     keywords:(g('keywords').value||'').split(',').map(s=>s.trim()).filter(Boolean),
     prefixes:(g('prefixes').value||'').split(',').map(s=>s.trim().toUpperCase()).filter(Boolean),
     sn_item:(g('sn_item').value||'').trim()};}).filter(c=>c.key&&c.label);
   try{await api('/api/settings/photo-categories',{method:'PUT',body:JSON.stringify({categories})});S.cats=categories;toast('Kategori foto tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 
-function diRow(n=''){return `<div class="er di" data-di>
-  <input data-k="name" placeholder="Nama barang" value="${esc(n)}">
-  <input data-k="merks" placeholder="mis. Std Actuated, Gen 3, HP" value="${esc((S.itemMerks[n]||[]).join(', '))}">${delBtnCell()}</div>`;}
+function diRow(n=''){return `<div class="ecard di" data-di>
+  <div class="erow"><input class="labelf" data-k="name" placeholder="Nama barang" value="${esc(n)}">${delBtnCell()}</div>
+  <div class="efields"><div class="field"><label>Opsi Merk/Type (pisah koma)</label><input data-k="merks" placeholder="mis. Std Actuated, Gen 3, HP" value="${esc((S.itemMerks[n]||[]).join(', '))}"></div></div></div>`;}
 function renderDI(){$('#di-list').innerHTML=(S.invItems.length?S.invItems:['']).map(diRow).join('');bindTips();}
 $('#di-add').addEventListener('click',()=>{$('#di-list').insertAdjacentHTML('beforeend',diRow());bindTips();});
 $('#di-save').addEventListener('click',async()=>{
   const items=[],merks={};
-  $$('#di-list .er.di').forEach(r=>{const name=(r.querySelector('[data-k="name"]').value||'').trim();if(!name)return;
+  $$('#di-list .ecard.di').forEach(r=>{const name=(r.querySelector('[data-k="name"]').value||'').trim();if(!name)return;
     items.push(name);
     const opts=(r.querySelector('[data-k="merks"]').value||'').split(',').map(s=>s.trim()).filter(Boolean);
     if(opts.length)merks[name]=opts;});
