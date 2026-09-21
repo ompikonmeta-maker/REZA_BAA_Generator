@@ -333,6 +333,7 @@
   .ecard .field label{display:block;font:var(--md-sys-typescale-label-small);font-weight:700;letter-spacing:.4px;text-transform:uppercase;color:var(--md-sys-color-on-surface-variant);margin:0 0 5px 2px}
   .ecard .field input{width:100%;border:none;background:var(--md-sys-color-surface);border-radius:11px;padding:11px 13px;font:var(--md-sys-typescale-body-medium);color:var(--md-sys-color-on-surface);outline:none;transition:box-shadow .15s}
   .ecard .field input:focus{box-shadow:0 0 0 2px var(--md-sys-color-primary)}
+  .ecard .field .fhint{font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant);opacity:.85;margin:6px 2px 0;text-transform:none;letter-spacing:normal}
   .ecard-del{border:none;background:transparent;color:var(--md-sys-color-on-surface-variant);cursor:pointer;width:34px;height:34px;border-radius:50%;display:grid;place-items:center}
   .ecard-del:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 8%,transparent);color:var(--warn)}
   .ecard-del .mi{font-size:19px}
@@ -1307,7 +1308,8 @@ $('#bk-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!
 function loadSettingsPage(){renderLF();renderPC();renderDI();}
 /* segmented (Teks/Tanggal) + toggle pill (OCR/Wajib) */
 document.addEventListener('click',e=>{const b=e.target.closest('.segt button');if(b){b.parentElement.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');}});
-document.addEventListener('change',e=>{const c=e.target;if(c.matches&&c.matches('.tg input[type="checkbox"]'))c.closest('.tg').classList.toggle('on',c.checked);});
+document.addEventListener('change',e=>{const c=e.target;if(c.matches&&c.matches('.tg input[type="checkbox"]')){c.closest('.tg').classList.toggle('on',c.checked);
+  if(c.dataset.k==='ocr'){const card=c.closest('.ecard.pc');const sf=card&&card.querySelector('.snitem-f');if(sf)sf.style.display=c.checked?'':'none';}}});
 function delBtnCell(){return `<button type="button" class="ecard-del" data-tip="Hapus" onclick="this.closest('.ecard').remove()"><span class="mi">close</span></button>`;}
 function pill(k,label,on){return `<label class="tg ${on?'on':''}"><input type="checkbox" data-k="${k}" ${on?'checked':''} hidden><span class="sw"></span>${label}</label>`;}
 function lfRow(f={}){return `<div class="ecard lf" data-lf>
@@ -1333,7 +1335,7 @@ function pcRow(c={}){return `<div class="ecard pc" data-pc>
   <div class="efields f3">
     <div class="field"><label>Kata kunci (koma)</label><input data-k="keywords" placeholder="mis. plang, depan" value="${esc((c.keywords||[]).join(', '))}"></div>
     <div class="field"><label>Prefix SN (koma)</label><input data-k="prefixes" placeholder="mis. KIT, KITX" value="${esc((c.prefixes||[]).join(', '))}"></div>
-    <div class="field"><label>Item Inventory</label><input data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}"></div>
+    <div class="field snitem-f"${c.ocr?'':' style="display:none"'}><label><span class="mi" style="text-transform:none;font-size:15px;vertical-align:-2px">link</span> Auto-isi SN ke item</label><input data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}"><div class="fhint">Serial hasil OCR otomatis mengisi kolom SN/Tagging item ini di Inventory.</div></div>
   </div></div>`;}
 function renderPC(){$('#pc-list').innerHTML=(S.cats||[]).map(pcRow).join('');bindTips();}
 $('#pc-add').addEventListener('click',()=>{$('#pc-list').insertAdjacentHTML('beforeend',pcRow());bindTips();});
