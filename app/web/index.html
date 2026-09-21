@@ -224,11 +224,12 @@
   /* ===== Dashboard (bento) ===== */
   .dash{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
   .dtile{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:22px;padding:18px;min-width:0}
-  .dhero{grid-column:span 12}.dkpis{grid-column:span 4;display:grid;grid-template-columns:repeat(2,1fr);gap:14px;align-content:start}
-  .dheat{grid-column:span 5}.ddonut{grid-column:span 3;grid-row:span 2}.dtrend{grid-column:span 9}
+  .dhero{grid-column:span 12}.dkpis{grid-column:span 4;display:grid;grid-template-columns:repeat(2,1fr);grid-template-rows:1fr 1fr;gap:14px}
+  .dheat{grid-column:span 5;display:flex;flex-direction:column}.ddonut{grid-column:span 3}.dtrend{grid-column:span 12}
   .dattn{grid-column:span 6}.dfeed{grid-column:span 6}
   .dside{grid-column:span 6}.dacts{grid-column:span 6}
-  @media(max-width:1000px){.dkpis,.ddonut,.dtrend,.dattn,.dheat,.dside,.dfeed,.dacts{grid-column:span 12}.ddonut{grid-row:auto}.dkpis{grid-template-columns:repeat(2,1fr)}}
+  @media(max-width:1000px){.dkpis,.ddonut,.dtrend,.dattn,.dheat,.dside,.dfeed,.dacts{grid-column:span 12}.dkpis{grid-template-columns:repeat(2,1fr)}}
+  .dkpi{display:flex;flex-direction:column;justify-content:center}
   .dtile .th{font:var(--md-sys-typescale-title-small);font-weight:700;margin:0 0 14px;display:flex;align-items:center;gap:9px}
   .dtile .th .grow{margin-left:auto}.dtile .th .lk{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-primary);cursor:pointer}
   /* hero */
@@ -261,6 +262,15 @@
   .ddonut .lg .dot{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:middle}
   /* sparkline */
   .spark{width:100%;height:96px;display:block}
+  /* bar chart 14 hari */
+  .bars{display:flex;align-items:flex-end;gap:6px;height:110px;padding-top:18px}
+  .bars .b{flex:1;min-height:3px;border-radius:6px 6px 0 0;position:relative;
+    background:linear-gradient(180deg,var(--md-sys-color-primary),color-mix(in srgb,var(--md-sys-color-primary) 55%,var(--md-sys-color-surface-container-highest)))}
+  .bars .b.zero{background:var(--md-sys-color-surface-container-highest)}
+  .bars .b.today{outline:2px solid var(--md-sys-color-primary);outline-offset:1px}
+  .bars .b .v{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font:var(--md-sys-typescale-label-small);font-weight:700;color:var(--md-sys-color-on-surface-variant)}
+  .barx{display:flex;gap:6px;margin-top:6px}.barx div{flex:1;text-align:center;font-size:9.5px;color:var(--md-sys-color-on-surface-variant)}
+  .bars-empty{width:100%;text-align:center;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-small);padding:34px 0}
   /* heatmap */
   .heat{display:grid;grid-template-columns:repeat(14,1fr);gap:5px}
   .heat .cell{aspect-ratio:1;border-radius:5px;cursor:pointer;transition:transform .1s}
@@ -275,15 +285,16 @@
   /* Heatmap kalender (terbaca) */
   .hinsight{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);margin:-6px 0 12px}
   .hinsight b{color:var(--md-sys-color-on-surface)}
-  .hcal{position:relative}
-  .hmonths{display:grid;grid-template-columns:24px repeat(8,1fr);gap:5px;margin-bottom:5px;font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant)}
-  .hbody{display:grid;grid-template-columns:24px 1fr}
-  .hdays{display:grid;grid-template-rows:repeat(7,1fr);gap:5px;font-size:9.5px;color:var(--md-sys-color-on-surface-variant);padding-right:4px}
+  .hcal{position:relative;flex:1;display:flex;flex-direction:column;justify-content:center}
+  .hmonths{display:grid;grid-template-columns:22px repeat(18,1fr);gap:4px;margin-bottom:5px;font-size:9.5px;color:var(--md-sys-color-on-surface-variant);overflow:hidden}
+  .hmonths span{white-space:nowrap}
+  .hbody{display:grid;grid-template-columns:22px minmax(0,1fr);gap:6px}
+  .hdays{display:grid;grid-template-rows:repeat(7,1fr);gap:4px;font-size:9px;color:var(--md-sys-color-on-surface-variant)}
   .hdays span{display:flex;align-items:center}
-  .hcols{display:grid;grid-template-columns:repeat(8,1fr);gap:5px}
-  .hcol{display:grid;grid-template-rows:repeat(7,1fr);gap:5px}
-  .hcell{aspect-ratio:1;border-radius:5px;background:var(--md-sys-color-surface-container-highest);transition:transform .1s}
-  .hcell:hover{transform:scale(1.2)}
+  .hcols{display:grid;grid-template-columns:repeat(18,1fr);gap:4px;min-width:0}
+  .hcol{display:grid;grid-template-rows:repeat(7,1fr);gap:4px}
+  .hcell{aspect-ratio:1;border-radius:3px;background:var(--md-sys-color-surface-container-highest);transition:transform .1s}
+  .hcell:hover{transform:scale(1.25)}
   .hcell.s1{background:color-mix(in srgb,var(--md-sys-color-primary) 32%,var(--md-sys-color-surface-container-highest))}
   .hcell.s2{background:color-mix(in srgb,var(--md-sys-color-primary) 58%,var(--md-sys-color-surface-container-highest))}
   .hcell.s3{background:color-mix(in srgb,var(--md-sys-color-primary) 80%,var(--md-sys-color-surface-container-highest))}
@@ -448,7 +459,7 @@
             <div class="hlegend"><span class="k"><i style="background:var(--md-sys-color-surface-container-highest)"></i>0</span><span class="k"><i class="hcell s1" style="aspect-ratio:auto"></i>1–2</span><span class="k"><i class="hcell s2" style="aspect-ratio:auto"></i>3–5</span><span class="k"><i class="hcell s4" style="aspect-ratio:auto"></i>6+</span></div>
           </div>
           <div class="dtile ddonut">
-            <div class="th"><span class="mi">donut_small</span> Progress Aktivasi</div>
+            <div class="th"><span class="mi">donut_small</span> Tingkat Penyelesaian</div>
             <div class="donutwrap">
               <svg class="gauge" viewBox="0 0 120 120" id="dGauge">
                 <defs>
@@ -460,14 +471,15 @@
                 <circle class="gtrack" cx="60" cy="60" r="50"/>
                 <circle class="gval" id="dArc" cx="60" cy="60" r="50"/>
                 <text class="gpct" id="dPct" x="60" y="57">0%</text>
-                <text class="gcap" x="60" y="74">selesai</text>
+                <text class="gcap" x="60" y="74">lokasi selesai</text>
               </svg>
             </div>
             <div class="lg"><span><span class="dot" style="background:var(--md-sys-color-primary)"></span>Selesai <b id="dLgDone">0</b></span><span><span class="dot" style="background:var(--md-sys-color-surface-container-highest)"></span>Draft <b id="dLgDraft">0</b></span></div>
           </div>
           <div class="dtile dtrend">
             <div class="th"><span class="mi">trending_up</span> Lokasi selesai · 14 hari <span class="grow"></span><span class="muted" id="dTrendSum" style="font:var(--md-sys-typescale-label-medium)"></span></div>
-            <svg class="spark" id="dSpark" viewBox="0 0 560 96" preserveAspectRatio="none"></svg>
+            <div class="bars" id="dBars"></div>
+            <div class="barx" id="dBarX"></div>
           </div>
           <div class="dtile dattn">
             <div class="th"><span class="mi">warning</span> Butuh Perhatian <span class="grow"></span><span class="lk" id="dAttnMore">Log Lokasi ›</span></div>
@@ -913,22 +925,27 @@ function paintDashSky(){
   const d=new Date(),days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],mo=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
   $('#dDate').textContent=`${days[d.getDay()]}, ${d.getDate()} ${mo[d.getMonth()]} ${d.getFullYear()}`;
 }
-function dSparkline(vals){const W=560,H=96,pad=6,max=Math.max(...vals,1),n=vals.length||1;
-  const x=i=>pad+i*(W-2*pad)/(n-1||1),y=v=>H-pad-(v/max)*(H-2*pad-8);
-  const pts=vals.map((v,i)=>[x(i),y(v)]);
-  const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
-  const area=line+` L ${x(n-1).toFixed(1)} ${H-pad} L ${x(0).toFixed(1)} ${H-pad} Z`;
-  const dots=pts.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.2" fill="var(--md-sys-color-primary)"><title>${vals[i]} lokasi · hari ke-${i+1}</title></circle>`).join('');
-  return `<defs><linearGradient id="dfill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--md-sys-color-primary)" stop-opacity=".26"/><stop offset="1" stop-color="var(--md-sys-color-primary)" stop-opacity="0"/></linearGradient></defs><path d="${area}" fill="url(#dfill)"/><path d="${line}" fill="none" stroke="var(--md-sys-color-primary)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;
+const MON3=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+function dBars(trend){trend=trend||[];const n=trend.length,mx=Math.max(...trend,1),sum=trend.reduce((a,b)=>a+b,0);
+  const wrap=$('#dBars');const today=new Date();today.setHours(0,0,0,0);
+  if(sum===0){wrap.innerHTML='<div class="bars-empty">Belum ada lokasi selesai 14 hari terakhir</div>';$('#dBarX').innerHTML='';$('#dTrendSum').textContent='';return;}
+  const peak=trend.indexOf(mx);
+  wrap.innerHTML=trend.map((v,i)=>{const dt=new Date(today);dt.setDate(today.getDate()-(n-1-i));
+    const cls=(v<=0?' zero':'')+(i===n-1?' today':'');
+    return `<div class="b${cls}" style="height:${v>0?Math.round(v/mx*100):3}%" title="${dt.getDate()} ${MON3[dt.getMonth()]} · ${v} selesai">${v>0?`<span class="v">${v}</span>`:''}</div>`;}).join('');
+  $('#dBarX').innerHTML=trend.map((v,i)=>{const dt=new Date(today);dt.setDate(today.getDate()-(n-1-i));
+    return `<div>${(i===0||i===n-1)?dt.getDate()+' '+MON3[dt.getMonth()]:''}</div>`;}).join('');
+  const pd=new Date(today);pd.setDate(today.getDate()-(n-1-peak));
+  $('#dTrendSum').textContent=`+${sum} · puncak ${pd.getDate()} ${MON3[pd.getMonth()]} (${mx})`;
 }
 function heatLvl(v){return v<=0?0:v<=2?1:v<=5?2:v<=8?3:4;}
 function buildDashHeat(heat){heat=heat||[];
   const DAYS=['Min','Sen','Sel','Rab','Kam','Jum','Sab'],MO=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
-  const today=new Date();today.setHours(0,0,0,0);const wd=(today.getDay()+6)%7;
-  const startMon=new Date(today);startMon.setDate(today.getDate()-wd-49);
+  const today=new Date();today.setHours(0,0,0,0);const wd=(today.getDay()+6)%7;const WEEKS=18;
+  const startMon=new Date(today);startMon.setDate(today.getDate()-wd-(WEEKS-1)*7);
   const cols=$('#dHeatCols'),months=$('#dHeatMonths');cols.innerHTML='';months.innerHTML='<span></span>';
   const N=heat.length;let prevM=-1,active=0,total=0,sum=0;const byDay=[0,0,0,0,0,0,0];
-  for(let w=0;w<8;w++){
+  for(let w=0;w<WEEKS;w++){
     const first=new Date(startMon);first.setDate(startMon.getDate()+w*7);
     months.innerHTML+=`<span>${first.getMonth()!==prevM?MO[first.getMonth()]:''}</span>`;prevM=first.getMonth();
     let col='<div class="hcol">';
@@ -963,7 +980,7 @@ async function loadDashboard(){
   const C=2*Math.PI*50,arc=$('#dArc');arc.style.strokeDasharray=C.toFixed(1);arc.style.strokeDashoffset=C.toFixed(1);
   requestAnimationFrame(()=>{arc.style.strokeDashoffset=(C*(1-s.pct/100)).toFixed(1);});
   $('#dPct').textContent=s.pct+'%';$('#dLgDone').textContent=t.done;$('#dLgDraft').textContent=t.draft;
-  $('#dSpark').innerHTML=dSparkline(s.trend);$('#dTrendSum').textContent='+'+s.trend.reduce((a,b)=>a+b,0)+' total';
+  dBars(s.trend);
   $('#dAttn').innerHTML=s.attention.length?s.attention.map(a=>`<div class="drow" onclick="openFromLog(${a.id})"><span class="code">${esc(a.code)}</span><span class="nm"><b>${esc(a.data.nama_lokasi||a.name||'(tanpa nama)')}</b><div class="l">${locLack(a)}</div></span><span class="badge">draft</span></div>`).join(''):'<p class="muted" style="padding:8px 4px">Tidak ada yang tertunda 🎉</p>';
   buildDashHeat(s.heat);
   $('#dLeadTile').classList.toggle('hidden',!isA);$('#dStreakTile').classList.toggle('hidden',isA);
