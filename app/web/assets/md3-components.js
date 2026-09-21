@@ -797,12 +797,13 @@
       root.innerHTML = `
         <style>
           :host{ position:fixed; inset:0; z-index:2000; display:${open ? 'grid' : 'none'}; place-items:center; }
-          .scrim{ position:absolute; inset:0; background:color-mix(in srgb,var(--md-sys-color-scrim) 32%,transparent);
+          .scrim{ position:absolute; inset:0; background:color-mix(in srgb,var(--md-sys-color-scrim) 55%,transparent);
             animation:fade ${EASE_STD}; }
           .dlg{ position:relative; max-width:560px; min-width:280px; width:calc(100% - 48px);
-            background:var(--md-sys-color-surface-container-high); color:var(--md-sys-color-on-surface);
+            background:var(--md-sys-color-surface); color:var(--md-sys-color-on-surface);
+            border:1px solid var(--md-sys-color-outline-variant);
             border-radius:var(--md-sys-shape-corner-extra-large); padding:24px;
-            box-shadow:var(--md-sys-elevation-level3); animation:pop ${SPRING_STD}; }
+            box-shadow:var(--md-sys-elevation-level5); animation:pop ${SPRING_STD}; }
           .headline{ font:var(--md-sys-typescale-headline-small); margin-bottom:16px; }
           .content{ font:var(--md-sys-typescale-body-medium); color:var(--md-sys-color-on-surface-variant); }
           .actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:24px; }

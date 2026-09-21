@@ -47,6 +47,29 @@
   .navitem .pill{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);border-radius:99px;font:var(--md-sys-typescale-label-small);padding:2px 8px}
   .shell.rail .navitem{padding-left:calc(var(--rail-w)/2 - 27px);gap:0}
   .shell.rail .navitem .lbl,.shell.rail .navitem .pill{opacity:0;max-width:0}
+  /* Accordion sub-menu Pengaturan */
+  .navgroup .chev{margin-left:auto;font-size:20px;transition:transform .32s var(--md-sys-motion-easing-emphasized)}
+  .navgroup.open .grouphead .chev{transform:rotate(180deg)}
+  .shell.rail .navgroup .chev{opacity:0;max-width:0}
+  .navsub{overflow:hidden;max-height:0;opacity:0;position:relative;margin-top:2px;
+    transition:max-height .38s var(--md-sys-motion-easing-emphasized),opacity .26s var(--md-sys-motion-easing-emphasized)}
+  .navgroup.open .navsub{max-height:280px;opacity:1}
+  .shell.rail .navgroup .navsub{max-height:0!important;opacity:0}
+  .navsub::before{content:'';position:absolute;left:26px;top:4px;bottom:4px;width:3px;border-radius:2px;background:var(--md-sys-color-outline-variant)}
+  .subnav{display:flex;align-items:center;height:42px;padding:0 12px 0 40px;border-radius:12px;cursor:pointer;
+    color:var(--md-sys-color-on-surface-variant);text-decoration:none;white-space:nowrap;position:relative;
+    transform:translateY(-6px);opacity:0;transition:transform .34s var(--md-sys-motion-spring-default-spatial),opacity .3s,background .15s}
+  .navgroup.open .subnav{transform:none;opacity:1}
+  .navgroup.open .subnav:nth-child(1){transition-delay:.04s}
+  .navgroup.open .subnav:nth-child(2){transition-delay:.09s}
+  .navgroup.open .subnav:nth-child(3){transition-delay:.14s}
+  .navgroup.open .subnav:nth-child(4){transition-delay:.19s}
+  .subnav .lbl{font:var(--md-sys-typescale-label-medium)}
+  .subnav:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 6%,transparent)}
+  .subnav.active{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container);font-weight:600}
+  /* Sub-view transisi konten Pengaturan */
+  .setview{animation:setenter .34s var(--md-sys-motion-easing-emphasized) both}
+  @keyframes setenter{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
   .nav-foot{margin-top:auto;display:flex;gap:4px;justify-content:center;padding-top:8px;border-top:1px solid var(--md-sys-color-outline-variant)}
 
   .canvas{flex:1 1 auto;min-width:0;background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level1);display:flex;flex-direction:column;overflow:hidden}
@@ -96,6 +119,10 @@
   .tr input::placeholder{color:var(--md-sys-color-on-surface-variant)}
   .tr input:focus{outline:none;background:color-mix(in srgb,var(--md-sys-color-primary) 5%,transparent);box-shadow:inset 0 -2px 0 var(--md-sys-color-primary)}
   .tr input.sn:focus{box-shadow:inset 0 -2px 0 var(--md-sys-color-tertiary);background:color-mix(in srgb,var(--md-sys-color-tertiary) 5%,transparent)}
+  .cbx{position:relative;display:flex;align-items:center}
+  .cbx input{padding-right:26px}
+  .cbx-arrow{position:absolute;right:4px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--md-sys-color-on-surface-variant);font-size:20px;user-select:none;border-radius:50%;line-height:1}
+  .cbx-arrow:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 8%,transparent)}
 
   /* foto — uniform cards */
   .drop{border:2px dashed var(--md-sys-color-outline-variant);border-radius:16px;padding:16px;text-align:center;color:var(--md-sys-color-on-surface-variant);margin-bottom:14px}
@@ -196,7 +223,15 @@
     <a class="navitem" data-view="locations" data-tip="Log Lokasi"><span class="mi">table_rows</span><span class="lbl">Log Lokasi</span><span class="pill" id="loc-count"></span></a>
     <a class="navitem admin-only" data-view="templates" data-tip="Template"><span class="mi">description</span><span class="lbl">Template</span></a>
     <a class="navitem admin-only" data-view="users" data-tip="Users"><span class="mi">group</span><span class="lbl">Users</span></a>
-    <a class="navitem admin-only" data-view="settings" data-tip="Pengaturan"><span class="mi">settings</span><span class="lbl">Pengaturan</span></a>
+    <div class="navgroup admin-only" id="navSettings">
+      <a class="navitem grouphead" id="setToggle" data-tip="Pengaturan"><span class="mi">settings</span><span class="lbl">Pengaturan</span><span class="mi chev">expand_more</span></a>
+      <div class="navsub">
+        <a class="subnav" data-sub="lokasi"><span class="lbl">Field Data Lokasi</span></a>
+        <a class="subnav" data-sub="inventory"><span class="lbl">Field Inventory</span></a>
+        <a class="subnav" data-sub="photo"><span class="lbl">Field Photo &amp; Capture</span></a>
+        <a class="subnav" data-sub="backup"><span class="lbl">BackUp &amp; Restore</span></a>
+      </div>
+    </div>
     <div class="nav-foot">
       <md-icon-button id="pwBtn" data-tip="Ganti password"><span>password</span></md-icon-button>
       <md-icon-button id="themeBtn" data-tip="Ganti tema"><span>dark_mode</span></md-icon-button>
@@ -351,34 +386,30 @@
       </section>
 
       <section id="v-settings" class="hidden">
-        <div class="card">
-          <div class="sec"><span class="mi acc">badge</span><h3>Judul Aplikasi</h3></div>
-          <div class="rowflex"><md-text-field id="set-title" variant="outlined" label="Judul" style="min-width:280px"></md-text-field>
-            <md-button id="set-title-save" variant="filled">Simpan</md-button></div>
-        </div>
-        <div class="card">
+        <div class="card setview hidden" id="set-lokasi">
           <div class="sec"><span class="mi acc">list_alt</span><h3>Field Data Lokasi</h3><span class="grow"></span>
             <md-button id="lf-add" variant="tonal" icon="add">Field</md-button></div>
           <div class="er lf head"><div>Key</div><div>Label</div><div>Tipe</div><div>Wajib</div><div></div></div>
           <div id="lf-list"></div>
           <div style="margin-top:12px"><md-button id="lf-save" variant="filled" icon="save">Simpan field</md-button></div>
         </div>
-        <div class="card">
-          <div class="sec"><span class="mi acc">photo_library</span><h3>Kategori Foto &amp; Kata Kunci</h3><span class="grow"></span>
+        <div class="card setview hidden" id="set-inventory">
+          <div class="sec"><span class="mi acc">inventory_2</span><h3>Field Inventory</h3><span class="grow"></span>
+            <md-button id="di-add" variant="tonal" icon="add">Item</md-button></div>
+          <p class="muted" style="margin:0 0 12px">Item default untuk lokasi baru + opsi Merk/Type (dipakai combobox di tabel Inventory Entry BAA).</p>
+          <div class="er di head"><div>Nama barang</div><div>Opsi Merk/Type (pisah koma)</div><div></div></div>
+          <div id="di-list"></div>
+          <div style="margin-top:12px"><md-button id="di-save" variant="filled" icon="save">Simpan default</md-button></div>
+        </div>
+        <div class="card setview hidden" id="set-photo">
+          <div class="sec"><span class="mi acc">photo_library</span><h3>Field Photo &amp; Capture</h3><span class="grow"></span>
             <md-button id="pc-add" variant="tonal" icon="add">Kategori</md-button></div>
           <div class="er pc head"><div>Key</div><div>Label</div><div>Kata kunci (koma)</div><div>Prefix SN (koma)</div><div>Item Inventory</div><div>OCR</div><div>Wajib</div><div></div></div>
           <div id="pc-list"></div>
           <div style="margin-top:12px"><md-button id="pc-save" variant="filled" icon="save">Simpan kategori</md-button></div>
         </div>
-        <div class="card">
-          <div class="sec"><span class="mi acc">inventory_2</span><h3>Default Item Inventory (lokasi baru)</h3><span class="grow"></span>
-            <md-button id="di-add" variant="tonal" icon="add">Item</md-button></div>
-          <div class="er di head"><div>Nama barang</div><div>Opsi Merk/Type (pisah koma)</div><div></div></div>
-          <div id="di-list"></div>
-          <div style="margin-top:12px"><md-button id="di-save" variant="filled" icon="save">Simpan default</md-button></div>
-        </div>
-        <div class="card">
-          <div class="sec"><span class="mi acc">backup</span><h3>Backup &amp; Restore</h3></div>
+        <div class="card setview hidden" id="set-backup">
+          <div class="sec"><span class="mi acc">backup</span><h3>BackUp &amp; Restore</h3></div>
           <p class="muted" style="margin:0 0 12px">Backup mengunduh ZIP berisi database, foto, &amp; template. Restore menimpa data dari ZIP (perlu jalankan ulang aplikasi setelahnya).</p>
           <div class="rowflex">
             <md-button id="bk-download" variant="filled" icon="download">Unduh backup</md-button>
@@ -532,17 +563,39 @@ $('#themeBtn').addEventListener('click',()=>{const c=MD3.getTheme();MD3.setTheme
 $('#railBtn').addEventListener('click',()=>$('#app').classList.toggle('rail'));
 
 async function showApp(){$('#login').classList.add('hidden');$('#app').classList.remove('hidden');
-  const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;S.invItems=s.default_inventory_items||[];S.itemMerks=s.item_merks||{};S.appTitle=s.app_title||'BAA Generator';
+  S.settingsReady=api('/api/settings').then(s=>{S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;S.invItems=s.default_inventory_items||[];S.itemMerks=s.item_merks||{};S.appTitle=s.app_title||'BAA Generator';});
+  await S.settingsReady;
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
   $('#app').classList.toggle('is-operator',S.user.role!=='admin');
   refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
   if(S.user.must_change)setTimeout(()=>openPw(true),400);}
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
+  $('#setToggle').classList.remove('active');$('#navSettings').classList.remove('open');  /* tutup accordion Pengaturan */
   const v=n.dataset.view;['entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
   $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');
-  if(v==='locations')loadLocations();if(v==='templates')loadTemplates();if(v==='settings')loadSettingsPage();
+  if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
   revealCards($('#v-'+v));}));
+
+/* Sub-menu Pengaturan (accordion) */
+const SET_SUBS={lokasi:{id:'set-lokasi',title:'Field Data Lokasi'},inventory:{id:'set-inventory',title:'Field Inventory'},
+  photo:{id:'set-photo',title:'Field Photo & Capture'},backup:{id:'set-backup',title:'BackUp & Restore'}};
+let curSetSub='lokasi';
+function showSetSub(key){curSetSub=key;const cfg=SET_SUBS[key];
+  $$('.subnav').forEach(s=>s.classList.toggle('active',s.dataset.sub===key));
+  Object.values(SET_SUBS).forEach(c=>{const el=$('#'+c.id);if(el)el.classList.toggle('hidden',c.id!==cfg.id);});
+  const active=$('#'+cfg.id);if(active){active.classList.remove('setview');void active.offsetWidth;active.classList.add('setview');}
+  $('#pageTitle').textContent='Pengaturan · '+cfg.title;}
+function openSettings(sub){
+  $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));
+  $('#setToggle').classList.add('active');$('#navSettings').classList.add('open');
+  ['entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='settings'));
+  $('#entryTools').classList.add('hidden');loadSettingsPage();showSetSub(sub||curSetSub);}
+$('#setToggle').addEventListener('click',()=>{
+  const wasOpen=$('#navSettings').classList.contains('open')&&$('#setToggle').classList.contains('active');
+  if(wasOpen){$('#navSettings').classList.remove('open');}   /* klik lagi -> lipat, tetap di halaman */
+  else openSettings(curSetSub);});
+$$('.subnav').forEach(s=>s.addEventListener('click',()=>openSettings(s.dataset.sub)));
 
 function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats;} /* semua kategori wajib */
 
@@ -551,7 +604,13 @@ async function refreshPicker(){const r=await api('/api/locations/options');const
   $('#loc-count').textContent=r.total||'';
   pickerSel.setOptions(opts.map(l=>({value:String(l.id),label:l.code+' · '+(l.nama||'')})));
   if(S.loc)pickerSel.setValue(String(S.loc.id));}
-$('#entry-new').addEventListener('click',async()=>{const loc=await api('/api/locations',{method:'POST',body:JSON.stringify({name:'',data:{},status:'draft'})});await refreshPicker();loadLocations();openLoc(loc.id);toast('Lokasi '+loc.code+' dibuat');});
+$('#entry-new').addEventListener('click',async()=>{const btn=$('#entry-new');
+  if(btn.hasAttribute('disabled'))return;btn.setAttribute('disabled','');
+  try{if(S.settingsReady)await S.settingsReady;                 /* tunggu settings siap (first-run) */
+    const loc=await api('/api/locations',{method:'POST',body:JSON.stringify({name:'',data:{},status:'draft'})});
+    await openLoc(loc.id);                                       /* langsung tampilkan Entry lokasi baru */
+    refreshPicker();loadLocations();toast('Lokasi '+loc.code+' dibuat');
+  }catch(e){toast('Gagal: '+e.message);}finally{btn.removeAttribute('disabled');}});
 $('#entry-del').addEventListener('click',()=>{if(S.loc)confirmDelete(S.loc.id,S.loc.code,true);});
 
 async function openLoc(id){S.loc=await api('/api/locations/'+id);pickerSel.setValue(String(id));
@@ -562,12 +621,11 @@ async function openLoc(id){S.loc=await api('/api/locations/'+id);pickerSel.setVa
   requestAnimationFrame(()=>revealCards($('#v-entry')));}
 function renderLocFields(){$('#loc-fields').innerHTML=S.locFields.map(f=>
   `<md-text-field data-lf="${f.key}" variant="outlined" label="${esc(f.label)}${f.required?' *':''}" type="${f.type==='date'?'date':'text'}" value="${esc(S.loc.data[f.key]||'')}"></md-text-field>`).join('');}
-let _mlSeq=0;
 function merkOpts(name){return (S.itemMerks&&S.itemMerks[(name||'').trim()])||[];}
-function invRow(it={}){const did='ml'+(_mlSeq++);
+function invRow(it={}){
   return `<div class="tr">
   <input data-iv="nama_barang" value="${esc(it.nama_barang)}">
-  <input data-iv="merk_type" list="${did}" placeholder="pilih / ketik…" value="${esc(it.merk_type)}"><datalist id="${did}">${merkOpts(it.nama_barang).map(o=>`<option value="${esc(o)}">`).join('')}</datalist>
+  <div class="cbx"><input data-iv="merk_type" placeholder="pilih / ketik…" value="${esc(it.merk_type)}"><span class="cbx-arrow mi" data-tip="Pilih Merk/Type" onclick="openMerkMenu(this)">arrow_drop_down</span></div>
   <input data-iv="jumlah" value="${esc(it.jumlah)}"><input data-iv="sn_tagging" class="sn" value="${esc(it.sn_tagging)}">
   <input data-iv="keterangan" value="${esc(it.keterangan)}">
   <md-icon-button data-tip="Hapus baris" onclick="this.closest('.tr').remove();updateSummary()"><span>close</span></md-icon-button></div>`;}
@@ -575,10 +633,11 @@ function renderInventory(){let rows=S.loc.inventory;
   if(!rows.length)rows=(S.invItems.length?S.invItems:['','','']).map(n=>({nama_barang:n}));
   $('#inv-body').innerHTML=rows.map(invRow).join('');bindTips();}
 $('#inv-add').addEventListener('click',()=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow());bindTips();updateSummary();});
-/* Perbarui opsi Merk/Type ketika Nama Barang diubah */
-$('#inv-body').addEventListener('input',e=>{if(e.target.dataset&&e.target.dataset.iv==='nama_barang'){
-  const tr=e.target.closest('.tr');const dl=tr&&tr.querySelector('datalist');
-  if(dl)dl.innerHTML=merkOpts(e.target.value).map(o=>`<option value="${esc(o)}">`).join('');}});
+/* Combobox Merk/Type: selalu tampilkan SELURUH opsi item (MDMenu), tetap boleh ketik */
+window.openMerkMenu=(el)=>{const tr=el.closest('.tr');const input=tr.querySelector('[data-iv="merk_type"]');
+  const name=(tr.querySelector('[data-iv="nama_barang"]').value||'').trim();const opts=merkOpts(name);
+  if(!opts.length){toast('Belum ada opsi untuk "'+(name||'item ini')+'". Atur di Pengaturan → Field Inventory.');input.focus();return;}
+  openMenu(input,opts.map(o=>({icon:'label',label:o,fn:()=>{input.value=o;updateSummary();}})));};
 function collectInventory(){return $$('#inv-body .tr').map(tr=>{const o={};tr.querySelectorAll('[data-iv]').forEach(i=>o[i.dataset.iv]=i.value);return o;}).filter(o=>Object.values(o).some(v=>v&&v.trim()));}
 function collectData(){const d={};$$('[data-lf]').forEach(el=>d[el.dataset.lf]=el.value);return d;}
 $('#entry-form').addEventListener('input',updateSummary);
@@ -930,7 +989,7 @@ $('#bk-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!
   toast('Memulihkan…');try{const r=await fetch('/api/restore',{method:'POST',credentials:'same-origin',body:fd});if(!r.ok)throw new Error((await r.json()).detail);const d=await r.json();toast(d.msg||'Dipulihkan');}catch(err){toast('Gagal: '+err.message);}e.target.value='';});
 
 /* ===== PENGATURAN ===== */
-function loadSettingsPage(){$('#set-title').setAttribute('value',S.appTitle||'');renderLF();renderPC();renderDI();}
+function loadSettingsPage(){renderLF();renderPC();renderDI();}
 function delBtnCell(){return `<md-icon-button data-tip="Hapus" onclick="this.closest('.er').remove()"><span>close</span></md-icon-button>`;}
 function lfRow(f={}){return `<div class="er lf" data-lf>
   <input data-k="key" placeholder="key" value="${esc(f.key)}"><input data-k="label" placeholder="Label" value="${esc(f.label)}">
@@ -972,8 +1031,6 @@ $('#di-save').addEventListener('click',async()=>{
   try{await api('/api/settings/default-inventory-items',{method:'PUT',body:JSON.stringify({items})});
     await api('/api/settings/item-merks',{method:'PUT',body:JSON.stringify({merks})});
     S.invItems=items;S.itemMerks=merks;toast('Default inventory tersimpan');}catch(e){toast('Gagal: '+e.message);}});
-$('#set-title-save').addEventListener('click',async()=>{const t=$('#set-title').value.trim();
-  try{await api('/api/settings/app-title',{method:'PUT',body:JSON.stringify({title:t})});S.appTitle=t;document.title=t;$('.nav-head .name').textContent=t;toast('Judul tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 function deepMerge(b,o){for(const k in(o||{})){if(o[k]&&typeof o[k]==='object'&&!Array.isArray(o[k]))b[k]=deepMerge(b[k]||{},o[k]);else b[k]=o[k];}return b;}
 window.addEventListener('DOMContentLoaded',boot);
 </script>
