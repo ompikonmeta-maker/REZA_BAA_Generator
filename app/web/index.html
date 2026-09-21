@@ -55,18 +55,21 @@
     transition:max-height .38s var(--md-sys-motion-easing-emphasized),opacity .26s var(--md-sys-motion-easing-emphasized)}
   .navgroup.open .navsub{max-height:280px;opacity:1}
   .shell.rail .navgroup .navsub{max-height:0!important;opacity:0}
-  .navsub::before{content:'';position:absolute;left:26px;top:4px;bottom:4px;width:3px;border-radius:2px;background:var(--md-sys-color-outline-variant)}
-  .subnav{display:flex;align-items:center;height:42px;padding:0 12px 0 40px;border-radius:12px;cursor:pointer;
-    color:var(--md-sys-color-on-surface-variant);text-decoration:none;white-space:nowrap;position:relative;
+  .subnav{display:flex;align-items:center;gap:12px;height:44px;margin:2px 0 2px 16px;padding:0 14px;border-radius:22px;cursor:pointer;
+    color:var(--md-sys-color-on-surface-variant);text-decoration:none;white-space:nowrap;position:relative;overflow:hidden;
     transform:translateY(-6px);opacity:0;transition:transform .34s var(--md-sys-motion-spring-default-spatial),opacity .3s,background .15s}
+  .subnav::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .15s}
+  .subnav:hover::before{opacity:.07}
   .navgroup.open .subnav{transform:none;opacity:1}
   .navgroup.open .subnav:nth-child(1){transition-delay:.04s}
   .navgroup.open .subnav:nth-child(2){transition-delay:.09s}
   .navgroup.open .subnav:nth-child(3){transition-delay:.14s}
   .navgroup.open .subnav:nth-child(4){transition-delay:.19s}
-  .subnav .lbl{font:var(--md-sys-typescale-label-medium)}
-  .subnav:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 6%,transparent)}
+  .subnav .mi{font-size:19px}
+  .subnav .lbl{font:var(--md-sys-typescale-label-large)}
   .subnav.active{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container);font-weight:600}
+  .subnav.active .mi{font-variation-settings:'FILL' 1}
+  .shell.rail .navgroup .subnav .lbl{opacity:0;max-width:0}
   /* Sub-view transisi konten Pengaturan */
   .setview{animation:setenter .34s var(--md-sys-motion-easing-emphasized) both}
   @keyframes setenter{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
@@ -226,10 +229,10 @@
     <div class="navgroup admin-only" id="navSettings">
       <a class="navitem grouphead" id="setToggle" data-tip="Pengaturan"><span class="mi">settings</span><span class="lbl">Pengaturan</span><span class="mi chev">expand_more</span></a>
       <div class="navsub">
-        <a class="subnav" data-sub="lokasi"><span class="lbl">Field Data Lokasi</span></a>
-        <a class="subnav" data-sub="inventory"><span class="lbl">Field Inventory</span></a>
-        <a class="subnav" data-sub="photo"><span class="lbl">Field Photo &amp; Capture</span></a>
-        <a class="subnav" data-sub="backup"><span class="lbl">BackUp &amp; Restore</span></a>
+        <a class="subnav" data-sub="lokasi"><span class="mi">list_alt</span><span class="lbl">Field Data Lokasi</span></a>
+        <a class="subnav" data-sub="inventory"><span class="mi">inventory_2</span><span class="lbl">Field Inventory</span></a>
+        <a class="subnav" data-sub="photo"><span class="mi">photo_library</span><span class="lbl">Field Photo &amp; Capture</span></a>
+        <a class="subnav" data-sub="backup"><span class="mi">backup</span><span class="lbl">BackUp &amp; Restore</span></a>
       </div>
     </div>
     <div class="nav-foot">
