@@ -1,0 +1,182 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Supervisor Console (Admin)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+<style>
+  :root{--bg:#e9ecec;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;--track:#dfe4e3;
+    --pri:#04726f;--sec:#cfe6e5;--onsec:#00413f;
+    --good:#1c7d46;--goodbg:#dcf0e2;--warn:#9a5b00;--warnbg:#fdeede;--bad:#a3312a;--badbg:#fbe4e2;}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--track:#28302f;--pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec;--good:#7ddc9f;--goodbg:#123522;--warn:#ffb95c;--warnbg:#3a2a10;--bad:#ffb1a8;--badbg:#3a1714;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",Roboto,system-ui,sans-serif}
+  .wrap{max-width:1200px;margin:0 auto;padding:20px 22px 40px}
+  .hd{display:flex;align-items:baseline;gap:10px;margin:0 0 4px}
+  .hd h1{font-size:20px;font-weight:800;margin:0}.hd .sub{color:var(--mut);font-size:12.5px}
+  .legend{display:flex;gap:14px;margin:10px 0 16px;font-size:11.5px;color:var(--mut);flex-wrap:wrap}
+  .legend .k{display:flex;align-items:center;gap:6px}
+  .dot{width:10px;height:10px;border-radius:50%;display:inline-block}.dot.g{background:var(--good)}.dot.w{background:var(--warn)}.dot.b{background:var(--bad)}
+  /* summary strip */
+  .strip{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:14px}
+  @media(max-width:900px){.strip{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--pane);border:1px solid var(--ov);border-radius:16px;padding:14px}
+  .kpi .t{color:var(--mut);font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .kpi .n{font-size:24px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+  .kpi .d{font-size:11px;margin-top:2px;font-weight:700}.up{color:var(--good)}.down{color:var(--bad)}.flat{color:var(--mut)}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+  .tile{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:16px;min-width:0}
+  .c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}.c12{grid-column:span 12}
+  @media(max-width:900px){.c7,.c5,.c6{grid-column:span 12}}
+  .th{font-size:14px;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:8px}.th .grow{margin-left:auto}
+  .th .lk{font-size:12px;color:var(--pri);font-weight:600;cursor:pointer}
+  /* attention (users) */
+  .att{display:flex;align-items:center;gap:12px;padding:11px 8px;border-radius:12px;cursor:pointer}
+  .att:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}.att+.att{border-top:1px solid var(--ov)}
+  .ava{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;color:#fff;flex:0 0 auto}
+  .att .who{flex:1;min-width:0}.att .who .nm{font-weight:700}.att .who .rs{font-size:12px;color:var(--mut)}
+  .pill{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-flex;gap:5px;align-items:center;white-space:nowrap}
+  .pill.b{background:var(--badbg);color:var(--bad)}.pill.w{background:var(--warnbg);color:var(--warn)}.pill.g{background:var(--goodbg);color:var(--good)}
+  .pill .mi{font-size:14px}
+  /* ranking table */
+  table{width:100%;border-collapse:collapse}
+  th,td{text-align:left;padding:9px 8px;font-size:12.5px;border-bottom:1px solid var(--ov)}
+  th{color:var(--mut);font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.3px}
+  tr.usr{cursor:pointer}tr.usr:hover td{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+  .mini{width:74px;height:26px;display:block}
+  .wl{height:8px;border-radius:5px;background:var(--track);overflow:hidden;min-width:70px}.wl>i{display:block;height:100%}
+  .hd2{display:flex;align-items:center;gap:8px}.name{font-weight:700}
+  /* velocity bars */
+  .vbars{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:8px}
+  .vbars .b{flex:1;background:linear-gradient(180deg,var(--pri),color-mix(in srgb,var(--pri) 60%,var(--track)));border-radius:6px 6px 0 0;position:relative;min-height:3px}
+  .vbars .b span{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--mut)}
+  .vx{display:flex;gap:8px;margin-top:6px}.vx div{flex:1;text-align:center;font-size:10px;color:var(--mut)}
+  /* bottleneck */
+  .bn{display:flex;align-items:center;gap:10px;padding:7px 0}
+  .bn .lbl{width:150px;font-size:12.5px}.bn .bar{flex:1;height:12px;border-radius:6px;background:var(--track);overflow:hidden}
+  .bn .bar>i{display:block;height:100%;background:var(--pri)}.bn .v{width:38px;text-align:right;font-size:12px;font-weight:700;color:var(--mut)}
+  /* drill-down drawer */
+  .drawer{position:fixed;top:0;right:0;height:100%;width:360px;max-width:92vw;background:var(--pane);border-left:1px solid var(--ov);
+    box-shadow:-20px 0 50px rgba(0,0,0,.22);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,0,0,1);z-index:40;display:flex;flex-direction:column}
+  .drawer.open{transform:none}
+  .dh{padding:18px;border-bottom:1px solid var(--ov);display:flex;align-items:center;gap:12px}
+  .dh .x{margin-left:auto;cursor:pointer;color:var(--mut)}
+  .db{padding:16px 18px;overflow:auto}
+  .stat3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .stat3 div{background:var(--bg);border-radius:12px;padding:10px;text-align:center}
+  .stat3 .n{font-size:20px;font-weight:800}.stat3 .t{font-size:10.5px;color:var(--mut)}
+  .dl{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--ov);font-size:12.5px}
+  .code{font-family:ui-monospace,Consolas,monospace;color:var(--pri);font-weight:700}
+  .scrim{position:fixed;inset:0;background:rgba(0,0,0,.28);opacity:0;pointer-events:none;transition:opacity .28s;z-index:39}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;line-height:1;vertical-align:-3px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd"><h1>Konsol Supervisor</h1><span class="sub">performa tim · 12 teknisi · minggu ini</span></div>
+  <div class="legend">
+    <span class="k"><span class="dot g"></span>On-track</span>
+    <span class="k"><span class="dot w"></span>Melambat</span>
+    <span class="k"><span class="dot b"></span>Menurun / mangkrak</span>
+    <span class="k" style="margin-left:auto">Klik user untuk drill-down →</span>
+  </div>
+
+  <!-- summary strip -->
+  <div class="strip">
+    <div class="kpi"><div class="t"><span class="mi">table_rows</span>Total Lokasi</div><div class="n">248</div><div class="d up">▲ 18 minggu ini</div></div>
+    <div class="kpi"><div class="t"><span class="mi">task_alt</span>% Selesai</div><div class="n">71%</div><div class="d up">▲ 4%</div></div>
+    <div class="kpi"><div class="t"><span class="mi">speed</span>Velocity</div><div class="n">32<span style="font-size:12px">/mgg</span></div><div class="d down">▼ 12% vs mgg lalu</div></div>
+    <div class="kpi"><div class="t"><span class="mi">timer</span>Cycle Time</div><div class="n">3,4<span style="font-size:12px">hari</span></div><div class="d up">▲ lebih cepat</div></div>
+    <div class="kpi"><div class="t"><span class="mi">hourglass_bottom</span>Draft Mangkrak</div><div class="n" style="color:var(--bad)">9</div><div class="d down">&gt; 7 hari</div></div>
+    <div class="kpi"><div class="t"><span class="mi">group</span>User Aktif</div><div class="n">8<span style="font-size:12px">/12</span></div><div class="d flat">7 hari terakhir</div></div>
+  </div>
+
+  <div class="grid">
+    <!-- ATTENTION: users menurun -->
+    <div class="tile c7">
+      <div class="th"><span class="mi">priority_high</span> Perlu Perhatian — Tim Menurun <span class="grow"></span><span class="lk">Semua user ›</span></div>
+      <div id="attList"></div>
+    </div>
+    <!-- bottleneck -->
+    <div class="tile c5">
+      <div class="th"><span class="mi">bug_report</span> Bottleneck — kenapa belum selesai</div>
+      <div id="bn"></div>
+      <p style="color:var(--mut);font-size:11.5px;margin:12px 0 0">Kategori yang paling sering hilang di lokasi draft.</p>
+    </div>
+
+    <!-- ranking -->
+    <div class="tile c7">
+      <div class="th"><span class="mi">leaderboard</span> Peringkat Performa</div>
+      <table><thead><tr><th></th><th>Teknisi</th><th>Selesai</th><th>Velocity 4 mgg</th><th>Beban</th><th style="text-align:right">%</th></tr></thead><tbody id="rank"></tbody></table>
+    </div>
+    <!-- velocity team -->
+    <div class="tile c5">
+      <div class="th"><span class="mi">insights</span> Throughput Tim · 8 minggu</div>
+      <div class="vbars" id="vbars"></div>
+      <div class="vx" id="vx"></div>
+    </div>
+  </div>
+</div>
+
+<div class="scrim" id="scrim"></div>
+<aside class="drawer" id="drawer">
+  <div class="dh"><span class="ava" id="dAva"></span><div><div class="name" id="dName"></div><div style="font-size:12px;color:var(--mut)" id="dRole">Teknisi</div></div><span class="mi x" id="dClose">close</span></div>
+  <div class="db" id="dBody"></div>
+</aside>
+
+<script>
+  const $=s=>document.querySelector(s);
+  const col=['#04726f','#1c7d46','#7a5cc0','#b5651d','#2a6fb0','#a3312a'];
+  const USERS=[
+    {n:'Budi',done:41,total:48,vel:[9,8,10,6],load:3,health:'w',reason:'velocity −33% (10→6) minggu ini'},
+    {n:'Sari',done:38,total:44,vel:[7,7,6,7],load:2,health:'g',reason:''},
+    {n:'Andi',done:12,total:29,vel:[5,4,2,1],load:9,health:'b',reason:'velocity −80% · 4 draft mangkrak >7 hari'},
+    {n:'Rina',done:9,total:14,vel:[2,3,1,4],load:1,health:'g',reason:''},
+    {n:'Dewi',done:17,total:33,vel:[4,3,3,0],load:6,health:'b',reason:'0 selesai minggu ini · 3 draft mangkrak'},
+    {n:'Eko',done:14,total:20,vel:[3,4,3,3],load:2,health:'g',reason:''},
+  ];
+  function spark(v,c){const W=74,H=26,mx=Math.max(...v,1),x=i=>2+i*(W-4)/(v.length-1),y=q=>H-2-(q/mx)*(H-6);
+    const ln=v.map((q,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(q).toFixed(1)).join(' ');
+    return `<svg class="mini" viewBox="0 0 ${W} ${H}"><path d="${ln}" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}
+  function trendArrow(v){const d=v[v.length-1]-v[v.length-2];return d>0?'<span class="up">▲</span>':d<0?'<span class="down">▼</span>':'<span class="flat">▬</span>';}
+  // attention: only w/b, sorted worst first
+  $('#attList').innerHTML=USERS.filter(u=>u.health!=='g').sort((a,b)=>(a.health==='b'?0:1)-(b.health==='b'?0:1))
+    .map((u,i)=>`<div class="att" onclick="drill('${u.n}')"><span class="ava" style="background:${col[USERS.indexOf(u)%col.length]}">${u.n[0]}</span>
+      <div class="who"><div class="nm">${u.n}</div><div class="rs">${u.reason}</div></div>
+      <span class="pill ${u.health}"><span class="mi">${u.health==='b'?'trending_down':'schedule'}</span>${u.health==='b'?'Menurun':'Melambat'}</span></div>`).join('');
+  // bottleneck
+  const BN=[['Foto SN Kit/Router',42],['Inventory belum lengkap',30],['Foto Ping/Speed',18],['Field lokasi kosong',10]];
+  $('#bn').innerHTML=BN.map(b=>`<div class="bn"><span class="lbl">${b[0]}</span><span class="bar"><i style="width:${b[1]}%"></i></span><span class="v">${b[1]}%</span></div>`).join('');
+  // ranking
+  $('#rank').innerHTML=[...USERS].sort((a,b)=>b.done/b.total-a.done/a.total).map(u=>{const pct=Math.round(u.done/u.total*100);
+    const wcol=u.load>=6?'var(--bad)':u.load>=3?'var(--warn)':'var(--good)';
+    return `<tr class="usr" onclick="drill('${u.n}')"><td><span class="dot ${u.health}"></span></td>
+      <td><span class="name">${u.n}</span></td><td>${u.done}/${u.total}</td>
+      <td>${spark(u.vel,col[0])} ${trendArrow(u.vel)}</td>
+      <td><div class="wl"><i style="width:${Math.min(100,u.load*11)}%;background:${wcol}"></i></div></td>
+      <td style="text-align:right;font-weight:700">${pct}%</td></tr>`;}).join('');
+  // team throughput
+  const TP=[24,28,26,30,35,33,36,32];
+  const mx=Math.max(...TP);$('#vbars').innerHTML=TP.map(v=>`<div class="b" style="height:${Math.round(v/mx*100)}%"><span>${v}</span></div>`).join('');
+  $('#vx').innerHTML=['-7','-6','-5','-4','-3','-2','-1','kini'].map(x=>`<div>${x}</div>`).join('');
+  // drill-down
+  window.drill=name=>{const u=USERS.find(x=>x.n===name);const c=col[USERS.indexOf(u)%col.length];const pct=Math.round(u.done/u.total*100);
+    $('#dAva').style.background=c;$('#dAva').textContent=u.n[0];$('#dName').textContent=u.n;
+    $('#dBody').innerHTML=`<div class="stat3"><div><div class="n">${u.done}/${u.total}</div><div class="t">Selesai</div></div>
+      <div><div class="n">${pct}%</div><div class="t">Completion</div></div><div><div class="n" style="color:${u.load>=6?'var(--bad)':'var(--ink)'}">${u.load}</div><div class="t">Draft aktif</div></div></div>
+      ${u.reason?`<div class="pill ${u.health}" style="margin-bottom:12px"><span class="mi">info</span>${u.reason}</div>`:''}
+      <div style="font-weight:700;font-size:12.5px;margin:6px 0">Draft yang menahan</div>
+      <div class="dl"><span class="code">LOK-7F3K9Q</span> Kopdes Sukamaju <span style="margin-left:auto;color:var(--mut)">Foto SN, Inventory</span></div>
+      <div class="dl"><span class="code">LOK-1QW9ZP</span> Kopdes Maju Jaya <span style="margin-left:auto;color:var(--mut)">Ping, Speed</span></div>
+      <div class="dl"><span class="code">LOK-88KD2M</span> Kopdes Sinar Tani <span style="margin-left:auto;color:var(--mut)">Inventory</span></div>
+      <div style="font-weight:700;font-size:12.5px;margin:14px 0 4px">Aktivitas terakhir</div>
+      <div style="font-size:12px;color:var(--mut)">2 jam lalu · unggah 4 foto · LOK-7F3K9Q</div>`;
+    $('#drawer').classList.add('open');$('#scrim').classList.add('on');};
+  const close=()=>{$('#drawer').classList.remove('open');$('#scrim').classList.remove('on');};
+  $('#dClose').onclick=close;$('#scrim').onclick=close;
+</script>
+</body>
+</html>
