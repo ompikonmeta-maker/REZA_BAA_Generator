@@ -59,9 +59,10 @@
   /* Cards (static) */
   .card{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:20px;padding:20px;margin-bottom:16px}
   .card.filled{background:var(--md-sys-color-surface-container);border-color:transparent}
-  /* Highlight kartu aktif (opsi C: tint background lembut) — ukuran tetap */
+  /* Highlight kartu aktif (opsi C: tint background) — ukuran tetap */
   .entry-main .card{transition:background .2s var(--md-sys-motion-easing-standard)}
-  .entry-main .card:focus-within{background:color-mix(in srgb,var(--md-sys-color-primary) 7%,var(--md-sys-color-surface))}
+  .entry-main .card.active-card,
+  .entry-main .card:focus-within{background:color-mix(in srgb,var(--md-sys-color-primary) 12%,var(--md-sys-color-surface))}
   .sec{display:flex;align-items:center;gap:10px;margin-bottom:16px}
   .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
   .fgrid md-text-field{width:100%}
@@ -134,10 +135,11 @@
   .card.warn-outline{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn)}
   .sum-actions{margin-top:16px;display:flex;flex-direction:column;gap:0}
   .sum-actions #save-btn{width:100%}
+  .sum-actions #save-btn::part(button){width:100%}
   .exp-group{margin-top:14px;padding-top:14px;border-top:1px solid var(--md-sys-color-outline-variant)}
   .exp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
   .exp-head span{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
-  .exp2{display:flex;gap:8px}.exp2 md-button{flex:1}
+  .exp2{display:flex;gap:8px}.exp2 md-button{flex:1}.exp2 md-button::part(button){width:100%}
   .hint{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin-top:12px}
 
   table{width:100%;border-collapse:collapse;font:var(--md-sys-typescale-body-medium)}
@@ -419,6 +421,11 @@ $('#inv-add').addEventListener('click',()=>{$('#inv-body').insertAdjacentHTML('b
 function collectInventory(){return $$('#inv-body .tr').map(tr=>{const o={};tr.querySelectorAll('[data-iv]').forEach(i=>o[i.dataset.iv]=i.value);return o;}).filter(o=>Object.values(o).some(v=>v&&v.trim()));}
 function collectData(){const d={};$$('[data-lf]').forEach(el=>d[el.dataset.lf]=el.value);return d;}
 $('#entry-form').addEventListener('input',updateSummary);
+/* Highlight kartu aktif (andal walau field di dalam shadow DOM) */
+$('#entry-form').addEventListener('focusin',e=>{const card=e.target.closest('.entry-main .card');
+  $$('#entry-form .entry-main .card').forEach(c=>c.classList.toggle('active-card',c===card));});
+$('#entry-form').addEventListener('focusout',()=>{setTimeout(()=>{
+  if(!$('#entry-form').contains(document.activeElement))$$('#entry-form .entry-main .card').forEach(c=>c.classList.remove('active-card'));},0);});
 
 /* progress summary */
 function computeState(){
