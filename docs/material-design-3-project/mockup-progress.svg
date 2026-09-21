@@ -1,0 +1,71 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1000" height="600" viewBox="0 0 1000 600" font-family="Segoe UI, Roboto, system-ui, sans-serif">
+  <defs>
+    <clipPath id="barclip"><rect x="620" y="250" width="330" height="10" rx="5"/></clipPath>
+  </defs>
+  <!-- page bg -->
+  <rect width="1000" height="600" fill="#eaeced"/>
+
+  <!-- ================= LEFT: date field fix ================= -->
+  <text x="40" y="46" font-size="18" font-weight="700" fill="#1a1c1d">1 · Perbaikan field Tanggal</text>
+
+  <!-- BEFORE -->
+  <text x="40" y="86" font-size="13" fill="#43474a">Sebelum — "yyyy" nyembul di bawah label</text>
+  <rect x="40" y="98" width="480" height="60" rx="11" fill="#fcfcfd" stroke="#74777a"/>
+  <text x="60" y="126" font-size="16" fill="#43474a">Tanggal Aktivasi</text>
+  <text x="60" y="146" font-size="13" fill="#9aa0a0" letter-spacing="2">˙˙˙˙  yyyy</text>
+  <path d="M486 118 h18 v18 h-18 z" fill="none" stroke="#43474a" stroke-width="1.6"/>
+  <line x1="486" y1="124" x2="504" y2="124" stroke="#43474a" stroke-width="1.6"/>
+
+  <!-- AFTER -->
+  <text x="40" y="196" font-size="13" fill="#006a6a" font-weight="600">Sesudah — label naik ke atas, area input bersih</text>
+  <rect x="40" y="210" width="480" height="60" rx="11" fill="#fcfcfd" stroke="#006a6a" stroke-width="2"/>
+  <rect x="56" y="202" width="120" height="16" fill="#fcfcfd"/>
+  <text x="60" y="214" font-size="12" fill="#006a6a" font-weight="600">Tanggal Aktivasi</text>
+  <text x="60" y="246" font-size="16" fill="#1a1c1d">21 / 09 / 2026</text>
+  <path d="M486 230 h18 v18 h-18 z" fill="none" stroke="#43474a" stroke-width="1.6"/>
+  <line x1="486" y1="236" x2="504" y2="236" stroke="#43474a" stroke-width="1.6"/>
+  <line x1="491" y1="226" x2="491" y2="232" stroke="#43474a" stroke-width="1.6"/>
+  <line x1="499" y1="226" x2="499" y2="232" stroke="#43474a" stroke-width="1.6"/>
+
+  <text x="40" y="330" font-size="13" fill="#43474a">Terapkan ke semua field tanggal (label selalu mengambang).</text>
+
+  <!-- ================= RIGHT: Ringkasan BAA panel ================= -->
+  <text x="600" y="46" font-size="18" font-weight="700" fill="#1a1c1d">2 · Panel Ringkasan BAA (progres &amp; kontrol)</text>
+
+  <rect x="600" y="70" width="360" height="470" rx="20" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <text x="620" y="106" font-size="18" font-weight="700" fill="#1a1c1d">Ringkasan BAA</text>
+  <text x="620" y="130" font-size="13" fill="#43474a">Status tersimpan otomatis sebagai draft</text>
+
+  <!-- progress -->
+  <text x="620" y="170" font-size="16" font-weight="700" fill="#1a1c1d">50% lengkap</text>
+  <rect x="620" y="188" width="320" height="10" rx="5" fill="#dfe2e3"/>
+  <rect x="620" y="188" width="160" height="10" rx="5" fill="#006a6a"/>
+
+  <!-- checklist -->
+  <line x1="620" y1="228" x2="940" y2="228" stroke="#e4e6e7"/>
+  <text x="620" y="252" font-size="14" fill="#43474a">Informasi lokasi</text>
+  <text x="940" y="252" font-size="14" font-weight="600" fill="#8a9090" text-anchor="end">Belum</text>
+  <line x1="620" y1="268" x2="940" y2="268" stroke="#e4e6e7"/>
+  <text x="620" y="292" font-size="14" fill="#43474a">Inventory</text>
+  <text x="940" y="292" font-size="14" font-weight="700" fill="#006a6a" text-anchor="end">1 item</text>
+  <line x1="620" y1="308" x2="940" y2="308" stroke="#e4e6e7"/>
+  <text x="620" y="332" font-size="14" fill="#43474a">Foto wajib</text>
+  <text x="940" y="332" font-size="14" font-weight="600" fill="#43474a" text-anchor="end">0 / 3</text>
+  <line x1="620" y1="348" x2="940" y2="348" stroke="#e4e6e7"/>
+
+  <!-- primary button -->
+  <rect x="620" y="372" width="320" height="48" rx="11" fill="#006a6a"/>
+  <text x="780" y="402" font-size="15" font-weight="700" fill="#ffffff" text-anchor="middle">Simpan BAA</text>
+
+  <!-- export buttons -->
+  <rect x="620" y="432" width="153" height="44" rx="11" fill="#fcfcfd" stroke="#74777a"/>
+  <text x="696" y="459" font-size="14" font-weight="600" fill="#006a6a" text-anchor="middle">Export Excel</text>
+  <rect x="787" y="432" width="153" height="44" rx="11" fill="#fcfcfd" stroke="#74777a"/>
+  <text x="863" y="459" font-size="14" font-weight="600" fill="#006a6a" text-anchor="middle">Export PDF</text>
+
+  <text x="620" y="500" font-size="11.5" fill="#8a9090">Export aktif setelah data wajib lengkap.</text>
+  <text x="620" y="518" font-size="11.5" fill="#8a9090">Panel update realtime saat mengisi form.</text>
+
+  <!-- caption -->
+  <text x="600" y="575" font-size="12" fill="#43474a">Ditempatkan sebagai kolom kanan sticky (layar lebar) / menumpuk di bawah (layar sempit).</text>
+</svg>
