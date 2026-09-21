@@ -135,7 +135,10 @@ def now_iso() -> str:
 
 def connect() -> sqlite3.Connection:
     config.ensure_dirs()
-    conn = sqlite3.connect(config.DB_PATH)
+    # check_same_thread=False: FastAPI menyelesaikan tiap dependency sync di thread
+    # pool yang bisa berbeda, sedangkan koneksi dibuat per-request & dipakai
+    # berurutan (bukan paralel), jadi aman melintasi thread.
+    conn = sqlite3.connect(config.DB_PATH, check_same_thread=False)
     conn.row_factory = sqlite3.Row
     conn.execute("PRAGMA foreign_keys = ON")
     conn.execute("PRAGMA journal_mode = WAL")
