@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="820" viewBox="0 0 1120 820" font-family="Segoe UI, Roboto, system-ui, sans-serif">
+  <rect width="1120" height="820" fill="#eaeced"/>
+  <style>.t{fill:#1a1c1d}.m{fill:#43474a}.mut{fill:#8a9090}.tl{fill:#006a6a}</style>
+
+  <!-- 1. Ringkasan checklist -->
+  <text x="30" y="34" font-size="15" font-weight="700" class="t">1 · Ringkasan BAA — "Foto &amp; Capture" + Foto Checklist (belum di atas)</text>
+  <rect x="30" y="48" width="330" height="360" rx="18" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <rect x="42" y="64" width="306" height="34" rx="9" fill="#fff3e0"/>
+  <text x="54" y="86" font-size="13.5" class="m">Foto &amp; Capture</text>
+  <text x="336" y="86" font-size="13.5" font-weight="700" fill="#9a5b00" text-anchor="end">2 / 11</text>
+  <text x="50" y="122" font-size="12" font-weight="600" class="m">Foto Checklist</text>
+  <!-- belum (atas) -->
+  <g font-size="12.5">
+    <text x="52" y="146" font-family="Material Symbols Outlined" font-size="17" fill="#9a5b00">check_box_outline_blank</text><text x="76" y="147" class="m">Tampak Depan / Plang</text>
+    <text x="52" y="170" font-family="Material Symbols Outlined" font-size="17" fill="#9a5b00">check_box_outline_blank</text><text x="76" y="171" class="m">Teknisi + PIC</text>
+    <text x="52" y="194" font-family="Material Symbols Outlined" font-size="17" fill="#9a5b00">check_box_outline_blank</text><text x="76" y="195" class="m">Perangkat Outdoor</text>
+    <text x="52" y="218" font-family="Material Symbols Outlined" font-size="17" fill="#9a5b00">check_box_outline_blank</text><text x="76" y="219" class="m">Perangkat Indoor</text>
+    <text x="52" y="242" font-family="Material Symbols Outlined" font-size="17" fill="#9a5b00">check_box_outline_blank</text><text x="76" y="243" class="m">SN Router</text>
+    <text x="52" y="266" font-family="Material Symbols Outlined" font-size="17" fill="#9a5b00">check_box_outline_blank</text><text x="76" y="267" class="m">SN Access Point</text>
+    <text x="52" y="290" font-family="Material Symbols Outlined" font-size="17" fill="#9a5b00">check_box_outline_blank</text><text x="76" y="291" class="m">Tes Ping</text>
+    <text x="52" y="314" font-family="Material Symbols Outlined" font-size="17" fill="#9a5b00">check_box_outline_blank</text><text x="76" y="315" class="m">Bandwidth / Speed</text>
+    <text x="52" y="338" font-family="Material Symbols Outlined" font-size="17" fill="#9a5b00">check_box_outline_blank</text><text x="76" y="339" class="m">Buka SIMKOPDES</text>
+    <!-- sudah (bawah) -->
+    <text x="52" y="366" font-family="Material Symbols Outlined" font-size="17" fill="#006a6a">check_box</text><text x="76" y="367" class="mut" text-decoration="line-through">Dashboard STARMON</text>
+    <text x="52" y="390" font-family="Material Symbols Outlined" font-size="17" fill="#006a6a">check_box</text><text x="76" y="391" class="mut" text-decoration="line-through">SN Kit Starlink</text>
+  </g>
+
+  <!-- 2. Inventory -->
+  <text x="392" y="34" font-size="15" font-weight="700" class="t">2 · Inventory — Merk/Type dropdown (boleh ketik) + "Jumlah"</text>
+  <rect x="392" y="48" width="698" height="200" rx="18" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <g font-size="11.5" font-weight="600" class="m"><text x="410" y="86">Nama Barang</text><text x="560" y="86">Merk / Type</text><text x="720" y="86">Jumlah</text><text x="790" y="86">SN / Tagging</text><text x="960" y="86">Keterangan</text></g>
+  <line x1="410" y1="96" x2="1072" y2="96" stroke="#c3c7c8"/>
+  <g font-size="13.5" class="t">
+    <text x="410" y="124">Kit Starlink</text>
+    <!-- combobox cell -->
+    <rect x="558" y="108" width="150" height="30" rx="8" fill="#fff" stroke="#006a6a"/><text x="568" y="128">Standard Gen 3</text>
+    <text x="694" y="128" font-family="Material Symbols Outlined" font-size="18" class="m">arrow_drop_down</text>
+    <text x="726" y="124">1</text><text x="790" y="124" fill="#3a3f52">KIT303891256</text><text x="960" y="124">Baik</text>
+    <line x1="410" y1="140" x2="1072" y2="140" stroke="#eceeee"/>
+    <text x="410" y="168">Router</text>
+    <rect x="558" y="152" width="150" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/><text x="568" y="172" class="mut">pilih / ketik…</text>
+    <text x="694" y="172" font-family="Material Symbols Outlined" font-size="18" class="m">arrow_drop_down</text>
+    <text x="726" y="168">1</text><text x="790" y="168" class="mut">—</text><text x="960" y="168" class="mut">—</text>
+    <line x1="410" y1="184" x2="1072" y2="184" stroke="#eceeee"/>
+  </g>
+  <!-- dropdown open example -->
+  <rect x="558" y="140" width="180" height="86" rx="10" fill="#f6f7f8" stroke="#c3c7c8"/>
+  <text x="570" y="160" font-size="12.5" class="t">Standard Actuated</text>
+  <text x="570" y="182" font-size="12.5" class="t">Standard Gen 3</text>
+  <text x="570" y="204" font-size="12.5" class="t">High Performance</text>
+  <text x="392" y="238" font-size="11.5" class="mut">Opsi dari Pengaturan per item; user tetap boleh mengetik nilai lain.</text>
+
+  <!-- 3. Log Lokasi -->
+  <text x="392" y="290" font-size="15" font-weight="700" class="t">3 · Log Lokasi — kolom lengkap, Kode = link, kolom "Kurang"</text>
+  <rect x="392" y="304" width="698" height="210" rx="18" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <g font-size="11.5" font-weight="600" class="m"><text x="410" y="336">Kode</text><text x="520" y="336">Nama Lokasi</text><text x="720" y="336">INV</text><text x="762" y="336">Foto</text><text x="812" y="336">Status</text><text x="900" y="336">Kurang</text></g>
+  <line x1="410" y1="346" x2="1072" y2="346" stroke="#c3c7c8"/>
+  <g font-size="12.5">
+    <text x="410" y="372" class="tl" text-decoration="underline" font-weight="600">LOK-7F3K9Q</text>
+    <text x="520" y="372" class="t">Kopdes Sukamaju</text><text x="726" y="372" class="t">3</text><text x="768" y="372" class="t">2/11</text>
+    <text x="812" y="372" fill="#9a5b00" font-weight="600">draft</text>
+    <text x="900" y="372" class="m">Foto: Outdoor, Indoor, +7 · PIC · Inventory</text>
+    <line x1="410" y1="384" x2="1072" y2="384" stroke="#eceeee"/>
+    <text x="410" y="410" class="tl" text-decoration="underline" font-weight="600">LOK-43WDQH</text>
+    <text x="520" y="410" class="t">Kopdes Merah Putih</text><text x="726" y="410" class="t">3</text><text x="768" y="410" class="t">11/11</text>
+    <text x="812" y="410" class="tl" font-weight="600">selesai</text>
+    <text x="900" y="410" class="mut">—</text>
+    <line x1="410" y1="422" x2="1072" y2="422" stroke="#eceeee"/>
+  </g>
+  <text x="410" y="452" font-size="11.5" class="mut">Klik Kode → buka data lengkap di Entry BAA. "Kurang" = foto + field lokasi + inventory (pisah koma).</text>
+
+  <!-- 4. Settings Item Inventory -->
+  <text x="30" y="452" font-size="15" font-weight="700" class="t">4 · Pengaturan → Item Inventory: Opsi Merk/Type per item</text>
+  <rect x="30" y="466" width="330" height="150" rx="18" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <g font-size="11.5" font-weight="600" class="m"><text x="46" y="494">Nama barang</text><text x="176" y="494">Opsi Merk/Type (koma)</text></g>
+  <g font-size="12.5">
+    <rect x="44" y="502" width="120" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/><text x="52" y="522" class="t">Kit Starlink</text>
+    <rect x="172" y="502" width="172" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/><text x="180" y="522" class="mut" font-size="11">Std Actuated, Gen 3, HP</text>
+    <rect x="44" y="540" width="120" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/><text x="52" y="560" class="t">Router</text>
+    <rect x="172" y="540" width="172" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/><text x="180" y="560" class="mut" font-size="11">Gen 2, Gen 3</text>
+    <rect x="44" y="578" width="120" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/><text x="52" y="598" class="t">Access Point</text>
+    <rect x="172" y="578" width="172" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/><text x="180" y="598" class="mut" font-size="11">(kosong = teks bebas)</text>
+  </g>
+
+  <text x="30" y="660" font-size="13" font-weight="700" class="t">Catatan</text>
+  <g font-size="12.5" class="m">
+    <text x="30" y="684">• Hanya 4 area ini yang diubah; fitur lain tetap.</text>
+    <text x="30" y="706">• Merk/Type: dropdown + boleh ketik (combobox); opsi per item dari Pengaturan.</text>
+    <text x="30" y="728">• Log "Kurang": foto kurang + field lokasi kosong + inventory belum lengkap.</text>
+    <text x="30" y="750">• Checklist Ringkasan: semua kategori, belum-di-atas / sudah-di-bawah, realtime.</text>
+  </g>
+</svg>
