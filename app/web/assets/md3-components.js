@@ -527,7 +527,7 @@
       root.innerHTML = `
         <style>
           :host{ display:inline-flex; flex-direction:column; min-width:210px; }
-          .field{ position:relative; display:flex; align-items:center; gap:12px; min-height:56px; padding:0 16px;
+          .field{ box-sizing:border-box; position:relative; display:flex; align-items:center; gap:12px; min-height:56px; padding:0 16px;
             background:${bg}; cursor:text;
             border-radius:${outlined ? 'var(--md-sys-shape-corner-extra-small)' : 'var(--md-sys-shape-corner-extra-small-top)'};
             ${outlined ? `border:1px solid ${error ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-outline)'};`
@@ -550,7 +550,7 @@
         </style>
         <div class="field" part="field">
           ${lead ? `<span class="md-ic">${lead}</span>` : ''}
-          ${label ? `<label class="${val ? 'float' : ''}">${label}</label>` : ''}
+          ${label ? `<label class="${(val || type === 'date') ? 'float' : ''}">${label}</label>` : ''}
           ${type === 'textarea'
             ? `<textarea rows="3">${val}</textarea>`
             : `<input type="${type}" value="${val}">`}
@@ -559,7 +559,7 @@
         ${(error && errorText) || support ? `<div class="support">${error && errorText ? errorText : support}</div>` : ''}`;
       const inp = root.querySelector('input,textarea');
       const lab = root.querySelector('label');
-      inp.addEventListener('input', () => { if (lab) lab.classList.toggle('float', !!inp.value); this.dispatchEvent(new Event('input')); });
+      inp.addEventListener('input', () => { if (lab) lab.classList.toggle('float', !!inp.value || type === 'date'); this.dispatchEvent(new Event('input')); });
       root.querySelector('.field').addEventListener('click', () => inp.focus());
     }
   }

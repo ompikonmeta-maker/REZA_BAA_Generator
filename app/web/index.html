@@ -13,123 +13,129 @@
 <style>
   :root{ --nav-w:248px; --rail-w:76px; }
   *{box-sizing:border-box}
-  body{margin:0;background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface);
-    font:var(--md-sys-typescale-body-medium);-webkit-font-smoothing:antialiased}
+  body{margin:0;background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-medium);-webkit-font-smoothing:antialiased}
   .hidden{display:none!important}
-  .mi{font-family:'Material Symbols Outlined';font-weight:normal;font-style:normal;line-height:1;display:inline-block;
-    font-variation-settings:'FILL' 0,'wght' 400,'opsz' 24;user-select:none;font-size:22px}
+  .mi{font-family:'Material Symbols Outlined';line-height:1;display:inline-block;font-variation-settings:'FILL' 0,'wght' 400,'opsz' 24;user-select:none;font-size:22px}
   .mi.acc{color:var(--md-sys-color-primary)} .mi.fill{font-variation-settings:'FILL' 1}
   .mono{font-family:ui-monospace,Consolas,monospace}
   .muted{color:var(--md-sys-color-on-surface-variant)}
+  .grow{flex:1}
   h2{font:var(--md-sys-typescale-headline-small);margin:0}
   h3{font:var(--md-sys-typescale-title-medium);margin:0}
 
-  /* ---- Login ---- */
+  /* Login */
   #login{min-height:100vh;display:grid;place-items:center;padding:20px}
-  #login .box{width:100%;max-width:360px;background:var(--md-sys-color-surface);border-radius:28px;
-    padding:28px;box-shadow:var(--md-sys-elevation-level1)}
+  #login .box{width:100%;max-width:360px;background:var(--md-sys-color-surface);border-radius:28px;padding:28px;box-shadow:var(--md-sys-elevation-level1)}
   #login .brand{display:flex;align-items:center;gap:10px;font:var(--md-sys-typescale-title-large);margin-bottom:16px}
   #login md-text-field{width:100%;margin:8px 0}
   .brand .dot{width:36px;height:36px;border-radius:11px;background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);display:grid;place-items:center}
 
-  /* ---- Shell ---- */
+  /* Shell */
   .shell{display:flex;height:100vh;gap:16px;padding:16px}
-  .nav{flex:0 0 auto;width:var(--nav-w);display:flex;flex-direction:column;gap:2px;
-    background:var(--md-sys-color-surface-container-low);border-radius:24px;box-shadow:var(--md-sys-elevation-level1);
-    padding:14px;overflow:hidden;transition:width var(--md-sys-motion-spring-default-spatial)}
+  .nav{flex:0 0 auto;width:var(--nav-w);display:flex;flex-direction:column;gap:2px;background:var(--md-sys-color-surface-container-low);border-radius:24px;box-shadow:var(--md-sys-elevation-level1);padding:14px;overflow:hidden;transition:width var(--md-sys-motion-spring-default-spatial)}
   .shell.rail .nav{width:var(--rail-w)}
   .nav-head{display:flex;align-items:center;gap:12px;height:52px;padding:0 8px;margin-bottom:6px;white-space:nowrap}
-  .nav-head .name{font:var(--md-sys-typescale-title-large);margin-right:auto;overflow:hidden;
-    transition:opacity .2s,max-width .3s;max-width:150px}
+  .nav-head .name{font:var(--md-sys-typescale-title-large);margin-right:auto;overflow:hidden;transition:opacity .2s,max-width .3s;max-width:150px}
   .shell.rail .nav-head .name{opacity:0;max-width:0}
-  .navitem{display:flex;align-items:center;gap:14px;height:50px;padding:0 16px;border-radius:14px;cursor:pointer;
-    color:var(--md-sys-color-on-surface-variant);text-decoration:none;white-space:nowrap;position:relative;overflow:hidden}
+  .navitem{display:flex;align-items:center;gap:14px;height:50px;padding:0 16px;border-radius:14px;cursor:pointer;color:var(--md-sys-color-on-surface-variant);text-decoration:none;white-space:nowrap;position:relative;overflow:hidden}
   .navitem::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .15s}
   .navitem:hover::before{opacity:.07}
   .navitem.active{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
   .navitem.active .mi{font-variation-settings:'FILL' 1}
   .navitem .lbl{font:var(--md-sys-typescale-label-large);margin-right:auto;overflow:hidden;transition:opacity .2s,max-width .3s;max-width:150px}
-  .navitem .pill{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);border-radius:99px;
-    font:var(--md-sys-typescale-label-small);padding:2px 8px;transition:opacity .2s}
+  .navitem .pill{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);border-radius:99px;font:var(--md-sys-typescale-label-small);padding:2px 8px}
   .shell.rail .navitem{padding-left:calc(var(--rail-w)/2 - 27px);gap:0}
   .shell.rail .navitem .lbl,.shell.rail .navitem .pill{opacity:0;max-width:0}
   .nav-foot{margin-top:auto;display:flex;gap:4px;justify-content:center;padding-top:8px;border-top:1px solid var(--md-sys-color-outline-variant)}
 
-  .canvas{flex:1 1 auto;min-width:0;background:var(--md-sys-color-surface);border-radius:24px;
-    box-shadow:var(--md-sys-elevation-level1);display:flex;flex-direction:column;overflow:hidden}
+  .canvas{flex:1 1 auto;min-width:0;background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level1);display:flex;flex-direction:column;overflow:hidden}
   .topbar{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
   .topbar .page-title{font:var(--md-sys-typescale-headline-small);margin:0}
   .canvas-body{padding:22px;overflow-y:scroll;scrollbar-gutter:stable}
-  .code-chip{display:inline-flex;align-items:center;gap:6px;background:var(--md-sys-color-surface-container-highest);
-    color:var(--md-sys-color-on-surface-variant);border-radius:9px;padding:4px 10px;font:var(--md-sys-typescale-label-medium)}
+  .code-chip{display:inline-flex;align-items:center;gap:6px;background:var(--md-sys-color-surface-container-highest);color:var(--md-sys-color-on-surface-variant);border-radius:9px;padding:4px 10px;font:var(--md-sys-typescale-label-medium)}
   .code-chip .mi{font-size:16px}
 
-  /* ---- Card (token-styled, reveal + focus-grow) ---- */
-  /* Kartu statis — tidak berubah ukuran saat field aktif (tanpa flicker) */
-  .card{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);
-    border-radius:20px;padding:20px;margin-bottom:16px}
+  /* Cards (static) */
+  .card{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:20px;padding:20px;margin-bottom:16px}
   .card.filled{background:var(--md-sys-color-surface-container);border-color:transparent}
   .sec{display:flex;align-items:center;gap:10px;margin-bottom:16px}
-  .grow{flex:1}
   .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
   .fgrid md-text-field{width:100%}
+
+  /* Entry two-column with sticky summary */
+  .entry-grid{display:grid;grid-template-columns:minmax(0,1fr) 330px;gap:16px;align-items:start}
+  .summary{position:sticky;top:0}
+  @media(max-width:1040px){.entry-grid{grid-template-columns:1fr}.summary{position:static}}
+
+  /* MD3 select (opens MDMenu) */
+  .md-select{position:relative;display:inline-flex;flex-direction:column;justify-content:center;min-width:190px;height:52px;
+    padding:6px 40px 6px 14px;border:1px solid var(--md-sys-color-outline);border-radius:11px;background:var(--md-sys-color-surface);
+    color:var(--md-sys-color-on-surface);cursor:pointer;text-align:left;font:inherit;transition:border-color .15s}
+  .md-select:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 4%,transparent)}
+  .md-select .lab{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-primary)}
+  .md-select .lab:empty{display:none}
+  .md-select .val{font:var(--md-sys-typescale-body-large);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .md-select .val.ph{color:var(--md-sys-color-on-surface-variant)}
+  .md-select .arrow{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--md-sys-color-on-surface-variant);transition:transform .2s}
+  .md-select[data-menu-open]{border:2px solid var(--md-sys-color-primary);padding:5px 39px 5px 13px}
+  .md-select[data-menu-open] .arrow{transform:translateY(-50%) rotate(180deg)}
 
   /* inventory */
   .tbl{display:flex;flex-direction:column;gap:8px;overflow-x:auto}
   .tr{display:grid;grid-template-columns:1.5fr 1.2fr 56px 1.5fr 1.2fr 40px;gap:8px;align-items:center;min-width:640px}
   .tr.th>div{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);padding:0 6px}
-  .tr input{height:44px;border:1px solid var(--md-sys-color-outline-variant);border-radius:11px;
-    background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);padding:0 12px;
-    font:var(--md-sys-typescale-body-medium);width:100%}
-  .tr input:focus{outline:2px solid var(--md-sys-color-primary);border-color:transparent}
+  .tr input{height:44px;border:1px solid var(--md-sys-color-outline-variant);border-radius:11px;background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);padding:0 12px;font:var(--md-sys-typescale-body-medium);width:100%}
+  .tr input:focus{outline:2px solid var(--md-sys-color-primary);outline-offset:-1px;border-color:transparent}
   .tr input.sn{border-color:var(--md-sys-color-tertiary)}
 
-  /* foto */
-  .count{background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);
-    border-radius:99px;padding:3px 12px;font:var(--md-sys-typescale-label-medium)}
-  .drop{border:2px dashed var(--md-sys-color-outline-variant);border-radius:16px;padding:18px;text-align:center;
-    color:var(--md-sys-color-on-surface-variant);margin-bottom:14px}
-  .drop .mi{font-size:30px;color:var(--md-sys-color-primary)}
-  .drop-actions{display:flex;gap:8px;justify-content:center;margin-top:10px;flex-wrap:wrap}
-  .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:12px}
-  .pslot{border:1.5px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:12px;display:flex;
-    flex-direction:column;gap:8px;background:var(--md-sys-color-surface)}
-  .pslot.sn{border-color:var(--md-sys-color-tertiary)}
-  .pl{display:flex;align-items:center;gap:6px;font:var(--md-sys-typescale-label-large)}
-  .pl .mi{font-size:18px;color:var(--md-sys-color-on-surface-variant)}
-  .pslot.sn .pl .mi{color:var(--md-sys-color-tertiary)}
-  .pt{min-height:96px;border-radius:11px;background:var(--md-sys-color-surface-container-highest);
-    display:flex;flex-wrap:wrap;gap:6px;padding:8px;align-items:center;justify-content:center}
-  .pt.empty{background:color-mix(in srgb,var(--md-sys-color-primary) 5%,transparent);border:1px dashed var(--md-sys-color-outline-variant)}
-  .thumb{position:relative;width:66px;height:66px;border-radius:9px;overflow:hidden;background:var(--md-sys-color-surface-container-highest)}
-  .thumb img{width:100%;height:100%;object-fit:cover;display:block}
-  .thumb .x{position:absolute;top:2px;right:2px;width:20px;height:20px;border:none;border-radius:50%;
-    background:rgba(0,0,0,.55);color:#fff;font:14px/1 'Material Symbols Outlined';cursor:pointer}
-  .sn-chip{display:inline-flex;align-items:center;gap:6px;background:var(--md-sys-color-tertiary-container);
-    color:var(--md-sys-color-on-tertiary-container);border-radius:9px;padding:4px 10px;font:var(--md-sys-typescale-label-medium)}
+  /* foto — uniform cards */
+  .drop{border:2px dashed var(--md-sys-color-outline-variant);border-radius:16px;padding:16px;text-align:center;color:var(--md-sys-color-on-surface-variant);margin-bottom:14px}
+  .drop .mi{font-size:28px;color:var(--md-sys-color-primary)}
+  .drop-actions{display:flex;gap:8px;justify-content:center;margin-top:8px;flex-wrap:wrap}
+  .count{background:var(--md-sys-color-primary-container);color:var(--md-sys-color-on-primary-container);border-radius:99px;padding:3px 12px;font:var(--md-sys-typescale-label-medium)}
+  .pgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:14px;align-items:stretch}
+  .pcard{display:flex;flex-direction:column;background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:12px;height:100%}
+  .pcard.sn{border-color:var(--md-sys-color-tertiary)}
+  .pcard .hd{display:flex;gap:8px;align-items:flex-start;min-height:42px;font:var(--md-sys-typescale-label-large);line-height:1.25}
+  .pcard .hd .mi{font-size:18px;color:var(--md-sys-color-on-surface-variant);flex:0 0 auto;margin-top:1px}
+  .pcard.sn .hd .mi{color:var(--md-sys-color-tertiary)}
+  .snap{position:relative;margin-top:6px;aspect-ratio:4/3;border-radius:11px;overflow:hidden;background:var(--md-sys-color-surface-container-highest);display:grid;place-items:center;cursor:pointer}
+  .snap img{width:100%;height:100%;object-fit:cover;display:block}
+  .snap.empty{background:color-mix(in srgb,var(--md-sys-color-primary) 5%,transparent);border:1px dashed var(--md-sys-color-outline-variant)}
+  .snap .badge{position:absolute;left:6px;bottom:6px;background:rgba(0,0,0,.6);color:#fff;font:var(--md-sys-typescale-label-small);padding:1px 7px;border-radius:99px}
+  .snap .x{position:absolute;top:5px;right:5px;width:24px;height:24px;border:none;border-radius:50%;background:rgba(0,0,0,.55);color:#fff;font:16px/1 'Material Symbols Outlined';cursor:pointer;display:grid;place-items:center}
+  .pcard .foot{min-height:34px;display:flex;align-items:center;gap:6px;margin-top:10px}
+  .sn-chip{display:inline-flex;align-items:center;gap:6px;background:var(--md-sys-color-tertiary-container);color:var(--md-sys-color-on-tertiary-container);border-radius:9px;padding:4px 9px;font:var(--md-sys-typescale-label-medium)}
   .sn-chip .mi{font-size:16px}
-  .genrow,.save-row,.rowflex{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
-  .save-row{justify-content:flex-end;margin-top:4px}
+  .sn-chip .add{cursor:pointer;font-size:16px}
+
+  /* summary panel */
+  .summary .card{margin-bottom:0}
+  .sum-title{font:var(--md-sys-typescale-title-large);margin:0}
+  .sum-sub{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin:2px 0 16px}
+  .sum-pct{font:var(--md-sys-typescale-title-medium)}
+  .bar{height:10px;border-radius:5px;background:var(--md-sys-color-surface-container-highest);overflow:hidden;margin:8px 0 12px}
+  .bar>span{display:block;height:100%;background:var(--md-sys-color-primary);border-radius:5px;transition:width .4s var(--md-sys-motion-easing-emphasized-decelerate)}
+  .crow{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-top:1px solid var(--md-sys-color-outline-variant);font:var(--md-sys-typescale-body-medium)}
+  .crow .st{font-weight:600}.crow .st.ok{color:var(--md-sys-color-primary)}.crow .st.no{color:var(--md-sys-color-on-surface-variant)}
+  .sum-actions{margin-top:16px;display:flex;flex-direction:column;gap:8px}
+  .sum-actions md-button{width:100%}
+  .exp2{display:flex;gap:8px}.exp2 md-button{flex:1}
+  .hint{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin-top:10px}
 
   table{width:100%;border-collapse:collapse;font:var(--md-sys-typescale-body-medium)}
   th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
   th{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
 
-  /* tooltip (MD3 plain) */
-  .tip{position:fixed;z-index:9999;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);
-    font:var(--md-sys-typescale-body-small);padding:5px 9px;border-radius:6px;pointer-events:none;opacity:0;
-    transition:opacity .12s;white-space:nowrap;transform:translateX(-50%)}
+  .tip{position:fixed;z-index:9999;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);font:var(--md-sys-typescale-body-small);padding:5px 9px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .12s;white-space:nowrap;transform:translateX(-50%)}
   .tip.show{opacity:1}
-  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--md-sys-color-inverse-surface);
-    color:var(--md-sys-color-inverse-on-surface);padding:12px 18px;border-radius:12px;z-index:9999;opacity:0;
-    transition:opacity .2s;box-shadow:var(--md-sys-elevation-level3)}
+  .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);padding:12px 18px;border-radius:12px;z-index:9999;opacity:0;transition:opacity .2s;box-shadow:var(--md-sys-elevation-level3)}
   .toast.show{opacity:1}
-  @media(max-width:820px){.shell{padding:8px;gap:8px}}
+  .rowflex{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
 </style>
 </head>
 <body>
 
-<!-- LOGIN -->
 <div id="login">
   <div class="box">
     <div class="brand"><span class="dot mi fill">inventory_2</span> BAA Generator</div>
@@ -141,7 +147,6 @@
   </div>
 </div>
 
-<!-- APP -->
 <div id="app" class="shell hidden">
   <aside class="nav">
     <div class="nav-head">
@@ -164,70 +169,77 @@
       <span class="code-chip hidden" id="entryCode"><span class="mi">tag</span><span></span></span>
       <span class="grow"></span>
       <span class="rowflex" id="entryTools">
-        <select id="entry-picker" class="hidden"></select>
+        <div class="md-select" id="picker"></div>
         <md-icon-button id="entry-new" variant="tonal" data-tip="Lokasi baru"><span>add</span></md-icon-button>
         <md-icon-button id="entry-del" data-tip="Hapus entry" class="hidden"><span>delete</span></md-icon-button>
       </span>
     </header>
 
     <div class="canvas-body">
-      <!-- ENTRY -->
       <section id="v-entry">
         <div id="entry-empty" class="card muted">Pilih lokasi di kanan atas, atau buat lokasi baru untuk mulai.</div>
-        <div id="entry-form" class="hidden">
-          <div class="card">
-            <div class="sec"><span class="mi acc">location_on</span><h3>Data Lokasi</h3></div>
-            <div class="fgrid" id="loc-fields"></div>
-          </div>
-          <div class="card">
-            <div class="sec"><span class="mi acc">inventory_2</span><h3>Inventory</h3><span class="grow"></span>
-              <md-icon-button id="inv-add" variant="tonal" data-tip="Tambah baris"><span>add</span></md-icon-button></div>
-            <div class="tbl">
-              <div class="tr th"><div>Nama Barang</div><div>Merk / Type</div><div>Jml</div><div>SN / Tagging</div><div>Keterangan</div><div></div></div>
-              <div id="inv-body"></div>
+        <div id="entry-form" class="entry-grid hidden">
+          <div class="entry-main">
+            <div class="card">
+              <div class="sec"><span class="mi acc">location_on</span><h3>Data Lokasi</h3></div>
+              <div class="fgrid" id="loc-fields"></div>
             </div>
-          </div>
-          <div class="card">
-            <div class="sec"><span class="mi acc">photo_camera</span><h3>Foto &amp; Capture</h3><span class="grow"></span><span class="count" id="foto-count">0 / 0</span></div>
-            <div class="drop" id="drop-auto">
-              <span class="mi">cloud_upload</span>
-              <div class="muted" style="margin-top:4px">Unggah — kategori otomatis dari nama file, SN langsung di-OCR</div>
-              <div class="drop-actions">
-                <md-button variant="tonal" icon="upload" id="btn-auto">Unggah otomatis</md-button>
-                <md-button variant="text" icon="folder" id="btn-folder">Pilih folder</md-button>
+            <div class="card">
+              <div class="sec"><span class="mi acc">inventory_2</span><h3>Inventory</h3><span class="grow"></span>
+                <md-icon-button id="inv-add" variant="tonal" data-tip="Tambah baris"><span>add</span></md-icon-button></div>
+              <div class="tbl">
+                <div class="tr th"><div>Nama Barang</div><div>Merk / Type</div><div>Jml</div><div>SN / Tagging</div><div>Keterangan</div><div></div></div>
+                <div id="inv-body"></div>
               </div>
-              <input id="file-auto" type="file" multiple accept="image/*" class="hidden">
-              <input id="file-folder" type="file" multiple webkitdirectory class="hidden">
             </div>
-            <div id="ocr-note" class="muted" style="margin-bottom:8px"></div>
-            <div class="pgrid" id="photo-slots"></div>
-            <div id="uncat-wrap" class="hidden" style="margin-top:14px">
-              <div class="sec"><span class="mi acc">help</span><h3>Belum terkategori</h3></div>
-              <div class="pgrid" id="uncat-slots"></div>
+            <div class="card">
+              <div class="sec"><span class="mi acc">photo_camera</span><h3>Foto &amp; Capture</h3><span class="grow"></span><span class="count" id="foto-count">0 / 0</span></div>
+              <div class="drop">
+                <span class="mi">cloud_upload</span>
+                <div class="muted" style="margin-top:4px">Unggah — kategori otomatis dari nama file, SN langsung di-OCR</div>
+                <div class="drop-actions">
+                  <md-button variant="tonal" icon="upload" id="btn-auto">Unggah otomatis</md-button>
+                  <md-button variant="text" icon="folder" id="btn-folder">Pilih folder</md-button>
+                </div>
+                <input id="file-auto" type="file" multiple accept="image/*" class="hidden">
+                <input id="file-folder" type="file" multiple webkitdirectory class="hidden">
+              </div>
+              <div id="ocr-note" class="muted" style="margin-bottom:8px"></div>
+              <div class="pgrid" id="photo-slots"></div>
+              <div id="uncat-wrap" class="hidden" style="margin-top:14px">
+                <div class="sec"><span class="mi acc">help</span><h3>Belum terkategori</h3></div>
+                <div class="pgrid" id="uncat-slots"></div>
+              </div>
             </div>
           </div>
-          <div class="card filled">
-            <div class="sec"><span class="mi acc">download</span><h3>Generate</h3></div>
-            <div class="genrow">
-              <md-segmented-button id="scope"><button data-value="one" selected>Lokasi ini</button><button data-value="all">Semua lokasi</button></md-segmented-button>
-              <span class="grow"></span>
-              <md-button variant="filled" icon="grid_on" id="exp-xlsx">Excel</md-button>
-              <md-button variant="tonal" icon="picture_as_pdf" id="exp-pdf">PDF</md-button>
+
+          <aside class="summary">
+            <div class="card">
+              <h2 class="sum-title">Ringkasan BAA</h2>
+              <p class="sum-sub" id="sum-status">Status: draft</p>
+              <div class="sum-pct"><span id="sum-pct">0%</span> lengkap</div>
+              <div class="bar"><span id="sum-bar" style="width:0%"></span></div>
+              <div class="crow"><span>Informasi lokasi</span><span class="st no" id="sum-loc">Belum</span></div>
+              <div class="crow"><span>Inventory</span><span class="st" id="sum-inv">0 item</span></div>
+              <div class="crow"><span>Foto wajib</span><span class="st" id="sum-foto">0 / 0</span></div>
+              <div class="sum-actions">
+                <md-segmented-button id="scope"><button data-value="one" selected>Lokasi ini</button><button data-value="all">Semua</button></md-segmented-button>
+                <md-button variant="filled" size="m" icon="save" id="save-btn">Simpan BAA</md-button>
+                <div class="exp2">
+                  <md-button variant="outlined" icon="grid_on" id="exp-xlsx">Excel</md-button>
+                  <md-button variant="outlined" icon="picture_as_pdf" id="exp-pdf">PDF</md-button>
+                </div>
+              </div>
+              <p class="hint">Export aktif setelah data wajib lengkap. Pada praktiknya tombol tetap dapat dicoba.</p>
             </div>
-          </div>
-          <div class="save-row">
-            <md-button variant="text" icon="restart_alt" id="reset-btn">Reset</md-button>
-            <md-button variant="filled" size="m" icon="save" id="save-btn">Simpan</md-button>
-          </div>
+          </aside>
         </div>
       </section>
 
-      <!-- LOCATIONS -->
       <section id="v-locations" class="hidden">
         <div class="card"><table><thead><tr><th>Kode</th><th>Nama Lokasi</th><th>Inv</th><th>Foto</th><th>Status</th><th></th></tr></thead><tbody id="loc-table"></tbody></table></div>
       </section>
 
-      <!-- TEMPLATES -->
       <section id="v-templates" class="hidden">
         <div class="card">
           <div class="sec"><span class="mi acc">upload_file</span><h3>Upload template baru</h3></div>
@@ -238,8 +250,8 @@
           <div style="margin-top:12px"><md-button id="tpl-inspect" variant="filled">Periksa worksheet</md-button></div>
           <div id="tpl-register" class="hidden" style="margin-top:14px">
             <div class="fgrid">
-              <div><label class="muted">Worksheet LOG</label><select id="tpl-log" style="width:100%"></select></div>
-              <div><label class="muted">Worksheet Detail</label><select id="tpl-detail" style="width:100%"></select></div>
+              <div class="md-select" id="tpl-log"></div>
+              <div class="md-select" id="tpl-detail"></div>
             </div>
             <div style="margin-top:12px"><md-button id="tpl-do-register" variant="filled">Daftarkan &amp; aktifkan</md-button></div>
           </div>
@@ -249,8 +261,8 @@
         <div id="mapping" class="card hidden">
           <div class="sec"><span class="mi acc">grid_on</span><h3>Mapping — <span id="map-tpl-name" class="mono"></span></h3></div>
           <div class="fgrid">
-            <div><label class="muted">Sheet LOG</label><select id="map-log" style="width:100%"></select></div>
-            <div><label class="muted">Sheet Detail</label><select id="map-detail" style="width:100%"></select></div>
+            <div class="md-select" id="map-log"></div>
+            <div class="md-select" id="map-detail"></div>
           </div>
           <div class="sec" style="margin-top:16px"><h3>Kolom LOG</h3></div><div class="fgrid" id="map-logcols"></div>
           <div style="max-width:260px;margin-top:10px"><label class="muted">Baris mulai LOG</label><input id="map-logstart" type="number" value="3" style="width:100%"></div>
@@ -267,7 +279,6 @@
         </div>
       </section>
 
-      <!-- USERS -->
       <section id="v-users" class="hidden">
         <div class="card"><table><thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Aktif</th></tr></thead><tbody id="usr-table"></tbody></table></div>
       </section>
@@ -275,7 +286,6 @@
   </main>
 </div>
 
-<!-- delete dialog -->
 <md-dialog id="delDlg">
   <span slot="headline">Hapus entry ini?</span>
   <div id="delMsg"></div>
@@ -300,122 +310,135 @@ const DEFAULT_MAP={log:{start_row:3,columns:{no:"A",lokasi:"B",nama_barang:"C",m
   detail:{location_cells:{},inventory:{start_row:32,max_rows:5,cols:{nama_barang:"B",merk_type:"C",jumlah:"E",sn_tagging:"F",keterangan:"H"}},photos:{},photo_max_w:320,photo_max_h:240}};
 let S={user:null,cats:[],locFields:[],ocr:false,loc:null,scope:'one',pending:null,mapTplId:null,sheets:[]};
 
-/* ===== Palet tenang: seed sbagai aksen, surface netral ===== */
-const NEUTRAL={light:{surface:'#fcfcfd',background:'#fcfcfd','surface-dim':'#dddfe0','surface-bright':'#fcfcfd',
-  'surface-container-lowest':'#ffffff','surface-container-low':'#f6f7f8','surface-container':'#f0f1f2',
-  'surface-container-high':'#eaeced','surface-container-highest':'#e4e6e7','surface-variant':'#dfe2e3',
-  'on-surface':'#1a1c1d','on-surface-variant':'#43474a','outline':'#74777a','outline-variant':'#c3c7c8',
-  'inverse-surface':'#2e3132','inverse-on-surface':'#eff0f1'},
- dark:{surface:'#131515',background:'#131515','surface-dim':'#131515','surface-bright':'#393b3c',
-  'surface-container-lowest':'#0e1010','surface-container-low':'#1b1d1d','surface-container':'#1f2121',
-  'surface-container-high':'#292b2b','surface-container-highest':'#343636','surface-variant':'#43474a',
-  'on-surface':'#e2e3e3','on-surface-variant':'#c3c7c8','outline':'#8d9192','outline-variant':'#43474a',
-  'inverse-surface':'#e2e3e3','inverse-on-surface':'#2e3132'}};
-function applyCalm(){const t=(window.MD3&&MD3.getTheme&&MD3.getTheme())||'light';const m=NEUTRAL[t]||NEUTRAL.light;
-  const st=document.documentElement.style;for(const k in m)st.setProperty('--md-sys-color-'+k,m[k]);}
-function paint(){if(window.MD3){MD3.applySeed('#024343',{style:'expressive'});}applyCalm();}
+/* calm palette */
+const NEUTRAL={light:{surface:'#fcfcfd',background:'#fcfcfd','surface-dim':'#dddfe0','surface-bright':'#fcfcfd','surface-container-lowest':'#ffffff','surface-container-low':'#f6f7f8','surface-container':'#f0f1f2','surface-container-high':'#eaeced','surface-container-highest':'#e4e6e7','surface-variant':'#dfe2e3','on-surface':'#1a1c1d','on-surface-variant':'#43474a','outline':'#74777a','outline-variant':'#c3c7c8','inverse-surface':'#2e3132','inverse-on-surface':'#eff0f1'},
+ dark:{surface:'#131515',background:'#131515','surface-dim':'#131515','surface-bright':'#393b3c','surface-container-lowest':'#0e1010','surface-container-low':'#1b1d1d','surface-container':'#1f2121','surface-container-high':'#292b2b','surface-container-highest':'#343636','surface-variant':'#43474a','on-surface':'#e2e3e3','on-surface-variant':'#c3c7c8','outline':'#8d9192','outline-variant':'#43474a','inverse-surface':'#e2e3e3','inverse-on-surface':'#2e3132'}};
+function applyCalm(){const t=(window.MD3&&MD3.getTheme&&MD3.getTheme())||'light';const m=NEUTRAL[t]||NEUTRAL.light;const st=document.documentElement.style;for(const k in m)st.setProperty('--md-sys-color-'+k,m[k]);}
+function paint(){if(window.MD3)MD3.applySeed('#024343',{style:'expressive'});applyCalm();}
 
-/* ===== reveal directional + focus-grow ===== */
 function revealCards(scope){if(reduced)return;[...scope.querySelectorAll('.card')].forEach((c,i)=>{
-  c.animate([{opacity:0,transform:'translateX(26px)'},{opacity:1,transform:'none'}],
-    {duration:480,delay:i*70,easing:'cubic-bezier(0.05,0.7,0.1,1)',fill:'both'});});}
+  c.animate([{opacity:0,transform:'translateX(26px)'},{opacity:1,transform:'none'}],{duration:460,delay:i*70,easing:'cubic-bezier(0.05,0.7,0.1,1)',fill:'both'});});}
 
-/* ===== tooltip ===== */
+/* tooltip */
 const tip=$('#tip');let ttmr;
 function bindTips(){$$('[data-tip]').forEach(el=>{if(el._tip)return;el._tip=1;
-  const show=()=>{tip.textContent=el.getAttribute('data-tip');const r=el.getBoundingClientRect();
-    tip.style.left=(r.left+r.width/2)+'px';tip.style.top=(r.bottom+8)+'px';clearTimeout(ttmr);ttmr=setTimeout(()=>tip.classList.add('show'),300);};
+  const show=()=>{tip.textContent=el.getAttribute('data-tip');const r=el.getBoundingClientRect();tip.style.left=(r.left+r.width/2)+'px';tip.style.top=(r.bottom+8)+'px';clearTimeout(ttmr);ttmr=setTimeout(()=>tip.classList.add('show'),300);};
   const hide=()=>{clearTimeout(ttmr);tip.classList.remove('show');};
   el.addEventListener('mouseenter',show);el.addEventListener('mouseleave',hide);el.addEventListener('click',hide);});}
 
-/* ===== MD3 Expressive dropdown (engine dari template dropdown-menu) ===== */
-function openMenu(anchor,items){
-  const model=items.map(it=>({label:it.label,icon:it.icon,onSelect:it.fn}));
-  if(window.MDMenu) MDMenu.open(anchor,model,{openerEl:anchor});
-}
+/* MD3 dropdown for row/photo actions */
+function openMenu(anchor,items){if(window.MDMenu)MDMenu.open(anchor,items.map(it=>({label:it.label,icon:it.icon,onSelect:it.fn})),{openerEl:anchor});}
 
-/* ===== AUTH ===== */
-async function boot(){paint();try{S.user=await api('/api/auth/me');showApp();}catch{$('#login').classList.remove('hidden');bindTips();}}
-$('#lg-btn').addEventListener('click',async()=>{try{
-  await api('/api/auth/login',{method:'POST',body:JSON.stringify({username:$('#lg-user').value,password:$('#lg-pass').value})});
-  S.user=await api('/api/auth/me');showApp();}catch(e){const el=$('#lg-err');el.textContent=e.message;el.classList.remove('hidden');}});
+/* MD3 select (single-select via MDMenu) */
+class MDSelect{
+  constructor(el,{label='',placeholder='— pilih —',onChange=null}={}){
+    this.el=el;this.label=label;this.ph=placeholder;this.onChange=onChange;this.items=[];this.value='';
+    el.tabIndex=0;el.innerHTML=`<span class="lab">${esc(label)}</span><span class="val ph">${esc(placeholder)}</span><span class="mi arrow">arrow_drop_down</span>`;
+    el.addEventListener('click',()=>this.open());
+  }
+  setOptions(list){this.items=list;if(this.value&&!list.some(o=>o.value===this.value))this.value='';this._render();return this;}
+  setValue(v){this.value=v;this._render();return this;}
+  getValue(){return this.value;}
+  _render(){const o=this.items.find(x=>x.value===this.value);const v=this.el.querySelector('.val');v.textContent=o?o.label:this.ph;v.classList.toggle('ph',!o);}
+  open(){if(!this.items.length)return;MDMenu.open(this.el,this.items.map(o=>({label:o.label,select:'single',group:'sel',selected:o.value===this.value,
+    onSelect:()=>{this.value=o.value;this._render();this.onChange&&this.onChange(o.value);}})),{openerEl:this.el});}
+}
+let pickerSel,tplLogSel,tplDetailSel,mapLogSel,mapDetailSel;
+
+/* AUTH */
+async function boot(){paint();
+  pickerSel=new MDSelect($('#picker'),{label:'Lokasi',placeholder:'— pilih lokasi —',onChange:v=>{if(v)openLoc(+v);}});
+  tplLogSel=new MDSelect($('#tpl-log'),{label:'Worksheet LOG'});
+  tplDetailSel=new MDSelect($('#tpl-detail'),{label:'Worksheet Detail'});
+  mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG'});
+  mapDetailSel=new MDSelect($('#map-detail'),{label:'Sheet Detail',onChange:v=>renderRef(v)});
+  try{S.user=await api('/api/auth/me');showApp();}catch{$('#login').classList.remove('hidden');bindTips();}}
+$('#lg-btn').addEventListener('click',async()=>{try{await api('/api/auth/login',{method:'POST',body:JSON.stringify({username:$('#lg-user').value,password:$('#lg-pass').value})});S.user=await api('/api/auth/me');showApp();}catch(e){const el=$('#lg-err');el.textContent=e.message;el.classList.remove('hidden');}});
+$('#lg-pass').addEventListener('keydown',e=>{if(e.key==='Enter')$('#lg-btn').click()});
 $('#logoutBtn').addEventListener('click',async()=>{await api('/api/auth/logout',{method:'POST'});location.reload();});
 $('#themeBtn').addEventListener('click',()=>{const c=MD3.getTheme();MD3.setTheme(c==='dark'?'light':'dark');applyCalm();});
 $('#railBtn').addEventListener('click',()=>$('#app').classList.toggle('rail'));
 
-async function showApp(){
-  $('#login').classList.add('hidden');$('#app').classList.remove('hidden');
+async function showApp(){$('#login').classList.add('hidden');$('#app').classList.remove('hidden');
   const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
-  refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}
-  bindTips();
-}
+  refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();}
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
   const v=n.dataset.view;['entry','locations','templates','users'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
-  $('#pageTitle').textContent=n.querySelector('.lbl').textContent;
-  $('#entryTools').classList.toggle('hidden',v!=='entry');
-  const sec=$('#v-'+v);revealCards(sec);
-}));
+  $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');
+  revealCards($('#v-'+v));}));
 
-/* ===== ENTRY ===== */
+function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats.filter(c=>['sn_kit','sn_router','sn_ap'].includes(c.key));}
+
+/* ENTRY */
 async function refreshPicker(){const rows=await api('/api/locations');$('#loc-count').textContent=rows.length||'';
-  $('#entry-picker').innerHTML='<option value="">— pilih lokasi —</option>'+rows.map(l=>`<option value="${l.id}">${esc(l.code)} · ${esc(l.data.nama_lokasi||l.name||'')}</option>`).join('');
-  if(S.loc)$('#entry-picker').value=S.loc.id;}
-$('#entry-picker').classList.remove('hidden');
-$('#entry-picker').addEventListener('change',e=>{if(e.target.value)openLoc(+e.target.value);});
+  pickerSel.setOptions(rows.map(l=>({value:String(l.id),label:l.code+' · '+(l.data.nama_lokasi||l.name||'')})));
+  if(S.loc)pickerSel.setValue(String(S.loc.id));}
 $('#entry-new').addEventListener('click',async()=>{const loc=await api('/api/locations',{method:'POST',body:JSON.stringify({name:'',data:{},status:'draft'})});await refreshPicker();openLoc(loc.id);toast('Lokasi '+loc.code+' dibuat');});
 $('#entry-del').addEventListener('click',()=>{if(S.loc)confirmDelete(S.loc.id,S.loc.code,true);});
 
-async function openLoc(id){S.loc=await api('/api/locations/'+id);$('#entry-picker').value=id;
+async function openLoc(id){S.loc=await api('/api/locations/'+id);pickerSel.setValue(String(id));
   $('#entry-empty').classList.add('hidden');$('#entry-form').classList.remove('hidden');
   $('#entryCode').classList.remove('hidden');$('#entryCode').querySelector('span:last-child').textContent=S.loc.code;
   $('#entry-del').classList.remove('hidden');
-  renderLocFields();renderInventory();renderPhotos();revealCards($('#v-entry'));bindTips();}
+  renderLocFields();renderInventory();renderPhotos();updateSummary();revealCards($('#v-entry'));bindTips();}
 function renderLocFields(){$('#loc-fields').innerHTML=S.locFields.map(f=>
   `<md-text-field data-lf="${f.key}" variant="outlined" label="${esc(f.label)}${f.required?' *':''}" type="${f.type==='date'?'date':'text'}" value="${esc(S.loc.data[f.key]||'')}"></md-text-field>`).join('');}
 function invRow(it={}){return `<div class="tr">
-  <input data-iv="nama_barang" value="${esc(it.nama_barang)}">
-  <input data-iv="merk_type" value="${esc(it.merk_type)}">
-  <input data-iv="jumlah" value="${esc(it.jumlah)}">
-  <input data-iv="sn_tagging" class="sn" value="${esc(it.sn_tagging)}">
+  <input data-iv="nama_barang" value="${esc(it.nama_barang)}"><input data-iv="merk_type" value="${esc(it.merk_type)}">
+  <input data-iv="jumlah" value="${esc(it.jumlah)}"><input data-iv="sn_tagging" class="sn" value="${esc(it.sn_tagging)}">
   <input data-iv="keterangan" value="${esc(it.keterangan)}">
-  <md-icon-button data-tip="Hapus baris" onclick="this.closest('.tr').remove()"><span>close</span></md-icon-button></div>`;}
+  <md-icon-button data-tip="Hapus baris" onclick="this.closest('.tr').remove();updateSummary()"><span>close</span></md-icon-button></div>`;}
 function renderInventory(){$('#inv-body').innerHTML=(S.loc.inventory.length?S.loc.inventory:[{}]).map(invRow).join('');bindTips();}
-$('#inv-add').addEventListener('click',()=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow());bindTips();});
+$('#inv-add').addEventListener('click',()=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow());bindTips();updateSummary();});
 function collectInventory(){return $$('#inv-body .tr').map(tr=>{const o={};tr.querySelectorAll('[data-iv]').forEach(i=>o[i.dataset.iv]=i.value);return o;}).filter(o=>Object.values(o).some(v=>v&&v.trim()));}
 function collectData(){const d={};$$('[data-lf]').forEach(el=>d[el.dataset.lf]=el.value);return d;}
-$('#reset-btn').addEventListener('click',()=>{if(S.loc)openLoc(S.loc.id);});
-$('#save-btn').addEventListener('click',async()=>{try{
-  const data=collectData();
-  await api('/api/locations/'+S.loc.id,{method:'PUT',body:JSON.stringify({name:data.nama_lokasi||'',data,status:S.loc.status})});
-  await api('/api/locations/'+S.loc.id+'/inventory',{method:'PUT',body:JSON.stringify({items:collectInventory()})});
-  toast('Tersimpan');await openLoc(S.loc.id);refreshPicker();}catch(e){toast('Gagal: '+e.message);}});
+$('#entry-form').addEventListener('input',updateSummary);
 
-/* photos */
+/* progress summary */
+function updateSummary(){
+  if(!S.loc)return;
+  const data=collectData();
+  const reqF=S.locFields.filter(f=>f.required);
+  const locDone=reqF.length?reqF.every(f=>(data[f.key]||'').trim()):Object.values(data).some(v=>(v||'').trim());
+  const inv=collectInventory().length;
+  const rc=requiredCats();const byCat={};(S.loc.photos||[]).forEach(p=>byCat[p.category]=1);
+  const fotoDone=rc.filter(c=>byCat[c.key]).length;
+  const total=(reqF.length||1)+1+rc.length;
+  const done=(reqF.length?reqF.filter(f=>(data[f.key]||'').trim()).length:(locDone?1:0))+(inv>0?1:0)+fotoDone;
+  const pct=Math.round(done/total*100);
+  $('#sum-pct').textContent=pct+'%';$('#sum-bar').style.width=pct+'%';
+  $('#sum-status').textContent='Status: '+(S.loc.status||'draft');
+  const l=$('#sum-loc');l.textContent=locDone?'Lengkap':'Belum';l.className='st '+(locDone?'ok':'no');
+  const iv=$('#sum-inv');iv.textContent=inv+' item';iv.className='st '+(inv>0?'ok':'no');
+  const ft=$('#sum-foto');ft.textContent=fotoDone+' / '+rc.length;ft.className='st '+(rc.length&&fotoDone>=rc.length?'ok':'no');
+}
+
+/* photos — uniform cards */
 function renderPhotos(){
   $('#ocr-note').textContent=S.ocr?'':'OCR nonaktif di server (Tesseract belum terpasang) — SN bisa diisi manual.';
   const byCat={};(S.loc.photos||[]).forEach(p=>{(byCat[p.category]=byCat[p.category]||[]).push(p);});
   const filled=S.cats.filter(c=>(byCat[c.key]||[]).length).length;
   $('#foto-count').textContent=filled+' / '+S.cats.length;
-  $('#photo-slots').innerHTML=S.cats.map(c=>{const ps=byCat[c.key]||[];
-    const thumbs=ps.length?ps.map(thumb).join(''):`<md-icon-button variant="tonal" data-tip="Unggah" onclick="pick('${c.key}')"><span>add</span></md-icon-button>`;
-    const sn=c.ocr?ps.filter(p=>p.ocr_serial).map(p=>`<span class="sn-chip"><span class="mi">document_scanner</span>${esc(p.ocr_serial)} <span class="mi" style="cursor:pointer;font-size:16px" onclick="useSerial('${esc(p.ocr_serial)}')" title="tambah ke inventory">add</span></span>`).join(''):'';
-    return `<div class="pslot ${c.ocr?'sn':''}"><div class="pl"><span class="mi">${c.ocr?'tag':'image'}</span>${esc(c.label)}</div>
-      <div class="pt ${ps.length?'':'empty'}">${thumbs}</div>${sn}
-      ${ps.length?`<md-button variant="text" size="xs" icon="add" onclick="pick('${c.key}')">Tambah</md-button>`:''}</div>`;}).join('');
+  $('#photo-slots').innerHTML=S.cats.map(c=>{const ps=byCat[c.key]||[];const first=ps[0];
+    const snap=first
+      ? `<div class="snap" onclick="pick('${c.key}')"><img src="/api/photos/${first.id}/file" loading="lazy">${ps.length>1?`<span class="badge">${ps.length} foto</span>`:''}<button class="x" onclick="event.stopPropagation();delPhoto(${first.id})">close</button></div>`
+      : `<div class="snap empty" onclick="pick('${c.key}')"><span class="mi" style="font-size:30px;color:var(--md-sys-color-primary)">add_a_photo</span></div>`;
+    let foot='<div class="foot"></div>';
+    if(c.ocr){const sn=ps.find(p=>p.ocr_serial);
+      foot=`<div class="foot">${sn?`<span class="sn-chip"><span class="mi">document_scanner</span>${esc(sn.ocr_serial)}<span class="mi add" onclick="useSerial('${esc(sn.ocr_serial)}')" title="tambah ke inventory">add</span></span>`:'<span class="muted" style="font:var(--md-sys-typescale-body-small)">SN via OCR</span>'}</div>`;}
+    return `<div class="pcard ${c.ocr?'sn':''}"><div class="hd"><span class="mi">${c.ocr?'tag':'image'}</span><span>${esc(c.label)}</span></div>${snap}${foot}</div>`;}).join('');
   const un=byCat['uncategorized']||[];$('#uncat-wrap').classList.toggle('hidden',!un.length);
-  $('#uncat-slots').innerHTML=un.map(p=>`<div class="pslot"><div class="pt">${thumb(p)}</div>
-    <md-button variant="tonal" size="xs" icon="drive_file_move" onclick="reassignMenu(this,${p.id})">Pindah kategori</md-button></div>`).join('');
+  $('#uncat-slots').innerHTML=un.map(p=>`<div class="pcard"><div class="hd"><span class="mi">help</span><span>Belum terkategori</span></div>
+    <div class="snap"><img src="/api/photos/${p.id}/file"><button class="x" onclick="delPhoto(${p.id})">close</button></div>
+    <div class="foot"><md-button variant="tonal" size="xs" icon="drive_file_move" onclick="reassignMenu(this,${p.id})">Pindah</md-button></div></div>`).join('');
   bindTips();
 }
-function thumb(p){return `<div class="thumb"><img src="/api/photos/${p.id}/file" loading="lazy"><button class="x" onclick="delPhoto(${p.id})">close</button></div>`;}
-window.pick=cat=>{const inp=document.createElement('input');inp.type='file';inp.multiple=true;inp.accept='image/*';
-  inp.onchange=()=>doUpload(inp.files,cat,[]);inp.click();};
-window.useSerial=s=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow({sn_tagging:s}));bindTips();toast('Baris inventory + SN ditambah');};
-window.delPhoto=async id=>{await api('/api/photos/'+id,{method:'DELETE'});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();};
-window.reassignMenu=(btn,pid)=>openMenu(btn,S.cats.map(c=>({icon:c.ocr?'tag':'image',label:c.label,fn:async()=>{
-  await api('/api/photos/'+pid,{method:'PATCH',body:JSON.stringify({category:c.key})});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();toast('Dipindah');}})));
+window.pick=cat=>{const inp=document.createElement('input');inp.type='file';inp.multiple=true;inp.accept='image/*';inp.onchange=()=>doUpload(inp.files,cat,[]);inp.click();};
+window.useSerial=s=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow({sn_tagging:s}));bindTips();updateSummary();toast('Baris inventory + SN ditambah');};
+window.delPhoto=async id=>{await api('/api/photos/'+id,{method:'DELETE'});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();};
+window.reassignMenu=(btn,pid)=>openMenu(btn,S.cats.map(c=>({icon:c.ocr?'tag':'image',label:c.label,fn:async()=>{await api('/api/photos/'+pid,{method:'PATCH',body:JSON.stringify({category:c.key})});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();toast('Dipindah');}})));
 async function doUpload(files,category,relpaths){if(!files||!files.length)return;const fd=new FormData();
   [...files].forEach(f=>fd.append('files',f));if(category)fd.append('category',category);
   fd.append('relpaths',JSON.stringify([...files].map(f=>f.webkitRelativePath||f.name)));
@@ -423,72 +446,71 @@ async function doUpload(files,category,relpaths){if(!files||!files.length)return
   try{const r=await fetch('/api/locations/'+S.loc.id+'/photos',{method:'POST',credentials:'same-origin',body:fd});
     if(!r.ok)throw new Error((await r.json()).detail);const d=await r.json();
     const sn=d.results.filter(x=>x.ocr_serial).map(x=>x.ocr_serial);
-    S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();
+    S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();
     toast('Selesai · '+d.results.length+' foto'+(sn.length?' · SN: '+sn.join(', '):''));}catch(e){toast('Gagal: '+e.message);}}
 $('#btn-auto').addEventListener('click',()=>$('#file-auto').click());
 $('#btn-folder').addEventListener('click',()=>$('#file-folder').click());
 $('#file-auto').addEventListener('change',e=>{doUpload(e.target.files,'',[]);e.target.value='';});
 $('#file-folder').addEventListener('change',e=>{doUpload(e.target.files,'',[]);e.target.value='';});
 
-/* scope + export */
+/* scope + save + export */
 $('#scope').addEventListener('change',e=>{S.scope=e.detail.value;});
-function expUrl(kind){const q=S.scope==='all'?'scope=all':('scope=one&loc_id='+(S.loc?S.loc.id:''));return `/api/export/${kind}?${q}`;}
+$('#save-btn').addEventListener('click',async()=>{try{const data=collectData();
+  await api('/api/locations/'+S.loc.id,{method:'PUT',body:JSON.stringify({name:data.nama_lokasi||'',data,status:S.loc.status})});
+  await api('/api/locations/'+S.loc.id+'/inventory',{method:'PUT',body:JSON.stringify({items:collectInventory()})});
+  toast('Tersimpan');await openLoc(S.loc.id);refreshPicker();}catch(e){toast('Gagal: '+e.message);}});
+function expUrl(k){return S.scope==='all'?`/api/export/${k}?scope=all`:`/api/export/${k}?scope=one&loc_id=${S.loc?S.loc.id:''}`;}
 $('#exp-xlsx').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return toast('Pilih lokasi');location.href=expUrl('excel');});
 $('#exp-pdf').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return toast('Pilih lokasi');location.href=expUrl('pdf');});
 
-/* ===== LOCATIONS ===== */
+/* LOCATIONS */
 async function loadLocations(){const rows=await api('/api/locations');$('#loc-count').textContent=rows.length||'';
   $('#loc-table').innerHTML=rows.map(l=>`<tr><td class="mono">${esc(l.code)}</td><td>${esc(l.data.nama_lokasi||l.name||'')}</td>
     <td>${l.inv_count}</td><td>${l.photo_count}</td><td>${l.status}</td>
-    <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`).join('')
-    ||'<tr><td colspan=6 class="muted">Belum ada lokasi</td></tr>';bindTips();}
+    <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`).join('')||'<tr><td colspan=6 class="muted">Belum ada lokasi</td></tr>';bindTips();}
 window.locMenu=(btn,l)=>{const items=[
   {icon:'edit',label:'Buka / Edit',fn:()=>{gotoEntry();openLoc(l.id);}},
   {icon:'grid_on',label:'Export Excel',fn:()=>location.href='/api/export/excel?scope=one&loc_id='+l.id},
   {icon:'picture_as_pdf',label:'Export PDF',fn:()=>location.href='/api/export/pdf?scope=one&loc_id='+l.id}];
-  if(l.cd)items.push({icon:'delete',label:'Hapus',fn:()=>confirmDelete(l.id,l.code,false)});
-  openMenu(btn,items);};
+  if(l.cd)items.push({icon:'delete',label:'Hapus',fn:()=>confirmDelete(l.id,l.code,false)});openMenu(btn,items);};
 function gotoEntry(){$$('.navitem[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view==='entry'));
   ['entry','locations','templates','users'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='entry'));
   $('#pageTitle').textContent='Entry BAA';$('#entryTools').classList.remove('hidden');}
 
-/* ===== DELETE ===== */
+/* DELETE */
 let delTarget=null,delFromEntry=false;
 function confirmDelete(id,code,fromEntry){delTarget=id;delFromEntry=fromEntry;
-  $('#delMsg').innerHTML=`Entry <b>${esc(code)}</b> beserta seluruh foto akan dihapus permanen. Tindakan ini tidak bisa dibatalkan.`;
-  $('#delDlg').show();}
+  $('#delMsg').innerHTML=`Entry <b>${esc(code)}</b> beserta seluruh foto akan dihapus permanen. Tindakan ini tidak bisa dibatalkan.`;$('#delDlg').show();}
 $('#delCancel').addEventListener('click',()=>$('#delDlg').close());
-$('#delOk').addEventListener('click',async()=>{try{await api('/api/locations/'+delTarget,{method:'DELETE'});$('#delDlg').close();
-  toast('Entry dihapus');if(delFromEntry){S.loc=null;$('#entry-form').classList.add('hidden');$('#entry-empty').classList.remove('hidden');$('#entryCode').classList.add('hidden');$('#entry-del').classList.add('hidden');}
+$('#delOk').addEventListener('click',async()=>{try{await api('/api/locations/'+delTarget,{method:'DELETE'});$('#delDlg').close();toast('Entry dihapus');
+  if(delFromEntry){S.loc=null;$('#entry-form').classList.add('hidden');$('#entry-empty').classList.remove('hidden');$('#entryCode').classList.add('hidden');$('#entry-del').classList.add('hidden');}
   refreshPicker();loadLocations();}catch(e){toast('Gagal: '+e.message);$('#delDlg').close();}});
 
-/* ===== TEMPLATES + MAPPING ===== */
+/* TEMPLATES + MAPPING */
 $('#tpl-inspect')&&$('#tpl-inspect').addEventListener('click',async()=>{const f=$('#tpl-file').files[0];if(!f)return toast('Pilih file');
   const fd=new FormData();fd.append('file',f);
   try{const r=await fetch('/api/templates/inspect',{method:'POST',credentials:'same-origin',body:fd});if(!r.ok)throw new Error((await r.json()).detail);
-    const d=await r.json();S.pending=d;const o=d.sheets.map(s=>`<option>${esc(s.name)}</option>`).join('');
-    $('#tpl-log').innerHTML=o;$('#tpl-detail').innerHTML=o;if(d.sheets[1])$('#tpl-detail').selectedIndex=1;
+    const d=await r.json();S.pending=d;const opts=d.sheets.map(s=>({value:s.name,label:s.name}));
+    tplLogSel.setOptions(opts).setValue(opts[0]?.value||'');tplDetailSel.setOptions(opts).setValue((opts[1]||opts[0])?.value||'');
     $('#tpl-register').classList.remove('hidden');toast(d.sheets.length+' worksheet');}catch(e){toast('Gagal: '+e.message);}});
 $('#tpl-do-register')&&$('#tpl-do-register').addEventListener('click',async()=>{const d=S.pending;if(!d)return;
-  try{await api('/api/templates/register',{method:'POST',body:JSON.stringify({pending_file:d.pending_file,name:$('#tpl-name').value||d.orig_name,orig_name:d.orig_name,sheet_log:$('#tpl-log').value,sheet_detail:$('#tpl-detail').value,activate:true})});
+  try{await api('/api/templates/register',{method:'POST',body:JSON.stringify({pending_file:d.pending_file,name:$('#tpl-name').value||d.orig_name,orig_name:d.orig_name,sheet_log:tplLogSel.getValue(),sheet_detail:tplDetailSel.getValue(),activate:true})});
     $('#tpl-register').classList.add('hidden');$('#tpl-file').value='';toast('Terdaftar & aktif');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
 async function loadTemplates(){const rows=await api('/api/templates');
   $('#tpl-table').innerHTML=rows.map(t=>`<tr><td>${esc(t.name)}</td><td class="mono">${esc(t.sheet_log)}</td><td class="mono">${esc(t.sheet_detail)}</td>
     <td>${t.active?'<span class="count">aktif</span>':''}</td><td style="text-align:right">
-    <md-button variant="tonal" size="xs" onclick="openMapping(${t.id})">Mapping</md-button>${t.active?'':`<md-button variant="text" size="xs" onclick="activateTpl(${t.id})">Aktifkan</md-button>`}</td></tr>`).join('')
-    ||'<tr><td colspan=5 class="muted">Belum ada template</td></tr>';}
+    <md-button variant="tonal" size="xs" onclick="openMapping(${t.id})">Mapping</md-button>${t.active?'':`<md-button variant="text" size="xs" onclick="activateTpl(${t.id})">Aktifkan</md-button>`}</td></tr>`).join('')||'<tr><td colspan=5 class="muted">Belum ada template</td></tr>';}
 window.activateTpl=async id=>{await api('/api/templates/'+id+'/activate',{method:'POST'});toast('Diaktifkan');loadTemplates();};
 window.openMapping=async id=>{S.mapTplId=id;const tpl=await api('/api/templates/'+id);const sh=await api('/api/templates/'+id+'/sheets');S.sheets=sh.sheets;
   const map=deepMerge(structuredClone(DEFAULT_MAP),tpl.config||{});$('#map-tpl-name').textContent=tpl.name;
-  const o=S.sheets.map(s=>`<option>${esc(s.name)}</option>`).join('');$('#map-log').innerHTML=o;$('#map-detail').innerHTML=o;$('#map-log').value=tpl.sheet_log;$('#map-detail').value=tpl.sheet_detail;
+  const opts=S.sheets.map(s=>({value:s.name,label:s.name}));mapLogSel.setOptions(opts).setValue(tpl.sheet_log);mapDetailSel.setOptions(opts).setValue(tpl.sheet_detail);
   $('#map-logcols').innerHTML=LOG_FIELDS.map(f=>`<div><label class="muted">${f}</label><input data-log="${f}" value="${esc(map.log.columns[f]||'')}" style="width:100%"></div>`).join('');
   $('#map-logstart').value=map.log.start_row||3;
   $('#map-invcols').innerHTML=INV_FIELDS.map(f=>`<div><label class="muted">${f}</label><input data-inv="${f}" value="${esc(map.detail.inventory.cols[f]||'')}" style="width:100%"></div>`).join('');
   $('#map-invstart').value=map.detail.inventory.start_row||32;$('#map-invmax').value=map.detail.inventory.max_rows||5;
   $('#map-photos').innerHTML=S.cats.map(c=>`<div style="display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;margin-bottom:8px"><label class="muted">${esc(c.label)}${c.ocr?' 🔎':''}</label><input data-photo="${c.key}" placeholder="mis. B27" value="${esc((map.detail.photos||{})[c.key]||'')}" style="width:100%"></div>`).join('');
   $('#map-pw').value=map.detail.photo_max_w||320;$('#map-ph').value=map.detail.photo_max_h||240;
-  renderRef($('#map-detail').value);$('#map-detail').onchange=()=>renderRef($('#map-detail').value);
-  $('#mapping').classList.remove('hidden');$('#mapping').scrollIntoView({behavior:'smooth'});};
+  renderRef(mapDetailSel.getValue());$('#mapping').classList.remove('hidden');$('#mapping').scrollIntoView({behavior:'smooth'});};
 function renderRef(n){const s=S.sheets.find(x=>x.name===n);const b=$('#map-ref');if(!s)return b.innerHTML='<span class="muted">—</span>';
   b.innerHTML=s.cells.map(c=>`<code style="cursor:pointer;display:inline-block;margin:2px;padding:1px 5px;border-radius:6px;background:var(--md-sys-color-surface-container)" onclick="navigator.clipboard&&navigator.clipboard.writeText('${c.ref}');toast('Disalin: ${c.ref}')">${c.ref}: ${esc(c.text.slice(0,18))}</code>`).join('')||'<span class="muted">kosong</span>';}
 $('#map-save')&&$('#map-save').addEventListener('click',async()=>{const cfg=structuredClone(DEFAULT_MAP);
@@ -497,12 +519,11 @@ $('#map-save')&&$('#map-save').addEventListener('click',async()=>{const cfg=stru
   cfg.detail.inventory.start_row=parseInt($('#map-invstart').value)||32;cfg.detail.inventory.max_rows=parseInt($('#map-invmax').value)||5;
   cfg.detail.photos={};$$('[data-photo]').forEach(i=>{if(i.value.trim())cfg.detail.photos[i.dataset.photo]=i.value.trim().toUpperCase();});
   cfg.detail.photo_max_w=parseInt($('#map-pw').value)||320;cfg.detail.photo_max_h=parseInt($('#map-ph').value)||240;
-  try{await api('/api/templates/'+S.mapTplId+'/mapping',{method:'PUT',body:JSON.stringify({config:cfg,sheet_log:$('#map-log').value,sheet_detail:$('#map-detail').value})});toast('Mapping tersimpan');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
+  try{await api('/api/templates/'+S.mapTplId+'/mapping',{method:'PUT',body:JSON.stringify({config:cfg,sheet_log:mapLogSel.getValue(),sheet_detail:mapDetailSel.getValue()})});toast('Mapping tersimpan');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
 $('#map-close')&&$('#map-close').addEventListener('click',()=>$('#mapping').classList.add('hidden'));
 
 async function loadUsers(){try{const rows=await api('/api/users');$('#usr-table').innerHTML=rows.map(u=>`<tr><td>${esc(u.username)}</td><td>${esc(u.full_name||'')}</td><td>${u.role}</td><td>${u.active?'ya':'tidak'}</td></tr>`).join('');}catch{}}
 function deepMerge(b,o){for(const k in(o||{})){if(o[k]&&typeof o[k]==='object'&&!Array.isArray(o[k]))b[k]=deepMerge(b[k]||{},o[k]);else b[k]=o[k];}return b;}
-
 window.addEventListener('DOMContentLoaded',boot);
 </script>
 </body>
