@@ -608,12 +608,15 @@ $('#entry-new').addEventListener('click',async()=>{const btn=$('#entry-new');
   if(btn.hasAttribute('disabled'))return;btn.setAttribute('disabled','');
   try{if(S.settingsReady)await S.settingsReady;                 /* tunggu settings siap (first-run) */
     const loc=await api('/api/locations',{method:'POST',body:JSON.stringify({name:'',data:{},status:'draft'})});
-    await openLoc(loc.id);                                       /* langsung tampilkan Entry lokasi baru */
-    refreshPicker();loadLocations();toast('Lokasi '+loc.code+' dibuat');
+    await refreshPicker();                                       /* pastikan opsi dropdown termasuk lokasi baru dulu */
+    await openLoc(loc.id);                                       /* baru set aktif -> dropdown sinkron dgn kode lokasi */
+    loadLocations();toast('Lokasi '+loc.code+' dibuat');
   }catch(e){toast('Gagal: '+e.message);}finally{btn.removeAttribute('disabled');}});
 $('#entry-del').addEventListener('click',()=>{if(S.loc)confirmDelete(S.loc.id,S.loc.code,true);});
 
-async function openLoc(id){S.loc=await api('/api/locations/'+id);pickerSel.setValue(String(id));
+async function openLoc(id){S.loc=await api('/api/locations/'+id);
+  if(pickerSel&&!pickerSel.items.some(o=>o.value===String(id)))await refreshPicker();  /* opsi belum ada -> refresh agar dropdown sinkron */
+  pickerSel.setValue(String(id));
   $('#entry-empty').classList.add('hidden');$('#entry-form').classList.remove('hidden');
   $('#entryCode').classList.remove('hidden');$('#entryCode').querySelector('span:last-child').textContent=S.loc.code;
   $('#entry-del').classList.remove('hidden');
