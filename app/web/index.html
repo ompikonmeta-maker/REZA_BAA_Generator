@@ -59,6 +59,9 @@
   /* Cards (static) */
   .card{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:20px;padding:20px;margin-bottom:16px}
   .card.filled{background:var(--md-sys-color-surface-container);border-color:transparent}
+  /* Highlight kartu aktif (opsi C: tint background lembut) — ukuran tetap */
+  .entry-main .card{transition:background .2s var(--md-sys-motion-easing-standard)}
+  .entry-main .card:focus-within{background:color-mix(in srgb,var(--md-sys-color-primary) 7%,var(--md-sys-color-surface))}
   .sec{display:flex;align-items:center;gap:10px;margin-bottom:16px}
   .fgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:14px}
   .fgrid md-text-field{width:100%}
@@ -120,10 +123,14 @@
   .sum-pct{font:var(--md-sys-typescale-title-medium)}
   .bar{height:10px;border-radius:5px;background:var(--md-sys-color-surface-container-highest);overflow:hidden;margin:8px 0 12px}
   .bar>span{display:block;height:100%;background:var(--md-sys-color-primary);border-radius:5px;transition:width .4s var(--md-sys-motion-easing-emphasized-decelerate)}
-  .crow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:10px 8px;margin:0 -8px;border-top:1px solid var(--md-sys-color-outline-variant);border-radius:8px;font:var(--md-sys-typescale-body-medium)}
+  /* baris progress: highlight saja, tanpa garis pemisah */
+  .crow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 10px;margin:3px -6px;border-radius:10px;font:var(--md-sys-typescale-body-medium)}
   .crow.warn{background:var(--warn-bg)}
   .crow .st{font-weight:700;text-align:right}.crow .st.ok{color:var(--md-sys-color-primary)}.crow .st.no{color:var(--md-sys-color-on-surface-variant)}.crow .st.warn{color:var(--warn)}
-  .miss{font:var(--md-sys-typescale-body-small);color:var(--warn);margin:-4px 0 4px;padding:0 8px}
+  .miss{margin:2px 0 6px;padding:0 10px}
+  .miss .mt{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);margin-bottom:4px}
+  .miss .row{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);display:flex;align-items:center;gap:7px;padding:2px 0}
+  .miss .row .mi{font-size:17px;color:var(--warn)}
   .card.warn-outline{border-color:var(--warn);box-shadow:0 0 0 1px var(--warn)}
   .sum-actions{margin-top:16px;display:flex;flex-direction:column;gap:0}
   .sum-actions #save-btn{width:100%}
@@ -234,9 +241,9 @@
               <div class="crow" id="sum-foto-row"><span>Foto wajib</span><span class="st" id="sum-foto">0 / 0</span></div>
               <div class="miss hidden" id="sum-foto-miss"></div>
               <div class="sum-actions">
-                <md-button variant="filled" size="m" icon="save" id="save-btn">Simpan BAA</md-button>
+                <md-button variant="filled" size="l" icon="save" id="save-btn">Simpan BAA</md-button>
                 <div class="exp-group">
-                  <div class="exp-head"><span>Export</span>
+                  <div class="exp-head"><span>Cakupan</span>
                     <md-segmented-button id="scope"><button data-value="one" selected>Lokasi ini</button><button data-value="all">Semua</button></md-segmented-button></div>
                   <div class="exp2">
                     <md-button variant="outlined" icon="grid_on" id="exp-xlsx">Excel</md-button>
@@ -442,7 +449,9 @@ function updateSummary(){
   const ft=$('#sum-foto');ft.textContent=s.fotoDone+' / '+s.rc.length;ft.className='st '+(s.fotoOk?'ok':'warn');
   $('#sum-foto-row').classList.toggle('warn',!s.fotoOk);
   const miss=$('#sum-foto-miss');
-  if(s.missing.length){miss.textContent='kurang: '+s.missing.join(', ');miss.classList.remove('hidden');}else miss.classList.add('hidden');
+  if(s.missing.length){miss.innerHTML='<div class="mt">Foto yang masih kurang</div>'+
+    s.missing.map(m=>`<div class="row"><span class="mi">check_box_outline_blank</span>${esc(m)}</div>`).join('');
+    miss.classList.remove('hidden');}else miss.classList.add('hidden');
 }
 
 /* photos — uniform cards */
