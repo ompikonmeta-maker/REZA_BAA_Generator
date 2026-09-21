@@ -70,19 +70,28 @@ def list_locations(conn: sqlite3.Connection = Depends(get_db), user=Depends(curr
     rows = conn.execute(
         "SELECT l.*, "
         "(SELECT COUNT(*) FROM photos p WHERE p.location_id=l.id) AS photo_count, "
-        "(SELECT COUNT(*) FROM inventory_items i WHERE i.location_id=l.id) AS inv_count "
+        "(SELECT COUNT(*) FROM inventory_items i WHERE i.location_id=l.id) AS inv_count, "
+        "(SELECT GROUP_CONCAT(DISTINCT category) FROM photos p WHERE p.location_id=l.id) AS photo_cats "
         "FROM locations l ORDER BY l.id DESC"
     ).fetchall()
     import json
     is_admin = user["role"] == "admin"
-    return [
-        {"id": r["id"], "code": r["code"], "name": r["name"], "status": r["status"],
-         "data": json.loads(r["data_json"]), "photo_count": r["photo_count"],
-         "inv_count": r["inv_count"], "updated_at": r["updated_at"],
-         "created_by": r["created_by"],
-         "can_delete": is_admin or r["created_by"] == user["id"]}
-        for r in rows
-    ]
+    result = []
+    for r in rows:
+        inv = conn.execute(
+            "SELECT nama_barang,merk_type,jumlah,sn_tagging,keterangan "
+            "FROM inventory_items WHERE location_id=? ORDER BY sort_order,id", (r["id"],)
+        ).fetchall()
+        result.append({
+            "id": r["id"], "code": r["code"], "name": r["name"], "status": r["status"],
+            "data": json.loads(r["data_json"]), "photo_count": r["photo_count"],
+            "inv_count": r["inv_count"], "updated_at": r["updated_at"],
+            "created_by": r["created_by"],
+            "photo_cats": (r["photo_cats"].split(",") if r["photo_cats"] else []),
+            "inventory": [dict(i) for i in inv],
+            "can_delete": is_admin or r["created_by"] == user["id"],
+        })
+    return result
 
 
 @router.post("")

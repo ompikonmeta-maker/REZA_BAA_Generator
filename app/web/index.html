@@ -133,6 +133,8 @@
   .miss .mt{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);margin-bottom:4px}
   .miss .row{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);display:flex;align-items:center;gap:7px;padding:2px 0}
   .miss .row .mi{font-size:17px;color:var(--warn)}
+  .miss .row.done{color:var(--md-sys-color-on-surface-variant);text-decoration:line-through;opacity:.75}
+  .miss .row.done .mi{color:var(--md-sys-color-primary);text-decoration:none}
   /* border kartu Data Lokasi seragam dengan kartu lain (highlight cukup di panel) */
   .card.warn-outline{border-color:var(--md-sys-color-outline-variant)}
   /* Admin-only: sembunyikan tambah/hapus baris inventory untuk operator */
@@ -149,6 +151,10 @@
   table{width:100%;border-collapse:collapse;font:var(--md-sys-typescale-body-medium)}
   th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
   th{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
+  .loc-link{color:var(--md-sys-color-primary);font-weight:600;text-decoration:underline;cursor:pointer}
+  .loc-link:hover{opacity:.8}
+  .loc-st{font-weight:600}.loc-st.ok{color:var(--md-sys-color-primary)}.loc-st.warn{color:var(--warn)}
+  .loc-lack{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-small);max-width:280px}
 
   .tip{position:fixed;z-index:9999;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);font:var(--md-sys-typescale-body-small);padding:5px 9px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .12s;white-space:nowrap;transform:translateX(-50%)}
   .tip.show{opacity:1}
@@ -159,7 +165,7 @@
   .er{display:grid;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--md-sys-color-outline-variant)}
   .er.lf{grid-template-columns:1fr 1.4fr 110px 90px 40px}
   .er.pc{grid-template-columns:0.9fr 1.1fr 1.4fr 1fr 1.2fr 52px 60px 40px}
-  .er.di{grid-template-columns:1fr 40px}
+  .er.di{grid-template-columns:1fr 1.6fr 40px}
   .er input,.er select{height:42px;border:1px solid var(--md-sys-color-outline-variant);border-radius:10px;background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);padding:0 10px;font:var(--md-sys-typescale-body-medium);width:100%}
   .er input:focus,.er select:focus{outline:2px solid var(--md-sys-color-primary);outline-offset:-1px;border-color:transparent}
   .er .ck{display:flex;align-items:center;gap:6px;font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);white-space:nowrap}
@@ -223,7 +229,7 @@
               <div class="sec"><span class="mi acc">inventory_2</span><h3>Inventory</h3><span class="grow"></span>
                 <md-icon-button id="inv-add" variant="tonal" data-tip="Tambah baris"><span>add</span></md-icon-button></div>
               <div class="tbl">
-                <div class="tr th"><div>Nama Barang</div><div>Merk / Type</div><div>Jml</div><div>SN / Tagging</div><div>Keterangan</div><div></div></div>
+                <div class="tr th"><div>Nama Barang</div><div>Merk / Type</div><div>Jumlah</div><div>SN / Tagging</div><div>Keterangan</div><div></div></div>
                 <div id="inv-body"></div>
               </div>
             </div>
@@ -256,7 +262,7 @@
               <div class="bar"><span id="sum-bar" style="width:0%"></span></div>
               <div class="crow" id="sum-loc-row"><span>Informasi lokasi</span><span class="st no" id="sum-loc">Belum</span></div>
               <div class="crow"><span>Inventory</span><span class="st" id="sum-inv">0 item</span></div>
-              <div class="crow" id="sum-foto-row"><span>Foto wajib</span><span class="st" id="sum-foto">0 / 0</span></div>
+              <div class="crow" id="sum-foto-row"><span>Foto &amp; Capture</span><span class="st" id="sum-foto">0 / 0</span></div>
               <div class="miss hidden" id="sum-foto-miss"></div>
               <div class="sum-actions">
                 <md-button variant="filled" size="l" icon="save" id="save-btn">Simpan BAA</md-button>
@@ -282,7 +288,7 @@
             <span class="grow"></span>
             <md-segmented-button id="loc-filter"><button data-value="all" selected>Semua</button><button data-value="draft">Draft</button><button data-value="selesai">Selesai</button></md-segmented-button>
           </div>
-          <table><thead><tr><th>Kode</th><th>Nama Lokasi</th><th>Inv</th><th>Foto</th><th>Status</th><th></th></tr></thead><tbody id="loc-table"></tbody></table>
+          <table><thead><tr><th>Kode</th><th>Nama Lokasi</th><th>INV</th><th>Foto</th><th>Status</th><th>Kurang</th><th></th></tr></thead><tbody id="loc-table"></tbody></table>
           <div id="loc-more" class="hidden" style="text-align:center;margin-top:12px"><md-button variant="text" id="loc-more-btn">Muat lebih banyak</md-button></div>
         </div>
       </section>
@@ -363,6 +369,7 @@
         <div class="card">
           <div class="sec"><span class="mi acc">inventory_2</span><h3>Default Item Inventory (lokasi baru)</h3><span class="grow"></span>
             <md-button id="di-add" variant="tonal" icon="add">Item</md-button></div>
+          <div class="er di head"><div>Nama barang</div><div>Opsi Merk/Type (pisah koma)</div><div></div></div>
           <div id="di-list"></div>
           <div style="margin-top:12px"><md-button id="di-save" variant="filled" icon="save">Simpan default</md-button></div>
         </div>
@@ -521,7 +528,7 @@ $('#themeBtn').addEventListener('click',()=>{const c=MD3.getTheme();MD3.setTheme
 $('#railBtn').addEventListener('click',()=>$('#app').classList.toggle('rail'));
 
 async function showApp(){$('#login').classList.add('hidden');$('#app').classList.remove('hidden');
-  const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;S.invItems=s.default_inventory_items||[];S.appTitle=s.app_title||'BAA Generator';
+  const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;S.invItems=s.default_inventory_items||[];S.itemMerks=s.item_merks||{};S.appTitle=s.app_title||'BAA Generator';
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
   $('#app').classList.toggle('is-operator',S.user.role!=='admin');
   refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
@@ -550,8 +557,12 @@ async function openLoc(id){S.loc=await api('/api/locations/'+id);pickerSel.setVa
   requestAnimationFrame(()=>revealCards($('#v-entry')));}
 function renderLocFields(){$('#loc-fields').innerHTML=S.locFields.map(f=>
   `<md-text-field data-lf="${f.key}" variant="outlined" label="${esc(f.label)}${f.required?' *':''}" type="${f.type==='date'?'date':'text'}" value="${esc(S.loc.data[f.key]||'')}"></md-text-field>`).join('');}
-function invRow(it={}){return `<div class="tr">
-  <input data-iv="nama_barang" value="${esc(it.nama_barang)}"><input data-iv="merk_type" value="${esc(it.merk_type)}">
+let _mlSeq=0;
+function merkOpts(name){return (S.itemMerks&&S.itemMerks[(name||'').trim()])||[];}
+function invRow(it={}){const did='ml'+(_mlSeq++);
+  return `<div class="tr">
+  <input data-iv="nama_barang" value="${esc(it.nama_barang)}">
+  <input data-iv="merk_type" list="${did}" placeholder="pilih / ketik…" value="${esc(it.merk_type)}"><datalist id="${did}">${merkOpts(it.nama_barang).map(o=>`<option value="${esc(o)}">`).join('')}</datalist>
   <input data-iv="jumlah" value="${esc(it.jumlah)}"><input data-iv="sn_tagging" class="sn" value="${esc(it.sn_tagging)}">
   <input data-iv="keterangan" value="${esc(it.keterangan)}">
   <md-icon-button data-tip="Hapus baris" onclick="this.closest('.tr').remove();updateSummary()"><span>close</span></md-icon-button></div>`;}
@@ -559,6 +570,10 @@ function renderInventory(){let rows=S.loc.inventory;
   if(!rows.length)rows=(S.invItems.length?S.invItems:['','','']).map(n=>({nama_barang:n}));
   $('#inv-body').innerHTML=rows.map(invRow).join('');bindTips();}
 $('#inv-add').addEventListener('click',()=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow());bindTips();updateSummary();});
+/* Perbarui opsi Merk/Type ketika Nama Barang diubah */
+$('#inv-body').addEventListener('input',e=>{if(e.target.dataset&&e.target.dataset.iv==='nama_barang'){
+  const tr=e.target.closest('.tr');const dl=tr&&tr.querySelector('datalist');
+  if(dl)dl.innerHTML=merkOpts(e.target.value).map(o=>`<option value="${esc(o)}">`).join('');}});
 function collectInventory(){return $$('#inv-body .tr').map(tr=>{const o={};tr.querySelectorAll('[data-iv]').forEach(i=>o[i.dataset.iv]=i.value);return o;}).filter(o=>Object.values(o).some(v=>v&&v.trim()));}
 function collectData(){const d={};$$('[data-lf]').forEach(el=>d[el.dataset.lf]=el.value);return d;}
 $('#entry-form').addEventListener('input',updateSummary);
@@ -577,8 +592,9 @@ function computeState(){
   rows.forEach(tr=>{const vals=[...tr.querySelectorAll('[data-iv]')].map(i=>i.value.trim());if(vals.some(v=>v)){items++;cells+=vals.length;filledCells+=vals.filter(v=>v).length;}});
   const rc=requiredCats();const byCat={};activePhotos().forEach(p=>byCat[p.category]=1);
   const fotoDone=rc.filter(c=>byCat[c.key]).length;const missing=rc.filter(c=>!byCat[c.key]).map(c=>c.label);
+  const checklist=rc.map(c=>({label:c.label,done:!!byCat[c.key]}));
   const invOk=items>0&&filledCells===cells;const fotoOk=rc.length>0&&fotoDone>=rc.length;
-  return {data,fields,filledF,locDone,items,cells,filledCells,invOk,rc,fotoDone,fotoOk,missing,complete:locDone&&invOk&&fotoOk};
+  return {data,fields,filledF,locDone,items,cells,filledCells,invOk,rc,fotoDone,fotoOk,missing,checklist,complete:locDone&&invOk&&fotoOk};
 }
 function updateSummary(){
   if(!S.loc)return;const s=computeState();
@@ -597,8 +613,10 @@ function updateSummary(){
   const ft=$('#sum-foto');ft.textContent=s.fotoDone+' / '+s.rc.length;ft.className='st '+(s.fotoOk?'ok':'warn');
   $('#sum-foto-row').classList.toggle('warn',!s.fotoOk);
   const miss=$('#sum-foto-miss');
-  if(s.missing.length){miss.innerHTML='<div class="mt">Foto yang masih kurang</div>'+
-    s.missing.map(m=>`<div class="row"><span class="mi">check_box_outline_blank</span>${esc(m)}</div>`).join('');
+  if(s.checklist.length){
+    const list=[...s.checklist].sort((a,b)=>(a.done?1:0)-(b.done?1:0)); /* belum di atas, sudah di bawah */
+    miss.innerHTML='<div class="mt">Foto Checklist</div>'+
+      list.map(it=>`<div class="row${it.done?' done':''}"><span class="mi">${it.done?'check_box':'check_box_outline_blank'}</span>${esc(it.label)}</div>`).join('');
     miss.classList.remove('hidden');}else miss.classList.add('hidden');
 }
 
@@ -773,10 +791,28 @@ function renderLocTable(){
   let rows=LOC_ROWS.filter(l=>{const name=(l.data.nama_lokasi||l.name||'').toLowerCase();
     return (!q||l.code.toLowerCase().includes(q)||name.includes(q))&&(f==='all'||l.status===f);});
   const total=rows.length;rows=rows.slice(0,LOC_SHOWN);
-  $('#loc-table').innerHTML=rows.map(l=>`<tr><td class="mono">${esc(l.code)}</td><td>${esc(l.data.nama_lokasi||l.name||'')}</td>
-    <td>${l.inv_count}</td><td>${l.photo_count}</td><td>${l.status}</td>
-    <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`).join('')||'<tr><td colspan=6 class="muted">Tidak ada data</td></tr>';
+  $('#loc-table').innerHTML=rows.map(l=>{
+    const present=(l.photo_cats||[]).filter(k=>S.cats.some(c=>c.key===k)).length;
+    const stCls=l.status==='selesai'?'ok':'warn';
+    return `<tr><td><a class="loc-link mono" onclick='openFromLog(${l.id})'>${esc(l.code)}</a></td>
+    <td>${esc(l.data.nama_lokasi||l.name||'')}</td>
+    <td>${l.inv_count}</td><td>${present}/${S.cats.length}</td>
+    <td><span class="loc-st ${stCls}">${esc(l.status)}</span></td>
+    <td class="loc-lack">${locLack(l)}</td>
+    <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`;}).join('')||'<tr><td colspan=7 class="muted">Tidak ada data</td></tr>';
   $('#loc-more').classList.toggle('hidden',total<=LOC_SHOWN);bindTips();}
+/* Daftar kekurangan: foto + field lokasi kosong + inventory belum lengkap */
+function locLack(l){
+  const parts=[];
+  const have=new Set(l.photo_cats||[]);
+  const miss=S.cats.filter(c=>!have.has(c.key)).map(c=>c.label);
+  if(miss.length)parts.push('Foto: '+(miss.length>2?miss.slice(0,2).join(', ')+', +'+(miss.length-2):miss.join(', ')));
+  (S.locFields||[]).forEach(f=>{if(!((l.data[f.key]||'').trim()))parts.push(f.label);});
+  const inv=l.inventory||[];
+  const invOk=inv.length>0&&inv.every(i=>['nama_barang','merk_type','jumlah','sn_tagging','keterangan'].every(k=>(i[k]||'').trim()));
+  if(!invOk)parts.push('Inventory');
+  return parts.length?esc(parts.join(' · ')):'<span class="muted">—</span>';}
+window.openFromLog=id=>{gotoEntry();openLoc(id);};
 $('#loc-search').addEventListener('input',renderLocTable);
 $('#loc-filter').addEventListener('change',e=>{S.locFilter=e.detail.value;renderLocTable();});
 $('#loc-more-btn').addEventListener('click',()=>{LOC_SHOWN+=50;renderLocTable();});
@@ -914,11 +950,20 @@ $('#pc-save').addEventListener('click',async()=>{const categories=$$('#pc-list .
     sn_item:(g('sn_item').value||'').trim()};}).filter(c=>c.key&&c.label);
   try{await api('/api/settings/photo-categories',{method:'PUT',body:JSON.stringify({categories})});S.cats=categories;toast('Kategori foto tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 
-function diRow(n=''){return `<div class="er di" data-di><input data-k="name" placeholder="Nama barang" value="${esc(n)}">${delBtnCell()}</div>`;}
+function diRow(n=''){return `<div class="er di" data-di>
+  <input data-k="name" placeholder="Nama barang" value="${esc(n)}">
+  <input data-k="merks" placeholder="mis. Std Actuated, Gen 3, HP" value="${esc((S.itemMerks[n]||[]).join(', '))}">${delBtnCell()}</div>`;}
 function renderDI(){$('#di-list').innerHTML=(S.invItems.length?S.invItems:['']).map(diRow).join('');bindTips();}
 $('#di-add').addEventListener('click',()=>{$('#di-list').insertAdjacentHTML('beforeend',diRow());bindTips();});
-$('#di-save').addEventListener('click',async()=>{const items=$$('#di-list .er input').map(i=>i.value.trim()).filter(Boolean);
-  try{await api('/api/settings/default-inventory-items',{method:'PUT',body:JSON.stringify({items})});S.invItems=items;toast('Default inventory tersimpan');}catch(e){toast('Gagal: '+e.message);}});
+$('#di-save').addEventListener('click',async()=>{
+  const items=[],merks={};
+  $$('#di-list .er.di').forEach(r=>{const name=(r.querySelector('[data-k="name"]').value||'').trim();if(!name)return;
+    items.push(name);
+    const opts=(r.querySelector('[data-k="merks"]').value||'').split(',').map(s=>s.trim()).filter(Boolean);
+    if(opts.length)merks[name]=opts;});
+  try{await api('/api/settings/default-inventory-items',{method:'PUT',body:JSON.stringify({items})});
+    await api('/api/settings/item-merks',{method:'PUT',body:JSON.stringify({merks})});
+    S.invItems=items;S.itemMerks=merks;toast('Default inventory tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 $('#set-title-save').addEventListener('click',async()=>{const t=$('#set-title').value.trim();
   try{await api('/api/settings/app-title',{method:'PUT',body:JSON.stringify({title:t})});S.appTitle=t;document.title=t;$('.nav-head .name').textContent=t;toast('Judul tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 function deepMerge(b,o){for(const k in(o||{})){if(o[k]&&typeof o[k]==='object'&&!Array.isArray(o[k]))b[k]=deepMerge(b[k]||{},o[k]);else b[k]=o[k];}return b;}

@@ -28,6 +28,10 @@ class InvItems(BaseModel):
     items: list[str]
 
 
+class ItemMerks(BaseModel):
+    merks: dict[str, list[str]]
+
+
 @router.get("")
 def get_settings(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
     return {
@@ -35,6 +39,7 @@ def get_settings(conn: sqlite3.Connection = Depends(get_db), user=Depends(curren
         "location_fields": db.get_setting(conn, "location_fields", []),
         "photo_categories": db.get_setting(conn, "photo_categories", []),
         "default_inventory_items": db.get_setting(conn, "default_inventory_items", []),
+        "item_merks": db.get_setting(conn, "item_merks", {}),
         "ocr_available": _ocr_available(),
     }
 
@@ -78,3 +83,16 @@ def update_default_inventory(body: InvItems, conn: sqlite3.Connection = Depends(
     conn.commit()
     audit(conn, user, "update", "settings", "default_inventory_items")
     return {"ok": True, "items": items}
+
+
+@router.put("/item-merks")
+def update_item_merks(body: ItemMerks, conn: sqlite3.Connection = Depends(get_db),
+                      user=Depends(require_admin)):
+    merks = {
+        k.strip(): [x.strip() for x in v if x.strip()]
+        for k, v in body.merks.items() if k.strip()
+    }
+    db.set_setting(conn, "item_merks", merks)
+    conn.commit()
+    audit(conn, user, "update", "settings", "item_merks")
+    return {"ok": True, "merks": merks}
