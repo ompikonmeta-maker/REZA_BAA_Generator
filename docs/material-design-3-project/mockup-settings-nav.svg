@@ -1,0 +1,103 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1160" height="720" viewBox="0 0 1160 720" font-family="Segoe UI, Roboto, system-ui, sans-serif">
+  <rect width="1160" height="720" fill="#eaeced"/>
+  <style>
+    .t{fill:#1a1c1d}.m{fill:#43474a}.mut{fill:#8a9090}.tl{fill:#006a6a}
+    .nav{fill:#f6f7f8;stroke:#c3c7c8}
+    .item{fill:#43474a;font-size:12.5px}
+    .sub{fill:#43474a;font-size:11.5px}
+    .active{fill:#004f4f;font-weight:700}
+    .pane{fill:#fcfcfd;stroke:#c3c7c8}
+    .h{font-size:13.5px;font-weight:700;fill:#1a1c1d}
+  </style>
+  <text x="30" y="32" font-size="17" font-weight="700" class="t">Pengaturan → sub-menu (3 opsi desain) — judul app fixed "BAA Generator"</text>
+
+  <!-- ============ OPSI A: Sidebar accordion ============ -->
+  <text x="30" y="66" font-size="14" font-weight="700" class="tl">Opsi A — Accordion di Sidebar</text>
+  <text x="30" y="84" font-size="11" class="mut">"Pengaturan" mengembang; sub-item turun (slide + fade bertahap)</text>
+  <!-- sidebar -->
+  <rect x="30" y="94" width="200" height="300" rx="18" class="nav"/>
+  <g>
+    <text x="52" y="126" class="item">Entry BAA</text>
+    <text x="52" y="156" class="item">Log Lokasi</text>
+    <text x="52" y="186" class="item">Template</text>
+    <text x="52" y="216" class="item">Users</text>
+    <rect x="42" y="230" width="176" height="26" rx="8" fill="#cfe6e6"/>
+    <text x="52" y="248" class="active">▾ Pengaturan</text>
+    <text x="70" y="276" class="active">Field Data Lokasi</text>
+    <text x="70" y="300" class="sub">Field Inventory</text>
+    <text x="70" y="324" class="sub">Field Photo &amp; Capture</text>
+    <text x="70" y="348" class="sub">BackUp &amp; Restore</text>
+    <rect x="60" y="266" width="3" height="86" rx="1.5" fill="#a9d3d3"/>
+  </g>
+  <!-- content -->
+  <rect x="244" y="94" width="330" height="300" rx="18" class="pane"/>
+  <text x="266" y="126" class="h">Field Data Lokasi</text>
+  <rect x="266" y="140" width="286" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/><text x="276" y="160" font-size="11.5" class="mut">key · label · type · wajib</text>
+  <rect x="266" y="178" width="286" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/>
+  <rect x="266" y="216" width="286" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/>
+  <rect x="452" y="352" width="100" height="30" rx="15" fill="#006a6a"/><text x="502" y="372" font-size="12" fill="#fff" text-anchor="middle">Simpan</text>
+  <text x="30" y="414" font-size="11" class="m">+ Hemat ruang, semua tetap di 1 layar. Transisi: tinggi grup melipat/membuka (spring) + label stagger.</text>
+
+  <!-- ============ OPSI B: Sub-rail dua panel ============ -->
+  <text x="600" y="66" font-size="14" font-weight="700" class="tl">Opsi B — Dua Panel (sub-rail di dalam Pengaturan)</text>
+  <text x="600" y="84" font-size="11" class="mut">Nav utama tetap; muncul rail ke-2 berisi 4 sub; konten cross-fade/slide</text>
+  <rect x="600" y="94" width="120" height="300" rx="18" class="nav"/>
+  <g font-size="11.5">
+    <text x="616" y="126" class="item">Entry</text>
+    <text x="616" y="152" class="item">Log</text>
+    <text x="616" y="178" class="item">Template</text>
+    <text x="616" y="204" class="item">Users</text>
+    <rect x="608" y="216" width="104" height="24" rx="8" fill="#cfe6e6"/>
+    <text x="616" y="232" class="active">Pengaturan</text>
+  </g>
+  <!-- sub rail -->
+  <rect x="730" y="94" width="150" height="300" rx="16" fill="#eef2f2" stroke="#c3c7c8"/>
+  <g>
+    <rect x="740" y="112" width="130" height="30" rx="9" fill="#cfe6e6"/><text x="752" y="132" class="active" font-size="11.5">Field Data Lokasi</text>
+    <text x="752" y="166" class="sub">Field Inventory</text>
+    <text x="752" y="200" class="sub">Field Photo &amp; Capture</text>
+    <text x="752" y="234" class="sub">BackUp &amp; Restore</text>
+  </g>
+  <!-- content -->
+  <rect x="890" y="94" width="240" height="300" rx="18" class="pane"/>
+  <text x="910" y="126" class="h">Field Data Lokasi</text>
+  <rect x="910" y="140" width="200" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/>
+  <rect x="910" y="178" width="200" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/>
+  <rect x="910" y="216" width="200" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/>
+  <rect x="1010" y="352" width="100" height="30" rx="15" fill="#006a6a"/><text x="1060" y="372" font-size="12" fill="#fff" text-anchor="middle">Simpan</text>
+  <text x="600" y="414" font-size="11" class="m">+ Konteks jelas (lihat semua sub sekaligus). Transisi: konten kanan cross-fade + geser halus saat pindah sub.</text>
+
+  <!-- ============ OPSI C: Master-detail drill-down ============ -->
+  <text x="30" y="452" font-size="14" font-weight="700" class="tl">Opsi C — Drill-down (daftar → geser masuk detail)</text>
+  <text x="30" y="470" font-size="11" class="mut">Pengaturan tampil daftar kartu; klik → halaman detail slide-in + tombol kembali</text>
+  <!-- list state -->
+  <rect x="30" y="480" width="300" height="210" rx="18" class="pane"/>
+  <text x="50" y="510" class="h">Pengaturan</text>
+  <rect x="50" y="522" width="260" height="34" rx="10" fill="#f0f3f3" stroke="#c3c7c8"/><text x="64" y="544" font-size="12.5" class="m">Field Data Lokasi</text><text x="298" y="544" font-size="14" class="mut" text-anchor="end">›</text>
+  <rect x="50" y="562" width="260" height="34" rx="10" fill="#f0f3f3" stroke="#c3c7c8"/><text x="64" y="584" font-size="12.5" class="m">Field Inventory</text><text x="298" y="584" font-size="14" class="mut" text-anchor="end">›</text>
+  <rect x="50" y="602" width="260" height="34" rx="10" fill="#f0f3f3" stroke="#c3c7c8"/><text x="64" y="624" font-size="12.5" class="m">Field Photo &amp; Capture</text><text x="298" y="624" font-size="14" class="mut" text-anchor="end">›</text>
+  <rect x="50" y="642" width="260" height="34" rx="10" fill="#f0f3f3" stroke="#c3c7c8"/><text x="64" y="664" font-size="12.5" class="m">BackUp &amp; Restore</text><text x="298" y="664" font-size="14" class="mut" text-anchor="end">›</text>
+  <!-- arrow -->
+  <text x="345" y="590" font-size="22" class="mut">→</text>
+  <!-- detail state -->
+  <rect x="372" y="480" width="300" height="210" rx="18" class="pane"/>
+  <g><text x="392" y="510" font-size="16" class="tl">‹</text><text x="410" y="510" class="h">Field Data Lokasi</text></g>
+  <rect x="392" y="524" width="260" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/>
+  <rect x="392" y="562" width="260" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/>
+  <rect x="392" y="600" width="260" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/>
+  <rect x="552" y="646" width="100" height="30" rx="15" fill="#006a6a"/><text x="602" y="666" font-size="12" fill="#fff" text-anchor="middle">Simpan</text>
+  <text x="30" y="708" font-size="11" class="m">+ Fokus & rapi di layar sempit. Transisi: detail slide-in dari kanan (push), kembali slide-out (X-axis shared-axis).</text>
+
+  <!-- recommendation -->
+  <rect x="710" y="452" width="420" height="238" rx="16" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <text x="732" y="482" class="h">Ringkas</text>
+  <g font-size="12" class="m">
+    <text x="732" y="510">A · Accordion — paling ringkas, semua di sidebar.</text>
+    <text x="732" y="534">B · Dua panel — konteks paling jelas untuk desktop/LAN.</text>
+    <text x="732" y="558">C · Drill-down — paling mobile-friendly & fokus.</text>
+    <text x="732" y="590" class="tl" font-weight="700">Rekomendasi: Opsi B (dua panel)</text>
+    <text x="732" y="612" font-size="11.5">— cocok layar lebar, transisi cross-fade mulus,</text>
+    <text x="732" y="630" font-size="11.5">  4 sub selalu terlihat, konsisten gaya sidebar.</text>
+    <text x="732" y="660" font-size="11.5" class="mut">Judul app fixed "BAA Generator" (editor dihapus).</text>
+  </g>
+</svg>
