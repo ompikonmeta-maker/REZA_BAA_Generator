@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1040" height="620" viewBox="0 0 1040 620" font-family="Segoe UI, Roboto, system-ui, sans-serif">
+  <rect width="1040" height="620" fill="#eaeced"/>
+  <style>.t{fill:#1a1c1d}.m{fill:#43474a}.mut{fill:#8a9090}.tl{fill:#006a6a}</style>
+  <text x="30" y="34" font-size="17" font-weight="700" class="t">Perbaikan tampilan Overlay / Dialog &amp; Field</text>
+
+  <!-- BEFORE -->
+  <text x="30" y="70" font-size="14" font-weight="700" fill="#8a1f1f">SEBELUM — pucat</text>
+  <!-- page bg sample -->
+  <rect x="30" y="82" width="470" height="470" rx="16" fill="#eaeced" stroke="#c3c7c8"/>
+  <!-- weak scrim -->
+  <rect x="30" y="82" width="470" height="470" rx="16" fill="#000000" opacity="0.08"/>
+  <!-- dialog same color as page -->
+  <rect x="95" y="200" width="340" height="230" rx="20" fill="#eaeced" stroke="#d2d5d6"/>
+  <text x="120" y="242" font-size="17" font-weight="600" class="t">Ganti Password</text>
+  <text x="120" y="266" font-size="11.5" fill="#9a5b00">Login pertama — wajib ganti password.</text>
+  <rect x="120" y="282" width="290" height="42" rx="7" fill="none" stroke="#c3c7c8"/>
+  <text x="134" y="308" font-size="13" class="mut">Password lama</text>
+  <rect x="120" y="334" width="290" height="42" rx="7" fill="none" stroke="#c3c7c8"/>
+  <text x="134" y="360" font-size="13" class="mut">Password baru</text>
+  <rect x="330" y="392" width="80" height="30" rx="15" fill="#006a6a" opacity="0.9"/>
+  <text x="370" y="412" font-size="12.5" fill="#fff" text-anchor="middle">Simpan</text>
+  <text x="42" y="540" font-size="11" fill="#8a1f1f">Panel = warna halaman · scrim tipis · field nyaris tak terlihat</text>
+
+  <!-- AFTER -->
+  <text x="540" y="70" font-size="14" font-weight="700" class="tl">SESUDAH — jelas &amp; menonjol</text>
+  <rect x="540" y="82" width="470" height="470" rx="16" fill="#eaeced" stroke="#c3c7c8"/>
+  <!-- strong scrim -->
+  <rect x="540" y="82" width="470" height="470" rx="16" fill="#000000" opacity="0.5"/>
+  <!-- dialog near-white raised -->
+  <rect x="601" y="196" width="348" height="238" rx="22" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <rect x="601" y="196" width="348" height="238" rx="22" fill="none" stroke="#000" opacity="0.06"/>
+  <text x="628" y="240" font-size="17" font-weight="600" class="t">Ganti Password</text>
+  <text x="628" y="264" font-size="11.5" fill="#9a5b00">Login pertama — wajib ganti password.</text>
+  <rect x="628" y="280" width="294" height="44" rx="7" fill="#fff" stroke="#74777a"/>
+  <text x="642" y="307" font-size="13" class="m">Password lama</text>
+  <rect x="628" y="334" width="294" height="44" rx="7" fill="#fff" stroke="#74777a"/>
+  <text x="642" y="361" font-size="13" class="m">Password baru</text>
+  <rect x="840" y="394" width="82" height="32" rx="16" fill="#006a6a"/>
+  <text x="881" y="415" font-size="12.5" fill="#fff" text-anchor="middle">Simpan</text>
+  <text x="552" y="540" font-size="11" class="tl">Panel putih + elevasi · scrim gelap · outline field jelas</text>
+
+  <text x="30" y="582" font-size="12.5" class="m">• Berlaku untuk semua dialog: Ganti Password, Users, Galeri Foto, Editor Foto, Baca SN. Warna pakai token (scrim, surface), bukan hex.</text>
+  <text x="30" y="604" font-size="12.5" class="m">• Fitur lain tidak diubah — hanya kontras/elevasi overlay &amp; keterbacaan field.</text>
+</svg>
