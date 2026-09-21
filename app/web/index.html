@@ -488,13 +488,13 @@
 
     <div class="canvas-body">
       <section id="v-dashboard">
+        <div class="dtile dhero" id="dHero" style="margin-bottom:14px">
+          <div class="sky" id="dSky"></div><div class="stars" id="dStars"></div><div class="orb" id="dOrb"></div>
+          <div class="htxt"><h1 id="dHello">Selamat datang</h1><p class="date" id="dDate"></p></div>
+          <div class="hstat"><span class="hchip" id="dChip"><span class="mi">bolt</span> <span id="dChipTxt"></span></span></div>
+        </div>
         <div id="dashOp">
         <div class="dash">
-          <div class="dtile dhero" id="dHero">
-            <div class="sky" id="dSky"></div><div class="stars" id="dStars"></div><div class="orb" id="dOrb"></div>
-            <div class="htxt"><h1 id="dHello">Selamat datang</h1><p class="date" id="dDate"></p></div>
-            <div class="hstat"><span class="hchip" id="dChip"><span class="mi">bolt</span> <span id="dChipTxt"></span></span></div>
-          </div>
           <div class="dkpis" id="dKpis"></div>
           <div class="dtile dheat">
             <div class="th"><span class="mi">calendar_month</span> Ritme aktivitas · 8 minggu</div>
@@ -557,7 +557,7 @@
 
         <div id="dashSuper" class="hidden">
           <div class="sup-head">
-            <div><h1 id="supHello">Konsol Supervisor</h1><p class="sub" id="supSub">performa tim</p></div>
+            <div><h2 style="font:var(--md-sys-typescale-title-large);font-weight:800;margin:0">Konsol Supervisor</h2><p class="sub" id="supSub">performa tim</p></div>
             <md-button variant="tonal" icon="help" id="supHelpBtn">Cara baca</md-button>
           </div>
           <div class="sup-legend">
@@ -1079,13 +1079,13 @@ async function loadDashboard(){
   let s;try{s=await api('/api/stats');}catch(e){return;}
   S.stats=s;
   const isAdmin=s.role==='admin';
-  $('#dashOp').classList.toggle('hidden',isAdmin);
-  $('#dashSuper').classList.toggle('hidden',!isAdmin);
-  if(isAdmin){loadSupervisor(s.name);return;}
-  paintDashSky();
+  paintDashSky();                                            /* hero sapaan utk semua peran */
   $('#dHello').textContent=`${greetWord()}, ${esc(s.name)}`;
   const t=s.totals;
   $('#dChipTxt').textContent=t.draft?`${t.draft} lokasi menunggu diselesaikan`:'Semua lokasi selesai 🎉';
+  $('#dashOp').classList.toggle('hidden',isAdmin);
+  $('#dashSuper').classList.toggle('hidden',!isAdmin);
+  if(isAdmin){loadSupervisor(s.name);return;}
   const isA=s.role==='admin';
   const kpis=isA
     ?[['table_rows','Total Lokasi',t.locations,'semua lokasi'],['task_alt','Selesai',t.done,s.pct+'% dari total'],['group','User Aktif',t.users_active,''],['photo_camera','Total Foto',t.photos,'']]
@@ -1122,7 +1122,6 @@ let SUP_USERS=[];
 async function loadSupervisor(name){
   let d;try{d=await api('/api/stats/supervisor');}catch(e){return;}
   SUP_USERS=d.users||[];
-  $('#supHello').textContent=`${greetWord()}, ${esc(name)}`;
   $('#supSub').textContent=`performa tim · ${d.summary.users_active}/${d.summary.users_total} teknisi aktif`;
   const m=d.summary;
   const wow=m.vel_prev>0?Math.round((m.vel_this-m.vel_prev)/m.vel_prev*100):0;
