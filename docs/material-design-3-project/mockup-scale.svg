@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="760" viewBox="0 0 1120 760" font-family="Segoe UI, Roboto, system-ui, sans-serif">
+  <rect width="1120" height="760" fill="#eaeced"/>
+  <style>.t{fill:#1a1c1d}.m{fill:#43474a}.mut{fill:#8a9090}.tl{fill:#006a6a}.mono{font-family:ui-monospace,Consolas,monospace}</style>
+
+  <text x="30" y="34" font-size="17" font-weight="700" class="t">Optimasi skala — 15 user &amp; 5000+ baris (paginasi + agregat server-side)</text>
+
+  <!-- BEFORE -->
+  <text x="30" y="70" font-size="14" font-weight="700" fill="#8a1f1f">SEBELUM — berat di 5000+ baris</text>
+  <rect x="30" y="82" width="510" height="196" rx="16" fill="#fdf0f0" stroke="#e0b4b4"/>
+  <text x="46" y="110" font-size="12.5" class="m">Browser buka "Log Lokasi"</text>
+  <rect x="46" y="120" width="478" height="30" rx="8" fill="#fff" stroke="#e0b4b4"/>
+  <text x="56" y="140" font-size="12" class="mono t">GET /api/locations</text>
+  <text x="516" y="140" font-size="11.5" text-anchor="end" fill="#8a1f1f">→ 5000 baris sekaligus</text>
+  <g font-size="12" class="m">
+    <text x="46" y="172">• 1 query utama + <tspan font-weight="700" fill="#8a1f1f">5000× query inventory</tspan> (N+1)</text>
+    <text x="46" y="194">• Kirim SEMUA data_json + inventory ke browser</text>
+    <text x="46" y="216">• Frontend simpan semua di memori, baru potong 50</text>
+    <text x="46" y="238">• Cari/filter dilakukan di browser (semua baris)</text>
+    <text x="46" y="262" fill="#8a1f1f" font-weight="600">Payload besar + lambat tiap buka halaman</text>
+  </g>
+
+  <!-- AFTER -->
+  <text x="580" y="70" font-size="14" font-weight="700" class="tl">SESUDAH — ringan &amp; skalabel</text>
+  <rect x="580" y="82" width="510" height="196" rx="16" fill="#eef6f6" stroke="#a9d3d3"/>
+  <text x="596" y="110" font-size="12.5" class="m">Browser buka "Log Lokasi"</text>
+  <rect x="596" y="120" width="478" height="30" rx="8" fill="#fff" stroke="#a9d3d3"/>
+  <text x="606" y="140" font-size="12" class="mono t">GET /api/locations?page=1&amp;size=50&amp;q=&amp;status=all</text>
+  <g font-size="12" class="m">
+    <text x="596" y="172">• <tspan font-weight="700" class="tl">LIMIT/OFFSET</tspan> → hanya 50 baris per halaman</text>
+    <text x="596" y="194">• Agregat via SQL: foto, inv, <tspan class="mono">photo_cats</tspan>, <tspan class="mono">inv_ok</tspan></text>
+    <text x="596" y="216">• Tanpa N+1 (tidak ada 5000 query inventory)</text>
+    <text x="596" y="238">• Cari/filter dikirim ke server (pakai index)</text>
+    <text x="596" y="262" class="tl" font-weight="600">Respon kecil &amp; cepat walau data 5000++</text>
+  </g>
+
+  <!-- Response shape -->
+  <text x="30" y="312" font-size="13" font-weight="700" class="t">Bentuk respons baru</text>
+  <rect x="30" y="324" width="510" height="150" rx="14" fill="#1f2b2b"/>
+  <g font-size="12" class="mono" fill="#d7e7e7">
+    <text x="46" y="348">{</text>
+    <text x="60" y="368">"total": 5000,   "page": 1,   "size": 50,</text>
+    <text x="60" y="388">"rows": [</text>
+    <text x="74" y="408">{ "code":"LOK-7F3K9Q", "data":{…},</text>
+    <text x="88" y="426">"inv_count":3, "photo_count":2,</text>
+    <text x="88" y="444">"photo_cats":["dashboard","sn_kit"],</text>
+    <text x="88" y="462">"inv_ok":false, "can_delete":true }, … ]}</text>
+  </g>
+  <text x="30" y="494" font-size="11.5" class="mut">"Kurang": foto &amp; field lokasi dihitung di client (dari photo_cats + data), inventory pakai inv_ok dari server.</text>
+
+  <!-- Endpoint ringan picker -->
+  <text x="580" y="312" font-size="13" font-weight="700" class="t">Picker Entry pakai endpoint ringan</text>
+  <rect x="580" y="324" width="510" height="150" rx="14" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <rect x="596" y="342" width="478" height="30" rx="8" fill="#fff" stroke="#c3c7c8"/>
+  <text x="606" y="362" font-size="12" class="mono t">GET /api/locations/options</text>
+  <g font-size="12" class="m">
+    <text x="596" y="394">• Hanya id · code · nama (tanpa data berat)</text>
+    <text x="596" y="416">• Dipakai dropdown pemilih lokasi di Entry BAA</text>
+    <text x="596" y="438">• Pill jumlah lokasi di sidebar ambil "total"</text>
+  </g>
+  <text x="596" y="462" font-size="11.5" class="mut">Dropdown tetap bisa lihat semua lokasi tanpa menarik seluruh data.</text>
+
+  <!-- Log Lokasi UI with pagination -->
+  <text x="30" y="518" font-size="13" font-weight="700" class="t">Log Lokasi — footer paginasi</text>
+  <rect x="30" y="530" width="1060" height="150" rx="16" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <g font-size="11.5" font-weight="600" class="m"><text x="48" y="558">Kode</text><text x="180" y="558">Nama Lokasi</text><text x="470" y="558">INV</text><text x="530" y="558">Foto</text><text x="610" y="558">Status</text><text x="720" y="558">Kurang</text></g>
+  <line x1="48" y1="568" x2="1072" y2="568" stroke="#c3c7c8"/>
+  <g font-size="12.5">
+    <text x="48" y="592" class="tl" text-decoration="underline" font-weight="600">LOK-7F3K9Q</text>
+    <text x="180" y="592" class="t">Kopdes Sukamaju</text><text x="476" y="592" class="t">3</text><text x="536" y="592" class="t">2/11</text>
+    <text x="610" y="592" fill="#9a5b00" font-weight="600">draft</text>
+    <text x="720" y="592" class="m" font-size="11.5">Foto: Outdoor, Indoor, +7 · PIC · Inventory</text>
+    <line x1="48" y1="604" x2="1072" y2="604" stroke="#eceeee"/>
+    <text x="48" y="628" class="tl" text-decoration="underline" font-weight="600">LOK-43WDQH</text>
+    <text x="180" y="628" class="t">Kopdes Merah Putih</text><text x="476" y="628" class="t">3</text><text x="536" y="628" class="t">11/11</text>
+    <text x="610" y="628" class="tl" font-weight="600">selesai</text>
+    <text x="720" y="628" class="mut" font-size="11.5">—</text>
+  </g>
+  <line x1="48" y1="646" x2="1072" y2="646" stroke="#eceeee"/>
+  <text x="48" y="670" font-size="12" class="mut">Menampilkan 1–50 dari 5000</text>
+  <rect x="905" y="654" width="167" height="30" rx="15" fill="#eef6f6" stroke="#a9d3d3"/>
+  <text x="988" y="674" font-size="12.5" text-anchor="middle" class="tl" font-weight="600">Muat lebih banyak</text>
+
+  <text x="30" y="712" font-size="13" font-weight="700" class="t">Catatan</text>
+  <g font-size="12.5" class="m">
+    <text x="30" y="734">• Perubahan utama di backend + cara Log Lokasi memanggil API; tampilan &amp; kolom tetap sama.</text>
+    <text x="30" y="754">• SQLite/WAL sudah cukup untuk 15 user; ingat foto = file di disk (kapasitas &amp; ukuran backup ikut naik).</text>
+  </g>
+</svg>
