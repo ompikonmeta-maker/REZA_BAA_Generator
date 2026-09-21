@@ -36,12 +36,19 @@ jobs:
       - name: Build one-file executable
         run: pyinstaller rezabaa.spec --noconfirm --clean
 
+      - name: Install Tesseract (for bundling)
+        shell: pwsh
+        run: choco install tesseract --no-progress -y
+
       - name: Stage release folder
         shell: pwsh
         run: |
           New-Item -ItemType Directory -Force -Path release | Out-Null
           Copy-Item dist/BAA_Generator.exe release/
           Copy-Item docs/Template_BAA.xlsx release/ -ErrorAction SilentlyContinue
+          # Bundle Tesseract portable (OCR aktif tanpa install di komputer user)
+          $ts = "C:\Program Files\Tesseract-OCR"
+          if (Test-Path $ts) { Copy-Item $ts release/tesseract -Recurse -Force }
           @"
           BAA Generator — cara pakai
           ================================

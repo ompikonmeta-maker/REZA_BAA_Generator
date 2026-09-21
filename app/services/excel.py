@@ -27,8 +27,13 @@ DEFAULT_CONFIG = {
             "cols": {"nama_barang": "B", "merk_type": "C", "jumlah": "E",
                      "sn_tagging": "F", "keterangan": "H"},
         },
-        # anchor sel kiri-atas tiap kategori foto (perlu kalibrasi visual sekali)
-        "photos": {},
+        # anchor sel kiri-atas tiap kategori foto (default utk Template_BAA;
+        # sesuaikan di menu Mapping bila template berbeda)
+        "photos": {
+            "dashboard": "B27", "tampak_depan": "B74", "teknisi": "B91",
+            "outdoor": "K26", "indoor": "K43", "sn_kit": "K74", "sn_router": "K91",
+            "sn_ap": "T24", "ping": "T43", "speed": "T74", "simkopdes": "T91",
+        },
         "photo_max_w": 320, "photo_max_h": 240,
     },
 }

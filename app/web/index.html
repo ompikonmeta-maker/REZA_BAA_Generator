@@ -189,6 +189,7 @@
     <a class="navitem admin-only" data-view="users" data-tip="Users"><span class="mi">group</span><span class="lbl">Users</span></a>
     <a class="navitem admin-only" data-view="settings" data-tip="Pengaturan"><span class="mi">settings</span><span class="lbl">Pengaturan</span></a>
     <div class="nav-foot">
+      <md-icon-button id="pwBtn" data-tip="Ganti password"><span>password</span></md-icon-button>
       <md-icon-button id="themeBtn" data-tip="Ganti tema"><span>dark_mode</span></md-icon-button>
       <md-icon-button id="logoutBtn" data-tip="Logout"><span>logout</span></md-icon-button>
     </div>
@@ -272,7 +273,15 @@
       </section>
 
       <section id="v-locations" class="hidden">
-        <div class="card"><table><thead><tr><th>Kode</th><th>Nama Lokasi</th><th>Inv</th><th>Foto</th><th>Status</th><th></th></tr></thead><tbody id="loc-table"></tbody></table></div>
+        <div class="card">
+          <div class="rowflex" style="margin-bottom:14px">
+            <md-text-field id="loc-search" variant="outlined" label="Cari kode / nama" leading-icon="search" style="min-width:260px"></md-text-field>
+            <span class="grow"></span>
+            <md-segmented-button id="loc-filter"><button data-value="all" selected>Semua</button><button data-value="draft">Draft</button><button data-value="selesai">Selesai</button></md-segmented-button>
+          </div>
+          <table><thead><tr><th>Kode</th><th>Nama Lokasi</th><th>Inv</th><th>Foto</th><th>Status</th><th></th></tr></thead><tbody id="loc-table"></tbody></table>
+          <div id="loc-more" class="hidden" style="text-align:center;margin-top:12px"><md-button variant="text" id="loc-more-btn">Muat lebih banyak</md-button></div>
+        </div>
       </section>
 
       <section id="v-templates" class="hidden">
@@ -315,7 +324,11 @@
       </section>
 
       <section id="v-users" class="hidden">
-        <div class="card"><table><thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Aktif</th></tr></thead><tbody id="usr-table"></tbody></table></div>
+        <div class="card">
+          <div class="sec"><span class="mi acc">group</span><h3>Users</h3><span class="grow"></span>
+            <md-button id="usr-add" variant="tonal" icon="person_add">Tambah user</md-button></div>
+          <table><thead><tr><th>Username</th><th>Nama</th><th>Role</th><th>Aktif</th><th></th></tr></thead><tbody id="usr-table"></tbody></table>
+        </div>
       </section>
 
       <section id="v-settings" class="hidden">
@@ -344,6 +357,15 @@
           <div id="di-list"></div>
           <div style="margin-top:12px"><md-button id="di-save" variant="filled" icon="save">Simpan default</md-button></div>
         </div>
+        <div class="card">
+          <div class="sec"><span class="mi acc">backup</span><h3>Backup &amp; Restore</h3></div>
+          <p class="muted" style="margin:0 0 12px">Backup mengunduh ZIP berisi database, foto, &amp; template. Restore menimpa data dari ZIP (perlu jalankan ulang aplikasi setelahnya).</p>
+          <div class="rowflex">
+            <md-button id="bk-download" variant="filled" icon="download">Unduh backup</md-button>
+            <input id="bk-file" type="file" accept=".zip" class="hidden">
+            <md-button id="bk-restore" variant="outlined" icon="restore">Restore dari ZIP…</md-button>
+          </div>
+        </div>
       </section>
     </div>
   </main>
@@ -353,6 +375,34 @@
   <span slot="headline">Hapus entry ini?</span>
   <div id="delMsg"></div>
   <div slot="actions"><md-button variant="text" id="delCancel">Batal</md-button><md-button variant="filled" id="delOk">Hapus</md-button></div>
+</md-dialog>
+
+<md-dialog id="userDlg">
+  <span slot="headline" id="userDlgTitle">User</span>
+  <div style="display:flex;flex-direction:column;gap:10px;min-width:300px">
+    <md-text-field id="u-username" variant="outlined" label="Username"></md-text-field>
+    <md-text-field id="u-fullname" variant="outlined" label="Nama lengkap"></md-text-field>
+    <div class="md-select" id="u-role"></div>
+    <md-text-field id="u-pass" variant="outlined" label="Password" type="password" supporting-text="Kosongkan bila tak mengubah (saat edit)"></md-text-field>
+    <label class="ck" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="u-active" checked style="width:18px;height:18px;accent-color:var(--md-sys-color-primary)"> Aktif</label>
+  </div>
+  <div slot="actions"><md-button variant="text" id="userCancel">Batal</md-button><md-button variant="filled" id="userSave">Simpan</md-button></div>
+</md-dialog>
+
+<md-dialog id="pwDlg">
+  <span slot="headline">Ganti Password</span>
+  <div style="display:flex;flex-direction:column;gap:10px;min-width:300px">
+    <div id="pwForce" class="hidden" style="color:var(--warn);font:var(--md-sys-typescale-body-small)">Login pertama — wajib ganti password.</div>
+    <md-text-field id="pw-old" variant="outlined" label="Password lama" type="password"></md-text-field>
+    <md-text-field id="pw-new" variant="outlined" label="Password baru" type="password"></md-text-field>
+  </div>
+  <div slot="actions"><md-button variant="text" id="pwCancel">Batal</md-button><md-button variant="filled" id="pwSave">Simpan</md-button></div>
+</md-dialog>
+
+<md-dialog id="galDlg">
+  <span slot="headline" id="galTitle">Foto</span>
+  <div id="galBody" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;min-width:320px;max-height:60vh;overflow:auto"></div>
+  <div slot="actions"><md-button variant="tonal" id="galAdd" icon="add">Tambah foto</md-button><md-button variant="text" id="galClose">Tutup</md-button></div>
 </md-dialog>
 
 <div class="tip" id="tip"></div>
@@ -406,7 +456,7 @@ class MDSelect{
   open(){if(!this.items.length)return;MDMenu.open(this.el,this.items.map(o=>({label:o.label,select:'single',group:'sel',selected:o.value===this.value,
     onSelect:()=>{this.value=o.value;this._render();this.onChange&&this.onChange(o.value);}})),{openerEl:this.el});}
 }
-let pickerSel,tplLogSel,tplDetailSel,mapLogSel,mapDetailSel;
+let pickerSel,tplLogSel,tplDetailSel,mapLogSel,mapDetailSel,roleSel;
 
 /* AUTH */
 async function boot(){paint();
@@ -415,6 +465,7 @@ async function boot(){paint();
   tplDetailSel=new MDSelect($('#tpl-detail'),{label:'Worksheet Detail'});
   mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG'});
   mapDetailSel=new MDSelect($('#map-detail'),{label:'Sheet Detail',onChange:v=>renderRef(v)});
+  roleSel=new MDSelect($('#u-role'),{label:'Role'});roleSel.setOptions([{value:'operator',label:'operator'},{value:'admin',label:'admin'}]).setValue('operator');
   try{S.user=await api('/api/auth/me');showApp();}catch{$('#login').classList.remove('hidden');bindTips();}}
 $('#lg-btn').addEventListener('click',async()=>{try{await api('/api/auth/login',{method:'POST',body:JSON.stringify({username:$('#lg-user').value,password:$('#lg-pass').value})});S.user=await api('/api/auth/me');showApp();}catch(e){const el=$('#lg-err');el.textContent=e.message;el.classList.remove('hidden');}});
 $('#lg-pass').addEventListener('keydown',e=>{if(e.key==='Enter')$('#lg-btn').click()});
@@ -425,7 +476,8 @@ $('#railBtn').addEventListener('click',()=>$('#app').classList.toggle('rail'));
 async function showApp(){$('#login').classList.add('hidden');$('#app').classList.remove('hidden');
   const s=await api('/api/settings');S.cats=s.photo_categories||[];S.locFields=s.location_fields||[];S.ocr=s.ocr_available;S.invItems=s.default_inventory_items||[];S.appTitle=s.app_title||'BAA Generator';
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
-  refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();}
+  refreshPicker();loadLocations();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
+  if(S.user.must_change)setTimeout(()=>openPw(true),400);}
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
   const v=n.dataset.view;['entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
@@ -509,7 +561,7 @@ function renderPhotos(){
   $('#foto-count').textContent=filled+' / '+S.cats.length;
   $('#photo-slots').innerHTML=S.cats.map(c=>{const ps=byCat[c.key]||[];const first=ps[0];
     const snap=first
-      ? `<div class="snap" onclick="pick('${c.key}')"><img src="/api/photos/${first.id}/file" loading="lazy">${ps.length>1?`<span class="badge">${ps.length} foto</span>`:''}<button class="x" onclick="event.stopPropagation();delPhoto(${first.id})">close</button></div>`
+      ? `<div class="snap" onclick="openGallery('${c.key}')"><img src="/api/photos/${first.id}/file" loading="lazy">${ps.length>1?`<span class="badge">${ps.length} foto</span>`:''}<button class="x" onclick="event.stopPropagation();delPhoto(${first.id})">close</button></div>`
       : `<div class="snap empty" onclick="pick('${c.key}')"><span class="mi" style="font-size:30px;color:var(--md-sys-color-primary)">add_a_photo</span></div>`;
     let foot='<div class="foot"></div>';
     if(c.ocr){const sn=ps.find(p=>p.ocr_serial);
@@ -552,10 +604,20 @@ $('#exp-xlsx').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return t
 $('#exp-pdf').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return toast('Pilih lokasi');location.href=expUrl('pdf');});
 
 /* LOCATIONS */
-async function loadLocations(){const rows=await api('/api/locations');$('#loc-count').textContent=rows.length||'';
+let LOC_ROWS=[],LOC_SHOWN=50;
+async function loadLocations(){LOC_ROWS=await api('/api/locations');$('#loc-count').textContent=LOC_ROWS.length||'';LOC_SHOWN=50;renderLocTable();}
+function renderLocTable(){
+  const q=($('#loc-search').value||'').toLowerCase();const f=S.locFilter||'all';
+  let rows=LOC_ROWS.filter(l=>{const name=(l.data.nama_lokasi||l.name||'').toLowerCase();
+    return (!q||l.code.toLowerCase().includes(q)||name.includes(q))&&(f==='all'||l.status===f);});
+  const total=rows.length;rows=rows.slice(0,LOC_SHOWN);
   $('#loc-table').innerHTML=rows.map(l=>`<tr><td class="mono">${esc(l.code)}</td><td>${esc(l.data.nama_lokasi||l.name||'')}</td>
     <td>${l.inv_count}</td><td>${l.photo_count}</td><td>${l.status}</td>
-    <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`).join('')||'<tr><td colspan=6 class="muted">Belum ada lokasi</td></tr>';bindTips();}
+    <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`).join('')||'<tr><td colspan=6 class="muted">Tidak ada data</td></tr>';
+  $('#loc-more').classList.toggle('hidden',total<=LOC_SHOWN);bindTips();}
+$('#loc-search').addEventListener('input',renderLocTable);
+$('#loc-filter').addEventListener('change',e=>{S.locFilter=e.detail.value;renderLocTable();});
+$('#loc-more-btn').addEventListener('click',()=>{LOC_SHOWN+=50;renderLocTable();});
 window.locMenu=(btn,l)=>{const items=[
   {icon:'edit',label:'Buka / Edit',fn:()=>{gotoEntry();openLoc(l.id);}},
   {icon:'grid_on',label:'Export Excel',fn:()=>location.href='/api/export/excel?scope=one&loc_id='+l.id},
@@ -610,7 +672,50 @@ $('#map-save')&&$('#map-save').addEventListener('click',async()=>{const cfg=stru
   try{await api('/api/templates/'+S.mapTplId+'/mapping',{method:'PUT',body:JSON.stringify({config:cfg,sheet_log:mapLogSel.getValue(),sheet_detail:mapDetailSel.getValue()})});toast('Mapping tersimpan');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
 $('#map-close')&&$('#map-close').addEventListener('click',()=>$('#mapping').classList.add('hidden'));
 
-async function loadUsers(){try{const rows=await api('/api/users');$('#usr-table').innerHTML=rows.map(u=>`<tr><td>${esc(u.username)}</td><td>${esc(u.full_name||'')}</td><td>${u.role}</td><td>${u.active?'ya':'tidak'}</td></tr>`).join('');}catch{}}
+let USR_ROWS=[],editUserId=null;
+async function loadUsers(){try{USR_ROWS=await api('/api/users');
+  $('#usr-table').innerHTML=USR_ROWS.map(u=>`<tr><td>${esc(u.username)}</td><td>${esc(u.full_name||'')}</td><td>${u.role}</td><td>${u.active?'ya':'tidak'}</td>
+    <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='usrMenu(this,${JSON.stringify({id:u.id})})'><span>more_vert</span></md-icon-button></td></tr>`).join('');bindTips();}catch{}}
+window.usrMenu=(btn,u)=>{const row=USR_ROWS.find(x=>x.id===u.id);openMenu(btn,[
+  {icon:'edit',label:'Edit / reset password',fn:()=>openUser(row)},
+  {icon:'delete',label:'Hapus',fn:()=>delUser(row)}]);};
+function openUser(u){editUserId=u?u.id:null;$('#userDlgTitle').textContent=u?'Edit user':'Tambah user';
+  $('#u-username').setAttribute('value',u?u.username:'');$('#u-fullname').setAttribute('value',u?(u.full_name||''):'');
+  roleSel.setValue(u?u.role:'operator');$('#u-pass').setAttribute('value','');$('#u-active').checked=u?!!u.active:true;$('#userDlg').show();}
+$('#usr-add').addEventListener('click',()=>openUser(null));
+$('#userCancel').addEventListener('click',()=>$('#userDlg').close());
+$('#userSave').addEventListener('click',async()=>{const body={username:$('#u-username').value.trim(),full_name:$('#u-fullname').value.trim(),role:roleSel.getValue(),active:$('#u-active').checked,password:$('#u-pass').value};
+  try{ if(editUserId){await api('/api/users/'+editUserId,{method:'PUT',body:JSON.stringify(body)});}
+    else{ if(!body.username||body.password.length<4)return toast('Username & password (min 4) wajib');await api('/api/users',{method:'POST',body:JSON.stringify(body)});}
+    $('#userDlg').close();toast('User tersimpan');loadUsers();}catch(e){toast('Gagal: '+e.message);}});
+async function delUser(u){if(u.id===S.user.id)return toast('Tidak bisa hapus akun sendiri');
+  if(!confirm('Hapus user '+u.username+'?'))return;
+  try{await api('/api/users/'+u.id,{method:'DELETE'});toast('User dihapus');loadUsers();}catch(e){toast('Gagal: '+e.message);}}
+
+/* Ganti password + wajib ganti saat login pertama */
+function openPw(force){$('#pwForce').classList.toggle('hidden',!force);$('#pwCancel').style.display=force?'none':'';
+  $('#pw-old').setAttribute('value','');$('#pw-new').setAttribute('value','');$('#pwDlg').show();}
+$('#pwBtn').addEventListener('click',()=>openPw(false));
+$('#pwCancel').addEventListener('click',()=>$('#pwDlg').close());
+$('#pwSave').addEventListener('click',async()=>{try{
+  await api('/api/auth/change-password',{method:'POST',body:JSON.stringify({old_password:$('#pw-old').value,new_password:$('#pw-new').value})});
+  $('#pwDlg').close();S.user.must_change=false;toast('Password diganti');}catch(e){toast('Gagal: '+e.message);}});
+
+/* Galeri foto per kategori */
+let galCat=null;
+window.openGallery=cat=>{galCat=cat;const c=S.cats.find(x=>x.key===cat);$('#galTitle').textContent=c?c.label:cat;
+  const ps=(S.loc.photos||[]).filter(p=>p.category===cat);
+  $('#galBody').innerHTML=ps.map(p=>`<div class="thumb" style="width:100%;height:110px"><img src="/api/photos/${p.id}/file"><button class="x" onclick="galDel(${p.id})">close</button></div>`).join('')||'<span class="muted">Belum ada foto</span>';
+  $('#galDlg').show();};
+window.galDel=async id=>{await api('/api/photos/'+id,{method:'DELETE'});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();openGallery(galCat);};
+$('#galClose').addEventListener('click',()=>$('#galDlg').close());
+$('#galAdd').addEventListener('click',()=>{const inp=document.createElement('input');inp.type='file';inp.multiple=true;inp.accept='image/*';inp.onchange=async()=>{await doUpload(inp.files,galCat,[]);openGallery(galCat);};inp.click();});
+
+/* Backup & restore */
+$('#bk-download').addEventListener('click',()=>{location.href='/api/backup';});
+$('#bk-restore').addEventListener('click',()=>$('#bk-file').click());
+$('#bk-file').addEventListener('change',async e=>{const f=e.target.files[0];if(!f)return;const fd=new FormData();fd.append('file',f);
+  toast('Memulihkan…');try{const r=await fetch('/api/restore',{method:'POST',credentials:'same-origin',body:fd});if(!r.ok)throw new Error((await r.json()).detail);const d=await r.json();toast(d.msg||'Dipulihkan');}catch(err){toast('Gagal: '+err.message);}e.target.value='';});
 
 /* ===== PENGATURAN ===== */
 function loadSettingsPage(){$('#set-title').setAttribute('value',S.appTitle||'');renderLF();renderPC();renderDI();}

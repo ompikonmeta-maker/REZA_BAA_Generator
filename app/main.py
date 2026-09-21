@@ -6,7 +6,7 @@ from fastapi.responses import FileResponse, JSONResponse
 from fastapi.staticfiles import StaticFiles
 
 from . import config, db
-from .routers import (auth, export, locations, photos, settings, templates, users)
+from .routers import (auth, backup, export, locations, photos, settings, templates, users)
 
 app = FastAPI(title="BAA Generator", version="0.1.0")
 
@@ -18,7 +18,7 @@ def _startup() -> None:
 
 
 for r in (auth.router, settings.router, templates.router, locations.router,
-          photos.router, users.router, export.router):
+          photos.router, users.router, export.router, backup.router):
     app.include_router(r)
 
 
