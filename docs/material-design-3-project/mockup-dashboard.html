@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Dashboard BAA</title>
+<style>
+  :root{
+    --bg:#eaeced;--nav:#f6f7f8;--pane:#fcfcfd;--primary:#006a6a;--onp:#fff;--on:#1a1c1d;
+    --onv:#43474a;--ov:#c3c7c8;--sec:#cfe6e6;--onsec:#004f4f;--warn:#9a5b00;--warnbg:#fff3e0;
+    --ok:#006a6a;--track:#dfe4e4;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#1f2121;--nav:#1b1d1d;--pane:#131515;--primary:#4fd8d8;--onp:#003737;--on:#e2e3e3;
+    --onv:#c3c7c8;--ov:#43474a;--sec:#0f3b3b;--onsec:#9fecec;--warn:#ffb95c;--warnbg:#3a2a10;--track:#2b2f2f;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--on);font:14px/1.45 "Segoe UI",Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .top{display:flex;align-items:center;gap:12px;padding:16px 22px}
+  .top .role{margin-left:auto;display:flex;gap:6px;background:var(--nav);padding:4px;border-radius:22px;border:1px solid var(--ov)}
+  .role button{border:none;background:transparent;color:var(--onv);padding:7px 16px;border-radius:18px;cursor:pointer;font-weight:600;font-size:13px}
+  .role button.on{background:var(--sec);color:var(--onsec)}
+  .wrap{padding:0 22px 30px;max-width:1180px;margin:0 auto}
+  .hello{font-size:24px;font-weight:700;margin:2px 0 2px}
+  .sub{color:var(--onv);font-size:13px;margin:0 0 18px}
+  .grid{display:grid;gap:14px}
+  .kpis{grid-template-columns:repeat(4,1fr)}
+  @media(max-width:820px){.kpis{grid-template-columns:repeat(2,1fr)}}
+  .card{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:16px}
+  .kpi .lbl{color:var(--onv);font-size:12px;display:flex;align-items:center;gap:7px}
+  .kpi .num{font-size:30px;font-weight:800;margin-top:6px;letter-spacing:-.5px}
+  .kpi .mi{width:28px;height:28px;border-radius:9px;background:var(--sec);color:var(--onsec);display:grid;place-items:center;font-size:16px}
+  .cols{grid-template-columns:1.4fr 1fr;margin-top:14px}
+  @media(max-width:820px){.cols{grid-template-columns:1fr}}
+  .h{font-size:15px;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .h .grow{margin-left:auto}
+  .link{color:var(--primary);font-size:12px;text-decoration:none;cursor:pointer}
+  /* donut */
+  .donut{width:132px;height:132px;border-radius:50%;background:conic-gradient(var(--primary) 0 68%,var(--track) 68% 100%);
+    display:grid;place-items:center;margin:6px auto}
+  .donut .in{width:96px;height:96px;border-radius:50%;background:var(--pane);display:grid;place-items:center;text-align:center}
+  .donut .pct{font-size:24px;font-weight:800}.donut .cap{font-size:11px;color:var(--onv)}
+  .legend{display:flex;justify-content:center;gap:16px;font-size:12px;color:var(--onv);margin-top:6px}
+  .dot{display:inline-block;width:10px;height:10px;border-radius:3px;vertical-align:middle;margin-right:5px}
+  /* rows */
+  .row{display:flex;align-items:center;gap:10px;padding:10px 8px;border-radius:10px;cursor:pointer}
+  .row:hover{background:color-mix(in srgb,var(--on) 5%,transparent)}
+  .row+.row{border-top:1px solid var(--ov)}
+  .code{font-family:ui-monospace,Consolas,monospace;color:var(--primary);font-weight:600;font-size:12.5px;min-width:96px}
+  .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .lack{color:var(--onv);font-size:11.5px}
+  .badge{font-size:11px;font-weight:700;padding:2px 9px;border-radius:20px}
+  .b-draft{background:var(--warnbg);color:var(--warn)}.b-done{background:var(--sec);color:var(--onsec)}
+  .bar{height:9px;border-radius:5px;background:var(--track);overflow:hidden;margin:10px 0}
+  .bar>span{display:block;height:100%;background:var(--primary)}
+  .lead{display:flex;align-items:center;gap:10px;padding:8px 6px}
+  .lead+.lead{border-top:1px solid var(--ov)}
+  .ava{width:30px;height:30px;border-radius:50%;background:var(--sec);color:var(--onsec);display:grid;place-items:center;font-weight:700;font-size:13px}
+  .mini{margin-left:auto;font-size:12px;color:var(--onv)}
+  .act{display:flex;gap:8px;flex-wrap:wrap;margin-top:2px}
+  .btn{border:none;background:var(--primary);color:var(--onp);padding:10px 18px;border-radius:20px;font-weight:600;cursor:pointer;font-size:13px;display:inline-flex;gap:8px;align-items:center}
+  .btn.ghost{background:transparent;color:var(--primary);border:1px solid var(--ov)}
+  .feed{font-size:12.5px;color:var(--onv)}
+  .feed .it{display:flex;gap:10px;padding:8px 0}.feed .it+.it{border-top:1px solid var(--ov)}
+  .feed b{color:var(--on)}
+  .mi{font-family:"Material Symbols Outlined","Segoe UI Symbol";font-style:normal}
+  .hide{display:none!important}
+</style>
+</head>
+<body>
+  <div class="top">
+    <strong style="font-size:16px">BAA Generator — Dashboard</strong>
+    <div class="role">
+      <button class="on" id="rAdmin">Admin</button>
+      <button id="rOp">Operator</button>
+    </div>
+  </div>
+
+  <div class="wrap">
+    <div class="hello" id="hello">Selamat pagi, Reza 👋</div>
+    <p class="sub" id="subline">Ringkasan aktivitas BAA hari ini.</p>
+
+    <!-- KPI -->
+    <div class="grid kpis" id="kpis"></div>
+
+    <div class="grid cols">
+      <!-- LEFT -->
+      <div>
+        <div class="card">
+          <div class="h"><span class="mi">warning</span> Butuh Perhatian <span class="grow"></span><a class="link">Lihat Log Lokasi ›</a></div>
+          <div id="attn"></div>
+        </div>
+        <div class="card" id="leadCard" style="margin-top:14px">
+          <div class="h"><span class="mi">leaderboard</span> Kinerja Teknisi</div>
+          <div id="lead"></div>
+        </div>
+      </div>
+      <!-- RIGHT -->
+      <div>
+        <div class="card">
+          <div class="h"><span class="mi">donut_small</span> Progress</div>
+          <div class="donut" id="donut"><div class="in"><div><div class="pct" id="dpct">68%</div><div class="cap">selesai</div></div></div></div>
+          <div class="legend"><span><span class="dot" style="background:var(--primary)"></span>Selesai <b id="lgDone">17</b></span><span><span class="dot" style="background:var(--track)"></span>Draft <b id="lgDraft">8</b></span></div>
+        </div>
+        <div class="card" id="opProgress" style="margin-top:14px">
+          <div class="h"><span class="mi">bolt</span> Aksi Cepat</div>
+          <div class="act" id="acts"></div>
+        </div>
+        <div class="card" id="feedCard" style="margin-top:14px">
+          <div class="h"><span class="mi">history</span> Aktivitas Terbaru</div>
+          <div class="feed" id="feed"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+  const DATA={
+    admin:{
+      hello:"Selamat pagi, Admin 👋", sub:"Ringkasan seluruh lokasi & tim.",
+      kpis:[["table_rows","Total Lokasi","25"],["task_alt","Selesai","17"],["draft","Draft","8"],["photo_camera","Total Foto","214"],
+            ["group","User Aktif","6"],["description","Template Aktif","1"],["percent","% Selesai","68%"],["inventory_2","Item Inventory","72"]],
+      pct:68,done:17,draft:8,
+      attn:[["LOK-7F3K9Q","Kopdes Sukamaju","Foto: Outdoor, Indoor, +7 · PIC · Inventory","draft"],
+            ["LOK-88KD2M","Kopdes Sinar Tani","Foto: SN Kit · Inventory","draft"],
+            ["LOK-1QW9ZP","Kopdes Maju Jaya","Foto: Ping, Speed","draft"]],
+      lead:[["Budi",9,7],["Sari",7,6],["Andi",5,3],["Rina",4,1]],
+      feed:[["Budi","menyelesaikan","LOK-43WDQH","5 mnt lalu"],["Sari","mengunggah 4 foto","LOK-7F3K9Q","22 mnt lalu"],
+            ["Andi","membuat lokasi","LOK-1QW9ZP","1 jam lalu"],["Admin","menambah user","operator: rina","2 jam lalu"]],
+      acts:[["add","+ Lokasi"],["group","Kelola User"],["description","Template"],["backup","Backup"]],
+      showLead:true, showFeed:true
+    },
+    op:{
+      hello:"Selamat pagi, Reza 👋", sub:"Ringkasan tugas BAA kamu.",
+      kpis:[["table_rows","Lokasi Saya","6"],["task_alt","Selesai","4"],["draft","Draft","2"],["percent","% Selesai","67%"]],
+      pct:67,done:4,draft:2,
+      attn:[["LOK-7F3K9Q","Kopdes Sukamaju","Foto: Outdoor, Indoor, +7 · PIC · Inventory","draft"],
+            ["LOK-1QW9ZP","Kopdes Maju Jaya","Foto: Ping, Speed","draft"]],
+      lead:[], feed:[["Kamu","menyelesaikan","LOK-9BNN9T","10 mnt lalu"],["Kamu","mengunggah 3 foto","LOK-7F3K9Q","1 jam lalu"]],
+      acts:[["add","+ Lokasi baru"]],
+      showLead:false, showFeed:true
+    }
+  };
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  function render(role){
+    const d=DATA[role];
+    $('#hello').textContent=d.hello; $('#subline').textContent=d.sub;
+    $('#kpis').innerHTML=d.kpis.map(k=>`<div class="card kpi"><div class="lbl"><span class="mi">${k[0]}</span>${k[1]}</div><div class="num">${k[2]}</div></div>`).join('');
+    $('#kpis').style.gridTemplateColumns=`repeat(${role==='admin'?4:4},1fr)`;
+    $('#donut').style.background=`conic-gradient(var(--primary) 0 ${d.pct}%,var(--track) ${d.pct}% 100%)`;
+    $('#dpct').textContent=d.pct+'%'; $('#lgDone').textContent=d.done; $('#lgDraft').textContent=d.draft;
+    $('#attn').innerHTML=d.attn.map(a=>`<div class="row"><span class="code">${a[0]}</span><span class="nm">${a[1]}<div class="lack">${a[2]}</div></span><span class="badge b-${a[3]==='draft'?'draft':'done'}">${a[3]}</span></div>`).join('');
+    $('#leadCard').classList.toggle('hide',!d.showLead);
+    $('#lead').innerHTML=d.lead.map(l=>`<div class="lead"><span class="ava">${l[0][0]}</span><span>${l[0]}</span><span class="mini">${l[2]}/${l[1]} selesai</span></div>`).join('');
+    $('#acts').innerHTML=d.acts.map((a,i)=>`<button class="btn ${i?'ghost':''}"><span class="mi">${a[0]}</span>${a[1]}</button>`).join('');
+    $('#feed').innerHTML=d.feed.map(f=>`<div class="it"><span class="mi" style="color:var(--primary)">fiber_manual_record</span><div><b>${f[0]}</b> ${f[1]} <b>${f[2]}</b><div style="opacity:.7">${f[3]}</div></div></div>`).join('');
+  }
+  $('#rAdmin').addEventListener('click',()=>{$('#rAdmin').classList.add('on');$('#rOp').classList.remove('on');render('admin');});
+  $('#rOp').addEventListener('click',()=>{$('#rOp').classList.add('on');$('#rAdmin').classList.remove('on');render('op');});
+  // greeting by time (contoh)
+  const hh=new Date().getHours();const greet=hh<11?'Selamat pagi':hh<15?'Selamat siang':hh<18?'Selamat sore':'Selamat malam';
+  DATA.admin.hello=greet+', Admin 👋';DATA.op.hello=greet+', Reza 👋';
+  render('admin');
+</script>
+</body>
+</html>
