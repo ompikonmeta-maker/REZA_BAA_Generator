@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Dashboard proporsi v4</title>
+<style>
+  :root{--bg:#e9ecec;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;--track:#dfe4e3;
+    --pri:#04726f;--sec:#cfe6e5;--onsec:#00413f;
+    --h1:#a9d6d3;--h2:#5fb4b0;--h3:#238b87;--h4:#04726f;--hc:16px;}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--track:#28302f;--pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec;--h1:#245350;--h2:#2f7d78;--h3:#3fa8a3;--h4:#57d6d1;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",Roboto,system-ui,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:20px 22px}
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+  .tile{background:var(--pane);border:1px solid var(--ov);border-radius:20px;padding:16px;min-width:0}
+  .kpis{grid-column:span 4;display:grid;grid-template-columns:1fr 1fr;gap:14px;align-content:start}
+  .heat{grid-column:span 5}.donut{grid-column:span 3}.trend{grid-column:span 12}
+  .attn{grid-column:span 6}.feed{grid-column:span 6}.side{grid-column:span 6}.acts{grid-column:span 6}
+  @media(max-width:960px){.kpis,.heat,.donut,.trend,.attn,.feed,.side,.acts{grid-column:span 12}}
+  .th{font-size:14px;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .th .grow{margin-left:auto}
+  /* kpi */
+  .kpi{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:15px}
+  .kpi .t{display:flex;align-items:center;gap:8px;color:var(--mut);font-size:12px;font-weight:600}
+  .kpi .ic{width:28px;height:28px;border-radius:9px;background:var(--sec);color:var(--onsec);display:grid;place-items:center;font-size:15px}
+  .kpi .n{font-size:26px;font-weight:800;margin-top:8px;letter-spacing:-1px}.kpi .d{font-size:11px;color:var(--mut);margin-top:2px}
+  /* heatmap compact */
+  .hins{font-size:12px;color:var(--mut);margin:-4px 0 12px}.hins b{color:var(--ink)}
+  .hmonths{display:grid;grid-template-columns:22px repeat(8,var(--hc));gap:5px;margin-bottom:5px;font-size:10px;color:var(--mut)}
+  .hbody{display:grid;grid-template-columns:22px auto}
+  .hdays{display:grid;grid-template-rows:repeat(7,var(--hc));gap:5px;font-size:9px;color:var(--mut)}
+  .hdays span{display:flex;align-items:center}
+  .hcols{display:grid;grid-template-columns:repeat(8,var(--hc));gap:5px}
+  .hcol{display:grid;grid-template-rows:repeat(7,var(--hc));gap:5px}
+  .c{width:var(--hc);height:var(--hc);border-radius:4px;background:var(--track)}
+  .c.l1{background:var(--h1)}.c.l2{background:var(--h2)}.c.l3{background:var(--h3)}.c.l4{background:var(--h4)}
+  .c.empty{background:transparent}.c.today{box-shadow:0 0 0 2px var(--pri)}
+  .hleg{display:flex;justify-content:flex-end;gap:9px;margin-top:12px;font-size:10.5px;color:var(--mut)}
+  .hleg .k{display:flex;align-items:center;gap:4px}.hleg i{width:12px;height:12px;border-radius:4px;display:inline-block}
+  /* donut */
+  .donut{display:flex;flex-direction:column}
+  .gwrap{flex:1;display:grid;place-items:center;padding:6px 0}
+  .gauge{width:min(170px,86%);aspect-ratio:1}
+  .gt{fill:none;stroke:var(--track);stroke-width:12}
+  .gv{fill:none;stroke:var(--pri);stroke-width:12;stroke-linecap:round;transform:rotate(-90deg);transform-origin:60px 60px}
+  .gp{fill:var(--ink);font-weight:800;font-size:21px;text-anchor:middle;dominant-baseline:middle}
+  .gc{fill:var(--mut);font-weight:600;font-size:7px;letter-spacing:.8px;text-anchor:middle;text-transform:uppercase}
+  .lg{display:flex;justify-content:center;gap:16px;font-size:12px;color:var(--mut);margin-top:6px}
+  .lg .dot{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:5px;vertical-align:middle}
+  /* sparkline */
+  .spk{width:100%;height:90px;display:block}
+  .filler{color:var(--mut);font-size:12px;padding:14px 4px}
+  .mi{font-family:"Material Symbols Outlined","Segoe UI Symbol";font-style:normal}
+</style>
+</head>
+<body>
+<div class="wrap"><div class="bento">
+  <div class="kpis" id="kpis"></div>
+  <div class="tile heat">
+    <div class="th"><span class="mi">calendar_month</span> Ritme aktivitas · 8 minggu</div>
+    <div class="hins" id="hins"></div>
+    <div class="hmonths" id="hmonths"></div>
+    <div class="hbody"><div class="hdays"><span>Sen</span><span></span><span>Rab</span><span></span><span>Jum</span><span></span><span>Min</span></div><div class="hcols" id="hcols"></div></div>
+    <div class="hleg"><span class="k"><i style="background:var(--track)"></i>0</span><span class="k"><i style="background:var(--h1)"></i>1–2</span><span class="k"><i style="background:var(--h2)"></i>3–5</span><span class="k"><i style="background:var(--h4)"></i>6+</span></div>
+  </div>
+  <div class="tile donut">
+    <div class="th"><span class="mi">donut_small</span> Progress Aktivasi</div>
+    <div class="gwrap"><svg class="gauge" viewBox="0 0 120 120"><circle class="gt" cx="60" cy="60" r="50"/><circle class="gv" id="arc" cx="60" cy="60" r="50"/><text class="gp" x="60" y="57">0%</text><text class="gc" x="60" y="74">selesai</text></svg></div>
+    <div class="lg"><span><span class="dot" style="background:var(--pri)"></span>Selesai <b>0</b></span><span><span class="dot" style="background:var(--track)"></span>Draft <b>1</b></span></div>
+  </div>
+  <div class="tile trend">
+    <div class="th"><span class="mi">trending_up</span> Lokasi selesai · 14 hari <span class="grow"></span><span style="color:var(--mut);font-size:12px">+0 total</span></div>
+    <svg class="spk" id="spk" viewBox="0 0 900 90" preserveAspectRatio="none"></svg>
+  </div>
+  <div class="tile attn"><div class="th"><span class="mi">warning</span> Butuh Perhatian</div><div class="filler">1 lokasi menunggu — LOK-TN9DGH · Kopdes Sukamaju</div></div>
+  <div class="tile feed"><div class="th"><span class="mi">history</span> Aktivitas Terbaru</div><div class="filler">Kamu membuat lokasi LOK-TN9DGH · baru saja</div></div>
+  <div class="tile side"><div class="th"><span class="mi">local_fire_department</span> Konsistensi Kamu</div><div class="filler">🔥 1 hari beruntun</div></div>
+  <div class="tile acts"><div class="th"><span class="mi">bolt</span> Akses Cepat</div><div class="filler">+ Lokasi baru · Log Lokasi</div></div>
+</div></div>
+
+<script>
+  const $=s=>document.querySelector(s);
+  $('#kpis').innerHTML=[['table_rows','Lokasi Saya','1','milik kamu'],['task_alt','Selesai','0','0%'],['draft','Draft','1','perlu dilanjut'],['photo_camera','Foto Saya','0','']]
+    .map(k=>`<div class="kpi"><div class="t"><span class="ic"><span class="mi">${k[0]}</span></span>${k[1]}</div><div class="n">${k[2]}</div><div class="d">${k[3]||'&nbsp;'}</div></div>`).join('');
+  // heatmap (2 aktivitas contoh)
+  const DAYS=['Min','Sen','Sel','Rab','Kam','Jum','Sab'],MO=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const today=new Date();today.setHours(0,0,0,0);const wd=(today.getDay()+6)%7;const startMon=new Date(today);startMon.setDate(today.getDate()-wd-49);
+  function lvl(v){return v<=0?0:v<=2?1:v<=5?2:v<=8?3:4;}
+  let prevM=-1,cols='',months='<span></span>';
+  const active=[today]; // 1 hari aktif
+  for(let w=0;w<8;w++){const first=new Date(startMon);first.setDate(startMon.getDate()+w*7);
+    months+=`<span>${first.getMonth()!==prevM?MO[first.getMonth()]:''}</span>`;prevM=first.getMonth();
+    cols+='<div class="hcol">';
+    for(let r=0;r<7;r++){const dt=new Date(startMon);dt.setDate(startMon.getDate()+w*7+r);
+      if(dt>today){cols+='<div class="c empty"></div>';continue;}
+      const v=(+dt===+today)?2:0;const td=(+dt===+today)?' today':'';
+      cols+=`<div class="c l${lvl(v)}${td}" title="${DAYS[dt.getDay()]}, ${dt.getDate()} ${MO[dt.getMonth()]} · ${v} aktivitas"></div>`;}
+    cols+='</div>';}
+  $('#hmonths').innerHTML=months;$('#hcols').innerHTML=cols;
+  $('#hins').innerHTML='<b>1</b> dari 50 hari aktif · total <b>2</b> aktivitas · tersibuk <b>Senin</b>';
+  // sparkline flat
+  const v=Array(14).fill(0);const W=900,H=90,p=6,n=v.length,x=i=>p+i*(W-2*p)/(n-1),y=q=>H-p-8;
+  const ln=v.map((q,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y().toFixed(1)).join(' ');
+  $('#spk').innerHTML=`<path d="${ln}" fill="none" stroke="var(--pri)" stroke-width="2.4" stroke-linecap="round"/>`+v.map((q,i)=>`<circle cx="${x(i).toFixed(1)}" cy="${y().toFixed(1)}" r="3" fill="var(--pri)"/>`).join('');
+  const C=2*Math.PI*50;$('#arc').style.strokeDasharray=C;$('#arc').style.strokeDashoffset=C;
+</script>
+</body>
+</html>
