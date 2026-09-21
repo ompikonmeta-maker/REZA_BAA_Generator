@@ -128,7 +128,7 @@ def location_options(conn: sqlite3.Connection = Depends(get_db), user=Depends(cu
     """Daftar ringan (id, code, nama) untuk dropdown pemilih lokasi di Entry BAA."""
     import json
     rows = conn.execute(
-        "SELECT id, code, name, data_json FROM locations ORDER BY id DESC"
+        "SELECT id, code, name, status, data_json FROM locations ORDER BY id DESC"
     ).fetchall()
     opts = []
     for r in rows:
@@ -138,7 +138,7 @@ def location_options(conn: sqlite3.Connection = Depends(get_db), user=Depends(cu
                 nama = (json.loads(r["data_json"]) or {}).get("nama_lokasi", "") or ""
             except Exception:
                 nama = ""
-        opts.append({"id": r["id"], "code": r["code"], "nama": nama})
+        opts.append({"id": r["id"], "code": r["code"], "nama": nama, "status": r["status"]})
     return {"options": opts, "total": len(opts)}
 
 

@@ -112,6 +112,39 @@
   .md-select[data-menu-open]{border:2px solid var(--md-sys-color-primary);padding:5px 39px 5px 13px}
   .md-select[data-menu-open] .arrow{transform:translateY(-50%) rotate(180deg)}
 
+  /* Searchable location picker */
+  .locpick{position:relative;display:inline-flex;flex-direction:column;justify-content:center;min-width:230px;height:52px;
+    padding:6px 40px 6px 14px;border:1px solid var(--md-sys-color-outline);border-radius:11px;background:var(--md-sys-color-surface);
+    color:var(--md-sys-color-on-surface);cursor:pointer;text-align:left;font:inherit;transition:border-color .15s}
+  .locpick:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 4%,transparent)}
+  .locpick .lp-lab{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-primary)}
+  .locpick .lp-val{font:var(--md-sys-typescale-body-large);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .locpick .lp-val.ph{color:var(--md-sys-color-on-surface-variant)}
+  .locpick .lp-code{font-family:ui-monospace,Consolas,monospace;color:var(--md-sys-color-primary);font-weight:700}
+  .locpick .lp-arrow{position:absolute;right:8px;top:50%;transform:translateY(-50%);color:var(--md-sys-color-on-surface-variant);transition:transform .2s}
+  .locpick.open{border:2px solid var(--md-sys-color-primary);padding:5px 39px 5px 13px}
+  .locpick.open .lp-arrow{transform:translateY(-50%) rotate(180deg)}
+  .lp-panel{position:fixed;z-index:3000;background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);
+    border-radius:18px;box-shadow:var(--md-sys-elevation-level5);overflow:hidden;display:none;flex-direction:column}
+  .lp-panel.show{display:flex;animation:lppop .16s cubic-bezier(.2,0,0,1)}
+  @keyframes lppop{from{opacity:0;transform:translateY(-6px)}}
+  .lp-search{display:flex;align-items:center;gap:9px;padding:12px 14px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
+  .lp-search .mi{color:var(--md-sys-color-on-surface-variant)}
+  .lp-search input{flex:1;border:none;background:transparent;outline:none;font:var(--md-sys-typescale-body-large);color:var(--md-sys-color-on-surface)}
+  .lp-list{max-height:320px;overflow-y:auto;padding:6px;scrollbar-gutter:stable}
+  .lp-opt{display:flex;align-items:center;gap:10px;padding:10px;border-radius:12px;cursor:pointer}
+  .lp-opt:hover,.lp-opt.act{background:var(--md-sys-color-surface-container-high)}
+  .lp-opt .lp-code{font-family:ui-monospace,Consolas,monospace;color:var(--md-sys-color-primary);font-weight:700;font-size:12.5px;min-width:98px}
+  .lp-opt .lp-nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font:var(--md-sys-typescale-body-medium)}
+  .lp-opt.sel{background:var(--md-sys-color-secondary-container)}
+  .lp-badge{font:var(--md-sys-typescale-label-small);font-weight:700;padding:2px 9px;border-radius:20px}
+  .lp-badge.b-d{background:var(--warn-bg);color:var(--warn)}
+  .lp-badge.b-s{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
+  .lp-empty{padding:24px 14px;text-align:center;color:var(--md-sys-color-on-surface-variant)}
+  .lp-foot{display:flex;align-items:center;gap:8px;padding:10px 14px;border-top:1px solid var(--md-sys-color-outline-variant)}
+  .lp-cnt{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small)}
+  .lp-new{margin-left:auto;display:inline-flex;align-items:center;gap:7px;background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);border:none;border-radius:20px;padding:8px 14px;font-weight:600;cursor:pointer;font:var(--md-sys-typescale-label-large)}
+
   /* inventory */
   /* inventory — gaya tabel tenang (borderless + garis pemisah tipis) */
   .tbl{display:flex;flex-direction:column;overflow-x:auto}
@@ -359,7 +392,7 @@
       <span class="code-chip hidden" id="entryCode"><span class="mi">tag</span><span></span></span>
       <span class="grow"></span>
       <span class="rowflex hidden" id="entryTools">
-        <div class="md-select" id="picker"></div>
+        <div class="locpick" id="picker"></div>
         <md-icon-button id="entry-new" variant="tonal" data-tip="Lokasi baru"><span>add</span></md-icon-button>
         <md-icon-button id="entry-del" data-tip="Hapus entry" class="hidden"><span>delete</span></md-icon-button>
       </span>
@@ -714,11 +747,64 @@ class MDSelect{
   open(){if(!this.items.length)return;MDMenu.open(this.el,this.items.map(o=>({label:o.label,select:'single',group:'sel',selected:o.value===this.value,
     onSelect:()=>{this.value=o.value;this._render();this.onChange&&this.onChange(o.value);}})),{openerEl:this.el});}
 }
+
+/* Searchable location picker — untuk daftar lokasi yang banyak */
+class LocationPicker{
+  constructor(el,{onChange=null,onNew=null}={}){
+    this.el=el;this.onChange=onChange;this.onNew=onNew;this.items=[];this.value='';this.open=false;this.act=0;
+    el.className='locpick';el.tabIndex=0;
+    el.innerHTML=`<div class="lp-lab">Lokasi</div><div class="lp-val ph">— pilih lokasi —</div><span class="mi lp-arrow">expand_more</span>`;
+    this.panel=document.createElement('div');this.panel.className='lp-panel';
+    this.panel.innerHTML=`<div class="lp-search"><span class="mi">search</span><input type="text" placeholder="Cari kode / nama lokasi…" autocomplete="off"></div>
+      <div class="lp-list"></div>
+      <div class="lp-foot"><span class="lp-cnt"></span><button type="button" class="lp-new"><span class="mi">add</span>Buat lokasi baru</button></div>`;
+    document.body.appendChild(this.panel);
+    this.q=this.panel.querySelector('input');this.list=this.panel.querySelector('.lp-list');
+    el.addEventListener('click',()=>this.toggle());
+    el.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '||e.key==='ArrowDown'){e.preventDefault();this.openPanel();}});
+    this.q.addEventListener('input',()=>{this.act=0;this._renderList();});
+    this.q.addEventListener('keydown',e=>this._key(e));
+    this.panel.querySelector('.lp-new').addEventListener('click',()=>{this.close();this.onNew&&this.onNew();});
+    this._out=e=>{if(this.open&&!e.target.closest('.lp-panel')&&e.target!==this.el&&!this.el.contains(e.target))this.close();};
+    this._rep=()=>{if(this.open)this._position();};
+    document.addEventListener('mousedown',this._out);
+    window.addEventListener('resize',this._rep);
+    document.addEventListener('scroll',this._rep,true); /* reposisi saat scroll (bukan menutup) */
+  }
+  setOptions(list){this.items=list||[];if(this.value&&!this.items.some(o=>o.value===this.value))this.value='';this._renderTrigger();if(this.open)this._renderList();return this;}
+  setValue(v){this.value=v==null?'':String(v);this._renderTrigger();return this;}
+  getValue(){return this.value;}
+  _renderTrigger(){const o=this.items.find(x=>x.value===this.value);const v=this.el.querySelector('.lp-val');
+    v.innerHTML=o?`<span class="lp-code">${esc(o.code)}</span> · ${esc(o.nama||'')}`:'— pilih lokasi —';v.classList.toggle('ph',!o);}
+  _position(){const r=this.el.getBoundingClientRect();const w=Math.max(300,r.width);
+    const left=Math.min(r.left,window.innerWidth-w-8);
+    this.panel.style.width=w+'px';this.panel.style.left=Math.max(8,left)+'px';this.panel.style.top=(r.bottom+6)+'px';}
+  toggle(){this.open?this.close():this.openPanel();}
+  openPanel(){this.open=true;this.act=0;this.q.value='';this._position();this.panel.classList.add('show');this.el.classList.add('open');this._renderList();setTimeout(()=>this.q.focus(),20);}
+  close(){this.open=false;this.panel.classList.remove('show');this.el.classList.remove('open');}
+  _filtered(){const q=(this.q.value||'').toLowerCase().trim();
+    return q?this.items.filter(o=>o.code.toLowerCase().includes(q)||(o.nama||'').toLowerCase().includes(q)):this.items;}
+  _renderList(){const rows=this._filtered();
+    this.panel.querySelector('.lp-cnt').textContent=rows.length+' / '+this.items.length+' lokasi';
+    if(this.act>=rows.length)this.act=Math.max(0,rows.length-1);
+    this.list.innerHTML=rows.length?rows.map((o,i)=>`<div class="lp-opt${i===this.act?' act':''}${o.value===this.value?' sel':''}" data-v="${o.value}">
+        <span class="lp-code">${esc(o.code)}</span><span class="lp-nm">${esc(o.nama||'')}</span>
+        <span class="lp-badge ${o.status==='selesai'?'b-s':'b-d'}">${esc(o.status||'')}</span></div>`).join(''):'<div class="lp-empty">Tidak ada lokasi cocok.</div>';
+    [...this.list.querySelectorAll('.lp-opt')].forEach(el=>el.addEventListener('click',()=>this._choose(el.dataset.v)));
+  }
+  _choose(v){this.value=v;this._renderTrigger();this.close();this.onChange&&this.onChange(v);}
+  _key(e){const rows=this._filtered();
+    if(e.key==='ArrowDown'){this.act=Math.min(this.act+1,rows.length-1);this._renderList();this._scrollAct();e.preventDefault();}
+    else if(e.key==='ArrowUp'){this.act=Math.max(this.act-1,0);this._renderList();this._scrollAct();e.preventDefault();}
+    else if(e.key==='Enter'){if(rows[this.act])this._choose(rows[this.act].value);e.preventDefault();}
+    else if(e.key==='Escape'){this.close();this.el.focus();}}
+  _scrollAct(){const el=this.list.children[this.act];if(el)el.scrollIntoView({block:'nearest'});}
+}
 let pickerSel,tplLogSel,tplDetailSel,mapLogSel,mapDetailSel,roleSel;
 
 /* AUTH */
 async function boot(){paint();
-  pickerSel=new MDSelect($('#picker'),{label:'Lokasi',placeholder:'— pilih lokasi —',onChange:v=>{if(v)openLoc(+v);}});
+  pickerSel=new LocationPicker($('#picker'),{onChange:v=>{if(v)openLoc(+v);},onNew:()=>$('#entry-new').click()});
   tplLogSel=new MDSelect($('#tpl-log'),{label:'Worksheet LOG'});
   tplDetailSel=new MDSelect($('#tpl-detail'),{label:'Worksheet Detail'});
   mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG'});
@@ -828,7 +914,7 @@ function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S
 /* ENTRY */
 async function refreshPicker(){const r=await api('/api/locations/options');const opts=r.options||[];
   $('#loc-count').textContent=r.total||'';
-  pickerSel.setOptions(opts.map(l=>({value:String(l.id),label:l.code+' · '+(l.nama||'')})));
+  pickerSel.setOptions(opts.map(l=>({value:String(l.id),code:l.code,nama:l.nama||'',status:l.status||'draft'})));
   if(S.loc)pickerSel.setValue(String(S.loc.id));}
 $('#entry-new').addEventListener('click',async()=>{const btn=$('#entry-new');
   if(btn.hasAttribute('disabled'))return;btn.setAttribute('disabled','');
