@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Pengaturan Accordion (Opsi A)</title>
+<style>
+  :root{
+    --bg:#eaeced; --nav:#f6f7f8; --pane:#fcfcfd; --primary:#006a6a; --on:#1a1c1d;
+    --onv:#43474a; --ov:#c3c7c8; --act:#cfe6e6; --acttext:#004f4f; --rail:#a9d3d3;
+    --spring:cubic-bezier(0.34,1.56,0.64,1); --emph:cubic-bezier(0.2,0,0,1);
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#1f2121; --nav:#1b1d1d; --pane:#131515; --primary:#4fd8d8; --on:#e2e3e3;
+    --onv:#c3c7c8; --ov:#43474a; --act:#0f3b3b; --acttext:#9fecec; --rail:#2b6b6b;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--on);
+    font:14px/1.4 "Segoe UI",Roboto,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+  .wrap{display:flex;gap:16px;padding:16px;min-height:100vh}
+  /* Sidebar */
+  .nav{flex:0 0 240px;background:var(--nav);border-radius:24px;padding:14px;
+    box-shadow:0 1px 3px rgba(0,0,0,.12);align-self:flex-start;position:sticky;top:16px}
+  .brand{display:flex;align-items:center;gap:10px;padding:8px 10px 14px;font-weight:700;font-size:17px}
+  .brand .dot{width:26px;height:26px;border-radius:8px;background:var(--primary);display:grid;place-items:center;color:#fff;font-size:15px}
+  .item{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:12px;cursor:pointer;
+    color:var(--onv);font-weight:600;user-select:none;transition:background .18s var(--emph)}
+  .item:hover{background:rgba(0,0,0,.05)}
+  .item.active{background:var(--act);color:var(--acttext)}
+  .item .ic{width:20px;text-align:center;font-size:16px;opacity:.9}
+  .item .chev{margin-left:auto;transition:transform .32s var(--emph);font-size:13px}
+  .group.open>.item .chev{transform:rotate(180deg)}
+  /* Accordion sub */
+  .sub{overflow:hidden;max-height:0;opacity:0;transition:max-height .38s var(--emph),opacity .28s var(--emph);
+    position:relative;margin:2px 0 0}
+  .group.open .sub{max-height:260px;opacity:1}
+  .sub::before{content:"";position:absolute;left:22px;top:6px;bottom:6px;width:3px;border-radius:2px;background:var(--rail)}
+  .subitem{display:block;padding:9px 12px 9px 34px;margin:1px 0;border-radius:10px;cursor:pointer;
+    color:var(--onv);font-size:13px;transform:translateY(-6px);opacity:0;
+    transition:transform .34s var(--spring),opacity .3s var(--emph),background .18s}
+  .group.open .subitem{transform:none;opacity:1}
+  .group.open .subitem:nth-child(1){transition-delay:.05s}
+  .group.open .subitem:nth-child(2){transition-delay:.10s}
+  .group.open .subitem:nth-child(3){transition-delay:.15s}
+  .group.open .subitem:nth-child(4){transition-delay:.20s}
+  .subitem:hover{background:rgba(0,0,0,.05)}
+  .subitem.active{background:var(--act);color:var(--acttext);font-weight:700}
+  /* Content */
+  .main{flex:1;min-width:0}
+  .topbar{font-size:22px;font-weight:700;padding:6px 4px 16px}
+  .pane{background:var(--pane);border:1px solid var(--ov);border-radius:20px;padding:22px;min-height:340px;
+    position:relative;overflow:hidden}
+  .view{animation:enter .34s var(--emph) both}
+  @keyframes enter{from{opacity:0;transform:translateX(18px)}to{opacity:1;transform:none}}
+  .h{font-size:16px;font-weight:700;margin:0 0 4px}
+  .desc{color:var(--onv);font-size:12.5px;margin:0 0 18px}
+  .row{height:46px;border:1px solid var(--ov);border-radius:11px;background:var(--pane);
+    display:flex;align-items:center;padding:0 14px;color:var(--onv);margin-bottom:10px;font-size:13px}
+  .row .mut{color:var(--onv);opacity:.6}
+  .btn{margin-top:8px;display:inline-block;background:var(--primary);color:#fff;border:none;
+    padding:10px 22px;border-radius:20px;font-weight:600;cursor:pointer;font-size:13px}
+  .hint{color:var(--onv);opacity:.7;font-size:11.5px;margin-top:14px}
+  .note{max-width:1000px;margin:14px auto 0;padding:0 16px;color:var(--onv);font-size:12px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <aside class="nav">
+    <div class="brand"><span class="dot">◆</span> BAA Generator</div>
+    <div class="item"><span class="ic">📝</span> Entry BAA</div>
+    <div class="item"><span class="ic">🗂️</span> Log Lokasi</div>
+    <div class="item"><span class="ic">📄</span> Template</div>
+    <div class="item"><span class="ic">👥</span> Users</div>
+    <div class="group" id="grp">
+      <div class="item active" id="gtoggle"><span class="ic">⚙️</span> Pengaturan <span class="chev">▾</span></div>
+      <div class="sub">
+        <span class="subitem active" data-v="lokasi">Field Data Lokasi</span>
+        <span class="subitem" data-v="inventory">Field Inventory</span>
+        <span class="subitem" data-v="photo">Field Photo &amp; Capture</span>
+        <span class="subitem" data-v="backup">BackUp &amp; Restore</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="topbar" id="title">Field Data Lokasi</div>
+    <div class="pane"><div class="view" id="view"></div></div>
+  </main>
+</div>
+<p class="note">Mockup interaktif (Opsi A). Klik <b>Pengaturan</b> untuk buka/tutup accordion; klik sub-menu untuk ganti isi — transisi smooth. Judul aplikasi fixed “BAA Generator”.</p>
+
+<script>
+  const VIEWS={
+    lokasi:{t:"Field Data Lokasi",d:"Atur field data lokasi (key, label, tipe, wajib).",
+      rows:["nama_lokasi · Nama Lokasi / Koperasi · text · wajib","tanggal · Tanggal Aktivasi · date","teknisi · Teknisi · text","pic · PIC Lokasi · text"]},
+    inventory:{t:"Field Inventory",d:"Default item inventory + opsi Merk/Type per item.",
+      rows:["Kit Starlink — Opsi: Std Actuated, Gen 3, HP","Router — Opsi: Gen 2, Gen 3","Access Point — (teks bebas)"]},
+    photo:{t:"Field Photo & Capture",d:"Kategori foto, kata kunci auto-sort, prefix SN, OCR, wajib.",
+      rows:["dashboard · Capture Dashboard (STARMON)","sn_kit · Foto SN Kit · OCR · prefix KIT","ping · Capture Tes Ping","simkopdes · Capture SIMKOPDES"]},
+    backup:{t:"BackUp & Restore",d:"Cadangkan / pulihkan database + foto + template.",
+      rows:["⬇  Unduh Backup (.zip)","⬆  Pulihkan dari file backup"]},
+  };
+  const grp=document.getElementById('grp'), toggle=document.getElementById('gtoggle');
+  const view=document.getElementById('view'), title=document.getElementById('title');
+  grp.classList.add('open');
+  toggle.addEventListener('click',()=>grp.classList.toggle('open'));
+  function render(key){
+    const v=VIEWS[key];title.textContent=v.t;
+    view.innerHTML='<h3 class="h">'+v.t+'</h3><p class="desc">'+v.d+'</p>'+
+      v.rows.map(r=>'<div class="row">'+r+'</div>').join('')+
+      '<button class="btn">Simpan</button>'+
+      (key==='inventory'?'<div class="hint">Opsi Merk/Type dipakai combobox di tabel Inventory.</div>':'');
+    // retrigger enter animation
+    view.style.animation='none';void view.offsetWidth;view.style.animation='';
+  }
+  document.querySelectorAll('.subitem').forEach(el=>el.addEventListener('click',()=>{
+    document.querySelectorAll('.subitem').forEach(x=>x.classList.remove('active'));
+    el.classList.add('active');render(el.dataset.v);
+  }));
+  render('lokasi');
+</script>
+</body>
+</html>
