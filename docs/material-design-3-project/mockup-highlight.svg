@@ -1,0 +1,116 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="860" viewBox="0 0 1080 860" font-family="Segoe UI, Roboto, system-ui, sans-serif">
+  <rect width="1080" height="860" fill="#eaeced"/>
+
+  <!-- ============ A. Highlight kartu aktif — 3 opsi ============ -->
+  <text x="34" y="38" font-size="17" font-weight="700" fill="#1a1c1d">A · Highlight kartu yang sedang dikerjakan — 3 opsi</text>
+
+  <!-- Opsi A: accent bar kiri -->
+  <rect x="34" y="56" width="320" height="150" rx="18" fill="#fbfdfc" stroke="#c3c7c8"/>
+  <rect x="34" y="56" width="6" height="150" rx="3" fill="#006a6a"/>
+  <rect x="34" y="56" width="320" height="150" rx="18" fill="#006a6a" opacity="0.04"/>
+  <text x="58" y="86" font-size="14" font-weight="700" fill="#1a1c1d">Data Lokasi</text>
+  <rect x="58" y="100" width="272" height="40" rx="10" fill="#fff" stroke="#006a6a" stroke-width="2"/>
+  <text x="70" y="125" font-size="13" fill="#1a1c1d">Kopdes Merah Putih…</text>
+  <text x="58" y="170" font-size="12" fill="#006a6a" font-weight="600">Opsi A — accent bar kiri + tint halus</text>
+  <text x="58" y="190" font-size="11.5" fill="#43474a">Jelas, hemat ruang, khas MD3.</text>
+
+  <!-- Opsi B: elevasi + ring -->
+  <rect x="378" y="52" width="320" height="150" rx="18" fill="#fbfdfc" stroke="#006a6a" stroke-width="2"/>
+  <rect x="374" y="60" width="328" height="150" rx="20" fill="#000" opacity="0.10"/>
+  <rect x="378" y="52" width="320" height="150" rx="18" fill="#fbfdfc" stroke="#006a6a" stroke-width="2"/>
+  <text x="402" y="82" font-size="14" font-weight="700" fill="#1a1c1d">Data Lokasi</text>
+  <rect x="402" y="96" width="272" height="40" rx="10" fill="#fff" stroke="#006a6a" stroke-width="2"/>
+  <text x="414" y="121" font-size="13" fill="#1a1c1d">Kopdes Merah Putih…</text>
+  <text x="402" y="166" font-size="12" fill="#006a6a" font-weight="600">Opsi B — elevasi naik + ring primary</text>
+  <text x="402" y="186" font-size="11.5" fill="#43474a">Paling menonjol; sedikit "berat".</text>
+
+  <!-- Opsi C: tint bg -->
+  <rect x="722" y="56" width="320" height="150" rx="18" fill="#e2f3f1" stroke="#a9d6d2"/>
+  <text x="746" y="86" font-size="14" font-weight="700" fill="#1a1c1d">Data Lokasi</text>
+  <rect x="746" y="100" width="272" height="40" rx="10" fill="#fff" stroke="#006a6a" stroke-width="2"/>
+  <text x="758" y="125" font-size="13" fill="#1a1c1d">Kopdes Merah Putih…</text>
+  <text x="746" y="170" font-size="12" fill="#006a6a" font-weight="600">Opsi C — background tint lembut</text>
+  <text x="746" y="190" font-size="11.5" fill="#43474a">Kalem; kontras lebih rendah.</text>
+
+  <!-- ============ B. Panel Ringkasan baru ============ -->
+  <text x="34" y="256" font-size="17" font-weight="700" fill="#1a1c1d">B · Panel Ringkasan — highlight tanpa border + checklist foto</text>
+
+  <rect x="34" y="274" width="320" height="470" rx="20" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <text x="54" y="306" font-size="17" font-weight="700" fill="#1a1c1d">Ringkasan BAA</text>
+  <text x="54" y="326" font-size="12" fill="#43474a">Status: draft</text>
+  <text x="54" y="356" font-size="15" font-weight="700" fill="#1a1c1d">18% lengkap</text>
+  <rect x="54" y="368" width="280" height="10" rx="5" fill="#dfe2e3"/>
+  <rect x="54" y="368" width="50" height="10" rx="5" fill="#006a6a"/>
+
+  <!-- rows: NO borders, only bg highlight on incomplete -->
+  <rect x="46" y="392" width="296" height="34" rx="9" fill="#fff3e0"/>
+  <text x="56" y="414" font-size="13.5" fill="#43474a">Informasi lokasi</text>
+  <text x="334" y="414" font-size="13.5" font-weight="700" fill="#9a5b00" text-anchor="end">Belum lengkap · 0/4</text>
+
+  <rect x="46" y="430" width="296" height="34" rx="9" fill="#fff3e0"/>
+  <text x="56" y="452" font-size="13.5" fill="#43474a">Inventory</text>
+  <text x="334" y="452" font-size="13.5" font-weight="700" fill="#9a5b00" text-anchor="end">3 item · 3/15 terisi</text>
+
+  <rect x="46" y="468" width="296" height="34" rx="9" fill="#fff3e0"/>
+  <text x="56" y="490" font-size="13.5" fill="#43474a">Foto wajib</text>
+  <text x="334" y="490" font-size="13.5" font-weight="700" fill="#9a5b00" text-anchor="end">0 / 11</text>
+
+  <!-- checklist foto kurang -->
+  <text x="54" y="524" font-size="12" font-weight="600" fill="#43474a">Foto yang masih kurang</text>
+  <g font-size="12.5" fill="#43474a">
+    <text x="56" y="546" font-family="Material Symbols Outlined" font-size="16" fill="#9a5b00">check_box_outline_blank</text><text x="80" y="547">Dashboard STARMON</text>
+    <text x="56" y="568" font-family="Material Symbols Outlined" font-size="16" fill="#9a5b00">check_box_outline_blank</text><text x="80" y="569">Tampak Depan / Plang</text>
+    <text x="56" y="590" font-family="Material Symbols Outlined" font-size="16" fill="#9a5b00">check_box_outline_blank</text><text x="80" y="591">Teknisi + PIC</text>
+    <text x="56" y="612" font-family="Material Symbols Outlined" font-size="16" fill="#9a5b00">check_box_outline_blank</text><text x="80" y="613">Perangkat Outdoor</text>
+    <text x="56" y="634" font-size="12" fill="#8a9090">+ 7 lainnya…</text>
+  </g>
+
+  <!-- Simpan full width, tegas -->
+  <rect x="54" y="656" width="280" height="52" rx="14" fill="#006a6a"/>
+  <text x="194" y="688" font-size="15" font-weight="700" fill="#fff" text-anchor="middle">Simpan BAA</text>
+  <text x="54" y="730" font-size="11" fill="#8a9090">Baris progress: highlight saja, tanpa garis pemisah.</text>
+
+  <!-- ============ C. Opsi posisi Export ============ -->
+  <text x="392" y="256" font-size="17" font-weight="700" fill="#1a1c1d">C · Posisi tombol Export — 3 opsi</text>
+
+  <!-- Opsi 1: sejajar -->
+  <rect x="392" y="278" width="330" height="120" rx="16" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <text x="410" y="304" font-size="12.5" font-weight="700" fill="#006a6a">Opsi 1 — dua tombol sejajar</text>
+  <text x="410" y="324" font-size="11.5" fill="#43474a">Cakupan: [ Lokasi ini | Semua ]</text>
+  <rect x="410" y="336" width="140" height="44" rx="11" fill="#fff" stroke="#74777a"/><text x="480" y="363" font-size="13" font-weight="600" fill="#006a6a" text-anchor="middle">Excel</text>
+  <rect x="564" y="336" width="140" height="44" rx="11" fill="#fff" stroke="#74777a"/><text x="634" y="363" font-size="13" font-weight="600" fill="#006a6a" text-anchor="middle">PDF</text>
+
+  <!-- Opsi 2: stacked -->
+  <rect x="392" y="410" width="330" height="150" rx="16" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <text x="410" y="436" font-size="12.5" font-weight="700" fill="#006a6a">Opsi 2 — bertumpuk penuh</text>
+  <rect x="410" y="448" width="294" height="42" rx="11" fill="#fff" stroke="#74777a"/><text x="557" y="474" font-size="13" font-weight="600" fill="#006a6a" text-anchor="middle">Export Excel</text>
+  <rect x="410" y="498" width="294" height="42" rx="11" fill="#fff" stroke="#74777a"/><text x="557" y="524" font-size="13" font-weight="600" fill="#006a6a" text-anchor="middle">Export PDF</text>
+
+  <!-- Opsi 3: split/menu -->
+  <rect x="392" y="572" width="330" height="140" rx="16" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <text x="410" y="598" font-size="12.5" font-weight="700" fill="#006a6a">Opsi 3 — satu tombol "Export ▾" (menu)</text>
+  <rect x="410" y="612" width="294" height="46" rx="12" fill="#006a6a"/>
+  <text x="540" y="640" font-size="14" font-weight="700" fill="#fff" text-anchor="middle">Export  ▾</text>
+  <rect x="470" y="664" width="180" height="40" rx="10" fill="#fff" stroke="#c3c7c8"/>
+  <text x="486" y="689" font-size="12.5" fill="#1a1c1d">Excel (.xlsx)</text>
+  <text x="410" y="698" font-size="11" fill="#8a9090">↑ menu MD3 muncul</text>
+
+  <!-- rekomendasi -->
+  <rect x="744" y="278" width="300" height="434" rx="16" fill="#fcfcfd" stroke="#c3c7c8"/>
+  <text x="762" y="306" font-size="14" font-weight="700" fill="#1a1c1d">Rekomendasi saya</text>
+  <g font-size="12.5" fill="#43474a">
+    <text x="762" y="336">Highlight kartu: Opsi A</text>
+    <text x="762" y="356" fill="#8a9090">(accent bar kiri — jelas, ringan,</text>
+    <text x="762" y="374" fill="#8a9090">tak menambah "berat").</text>
+    <text x="762" y="404">Export: Opsi 1 (sejajar)</text>
+    <text x="762" y="424" fill="#8a9090">paling cepat dijangkau; Opsi 3</text>
+    <text x="762" y="442" fill="#8a9090">bila ingin panel super ringkas.</text>
+    <text x="762" y="476">Simpan: full-width, tinggi 52px,</text>
+    <text x="762" y="494" fill="#8a9090">warna primary — aksi utama.</text>
+    <text x="762" y="528">Progress: highlight bg saja,</text>
+    <text x="762" y="546" fill="#8a9090">tanpa garis; foto kurang =</text>
+    <text x="762" y="564" fill="#8a9090">checklist ke bawah.</text>
+  </g>
+
+  <text x="34" y="784" font-size="13" font-weight="700" fill="#1a1c1d">Sebutkan pilihanmu: Highlight kartu (A/B/C) &amp; Export (1/2/3). Lalu saya eksekusi.</text>
+</svg>
