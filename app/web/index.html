@@ -158,7 +158,7 @@
   /* Pengaturan editor rows */
   .er{display:grid;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid var(--md-sys-color-outline-variant)}
   .er.lf{grid-template-columns:1fr 1.4fr 110px 90px 40px}
-  .er.pc{grid-template-columns:1fr 1.2fr 1.7fr 1.1fr 60px 72px 40px}
+  .er.pc{grid-template-columns:0.9fr 1.1fr 1.4fr 1fr 1.2fr 52px 60px 40px}
   .er.di{grid-template-columns:1fr 40px}
   .er input,.er select{height:42px;border:1px solid var(--md-sys-color-outline-variant);border-radius:10px;background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);padding:0 10px;font:var(--md-sys-typescale-body-medium);width:100%}
   .er input:focus,.er select:focus{outline:2px solid var(--md-sys-color-primary);outline-offset:-1px;border-color:transparent}
@@ -356,7 +356,7 @@
         <div class="card">
           <div class="sec"><span class="mi acc">photo_library</span><h3>Kategori Foto &amp; Kata Kunci</h3><span class="grow"></span>
             <md-button id="pc-add" variant="tonal" icon="add">Kategori</md-button></div>
-          <div class="er pc head"><div>Key</div><div>Label</div><div>Kata kunci (koma)</div><div>Prefix SN (koma)</div><div>OCR</div><div>Wajib</div><div></div></div>
+          <div class="er pc head"><div>Key</div><div>Label</div><div>Kata kunci (koma)</div><div>Prefix SN (koma)</div><div>Item Inventory</div><div>OCR</div><div>Wajib</div><div></div></div>
           <div id="pc-list"></div>
           <div style="margin-top:12px"><md-button id="pc-save" variant="filled" icon="save">Simpan kategori</md-button></div>
         </div>
@@ -615,7 +615,7 @@ function renderPhotos(){
     let foot='<div class="foot"></div>';
     if(c.ocr){const sn=ps.find(p=>p.ocr_serial);const fp=ps[0];
       foot=`<div class="foot" style="flex-wrap:wrap">
-        ${sn?`<span class="sn-chip"><span class="mi">document_scanner</span>${esc(sn.ocr_serial)}<span class="mi add" onclick="useSerial('${esc(sn.ocr_serial)}')" title="tambah ke inventory">add</span></span>`:''}
+        ${sn?`<span class="sn-chip"><span class="mi">document_scanner</span>${esc(sn.ocr_serial)}<span class="mi add" onclick="applySnToInventory('${c.key}','${esc(sn.ocr_serial)}')" title="isi ke inventory">arrow_forward</span></span>`:''}
         ${fp?`<md-button variant="text" size="xs" icon="barcode_scanner" onclick="openSnReader(${fp.id},'${c.key}')">Baca SN</md-button>`:'<span class="muted" style="font:var(--md-sys-typescale-body-small)">unggah foto SN</span>'}
       </div>`;}
     return `<div class="pcard ${c.ocr?'sn':''}"><div class="hd"><span class="mi">${c.ocr?'tag':'image'}</span><span>${esc(c.label)}</span></div>${snap}${foot}</div>`;}).join('');
@@ -628,6 +628,14 @@ function renderPhotos(){
 function pickFiles(multi,cb){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=!!multi;inp.onchange=()=>cb(inp.files);inp.click();}
 window.pick=cat=>pickFiles(true,files=>{ if(files.length===1) openEditor(files[0],blob=>uploadBlob(cat,blob,files[0].name)); else doUpload(files,cat,[]); });
 window.useSerial=s=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow({sn_tagging:s}));bindTips();updateSummary();toast('Baris inventory + SN ditambah');};
+/* Tautkan SN ke baris inventory sesuai mapping kategori->item (dari Pengaturan) */
+window.applySnToInventory=(cat,serial)=>{if(!serial)return;
+  const c=S.cats.find(x=>x.key===cat);const item=((c&&c.sn_item)||'').trim();
+  let target=null;
+  if(item)target=$$('#inv-body .tr').find(tr=>{const nb=tr.querySelector('[data-iv="nama_barang"]');return nb&&nb.value.trim().toLowerCase()===item.toLowerCase();});
+  if(target){target.querySelector('[data-iv="sn_tagging"]').value=serial;target.querySelector('[data-iv="sn_tagging"]').classList.add('sn');}
+  else{$('#inv-body').insertAdjacentHTML('beforeend',invRow({nama_barang:item||'',sn_tagging:serial}));bindTips();}
+  updateSummary();toast(target?('SN → '+item):'Baris inventory + SN ditambah');};
 
 /* ---- soft delete + undo (timer) ---- */
 const pendingDel=new Map();  // id -> timeoutId
@@ -739,10 +747,11 @@ $('#sn-read').addEventListener('click',async()=>{
   },'image/jpeg',0.92);
 });
 $('#sn-cancel').addEventListener('click',()=>$('#snDlg').close());
-$('#sn-save').addEventListener('click',async()=>{const val=$('#sn-serial').value.trim();
+$('#sn-save').addEventListener('click',async()=>{const val=$('#sn-serial').value.trim();const cat=sn.cat;
   try{await api('/api/photos/'+sn.photoId,{method:'PATCH',body:JSON.stringify({ocr_serial:val})});
-    S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();$('#snDlg').close();
-    toast('SN disimpan'+(val?': '+val:''));}catch(e){toast('Gagal: '+e.message);}});
+    S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();
+    if(val)applySnToInventory(cat,val);else updateSummary();
+    $('#snDlg').close();toast('SN disimpan'+(val?': '+val:''));}catch(e){toast('Gagal: '+e.message);}});
 
 /* scope + save + export */
 $('#scope').addEventListener('change',e=>{S.scope=e.detail.value;});
@@ -893,6 +902,7 @@ function pcRow(c={}){return `<div class="er pc" data-pc>
   <input data-k="key" placeholder="key" value="${esc(c.key)}"><input data-k="label" placeholder="Label" value="${esc(c.label)}">
   <input data-k="keywords" placeholder="kata kunci" value="${esc((c.keywords||[]).join(', '))}">
   <input data-k="prefixes" placeholder="mis. KIT, KITX" value="${esc((c.prefixes||[]).join(', '))}">
+  <input data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}">
   <label class="ck"><input type="checkbox" data-k="ocr" ${c.ocr?'checked':''}></label>
   <label class="ck"><input type="checkbox" data-k="required" ${c.required?'checked':''}></label>${delBtnCell()}</div>`;}
 function renderPC(){$('#pc-list').innerHTML=(S.cats||[]).map(pcRow).join('');bindTips();}
@@ -900,7 +910,8 @@ $('#pc-add').addEventListener('click',()=>{$('#pc-list').insertAdjacentHTML('bef
 $('#pc-save').addEventListener('click',async()=>{const categories=$$('#pc-list .er').map(r=>{const g=k=>r.querySelector(`[data-k="${k}"]`);
   return {key:(g('key').value||'').trim(),label:(g('label').value||'').trim(),ocr:g('ocr').checked,required:g('required').checked,
     keywords:(g('keywords').value||'').split(',').map(s=>s.trim()).filter(Boolean),
-    prefixes:(g('prefixes').value||'').split(',').map(s=>s.trim().toUpperCase()).filter(Boolean)};}).filter(c=>c.key&&c.label);
+    prefixes:(g('prefixes').value||'').split(',').map(s=>s.trim().toUpperCase()).filter(Boolean),
+    sn_item:(g('sn_item').value||'').trim()};}).filter(c=>c.key&&c.label);
   try{await api('/api/settings/photo-categories',{method:'PUT',body:JSON.stringify({categories})});S.cats=categories;toast('Kategori foto tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 
 function diRow(n=''){return `<div class="er di" data-di><input data-k="name" placeholder="Nama barang" value="${esc(n)}">${delBtnCell()}</div>`;}
