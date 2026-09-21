@@ -289,7 +289,11 @@
             <md-segmented-button id="loc-filter"><button data-value="all" selected>Semua</button><button data-value="draft">Draft</button><button data-value="selesai">Selesai</button></md-segmented-button>
           </div>
           <table><thead><tr><th>Kode</th><th>Nama Lokasi</th><th>INV</th><th>Foto</th><th>Status</th><th>Kurang</th><th></th></tr></thead><tbody id="loc-table"></tbody></table>
-          <div id="loc-more" class="hidden" style="text-align:center;margin-top:12px"><md-button variant="text" id="loc-more-btn">Muat lebih banyak</md-button></div>
+          <div class="rowflex" style="margin-top:12px;align-items:center">
+            <span id="loc-info" class="muted" style="font:var(--md-sys-typescale-body-small)"></span>
+            <span class="grow"></span>
+            <div id="loc-more" class="hidden"><md-button variant="tonal" id="loc-more-btn">Muat lebih banyak</md-button></div>
+          </div>
         </div>
       </section>
 
@@ -543,8 +547,9 @@ $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
 function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats;} /* semua kategori wajib */
 
 /* ENTRY */
-async function refreshPicker(){const rows=await api('/api/locations');$('#loc-count').textContent=rows.length||'';
-  pickerSel.setOptions(rows.map(l=>({value:String(l.id),label:l.code+' · '+(l.data.nama_lokasi||l.name||'')})));
+async function refreshPicker(){const r=await api('/api/locations/options');const opts=r.options||[];
+  $('#loc-count').textContent=r.total||'';
+  pickerSel.setOptions(opts.map(l=>({value:String(l.id),label:l.code+' · '+(l.nama||'')})));
   if(S.loc)pickerSel.setValue(String(S.loc.id));}
 $('#entry-new').addEventListener('click',async()=>{const loc=await api('/api/locations',{method:'POST',body:JSON.stringify({name:'',data:{},status:'draft'})});await refreshPicker();loadLocations();openLoc(loc.id);toast('Lokasi '+loc.code+' dibuat');});
 $('#entry-del').addEventListener('click',()=>{if(S.loc)confirmDelete(S.loc.id,S.loc.code,true);});
@@ -783,15 +788,19 @@ function expUrl(k){return S.scope==='all'?`/api/export/${k}?scope=all`:`/api/exp
 $('#exp-xlsx').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return toast('Pilih lokasi');location.href=expUrl('excel');});
 $('#exp-pdf').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return toast('Pilih lokasi');location.href=expUrl('pdf');});
 
-/* LOCATIONS */
-let LOC_ROWS=[],LOC_SHOWN=50;
-async function loadLocations(){LOC_ROWS=await api('/api/locations');$('#loc-count').textContent=LOC_ROWS.length||'';LOC_SHOWN=50;renderLocTable();}
+/* LOCATIONS — paginasi + cari/filter server-side */
+let LOC_ROWS=[],LOC_PAGE=1,LOC_TOTAL=0;const LOC_SIZE=50;let locSearchTimer=null;
+function fetchLocPage(page){
+  const q=encodeURIComponent(($('#loc-search').value||'').trim());
+  const st=S.locFilter||'all';
+  return api(`/api/locations?page=${page}&size=${LOC_SIZE}&q=${q}&status=${st}`);
+}
+async function loadLocations(){LOC_PAGE=1;const r=await fetchLocPage(1);
+  LOC_ROWS=r.rows||[];LOC_TOTAL=r.total||0;renderLocTable();}
+async function loadMoreLoc(){LOC_PAGE++;const r=await fetchLocPage(LOC_PAGE);
+  LOC_ROWS=LOC_ROWS.concat(r.rows||[]);LOC_TOTAL=r.total||0;renderLocTable();}
 function renderLocTable(){
-  const q=($('#loc-search').value||'').toLowerCase();const f=S.locFilter||'all';
-  let rows=LOC_ROWS.filter(l=>{const name=(l.data.nama_lokasi||l.name||'').toLowerCase();
-    return (!q||l.code.toLowerCase().includes(q)||name.includes(q))&&(f==='all'||l.status===f);});
-  const total=rows.length;rows=rows.slice(0,LOC_SHOWN);
-  $('#loc-table').innerHTML=rows.map(l=>{
+  $('#loc-table').innerHTML=LOC_ROWS.map(l=>{
     const present=(l.photo_cats||[]).filter(k=>S.cats.some(c=>c.key===k)).length;
     const stCls=l.status==='selesai'?'ok':'warn';
     return `<tr><td><a class="loc-link mono" onclick='openFromLog(${l.id})'>${esc(l.code)}</a></td>
@@ -800,22 +809,21 @@ function renderLocTable(){
     <td><span class="loc-st ${stCls}">${esc(l.status)}</span></td>
     <td class="loc-lack">${locLack(l)}</td>
     <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`;}).join('')||'<tr><td colspan=7 class="muted">Tidak ada data</td></tr>';
-  $('#loc-more').classList.toggle('hidden',total<=LOC_SHOWN);bindTips();}
-/* Daftar kekurangan: foto + field lokasi kosong + inventory belum lengkap */
+  $('#loc-info').textContent=LOC_TOTAL?`Menampilkan ${Math.min(LOC_ROWS.length,LOC_TOTAL)} dari ${LOC_TOTAL}`:'';
+  $('#loc-more').classList.toggle('hidden',LOC_ROWS.length>=LOC_TOTAL);bindTips();}
+/* Daftar kekurangan: foto + field lokasi kosong + inventory belum lengkap (inv_ok dari server) */
 function locLack(l){
   const parts=[];
   const have=new Set(l.photo_cats||[]);
   const miss=S.cats.filter(c=>!have.has(c.key)).map(c=>c.label);
   if(miss.length)parts.push('Foto: '+(miss.length>2?miss.slice(0,2).join(', ')+', +'+(miss.length-2):miss.join(', ')));
   (S.locFields||[]).forEach(f=>{if(!((l.data[f.key]||'').trim()))parts.push(f.label);});
-  const inv=l.inventory||[];
-  const invOk=inv.length>0&&inv.every(i=>['nama_barang','merk_type','jumlah','sn_tagging','keterangan'].every(k=>(i[k]||'').trim()));
-  if(!invOk)parts.push('Inventory');
+  if(!l.inv_ok)parts.push('Inventory');
   return parts.length?esc(parts.join(' · ')):'<span class="muted">—</span>';}
 window.openFromLog=id=>{gotoEntry();openLoc(id);};
-$('#loc-search').addEventListener('input',renderLocTable);
-$('#loc-filter').addEventListener('change',e=>{S.locFilter=e.detail.value;renderLocTable();});
-$('#loc-more-btn').addEventListener('click',()=>{LOC_SHOWN+=50;renderLocTable();});
+$('#loc-search').addEventListener('input',()=>{clearTimeout(locSearchTimer);locSearchTimer=setTimeout(loadLocations,300);});
+$('#loc-filter').addEventListener('change',e=>{S.locFilter=e.detail.value;loadLocations();});
+$('#loc-more-btn').addEventListener('click',loadMoreLoc);
 window.locMenu=(btn,l)=>{const items=[
   {icon:'edit',label:'Buka / Edit',fn:()=>{gotoEntry();openLoc(l.id);}},
   {icon:'grid_on',label:'Export Excel',fn:()=>location.href='/api/export/excel?scope=one&loc_id='+l.id},

@@ -5,7 +5,7 @@ import secrets
 import shutil
 import sqlite3
 
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 
 from .. import config, db
@@ -66,32 +66,80 @@ def _location_dict(conn: sqlite3.Connection, row) -> dict:
 
 
 @router.get("")
-def list_locations(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
-    rows = conn.execute(
-        "SELECT l.*, "
-        "(SELECT COUNT(*) FROM photos p WHERE p.location_id=l.id) AS photo_count, "
-        "(SELECT COUNT(*) FROM inventory_items i WHERE i.location_id=l.id) AS inv_count, "
-        "(SELECT GROUP_CONCAT(DISTINCT category) FROM photos p WHERE p.location_id=l.id) AS photo_cats "
-        "FROM locations l ORDER BY l.id DESC"
-    ).fetchall()
+def list_locations(
+    page: int = Query(1, ge=1),
+    size: int = Query(50, ge=1, le=200),
+    q: str = Query(""),
+    status: str = Query("all"),
+    conn: sqlite3.Connection = Depends(get_db),
+    user=Depends(current_user),
+):
+    """Daftar lokasi terpaginasi + agregat (foto, inventory) dihitung di SQL.
+
+    Ringan walau data ribuan: hanya ``size`` baris per halaman, tanpa N+1.
+    """
     import json
+    where, params = [], []
+    if q.strip():
+        like = f"%{q.strip()}%"
+        where.append("(l.code LIKE ? OR l.name LIKE ?)")
+        params += [like, like]
+    if status in ("draft", "selesai"):
+        where.append("l.status = ?")
+        params.append(status)
+    wsql = ("WHERE " + " AND ".join(where)) if where else ""
+
+    total = conn.execute(
+        f"SELECT COUNT(*) AS c FROM locations l {wsql}", params
+    ).fetchone()["c"]
+
+    offset = (page - 1) * size
+    rows = conn.execute(
+        f"""SELECT l.id, l.code, l.name, l.status, l.data_json, l.created_by, l.updated_at,
+              (SELECT COUNT(*) FROM photos p WHERE p.location_id = l.id) AS photo_count,
+              (SELECT GROUP_CONCAT(DISTINCT category) FROM photos p WHERE p.location_id = l.id) AS photo_cats,
+              (SELECT COUNT(*) FROM inventory_items i WHERE i.location_id = l.id) AS inv_count,
+              (SELECT COUNT(*) FROM inventory_items i WHERE i.location_id = l.id AND (
+                   TRIM(COALESCE(i.nama_barang,'')) = '' OR TRIM(COALESCE(i.merk_type,'')) = '' OR
+                   TRIM(COALESCE(i.jumlah,'')) = '' OR TRIM(COALESCE(i.sn_tagging,'')) = '' OR
+                   TRIM(COALESCE(i.keterangan,'')) = '')) AS inv_bad
+            FROM locations l {wsql} ORDER BY l.id DESC LIMIT ? OFFSET ?""",
+        params + [size, offset],
+    ).fetchall()
+
     is_admin = user["role"] == "admin"
-    result = []
-    for r in rows:
-        inv = conn.execute(
-            "SELECT nama_barang,merk_type,jumlah,sn_tagging,keterangan "
-            "FROM inventory_items WHERE location_id=? ORDER BY sort_order,id", (r["id"],)
-        ).fetchall()
-        result.append({
+    result = [
+        {
             "id": r["id"], "code": r["code"], "name": r["name"], "status": r["status"],
             "data": json.loads(r["data_json"]), "photo_count": r["photo_count"],
             "inv_count": r["inv_count"], "updated_at": r["updated_at"],
             "created_by": r["created_by"],
             "photo_cats": (r["photo_cats"].split(",") if r["photo_cats"] else []),
-            "inventory": [dict(i) for i in inv],
+            "inv_ok": r["inv_count"] > 0 and r["inv_bad"] == 0,
             "can_delete": is_admin or r["created_by"] == user["id"],
-        })
-    return result
+        }
+        for r in rows
+    ]
+    return {"rows": result, "total": total, "page": page, "size": size}
+
+
+@router.get("/options")
+def location_options(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
+    """Daftar ringan (id, code, nama) untuk dropdown pemilih lokasi di Entry BAA."""
+    import json
+    rows = conn.execute(
+        "SELECT id, code, name, data_json FROM locations ORDER BY id DESC"
+    ).fetchall()
+    opts = []
+    for r in rows:
+        nama = r["name"] or ""
+        if not nama:
+            try:
+                nama = (json.loads(r["data_json"]) or {}).get("nama_lokasi", "") or ""
+            except Exception:
+                nama = ""
+        opts.append({"id": r["id"], "code": r["code"], "nama": nama})
+    return {"options": opts, "total": len(opts)}
 
 
 @router.post("")
