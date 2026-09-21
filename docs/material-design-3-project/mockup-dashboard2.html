@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Dashboard BAA (kreatif)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@500;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#e9ecec;--pane:#fcfefe;--ink:#111817;--mut:#48514f;--ov:#c6cccb;
+    --pri:#04726f;--deep:#023b3a;--sec:#cfe6e5;--onsec:#00413f;
+    --warn:#9a5b00;--warnbg:#fdeede;--track:#dde4e3;
+    --h1:#e4efee;--h2:#bfe0df;--h3:#7cc6c3;--h4:#3f9e9b;--h5:#04726f;
+    --disp:'Sora',system-ui,sans-serif;--body:'Inter',system-ui,sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#aab3b1;--ov:#333a39;
+    --pri:#57d6d1;--deep:#8ff0eb;--sec:#0e3b39;--onsec:#9ff0ec;
+    --warn:#ffb95c;--warnbg:#3a2a10;--track:#28302f;
+    --h1:#1a2322;--h2:#204340;--h3:#2f6764;--h4:#3f9e9b;--h5:#57d6d1;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);-webkit-font-smoothing:antialiased}
+  .bar{display:flex;align-items:center;gap:12px;padding:16px 22px}
+  .bar .logo{font-family:var(--disp);font-weight:800;font-size:16px;letter-spacing:-.2px}
+  .toggle{margin-left:auto;display:flex;gap:4px;background:var(--pane);padding:4px;border-radius:24px;border:1px solid var(--ov)}
+  .toggle button{border:none;background:transparent;color:var(--mut);padding:8px 18px;border-radius:20px;cursor:pointer;font-family:var(--body);font-weight:600;font-size:13px}
+  .toggle button.on{background:var(--pri);color:#fff}
+  .wrap{max-width:1200px;margin:0 auto;padding:0 22px 34px}
+  /* bento */
+  .bento{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+  .tile{background:var(--pane);border:1px solid var(--ov);border-radius:22px;padding:18px;min-width:0}
+  .s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}
+  .s7{grid-column:span 7}.s8{grid-column:span 8}.s12{grid-column:span 12}.rspan{grid-row:span 2}
+  @media(max-width:900px){.s3,.s4,.s5,.s6,.s7,.s8{grid-column:span 12}}
+  /* hero */
+  .hero{grid-column:span 12;border-radius:26px;padding:26px 28px;position:relative;overflow:hidden;border:none;
+    display:flex;align-items:center;gap:20px;min-height:132px}
+  .hero .sky{position:absolute;inset:0;z-index:0}
+  .hero .orb{position:absolute;border-radius:50%;filter:blur(1px);z-index:0}
+  .hero .stars{position:absolute;inset:0;z-index:0}
+  .hero .star{position:absolute;width:2px;height:2px;border-radius:50%;background:#fff;opacity:.8}
+  .hero .txt{position:relative;z-index:2}
+  .hero h1{font-family:var(--disp);font-weight:800;font-size:30px;letter-spacing:-.5px;margin:0}
+  .hero .date{font-size:13px;margin:4px 0 0;opacity:.9}
+  .hero .status{position:relative;z-index:2;margin-left:auto;text-align:right}
+  .hero .chip{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,.28);backdrop-filter:blur(6px);
+    border:1px solid rgba(255,255,255,.4);padding:9px 15px;border-radius:20px;font-weight:600;font-size:13px}
+  /* kpi */
+  .kpi .top{display:flex;align-items:center;gap:9px;color:var(--mut);font-size:12px;font-weight:600}
+  .kpi .ic{width:30px;height:30px;border-radius:10px;background:var(--sec);color:var(--onsec);display:grid;place-items:center;font-size:17px}
+  .kpi .n{font-family:var(--disp);font-weight:800;font-size:32px;margin-top:10px;letter-spacing:-1px}
+  .kpi .d{font-size:11.5px;color:var(--mut);margin-top:2px}
+  .kpi .d .up{color:var(--pri);font-weight:700}
+  .th{font-family:var(--disp);font-weight:700;font-size:14px;margin:0 0 14px;display:flex;align-items:center;gap:9px}
+  .th .grow{margin-left:auto}.th .lk{font-family:var(--body);font-size:12px;font-weight:600;color:var(--pri);cursor:pointer}
+  /* donut */
+  .donut{width:150px;height:150px;border-radius:50%;margin:6px auto 2px;display:grid;place-items:center;position:relative}
+  .donut .in{width:108px;height:108px;border-radius:50%;background:var(--pane);display:grid;place-items:center;text-align:center}
+  .donut .p{font-family:var(--disp);font-weight:800;font-size:30px;letter-spacing:-1px}
+  .donut .c{font-size:11px;color:var(--mut)}
+  .lg{display:flex;justify-content:center;gap:18px;font-size:12px;color:var(--mut);margin-top:12px}
+  .lg .dot{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:middle}
+  /* sparkline */
+  .spark{width:100%;height:90px;display:block}
+  .sctip{position:fixed;z-index:50;background:var(--deep);color:#eafaf9;font-size:11.5px;padding:5px 9px;border-radius:8px;pointer-events:none;opacity:0;transition:opacity .12s;white-space:nowrap;transform:translate(-50%,-130%)}
+  /* heatmap */
+  .heat{display:grid;grid-template-columns:repeat(8,1fr);gap:6px}
+  .heat .cell{aspect-ratio:1;border-radius:6px;background:var(--h1);cursor:pointer;transition:transform .1s}
+  .heat .cell:hover{transform:scale(1.14)}
+  .scale{display:flex;align-items:center;gap:6px;justify-content:flex-end;margin-top:10px;font-size:11px;color:var(--mut)}
+  .scale i{width:13px;height:13px;border-radius:4px;display:inline-block}
+  /* list */
+  .row{display:flex;align-items:center;gap:11px;padding:11px 6px;border-radius:12px;cursor:pointer}
+  .row:hover{background:color-mix(in srgb,var(--ink) 5%,transparent)}
+  .row+.row{border-top:1px solid var(--ov)}
+  .code{font-family:ui-monospace,Consolas,monospace;color:var(--pri);font-weight:700;font-size:12.5px;min-width:98px}
+  .nm{flex:1;min-width:0;overflow:hidden}.nm b{font-weight:600}.nm .l{color:var(--mut);font-size:11.5px}
+  .badge{font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px}
+  .b-d{background:var(--warnbg);color:var(--warn)}.b-s{background:var(--sec);color:var(--onsec)}
+  /* leaderboard signal bars */
+  .ld{display:flex;align-items:center;gap:12px;padding:10px 4px}.ld+.ld{border-top:1px solid var(--ov)}
+  .ava{width:34px;height:34px;border-radius:12px;background:linear-gradient(135deg,var(--pri),var(--deep));color:#fff;display:grid;place-items:center;font-weight:700;font-family:var(--disp)}
+  .ld .meta{flex:1}.ld .meta .nm2{font-weight:600;font-size:13px}.ld .meta .sub{font-size:11px;color:var(--mut)}
+  .track{width:120px;height:8px;border-radius:5px;background:var(--track);overflow:hidden}.track>i{display:block;height:100%;background:var(--pri)}
+  /* streak */
+  .streak{text-align:center;padding:6px 0}
+  .streak .big{font-family:var(--disp);font-weight:800;font-size:44px;letter-spacing:-2px}
+  .streak .fire{font-size:34px}
+  .week{display:flex;justify-content:center;gap:7px;margin-top:12px}
+  .week .d{width:26px;height:26px;border-radius:9px;background:var(--track);display:grid;place-items:center;font-size:10px;color:var(--mut)}
+  .week .d.on{background:var(--pri);color:#fff;font-weight:700}
+  /* actions */
+  .acts{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+  @media(max-width:900px){.acts{grid-template-columns:repeat(2,1fr)}}
+  .act{border:1px solid var(--ov);border-radius:18px;padding:16px;cursor:pointer;display:flex;flex-direction:column;gap:10px;background:var(--pane);transition:transform .12s,border-color .12s}
+  .act:hover{transform:translateY(-2px);border-color:var(--pri)}
+  .act .ic{width:40px;height:40px;border-radius:13px;background:var(--sec);color:var(--onsec);display:grid;place-items:center;font-size:21px}
+  .act.pri .ic{background:var(--pri);color:#fff}.act .t{font-weight:600;font-size:13.5px}
+  /* feed */
+  .feed .it{display:flex;gap:11px;padding:10px 0;font-size:12.5px;color:var(--mut)}.feed .it+.it{border-top:1px solid var(--ov)}
+  .feed b{color:var(--ink)}.feed .dot{width:9px;height:9px;border-radius:50%;background:var(--pri);margin-top:4px;flex:0 0 auto}
+  .mi{font-family:"Material Symbols Outlined","Segoe UI Symbol";font-style:normal;line-height:1}
+  .hide{display:none!important}
+</style>
+</head>
+<body>
+  <div class="bar">
+    <span class="logo">◆ BAA Generator</span>
+    <div class="toggle"><button class="on" id="rA">Admin</button><button id="rO">Operator</button></div>
+  </div>
+
+  <div class="wrap">
+    <div class="bento">
+      <!-- HERO -->
+      <div class="tile hero" id="hero">
+        <div class="sky" id="sky"></div>
+        <div class="stars" id="stars"></div>
+        <div class="orb" id="orb"></div>
+        <div class="txt"><h1 id="hello">Selamat pagi, Reza</h1><p class="date" id="date">Senin, 21 September 2026</p></div>
+        <div class="status"><span class="chip" id="chip"><span class="mi">bolt</span> <span id="chiptxt">2 lokasi menunggu diselesaikan</span></span></div>
+      </div>
+
+      <!-- KPIs -->
+      <div class="bento s8" style="display:grid;grid-template-columns:repeat(2,1fr);gap:14px" id="kpis"></div>
+
+      <!-- Donut -->
+      <div class="tile s4 rspan">
+        <div class="th"><span class="mi">donut_small</span> Progress Aktivasi</div>
+        <div class="donut" id="donut"><div class="in"><div><div class="p" id="dp">68%</div><div class="c">selesai</div></div></div></div>
+        <div class="lg"><span><span class="dot" style="background:var(--pri)"></span>Selesai <b id="lgd">17</b></span><span><span class="dot" style="background:var(--track)"></span>Draft <b id="lgr">8</b></span></div>
+      </div>
+
+      <!-- Sparkline trend -->
+      <div class="tile s8">
+        <div class="th"><span class="mi">trending_up</span> Lokasi Selesai · 14 hari <span class="grow"></span><span class="lk" id="trendsum">+6 minggu ini</span></div>
+        <svg class="spark" id="spark" viewBox="0 0 560 90" preserveAspectRatio="none"></svg>
+      </div>
+
+      <!-- Butuh perhatian -->
+      <div class="tile s6">
+        <div class="th"><span class="mi">warning</span> Butuh Perhatian <span class="grow"></span><span class="lk">Log Lokasi ›</span></div>
+        <div id="attn"></div>
+      </div>
+
+      <!-- Heatmap -->
+      <div class="tile s6">
+        <div class="th"><span class="mi">calendar_month</span> Ritme Aktivitas · 8 minggu</div>
+        <div class="heat" id="heat"></div>
+        <div class="scale">kurang <i style="background:var(--h1)"></i><i style="background:var(--h2)"></i><i style="background:var(--h3)"></i><i style="background:var(--h4)"></i><i style="background:var(--h5)"></i> banyak</div>
+      </div>
+
+      <!-- Leaderboard (admin) / Streak (operator) -->
+      <div class="tile s6" id="leadTile">
+        <div class="th"><span class="mi">military_tech</span> Kinerja Teknisi</div>
+        <div id="lead"></div>
+      </div>
+      <div class="tile s6 hide" id="streakTile">
+        <div class="th"><span class="mi">local_fire_department</span> Konsistensi Kamu</div>
+        <div class="streak"><span class="fire">🔥</span> <span class="big" id="streakN">4</span> <span style="color:var(--mut)">hari beruntun</span>
+          <div class="week" id="week"></div>
+        </div>
+      </div>
+
+      <!-- Feed -->
+      <div class="tile s6">
+        <div class="th"><span class="mi">history</span> Aktivitas Terbaru</div>
+        <div class="feed" id="feed"></div>
+      </div>
+
+      <!-- Actions -->
+      <div class="tile s12">
+        <div class="th"><span class="mi">bolt</span> Aksi Cepat</div>
+        <div class="acts" id="acts"></div>
+      </div>
+    </div>
+  </div>
+  <div class="sctip" id="sctip"></div>
+
+<script>
+  const $=s=>document.querySelector(s);
+  const DATA={
+    admin:{name:'Admin',
+      kpis:[['table_rows','Total Lokasi','25','+3 minggu ini'],['task_alt','Selesai','17','68% dari total'],
+            ['group','User Aktif','6','2 online'],['photo_camera','Total Foto','214','OCR aktif']],
+      pct:68,done:17,draft:8,
+      trend:[0,1,0,2,1,3,2,1,2,4,1,2,3,2],
+      attn:[['LOK-7F3K9Q','Kopdes Sukamaju','Foto: Outdoor, Indoor +7 · PIC · Inventory'],
+            ['LOK-88KD2M','Kopdes Sinar Tani','Foto: SN Kit · Inventory'],
+            ['LOK-1QW9ZP','Kopdes Maju Jaya','Foto: Ping, Speed']],
+      lead:[['Budi',7,9],['Sari',6,7],['Andi',3,5],['Rina',1,4]],
+      feed:[['Budi','menyelesaikan','LOK-43WDQH','5 mnt'],['Sari','unggah 4 foto','LOK-7F3K9Q','22 mnt'],
+            ['Andi','buat lokasi','LOK-1QW9ZP','1 jam'],['Admin','tambah user','rina','2 jam']],
+      acts:[['add','Lokasi baru',1],['group','Kelola User',0],['description','Template',0],['backup','Backup',0]],
+      lead_on:true},
+    op:{name:'Reza',
+      kpis:[['table_rows','Lokasi Saya','6','milik kamu'],['task_alt','Selesai','4','67%'],
+            ['draft','Draft','2','perlu dilanjut'],['photo_camera','Foto Saya','48','']],
+      pct:67,done:4,draft:2,
+      trend:[0,0,1,0,1,1,0,1,0,1,0,0,1,1],
+      attn:[['LOK-7F3K9Q','Kopdes Sukamaju','Foto: Outdoor, Indoor +7 · PIC · Inventory'],
+            ['LOK-1QW9ZP','Kopdes Maju Jaya','Foto: Ping, Speed']],
+      lead:[],feed:[['Kamu','menyelesaikan','LOK-9BNN9T','10 mnt'],['Kamu','unggah 3 foto','LOK-7F3K9Q','1 jam']],
+      acts:[['add','Lokasi baru',1],['table_rows','Lokasi Saya',0]],
+      lead_on:false,streak:4,week:[1,1,0,1,1,1,0]}
+  };
+
+  /* hero sky by time */
+  function paintSky(){
+    const h=new Date().getHours();
+    let greet,sky,orb,ink='#0d1f1e',stars=false;
+    if(h<11){greet='Selamat pagi';sky='linear-gradient(120deg,#ffe6c4 0%,#ffd0b0 32%,#9fd8cf 100%)';orb='radial-gradient(circle,#fff3d6,#ffd27a)';}
+    else if(h<15){greet='Selamat siang';sky='linear-gradient(120deg,#cdeeee 0%,#a9dced 55%,#7fc7e6 100%)';orb='radial-gradient(circle,#ffffff,#ffe9a8)';}
+    else if(h<18){greet='Selamat sore';sky='linear-gradient(120deg,#ffd9a8 0%,#f4a98c 55%,#c77e86 100%)';orb='radial-gradient(circle,#fff0d0,#ff9d5c)';}
+    else {greet='Selamat malam';sky='linear-gradient(120deg,#0b2733 0%,#0f3a3a 60%,#123f3e 100%)';orb='radial-gradient(circle,#eaf6ff,#b9d6e6)';ink='#eafaf9';stars=true;}
+    $('#sky').style.background=sky;
+    $('#orb').style.cssText+=`;background:${orb};width:120px;height:120px;right:-20px;top:-30px;opacity:.9`;
+    $('#hero').style.color=ink;
+    const chip=$('#chip');chip.style.color=ink;
+    if(stars){$('#stars').innerHTML=Array.from({length:26},()=>`<span class="star" style="left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:${.3+Math.random()*.6}"></span>`).join('');}
+    else $('#stars').innerHTML='';
+    const d=new Date();const days=['Minggu','Senin','Selasa','Rabu','Kamis','Jumat','Sabtu'],mo=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+    $('#date').textContent=`${days[d.getDay()]}, ${d.getDate()} ${mo[d.getMonth()]} ${d.getFullYear()}`;
+    return greet;
+  }
+  const GREET=paintSky();
+
+  function sparkline(vals){
+    const W=560,H=90,pad=6,max=Math.max(...vals,1),n=vals.length;
+    const x=i=>pad+i*(W-2*pad)/(n-1), y=v=>H-pad-(v/max)*(H-2*pad-8);
+    const pts=vals.map((v,i)=>[x(i),y(v)]);
+    const line=pts.map((p,i)=>(i?'L':'M')+p[0].toFixed(1)+' '+p[1].toFixed(1)).join(' ');
+    const area=line+` L ${x(n-1)} ${H-pad} L ${x(0)} ${H-pad} Z`;
+    const dots=pts.map((p,i)=>`<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="3.4" fill="var(--pri)" data-v="${vals[i]}" data-i="${i}"/>`).join('');
+    return `<defs><linearGradient id="fill" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="var(--pri)" stop-opacity=".26"/><stop offset="1" stop-color="var(--pri)" stop-opacity="0"/></linearGradient></defs>
+      <path d="${area}" fill="url(#fill)"/><path d="${line}" fill="none" stroke="var(--pri)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/>${dots}`;
+  }
+  function heatmap(seed){
+    // 8 weeks x 5 rows illustrative
+    let html='';for(let i=0;i<40;i++){const lv=(Math.floor((Math.sin(i*1.3+seed)+1)*2.6))%5;
+      html+=`<div class="cell" style="background:var(--h${lv+1})" data-lv="${lv}"></div>`;}
+    return html;
+  }
+
+  function render(role){
+    const d=DATA[role];
+    $('#hello').textContent=`${GREET}, ${d.name}`;
+    $('#chiptxt').textContent = d.draft?`${d.draft} lokasi menunggu diselesaikan`:'Semua lokasi selesai 🎉';
+    $('#kpis').innerHTML=d.kpis.map(k=>`<div class="tile kpi"><div class="top"><span class="ic"><span class="mi">${k[0]}</span></span>${k[1]}</div><div class="n">${k[2]}</div><div class="d">${k[3]?`<span class="up">${k[3]}</span>`:'&nbsp;'}</div></div>`).join('');
+    $('#donut').style.background=`conic-gradient(var(--pri) 0 ${d.pct}%,var(--track) ${d.pct}% 100%)`;
+    $('#dp').textContent=d.pct+'%';$('#lgd').textContent=d.done;$('#lgr').textContent=d.draft;
+    $('#spark').innerHTML=sparkline(d.trend);
+    $('#trendsum').textContent='+'+d.trend.reduce((a,b)=>a+b,0)+' total';
+    $('#attn').innerHTML=d.attn.map(a=>`<div class="row"><span class="code">${a[0]}</span><span class="nm"><b>${a[1]}</b><div class="l">${a[2]}</div></span><span class="badge b-d">draft</span></div>`).join('');
+    $('#heat').innerHTML=heatmap(role==='admin'?1:4);
+    $('#leadTile').classList.toggle('hide',!d.lead_on);
+    $('#streakTile').classList.toggle('hide',d.lead_on);
+    if(d.lead_on){const mx=Math.max(...d.lead.map(l=>l[2]));
+      $('#lead').innerHTML=d.lead.map(l=>`<div class="ld"><span class="ava">${l[0][0]}</span><div class="meta"><div class="nm2">${l[0]}</div><div class="sub">${l[1]}/${l[2]} selesai</div></div><div class="track"><i style="width:${Math.round(l[1]/mx*100)}%"></i></div></div>`).join('');
+    }else{
+      $('#streakN').textContent=d.streak;
+      $('#week').innerHTML=['S','S','R','K','J','S','M'].map((x,i)=>`<div class="d ${d.week[i]?'on':''}">${x}</div>`).join('');
+    }
+    $('#feed').innerHTML=d.feed.map(f=>`<div class="it"><span class="dot"></span><div><b>${f[0]}</b> ${f[1]} <b>${f[2]}</b><div style="opacity:.75">${f[3]} lalu</div></div></div>`).join('');
+    $('#acts').innerHTML=d.acts.map(a=>`<div class="act ${a[2]?'pri':''}"><span class="ic"><span class="mi">${a[0]}</span></span><span class="t">${a[1]}</span></div>`).join('');
+  }
+  // spark tooltip
+  const tip=$('#sctip');
+  $('#spark').addEventListener('mouseover',e=>{if(e.target.tagName==='circle'){const r=e.target.getBoundingClientRect();
+    tip.textContent=e.target.dataset.v+' lokasi · hari '+(+e.target.dataset.i+1);tip.style.left=r.left+r.width/2+'px';tip.style.top=r.top+'px';tip.style.opacity=1;}});
+  $('#spark').addEventListener('mouseout',()=>tip.style.opacity=0);
+  $('#heat').addEventListener('mouseover',e=>{if(e.target.classList.contains('cell')){const r=e.target.getBoundingClientRect();
+    tip.textContent=['tidak ada','ringan','sedang','ramai','sangat ramai'][e.target.dataset.lv]+' aktivitas';tip.style.left=r.left+r.width/2+'px';tip.style.top=r.top+'px';tip.style.opacity=1;}});
+  $('#heat').addEventListener('mouseout',()=>tip.style.opacity=0);
+
+  $('#rA').addEventListener('click',()=>{$('#rA').classList.add('on');$('#rO').classList.remove('on');render('admin');});
+  $('#rO').addEventListener('click',()=>{$('#rO').classList.add('on');$('#rA').classList.remove('on');render('op');});
+  render('admin');
+</script>
+</body>
+</html>
