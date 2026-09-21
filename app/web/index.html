@@ -213,12 +213,15 @@
   .dkpi .n{font:var(--md-sys-typescale-display-small);font-weight:800;letter-spacing:-1px;margin-top:8px}
   .dkpi .d{font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant);margin-top:2px}
   .dkpi .d .up{color:var(--md-sys-color-primary);font-weight:700}
-  /* donut — proporsional dgn kartu (selalu bulat) */
-  .donutwrap{display:grid;place-items:center;padding:4px 0}
-  .donut{width:min(180px,64%);aspect-ratio:1;border-radius:50%;display:grid;place-items:center}
-  .donut .in{width:68%;aspect-ratio:1;border-radius:50%;background:var(--md-sys-color-surface);display:grid;place-items:center;text-align:center}
-  .donut .p{font:var(--md-sys-typescale-headline-medium);font-weight:800;letter-spacing:-1px}
-  .donut .c{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
+  /* donut — SVG gauge proporsional (ring tebal, ujung membulat, gradient) */
+  .ddonut{display:flex;flex-direction:column;justify-content:center}
+  .donutwrap{display:grid;place-items:center;padding:6px 0}
+  .gauge{width:min(200px,74%);height:auto;display:block}
+  .gauge .gtrack{fill:none;stroke:var(--md-sys-color-surface-container-highest);stroke-width:12}
+  .gauge .gval{fill:none;stroke:url(#gaugeGrad);stroke-width:12;stroke-linecap:round;
+    transform:rotate(-90deg);transform-origin:60px 60px;transition:stroke-dashoffset 1.1s cubic-bezier(.2,0,0,1)}
+  .gauge .gpct{fill:var(--md-sys-color-on-surface);font-family:inherit;font-weight:800;font-size:21px;letter-spacing:-.5px;text-anchor:middle;dominant-baseline:middle}
+  .gauge .gcap{fill:var(--md-sys-color-on-surface-variant);font-family:inherit;font-weight:600;font-size:7px;letter-spacing:.8px;text-anchor:middle;text-transform:uppercase}
   .ddonut .lg{display:flex;justify-content:center;gap:18px;margin-top:12px;font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
   .ddonut .lg .dot{width:9px;height:9px;border-radius:3px;display:inline-block;margin-right:6px;vertical-align:middle}
   /* sparkline */
@@ -346,7 +349,20 @@
           <div class="dkpis" id="dKpis"></div>
           <div class="dtile ddonut">
             <div class="th"><span class="mi">donut_small</span> Progress Aktivasi</div>
-            <div class="donutwrap"><div class="donut" id="dDonut"><div class="in"><div><div class="p" id="dPct">0%</div><div class="c">selesai</div></div></div></div></div>
+            <div class="donutwrap">
+              <svg class="gauge" viewBox="0 0 120 120" id="dGauge">
+                <defs>
+                  <linearGradient id="gaugeGrad" x1="0" y1="0" x2="1" y2="1">
+                    <stop offset="0" stop-color="var(--md-sys-color-primary)"/>
+                    <stop offset="1" stop-color="var(--md-sys-color-tertiary)"/>
+                  </linearGradient>
+                </defs>
+                <circle class="gtrack" cx="60" cy="60" r="50"/>
+                <circle class="gval" id="dArc" cx="60" cy="60" r="50"/>
+                <text class="gpct" id="dPct" x="60" y="57">0%</text>
+                <text class="gcap" x="60" y="74">selesai</text>
+              </svg>
+            </div>
             <div class="lg"><span><span class="dot" style="background:var(--md-sys-color-primary)"></span>Selesai <b id="dLgDone">0</b></span><span><span class="dot" style="background:var(--md-sys-color-surface-container-highest)"></span>Draft <b id="dLgDraft">0</b></span></div>
           </div>
           <div class="dtile dtrend">
@@ -763,7 +779,8 @@ async function loadDashboard(){
     ?[['table_rows','Total Lokasi',t.locations,'semua lokasi'],['task_alt','Selesai',t.done,s.pct+'% dari total'],['group','User Aktif',t.users_active,''],['photo_camera','Total Foto',t.photos,'']]
     :[['table_rows','Lokasi Saya',t.locations,'milik kamu'],['task_alt','Selesai',t.done,s.pct+'%'],['draft','Draft',t.draft,'perlu dilanjut'],['photo_camera','Foto Saya',t.photos,'']];
   $('#dKpis').innerHTML=kpis.map(k=>`<div class="dkpi"><div class="top"><span class="ic"><span class="mi">${k[0]}</span></span>${k[1]}</div><div class="n">${k[2]}</div><div class="d">${k[3]?`<span class="up">${esc(k[3])}</span>`:'&nbsp;'}</div></div>`).join('');
-  $('#dDonut').style.background=`conic-gradient(var(--md-sys-color-primary) 0 ${s.pct}%,var(--md-sys-color-surface-container-highest) ${s.pct}% 100%)`;
+  const C=2*Math.PI*50,arc=$('#dArc');arc.style.strokeDasharray=C.toFixed(1);arc.style.strokeDashoffset=C.toFixed(1);
+  requestAnimationFrame(()=>{arc.style.strokeDashoffset=(C*(1-s.pct/100)).toFixed(1);});
   $('#dPct').textContent=s.pct+'%';$('#dLgDone').textContent=t.done;$('#dLgDraft').textContent=t.draft;
   $('#dSpark').innerHTML=dSparkline(s.trend);$('#dTrendSum').textContent='+'+s.trend.reduce((a,b)=>a+b,0)+' total';
   $('#dAttn').innerHTML=s.attention.length?s.attention.map(a=>`<div class="drow" onclick="openFromLog(${a.id})"><span class="code">${esc(a.code)}</span><span class="nm"><b>${esc(a.data.nama_lokasi||a.name||'(tanpa nama)')}</b><div class="l">${locLack(a)}</div></span><span class="badge">draft</span></div>`).join(''):'<p class="muted" style="padding:8px 4px">Tidak ada yang tertunda 🎉</p>';
