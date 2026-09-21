@@ -141,3 +141,131 @@ def stats(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)
         out["week"] = week
 
     return out
+
+
+@router.get("/stats/supervisor")
+def supervisor(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
+    """Metrik performa per-user untuk konsol supervisor (admin)."""
+    from fastapi import HTTPException
+    if user["role"] != "admin":
+        raise HTTPException(403, "Khusus admin")
+    import json
+    today = date.today()
+    monday = today - timedelta(days=today.weekday())      # Senin minggu ini
+    cutoff7 = (today - timedelta(days=7)).isoformat()
+
+    def wk(i):  # awal minggu i-minggu lalu (i=0 -> Senin ini)
+        return monday - timedelta(days=7 * i)
+
+    def completed(a, b, uid=None):
+        q = ("SELECT COUNT(*) c FROM locations WHERE status='selesai' "
+             "AND date(updated_at)>=? AND date(updated_at)<?")
+        pr = [a.isoformat(), b.isoformat()]
+        if uid is not None:
+            q += " AND created_by=?"; pr.append(uid)
+        return conn.execute(q, pr).fetchone()["c"] or 0
+
+    tot = conn.execute(
+        "SELECT COUNT(*) c, SUM(CASE WHEN status='selesai' THEN 1 ELSE 0 END) d FROM locations"
+    ).fetchone()
+    total = tot["c"] or 0
+    done = tot["d"] or 0
+    pct = round(done / total * 100) if total else 0
+    vel_this = completed(wk(0), wk(-1))
+    vel_prev = completed(wk(1), wk(0))
+    ct = conn.execute(
+        "SELECT AVG(julianday(updated_at)-julianday(created_at)) a FROM locations WHERE status='selesai'"
+    ).fetchone()["a"]
+    cycle = round(ct, 1) if ct and ct > 0 else 0
+    stalled = conn.execute(
+        "SELECT COUNT(*) c FROM locations WHERE status!='selesai' AND date(updated_at)<?", [cutoff7]
+    ).fetchone()["c"] or 0
+    users_active = conn.execute("SELECT COUNT(*) c FROM users WHERE active=1").fetchone()["c"] or 0
+    users_total = conn.execute("SELECT COUNT(*) c FROM users").fetchone()["c"] or 0
+    throughput = [completed(wk(j), wk(j - 1)) for j in range(7, -1, -1)]
+
+    # per-user
+    users = []
+    for u in conn.execute(
+        "SELECT id, COALESCE(NULLIF(full_name,''),username) nm FROM users WHERE active=1"
+    ).fetchall():
+        r = conn.execute(
+            "SELECT COUNT(*) t, SUM(CASE WHEN status='selesai' THEN 1 ELSE 0 END) d "
+            "FROM locations WHERE created_by=?", [u["id"]]
+        ).fetchone()
+        t = r["t"] or 0
+        if t == 0:
+            continue
+        d = r["d"] or 0
+        load = conn.execute(
+            "SELECT COUNT(*) c FROM locations WHERE created_by=? AND status!='selesai'", [u["id"]]
+        ).fetchone()["c"] or 0
+        stalled_u = conn.execute(
+            "SELECT COUNT(*) c FROM locations WHERE created_by=? AND status!='selesai' AND date(updated_at)<?",
+            [u["id"], cutoff7]
+        ).fetchone()["c"] or 0
+        vel = [completed(wk(j), wk(j - 1), u["id"]) for j in range(3, -1, -1)]
+        vt, vp = vel[-1], vel[-2]
+        if (vt == 0 and load > 0) or stalled_u >= 3 or (vp > 0 and vt < vp * 0.6):
+            health = "b"
+        elif vp > 0 and vt < vp:
+            health = "w"
+        else:
+            health = "g"
+        reasons = []
+        if vp > 0 and vt < vp:
+            reasons.append(f"velocity −{round((vp - vt) / vp * 100)}%")
+        if vt == 0 and load > 0:
+            reasons.append("0 selesai minggu ini")
+        if stalled_u > 0:
+            reasons.append(f"{stalled_u} draft mangkrak")
+        users.append({
+            "id": u["id"], "name": u["nm"], "done": d, "total": t,
+            "pct": round(d / t * 100), "vel": vel, "load": load,
+            "stalled": stalled_u, "health": health, "reason": " · ".join(reasons),
+        })
+
+    # bottleneck dari draft
+    cats = db.get_setting(conn, "photo_categories", [])
+    fields = db.get_setting(conn, "location_fields", [])
+    drafts = conn.execute("SELECT id, data_json FROM locations WHERE status!='selesai'").fetchall()
+    nd = len(drafts)
+    miss = {}
+    inv_bad = 0
+    field_bad = 0
+    for dr in drafts:
+        present = {x["category"] for x in conn.execute(
+            "SELECT DISTINCT category FROM photos WHERE location_id=?", [dr["id"]]).fetchall()}
+        for c in cats:
+            if c.get("key") not in present:
+                lbl = c.get("label", c.get("key"))
+                miss[lbl] = miss.get(lbl, 0) + 1
+        icnt = conn.execute("SELECT COUNT(*) c FROM inventory_items WHERE location_id=?", [dr["id"]]).fetchone()["c"] or 0
+        ibad = conn.execute(
+            f"SELECT COUNT(*) c FROM inventory_items i WHERE location_id=? AND ({_EMPTY_INV})", [dr["id"]]
+        ).fetchone()["c"] or 0
+        if not (icnt > 0 and ibad == 0):
+            inv_bad += 1
+        try:
+            data = json.loads(dr["data_json"] or "{}")
+        except Exception:
+            data = {}
+        if any(not str(data.get(f["key"], "")).strip() for f in fields):
+            field_bad += 1
+    items = [(l, c) for l, c in miss.items() if c > 0]
+    if inv_bad:
+        items.append(("Inventory belum lengkap", inv_bad))
+    if field_bad:
+        items.append(("Field lokasi kosong", field_bad))
+    items.sort(key=lambda x: -x[1])
+    bottleneck = [{"label": l, "pct": round(c / nd * 100)} for l, c in items[:5]] if nd else []
+
+    return {
+        "name": user["full_name"] or user["username"],
+        "summary": {"total": total, "done": done, "pct": pct,
+                    "vel_this": vel_this, "vel_prev": vel_prev, "cycle": cycle,
+                    "stalled": stalled, "users_active": users_active, "users_total": users_total},
+        "users": users,
+        "bottleneck": bottleneck,
+        "throughput": throughput,
+    }

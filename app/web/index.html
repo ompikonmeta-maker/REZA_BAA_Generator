@@ -11,8 +11,8 @@
 <script defer src="/assets/md3-components.js"></script>
 <script defer src="/assets/mdmenu.js"></script>
 <style>
-  :root{ --nav-w:248px; --rail-w:76px; --warn:#9a5b00; --warn-bg:#fff3e0; }
-  :root[data-theme="dark"]{ --warn:#ffb877; --warn-bg:#3a2a12; }
+  :root{ --nav-w:248px; --rail-w:76px; --warn:#9a5b00; --warn-bg:#fff3e0; --good:#1c7d46; --good-bg:#dcf0e2; --bad:#a3312a; --bad-bg:#fbe4e2; }
+  :root[data-theme="dark"]{ --warn:#ffb877; --warn-bg:#3a2a12; --good:#7ddc9f; --good-bg:#123522; --bad:#ffb1a8; --bad-bg:#3a1714; }
   *{box-sizing:border-box}
   body{margin:0;background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-medium);-webkit-font-smoothing:antialiased}
   .hidden{display:none!important}
@@ -340,6 +340,57 @@
   .dact.pri .ic{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary)}
   .dact .t{font:var(--md-sys-typescale-label-large);font-weight:600}
 
+  /* ===== Konsol Supervisor ===== */
+  .sup-head{display:flex;align-items:center;gap:14px;margin-bottom:6px}
+  .sup-head h1{font:var(--md-sys-typescale-headline-small);font-weight:800;margin:0}
+  .sup-head .sub{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-small);margin:2px 0 0}
+  .sup-head md-button{margin-left:auto}
+  .sup-legend{display:flex;gap:16px;flex-wrap:wrap;margin:8px 0 16px;font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
+  .sup-legend .k{display:flex;align-items:center;gap:6px}
+  .hdot{width:10px;height:10px;border-radius:50%;display:inline-block}
+  .hdot.g{background:var(--good)}.hdot.w{background:var(--warn)}.hdot.b{background:var(--bad)}
+  .sup-strip{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:14px}
+  @media(max-width:900px){.sup-strip{grid-template-columns:repeat(2,1fr)}}
+  .sk{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;padding:14px}
+  .sk .t{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small);font-weight:600;display:flex;align-items:center;gap:6px}
+  .sk .n{font:var(--md-sys-typescale-headline-small);font-weight:800;margin-top:6px}
+  .sk .d{font:var(--md-sys-typescale-label-small);margin-top:2px;font-weight:700}
+  .up{color:var(--good)}.down{color:var(--bad)}.flat{color:var(--md-sys-color-on-surface-variant)}
+  .satt{display:flex;align-items:center;gap:12px;padding:11px 6px;border-radius:12px;cursor:pointer}
+  .satt:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 5%,transparent)}.satt+.satt{border-top:1px solid var(--md-sys-color-outline-variant)}
+  .sup-ava{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;font-weight:800;color:#fff;flex:0 0 auto;background:var(--md-sys-color-primary)}
+  .satt .who{flex:1;min-width:0}.satt .who .nm{font-weight:700}.satt .who .rs{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant)}
+  .spill{font:var(--md-sys-typescale-label-small);font-weight:700;padding:3px 10px;border-radius:20px;display:inline-flex;gap:5px;align-items:center;white-space:nowrap}
+  .spill.b{background:var(--bad-bg,var(--warn-bg));color:var(--bad)}.spill.w{background:var(--warn-bg);color:var(--warn)}.spill.g{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
+  .spill .mi{font-size:14px}
+  #supRank tr.usr{cursor:pointer}#supRank tr.usr:hover td{background:color-mix(in srgb,var(--md-sys-color-on-surface) 4%,transparent)}
+  .smini{width:74px;height:24px;display:block}
+  .wl{height:8px;border-radius:5px;background:var(--md-sys-color-surface-container-highest);overflow:hidden;min-width:66px}.wl>i{display:block;height:100%}
+  .vbars{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:18px}
+  .vbars .b{flex:1;border-radius:6px 6px 0 0;min-height:3px;position:relative;background:linear-gradient(180deg,var(--md-sys-color-primary),color-mix(in srgb,var(--md-sys-color-primary) 55%,var(--md-sys-color-surface-container-highest)))}
+  .vbars .b span{position:absolute;top:-16px;left:50%;transform:translateX(-50%);font:var(--md-sys-typescale-label-small);font-weight:700;color:var(--md-sys-color-on-surface-variant)}
+  .vx{display:flex;gap:8px;margin-top:6px}.vx div{flex:1;text-align:center;font-size:9.5px;color:var(--md-sys-color-on-surface-variant)}
+  .sbn{display:flex;align-items:center;gap:10px;padding:7px 0}
+  .sbn .lbl{width:150px;font:var(--md-sys-typescale-body-small)}.sbn .bar{flex:1;height:12px;border-radius:6px;background:var(--md-sys-color-surface-container-highest);overflow:hidden}
+  .sbn .bar>i{display:block;height:100%;background:var(--md-sys-color-primary)}.sbn .v{width:38px;text-align:right;font:var(--md-sys-typescale-label-medium);font-weight:700;color:var(--md-sys-color-on-surface-variant)}
+  /* drawer */
+  .sup-scrim{position:fixed;inset:0;background:color-mix(in srgb,var(--md-sys-color-scrim) 40%,transparent);opacity:0;pointer-events:none;transition:opacity .28s;z-index:2400}
+  .sup-scrim.on{opacity:1;pointer-events:auto}
+  .sup-drawer{position:fixed;top:0;right:0;height:100%;width:380px;max-width:92vw;background:var(--md-sys-color-surface);border-left:1px solid var(--md-sys-color-outline-variant);
+    box-shadow:var(--md-sys-elevation-level5);transform:translateX(100%);transition:transform .3s cubic-bezier(.2,0,0,1);z-index:2401;display:flex;flex-direction:column}
+  .sup-drawer.open{transform:none}
+  .sd-h{padding:18px;border-bottom:1px solid var(--md-sys-color-outline-variant);display:flex;align-items:center;gap:12px}
+  .sd-name{font-weight:800}.sd-role{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant)}.sd-x{margin-left:auto}
+  .sd-b{padding:16px 18px;overflow:auto}
+  .sstat3{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .sstat3 div{background:var(--md-sys-color-surface-container-low);border-radius:12px;padding:10px;text-align:center}
+  .sstat3 .n{font:var(--md-sys-typescale-title-large);font-weight:800}.sstat3 .t{font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant)}
+  .sdl{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--md-sys-color-outline-variant);font:var(--md-sys-typescale-body-small)}
+  .sdl .code{font-family:ui-monospace,Consolas,monospace;color:var(--md-sys-color-primary);font-weight:700}
+  .help .hrow{display:flex;gap:9px;align-items:baseline;margin:8px 0}.help .hrow .hdot{margin-top:5px;flex:0 0 auto}
+  .help p{margin:8px 0;color:var(--md-sys-color-on-surface-variant)}.help b{color:var(--md-sys-color-on-surface)}
+  .help hr{border:none;border-top:1px solid var(--md-sys-color-outline-variant);margin:12px 0}
+</style>
   .tip{position:fixed;z-index:9999;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);font:var(--md-sys-typescale-body-small);padding:5px 9px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .12s;white-space:nowrap;transform:translateX(-50%)}
   .tip.show{opacity:1}
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);padding:12px 18px;border-radius:12px;z-index:9999;opacity:0;transition:opacity .2s;box-shadow:var(--md-sys-elevation-level3)}
@@ -438,6 +489,7 @@
 
     <div class="canvas-body">
       <section id="v-dashboard">
+        <div id="dashOp">
         <div class="dash">
           <div class="dtile dhero" id="dHero">
             <div class="sky" id="dSky"></div><div class="stars" id="dStars"></div><div class="orb" id="dOrb"></div>
@@ -500,6 +552,40 @@
           <div class="dtile dacts">
             <div class="th"><span class="mi">bolt</span> Akses Cepat</div>
             <div class="acts" id="dActs"></div>
+          </div>
+        </div>
+        </div><!-- /dashOp -->
+
+        <div id="dashSuper" class="hidden">
+          <div class="sup-head">
+            <div><h1 id="supHello">Konsol Supervisor</h1><p class="sub" id="supSub">performa tim</p></div>
+            <md-button variant="tonal" icon="help" id="supHelpBtn">Cara baca</md-button>
+          </div>
+          <div class="sup-legend">
+            <span class="k"><span class="hdot g"></span>On-track</span>
+            <span class="k"><span class="hdot w"></span>Melambat</span>
+            <span class="k"><span class="hdot b"></span>Menurun / mangkrak</span>
+            <span class="k" style="margin-left:auto">Klik user untuk drill-down →</span>
+          </div>
+          <div class="sup-strip" id="supStrip"></div>
+          <div class="dash">
+            <div class="dtile" style="grid-column:span 7">
+              <div class="th"><span class="mi">priority_high</span> Perlu Perhatian — Tim Menurun</div>
+              <div id="supAtt"></div>
+            </div>
+            <div class="dtile" style="grid-column:span 5">
+              <div class="th"><span class="mi">bug_report</span> Bottleneck — kenapa belum selesai</div>
+              <div id="supBn"></div>
+            </div>
+            <div class="dtile" style="grid-column:span 7">
+              <div class="th"><span class="mi">leaderboard</span> Peringkat Performa</div>
+              <table><thead><tr><th></th><th>Teknisi</th><th>Selesai</th><th>Velocity 4 mgg</th><th>Beban</th><th style="text-align:right">%</th></tr></thead><tbody id="supRank"></tbody></table>
+            </div>
+            <div class="dtile" style="grid-column:span 5">
+              <div class="th"><span class="mi">insights</span> Throughput Tim · 8 minggu</div>
+              <div class="vbars" id="supVbars"></div>
+              <div class="vx" id="supVx"></div>
+            </div>
           </div>
         </div>
       </section>
@@ -670,6 +756,30 @@
     </div>
   </main>
 </div>
+
+<!-- Drill-down user (supervisor) -->
+<div class="sup-scrim" id="supScrim"></div>
+<aside class="sup-drawer" id="supDrawer">
+  <div class="sd-h"><span class="sup-ava" id="sdAva"></span><div><div class="sd-name" id="sdName"></div><div class="sd-role">Teknisi</div></div><md-icon-button class="sd-x" id="sdClose"><span>close</span></md-icon-button></div>
+  <div class="sd-b" id="sdBody"></div>
+</aside>
+
+<md-dialog id="helpDlg">
+  <span slot="headline">Cara membaca Konsol Supervisor</span>
+  <div class="help">
+    <div class="hrow"><span class="hdot g"></span><b>Hijau — On-track.</b> Velocity stabil/naik, tidak ada draft mangkrak.</div>
+    <div class="hrow"><span class="hdot w"></span><b>Kuning — Melambat.</b> Lokasi selesai minggu ini lebih sedikit dari minggu lalu.</div>
+    <div class="hrow"><span class="hdot b"></span><b>Merah — Menurun/mangkrak.</b> Turun tajam (&gt;40%), 0 selesai minggu ini, atau ≥3 draft mangkrak.</div>
+    <hr>
+    <p><b>Velocity</b> = jumlah lokasi yang <i>selesai</i> per minggu. Angka besar + tanda ▲/▼ membandingkan dengan minggu lalu.</p>
+    <p><b>Cycle time</b> = rata-rata berapa <i>hari</i> sebuah lokasi dari dibuat sampai selesai. Makin kecil makin cepat.</p>
+    <p><b>Draft mangkrak</b> = lokasi belum selesai yang tidak tersentuh &gt; 7 hari.</p>
+    <p><b>Beban kerja</b> = jumlah draft aktif milik user (batang makin panjang & merah = makin banyak yang tertahan).</p>
+    <p><b>Bottleneck</b> = hal yang paling sering membuat lokasi belum selesai (mis. foto SN atau inventory), dalam % dari semua draft.</p>
+    <p><b>Peringkat</b> diurutkan dari % penyelesaian tertinggi. Klik baris user untuk melihat detail lokasi yang menahan.</p>
+  </div>
+  <div slot="actions"><md-button id="helpOk" variant="filled">Mengerti</md-button></div>
+</md-dialog>
 
 <md-dialog id="delDlg">
   <span slot="headline">Hapus entry ini?</span>
@@ -968,7 +1078,12 @@ function actionLabel(f){const m={create:'membuat lokasi',update:'memperbarui',de
 function timeAgo(iso){try{const s=(Date.now()-new Date(iso))/1000;if(s<60)return 'baru saja';if(s<3600)return Math.floor(s/60)+' mnt lalu';if(s<86400)return Math.floor(s/3600)+' jam lalu';return Math.floor(s/86400)+' hari lalu';}catch(e){return '';}}
 async function loadDashboard(){
   let s;try{s=await api('/api/stats');}catch(e){return;}
-  S.stats=s;paintDashSky();
+  S.stats=s;
+  const isAdmin=s.role==='admin';
+  $('#dashOp').classList.toggle('hidden',isAdmin);
+  $('#dashSuper').classList.toggle('hidden',!isAdmin);
+  if(isAdmin){loadSupervisor(s.name);return;}
+  paintDashSky();
   $('#dHello').textContent=`${greetWord()}, ${esc(s.name)}`;
   const t=s.totals;
   $('#dChipTxt').textContent=t.draft?`${t.draft} lokasi menunggu diselesaikan`:'Semua lokasi selesai 🎉';
@@ -996,6 +1111,70 @@ async function loadDashboard(){
   [...wrap.children].forEach((el,i)=>el.addEventListener('click',acts[i][3]));
   $('#dAttnMore').onclick=()=>navTo('locations');
 }
+
+/* ===== KONSOL SUPERVISOR ===== */
+const SUP_COL=['#04726f','#1c7d46','#7a5cc0','#b5651d','#2a6fb0','#a3312a','#0f7a6f','#8a3b6b'];
+function supSpark(v,c){const W=74,H=24,mx=Math.max(...v,1),x=i=>2+i*(W-4)/((v.length-1)||1),y=q=>H-2-(q/mx)*(H-6);
+  const ln=v.map((q,i)=>(i?'L':'M')+x(i).toFixed(1)+' '+y(q).toFixed(1)).join(' ');
+  return `<svg class="smini" viewBox="0 0 ${W} ${H}"><path d="${ln}" fill="none" stroke="${c}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>`;}
+function trArrow(v){const d=v[v.length-1]-v[v.length-2];return d>0?'<span class="up">▲</span>':d<0?'<span class="down">▼</span>':'<span class="flat">▬</span>';}
+function healthLabel(h){return h==='b'?'Menurun':h==='w'?'Melambat':'On-track';}
+let SUP_USERS=[];
+async function loadSupervisor(name){
+  let d;try{d=await api('/api/stats/supervisor');}catch(e){return;}
+  SUP_USERS=d.users||[];
+  $('#supHello').textContent=`${greetWord()}, ${esc(name)}`;
+  $('#supSub').textContent=`performa tim · ${d.summary.users_active}/${d.summary.users_total} teknisi aktif`;
+  const m=d.summary;
+  const wow=m.vel_prev>0?Math.round((m.vel_this-m.vel_prev)/m.vel_prev*100):0;
+  const wowTxt=m.vel_prev>0?(wow>=0?`<span class="up">▲ ${wow}%</span>`:`<span class="down">▼ ${Math.abs(wow)}%</span>`):'<span class="flat">—</span>';
+  $('#supStrip').innerHTML=[
+    ['table_rows','Total Lokasi',m.total,''],
+    ['task_alt','% Selesai',m.pct+'%',''],
+    ['speed','Velocity',m.vel_this+'<span style="font-size:12px">/mgg</span>',wowTxt+' vs mgg lalu'],
+    ['timer','Cycle Time',(m.cycle||0)+'<span style="font-size:12px"> hari</span>',''],
+    ['hourglass_bottom','Draft Mangkrak',`<span style="color:${m.stalled?'var(--bad)':'inherit'}">${m.stalled}</span>`,'&gt; 7 hari'],
+    ['group','User Aktif',m.users_active+`<span style="font-size:12px">/${m.users_total}</span>`,''],
+  ].map(k=>`<div class="sk"><div class="t"><span class="mi">${k[0]}</span>${k[1]}</div><div class="n">${k[2]}</div><div class="d">${k[3]||'&nbsp;'}</div></div>`).join('');
+  // attention: user menurun/melambat, terparah dulu
+  const att=SUP_USERS.filter(u=>u.health!=='g').sort((a,b)=>(a.health==='b'?0:1)-(b.health==='b'?0:1));
+  $('#supAtt').innerHTML=att.length?att.map(u=>`<div class="satt" onclick="supDrill(${u.id})">
+    <span class="sup-ava" style="background:${SUP_COL[u.id%SUP_COL.length]}">${esc((u.name[0]||'?').toUpperCase())}</span>
+    <div class="who"><div class="nm">${esc(u.name)}</div><div class="rs">${esc(u.reason||'perlu dipantau')}</div></div>
+    <span class="spill ${u.health}"><span class="mi">${u.health==='b'?'trending_down':'schedule'}</span>${healthLabel(u.health)}</span></div>`).join('')
+    :'<p class="muted" style="padding:10px 4px">Semua teknisi on-track 👍</p>';
+  // bottleneck
+  $('#supBn').innerHTML=(d.bottleneck||[]).length?d.bottleneck.map(b=>`<div class="sbn"><span class="lbl">${esc(b.label)}</span><span class="bar"><i style="width:${b.pct}%"></i></span><span class="v">${b.pct}%</span></div>`).join('')
+    :'<p class="muted" style="padding:10px 4px">Tidak ada draft tertahan.</p>';
+  // ranking
+  const rank=[...SUP_USERS].sort((a,b)=>b.pct-a.pct);
+  $('#supRank').innerHTML=rank.length?rank.map(u=>{const wcol=u.load>=6?'var(--bad)':u.load>=3?'var(--warn)':'var(--good)';
+    return `<tr class="usr" onclick="supDrill(${u.id})"><td><span class="hdot ${u.health}"></span></td>
+      <td style="font-weight:700">${esc(u.name)}</td><td>${u.done}/${u.total}</td>
+      <td>${supSpark(u.vel,SUP_COL[0])} ${trArrow(u.vel)}</td>
+      <td><div class="wl"><i style="width:${Math.min(100,u.load*11)}%;background:${wcol}"></i></div></td>
+      <td style="text-align:right;font-weight:700">${u.pct}%</td></tr>`;}).join('')
+    :'<tr><td colspan="6" class="muted">Belum ada data teknisi.</td></tr>';
+  // throughput
+  const tp=d.throughput||[];const mx=Math.max(...tp,1);
+  $('#supVbars').innerHTML=tp.map(v=>`<div class="b" style="height:${Math.round(v/mx*100)}%"><span>${v}</span></div>`).join('');
+  $('#supVx').innerHTML=['-7','-6','-5','-4','-3','-2','-1','kini'].map(x=>`<div>${x}</div>`).join('');
+}
+window.supDrill=id=>{const u=SUP_USERS.find(x=>x.id===id);if(!u)return;const c=SUP_COL[u.id%SUP_COL.length];
+  $('#sdAva').style.background=c;$('#sdAva').textContent=(u.name[0]||'?').toUpperCase();$('#sdName').textContent=u.name;
+  $('#sdBody').innerHTML=`<div class="sstat3"><div><div class="n">${u.done}/${u.total}</div><div class="t">Selesai</div></div>
+    <div><div class="n">${u.pct}%</div><div class="t">Completion</div></div>
+    <div><div class="n" style="color:${u.load>=6?'var(--bad)':'inherit'}">${u.load}</div><div class="t">Draft aktif</div></div></div>
+    ${u.reason?`<div class="spill ${u.health}" style="margin-bottom:12px"><span class="mi">info</span>${esc(u.reason)}</div>`:'<div class="spill g" style="margin-bottom:12px"><span class="mi">check</span>On-track</div>'}
+    <div style="font-weight:700;font:var(--md-sys-typescale-label-large);margin:6px 0 2px">Velocity 4 minggu</div>
+    <div style="color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-small)">${u.vel.join(' · ')} selesai/minggu ${trArrow(u.vel)}</div>
+    <div style="font-weight:700;font:var(--md-sys-typescale-label-large);margin:14px 0 2px">Beban & mangkrak</div>
+    <div style="color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-small)">${u.load} draft aktif${u.stalled?` · <b style="color:var(--bad)">${u.stalled} mangkrak &gt;7 hari</b>`:''}</div>`;
+  $('#supDrawer').classList.add('open');$('#supScrim').classList.add('on');};
+(function(){const close=()=>{$('#supDrawer').classList.remove('open');$('#supScrim').classList.remove('on');};
+  $('#sdClose').addEventListener('click',close);$('#supScrim').addEventListener('click',close);
+  $('#supHelpBtn').addEventListener('click',()=>$('#helpDlg').show());
+  $('#helpOk').addEventListener('click',()=>$('#helpDlg').close());})();
 
 function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats;} /* semua kategori wajib */
 
