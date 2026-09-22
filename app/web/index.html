@@ -253,7 +253,7 @@
   /* inventory */
   /* inventory — gaya tabel tenang (borderless + garis pemisah tipis) */
   .tbl{display:flex;flex-direction:column;overflow-x:auto}
-  .tr{display:grid;grid-template-columns:1.6fr 1.3fr 60px 1.6fr 1.3fr 40px;gap:10px;align-items:center;min-width:660px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
+  .tr{display:grid;grid-template-columns:1.25fr 1.1fr 56px 1.7fr 1.5fr 40px;gap:10px;align-items:center;min-width:660px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
   .tr.th>div{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);padding:6px 8px}
   .tr:not(.th):hover{background:color-mix(in srgb,var(--md-sys-color-primary) 4%,transparent)}
   .tr input{height:46px;border:none;background:transparent;border-radius:8px;padding:0 8px;color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-medium);width:100%}
@@ -315,6 +315,42 @@
   .snbox .sact:hover{background:color-mix(in srgb,var(--md-sys-color-on-tertiary-container) 12%,transparent)}
   .ocr-lab{display:flex;align-items:center;gap:5px;font:var(--md-sys-typescale-label-small);font-weight:700;color:var(--md-sys-color-primary);margin:10px 0 5px 2px;text-transform:uppercase;letter-spacing:.3px}
   .ocr-lab .mi{font-size:13px}
+
+  /* compact photo tiles */
+  .ptgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
+  .ptile{position:relative;border-radius:14px;overflow:hidden;background:var(--md-sys-color-surface-container-highest);border:1.5px solid var(--md-sys-color-outline-variant)}
+  .ptile .thumb{aspect-ratio:4/3;display:block;position:relative;background:var(--md-sys-color-surface-container-highest)}
+  .ptile.has .thumb{cursor:pointer}
+  .ptile .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+  .ptile.empty .thumb{display:grid;place-items:center;cursor:pointer;color:var(--md-sys-color-on-surface-variant)}
+  .ptile.empty .thumb .mi{font-size:26px;color:var(--md-sys-color-primary)}
+  .ptile .cap{position:absolute;left:0;right:0;bottom:0;padding:7px 9px;background:linear-gradient(to top,rgba(0,0,0,.6),transparent);color:#fff;font:var(--md-sys-typescale-label-small);font-weight:700;line-height:1.2}
+  .ptile.empty .cap{position:static;color:var(--md-sys-color-on-surface);background:none;padding:8px 9px 10px;text-align:center}
+  .ptile .cap .ocrtag{color:#9be7e3;font-weight:800}
+  .ptile.empty .cap .ocrtag{color:var(--md-sys-color-primary)}
+  .ptile .ok{position:absolute;top:7px;left:7px;color:#fff;font-size:20px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.45));z-index:2}
+  .ptile .more{position:absolute;top:5px;right:5px;z-index:3;width:28px;height:28px;border-radius:9px;border:0;background:rgba(255,255,255,.92);color:#1a1c1d;display:grid;place-items:center;cursor:pointer;opacity:0;transition:opacity .15s}
+  .ptile:hover .more,.ptile:focus-within .more{opacity:1}
+  .ptile .more .mi{font-size:18px}
+  @media(hover:none){.ptile .more{opacity:1}}
+  .ptile .snstrip{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;gap:6px;background:color-mix(in srgb,var(--md-sys-color-tertiary) 88%,#000);color:#fff;padding:5px 8px;font-size:11px;font-weight:800;cursor:text;min-width:0}
+  .ptile .snstrip.warn{background:var(--md-sys-color-tertiary);cursor:pointer}
+  .ptile .snstrip .mi{font-size:14px;flex:0 0 auto}
+  .ptile .snstrip .v{flex:1;min-width:0;font-family:ui-monospace,Consolas,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .ptile .snstrip input{flex:1;min-width:0;border:0;border-radius:5px;padding:2px 5px;font-family:ui-monospace,Consolas,monospace;font-weight:700;background:#fff;color:#111}
+  .ptile .snstrip .sgo{flex:0 0 auto;cursor:pointer;font-size:15px}
+  .ptile .undo{position:absolute;inset:0;z-index:4;background:rgba(20,26,25,.86);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;backdrop-filter:blur(2px)}
+  .ptile .undo svg{width:40px;height:40px;transform:rotate(-90deg)}
+  .ptile .undo svg circle{fill:none;stroke-width:4}
+  .ptile .undo svg .t{stroke:rgba(255,255,255,.25)}
+  .ptile .undo svg .p{stroke:#fff;stroke-linecap:round;stroke-dasharray:113;animation:ringdrain2 5s linear forwards}
+  @keyframes ringdrain2{from{stroke-dashoffset:0}to{stroke-dashoffset:113}}
+  .ptile .undo .cc{position:absolute;font-size:16px}
+  .ptile .undo .ub{border:1px solid rgba(255,255,255,.55);background:transparent;color:#fff;border-radius:16px;padding:4px 12px;font-weight:800;cursor:pointer;font-size:11px;display:flex;gap:5px;align-items:center}
+  .ptile .undo .ub .mi{font-size:15px}
+  .is-viewer .ptile .more,.is-viewer .ptile.empty{display:none}
+  .is-viewer .ptile.empty{display:none}
+  .is-viewer .ptile .thumb,.is-viewer .ptile .snstrip{cursor:default}
 
   /* summary panel */
   .summary .card{margin-bottom:0}
@@ -1837,52 +1873,69 @@ function updateSummary(){
     miss.classList.remove('hidden');}else miss.classList.add('hidden');
 }
 
-/* photos — Opsi A: hover toolbar, 1 foto/kategori, OCR footer editable, undo in-card */
+/* photos — tile kompak: klik=Edit, ⋯=aksi lain, strip SN (OCR), undo bercincin in-tile */
 function renderPhotos(){
   $('#ocr-note').textContent=S.ocr?'':'OCR nonaktif di server (Tesseract belum terpasang) — SN bisa diisi manual.';
   const all=(S.loc&&S.loc.photos)||[];
   const activeByCat={};activePhotos().forEach(p=>{(activeByCat[p.category]=activeByCat[p.category]||[]).push(p);});
   const filled=S.cats.filter(c=>(activeByCat[c.key]||[]).length).length;
   $('#foto-count').textContent=filled+' / '+S.cats.length;
+  $('#photo-slots').className='ptgrid';
   $('#photo-slots').innerHTML=S.cats.map(c=>{
     const ph=(activeByCat[c.key]||[])[0];
     const pending=all.find(p=>p.category===c.key&&pendingDel.has(p.id));
-    let snap;
+    const ocrTag=c.ocr?' · <span class="ocrtag">OCR</span>':'';
     if(pending){
-      snap=`<div class="snap"><img src="/api/photos/${pending.id}/file" style="filter:brightness(.45)">
-        <div class="pf-undo"><div class="ringwrap"><svg viewBox="0 0 46 46"><circle class="t" cx="23" cy="23" r="20"/><circle class="p" cx="23" cy="23" r="20"/></svg><span class="mi c">delete</span></div>
-        <div class="msg">Foto dihapus</div><button class="ub" onclick="undoDel(${pending.id})"><span class="mi">undo</span>Urungkan</button></div></div>`;
-    }else if(ph){
-      snap=`<div class="snap"><img src="/api/photos/${ph.id}/file" loading="lazy" onclick="editExisting(${ph.id},'${c.key}')">
-        <div class="actbar">
-          <button data-tip="Edit / sesuaikan" onclick="editExisting(${ph.id},'${c.key}')"><span class="mi">tune</span></button>
-          ${c.ocr?`<button data-tip="Baca SN" onclick="openSnReader(${ph.id},'${c.key}')"><span class="mi">barcode_scanner</span></button>`:''}
-          <button data-tip="Ganti foto" onclick="replacePhoto(${ph.id},'${c.key}')"><span class="mi">swap_horiz</span></button>
-          <button class="del" data-tip="Hapus" onclick="softRemove(${ph.id})"><span class="mi">delete</span></button>
-        </div></div>`;
-    }else{
-      snap=`<div class="snap empty" onclick="pick('${c.key}')"><span class="mi" style="font-size:30px;color:var(--md-sys-color-primary)">add_a_photo</span></div>`;
+      return `<div class="ptile has"><div class="thumb"><img src="/api/photos/${pending.id}/file" style="filter:brightness(.4)"></div>
+        <div class="undo"><svg viewBox="0 0 40 40"><circle class="t" cx="20" cy="20" r="18"/><circle class="p" cx="20" cy="20" r="18"/></svg><span class="mi cc">delete</span>
+        <button class="ub" onclick="undoDel(${pending.id})"><span class="mi">undo</span>Urungkan</button></div></div>`;
     }
-    let foot='';
+    if(!ph){
+      return `<div class="ptile empty"><div class="thumb" onclick="pick('${c.key}')"><span class="mi">add_a_photo</span></div><div class="cap">${esc(c.label)}${ocrTag}</div></div>`;
+    }
+    const sn=(ph.ocr_serial||'').trim();
+    let strip='';
     if(c.ocr){
-      if(ph){const sn=(ph.ocr_serial||'').trim();
-        foot=`<div class="ocr-lab"><span class="mi">document_scanner</span>${sn?'SN terdeteksi · bisa dikoreksi':'SN belum terbaca'}</div>`+
-          (sn?`<div class="snbox"><span class="sn" title="${esc(sn)}" onclick="editSn(this,${ph.id})">${esc(sn)}</span>
-             <button class="sact" data-tip="Edit SN" onclick="editSn(this.parentElement.querySelector('.sn'),${ph.id})"><span class="mi">edit</span></button>
-             <button class="sact" data-tip="Isi ke Inventory" onclick="applySnToInventory('${c.key}','${esc(sn)}')"><span class="mi">arrow_forward</span></button></div>`
-           :`<md-button variant="tonal" size="xs" icon="barcode_scanner" onclick="openSnReader(${ph.id},'${c.key}')">Baca SN</md-button>`);
-      }else{foot=`<div class="ocr-lab"><span class="mi">document_scanner</span>Perlu foto SN</div>`;}
+      strip=sn
+        ? `<div class="snstrip" data-sn="${esc(sn)}" onclick="tileEditSn(this,${ph.id},'${c.key}')"><span class="mi">tag</span><span class="v" title="${esc(sn)}">${esc(sn)}</span><span class="mi sgo" title="Isi ke Inventory" onclick="event.stopPropagation();applySnToInventory('${c.key}','${esc(sn)}')">arrow_forward</span></div>`
+        : `<div class="snstrip warn" onclick="openSnReader(${ph.id},'${c.key}')"><span class="mi">document_scanner</span><span class="v">SN belum terbaca — Baca SN</span></div>`;
     }
-    return `<div class="pcard ${c.ocr?'sn':''}"><div class="hd"><span class="mi">${c.ocr?'tag':'image'}</span><span>${esc(c.label)}</span></div>${snap}<div class="foot" style="display:block;min-height:0;margin-top:${c.ocr?'0':'8px'}">${foot}</div></div>`;
+    return `<div class="ptile has" data-i="${ph.id}">
+      <div class="thumb" onclick="editExisting(${ph.id},'${c.key}')"><img src="/api/photos/${ph.id}/file" loading="lazy"><span class="mi ok">check_circle</span></div>
+      <button class="more" onclick="photoMenu(this,${ph.id},'${c.key}')"><span class="mi">more_vert</span></button>
+      <div class="cap"${c.ocr?' style="bottom:26px"':''}>${esc(c.label)}</div>
+      ${strip}</div>`;
   }).join('');
   const un=activePhotos().filter(p=>p.category==='uncategorized');
-  $('#uncat-wrap').classList.toggle('hidden',!un.length);
-  $('#uncat-slots').innerHTML=un.map(p=>`<div class="pcard"><div class="hd"><span class="mi">help</span><span>Belum terkategori</span></div>
-    <div class="snap"><img src="/api/photos/${p.id}/file">
-      <div class="actbar"><button data-tip="Pindah kategori" onclick="reassignMenu(this,${p.id})"><span class="mi">drive_file_move</span></button><button class="del" data-tip="Hapus" onclick="softRemove(${p.id})"><span class="mi">delete</span></button></div>
-    </div></div>`).join('');
+  const unPending=all.filter(p=>p.category==='uncategorized'&&pendingDel.has(p.id));
+  $('#uncat-wrap').classList.toggle('hidden',!un.length&&!unPending.length);
+  $('#uncat-slots').className='ptgrid';
+  $('#uncat-slots').innerHTML=unPending.map(p=>`<div class="ptile has"><div class="thumb"><img src="/api/photos/${p.id}/file" style="filter:brightness(.4)"></div>
+    <div class="undo"><svg viewBox="0 0 40 40"><circle class="t" cx="20" cy="20" r="18"/><circle class="p" cx="20" cy="20" r="18"/></svg><span class="mi cc">delete</span>
+    <button class="ub" onclick="undoDel(${p.id})"><span class="mi">undo</span>Urungkan</button></div></div>`).join('')
+    +un.map(p=>`<div class="ptile has" data-i="${p.id}">
+    <div class="thumb" onclick="editExisting(${p.id},'uncategorized')"><img src="/api/photos/${p.id}/file" loading="lazy"></div>
+    <button class="more" onclick="uncatMenu(this,${p.id})"><span class="mi">more_vert</span></button>
+    <div class="cap">Belum terkategori</div></div>`).join('');
   bindTips();
 }
+/* menu ⋯ untuk tile berkategori (pakai engine MDMenu) */
+window.photoMenu=(btn,id,cat)=>{const c=S.cats.find(x=>x.key===cat);const ph=(S.loc.photos||[]).find(p=>p.id===id);const sn=ph&&(ph.ocr_serial||'').trim();
+  const items=[{icon:'tune',label:'Edit / sesuaikan',fn:()=>editExisting(id,cat)}];
+  if(c&&c.ocr)items.push({icon:'barcode_scanner',label:'Baca SN',fn:()=>openSnReader(id,cat)});
+  if(c&&c.ocr&&sn)items.push({icon:'arrow_forward',label:'Isi SN ke Inventory',fn:()=>applySnToInventory(cat,sn)});
+  items.push({icon:'swap_horiz',label:'Ganti foto',fn:()=>replacePhoto(id,cat)},{icon:'delete',label:'Hapus',fn:()=>softRemove(id)});
+  openMenu(btn,items);};
+window.uncatMenu=(btn,id)=>openMenu(btn,[{icon:'drive_file_move',label:'Pindah kategori',fn:()=>reassignMenu(btn,id)},{icon:'delete',label:'Hapus',fn:()=>softRemove(id)}]);
+/* koreksi SN inline pada strip tile */
+window.tileEditSn=(strip,id,cat)=>{if(strip.querySelector('input'))return;const cur=strip.dataset.sn||'';
+  strip.innerHTML=`<span class="mi">tag</span><input value="${esc(cur)}"><span class="mi sgo" title="Simpan">check</span>`;
+  const inp=strip.querySelector('input');inp.focus();inp.select();
+  let done=false;const commit=async()=>{if(done)return;done=true;const nv=inp.value.trim();
+    try{await api('/api/photos/'+id,{method:'PATCH',body:JSON.stringify({ocr_serial:nv})});}catch(e){}
+    const ph=(S.loc.photos||[]).find(p=>p.id===id);if(ph)ph.ocr_serial=nv;renderPhotos();toast('SN diperbarui');};
+  strip.querySelector('.sgo').addEventListener('mousedown',e=>{e.preventDefault();inp.blur();});
+  inp.addEventListener('blur',commit);inp.addEventListener('keydown',e=>{if(e.key==='Enter')inp.blur();else if(e.key==='Escape'){done=true;renderPhotos();}});};
 function pickFiles(multi,cb){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=!!multi;inp.onchange=()=>cb(inp.files);inp.click();}
 window.pick=cat=>pickFiles(false,files=>{const f=files[0];if(!f)return;openEditor(f,blob=>uploadBlob(cat,blob,f.name));});
 /* Edit foto yang sudah ada: buka editor (juga sbg preview fit), simpan -> ganti */
