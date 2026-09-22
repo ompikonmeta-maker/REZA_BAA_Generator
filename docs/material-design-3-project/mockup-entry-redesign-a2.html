@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Entry BAA (Opsi A revisi)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#e8ebeb;--pane:#fcfefe;--ink:#141a19;--mut:#5a6462;--ov:#dbe0df;--fieldbg:#f2f5f5;--pri:#04726f;--pri2:#0a9c97;--sec:#cfe6e5;--onsec:#00413f;--disp:'Sora',system-ui;
+    --good:#1c7d46;--goodbg:#dcf0e2;--warn:#9a5b00;--warnbg:#fdeede}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1212;--pane:#191d1d;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2a3130;--fieldbg:#121616;--pri:#57d6d1;--pri2:#7ce7e2;--sec:#0e3b39;--onsec:#9ff0ec;--good:#7ddc9f;--goodbg:#123522;--warn:#ffb95c;--warnbg:#3a2a10}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI",Roboto,system-ui}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+  .wrap{max-width:1120px;margin:0 auto;padding:18px 18px 70px}
+  /* ===== header: pemilih lokasi (dropdown searchable) ===== */
+  .ehead{display:flex;align-items:center;gap:10px;margin-bottom:16px;flex-wrap:wrap}
+  .picker{position:relative;min-width:340px}
+  .pk-trig{display:flex;align-items:center;gap:11px;background:var(--pane);border:1.5px solid var(--ov);border-radius:15px;padding:10px 14px;cursor:pointer;transition:.2s}
+  .pk-trig:hover,.pk-trig.open{border-color:var(--pri);box-shadow:0 0 0 4px color-mix(in srgb,var(--pri) 12%,transparent)}
+  .pk-trig .mi.loc{color:var(--pri)}
+  .pk-trig .val{flex:1;min-width:0}
+  .pk-trig .val .lab{font-size:10.5px;color:var(--mut);font-weight:700}
+  .pk-trig .val .cur{font-weight:800;display:flex;align-items:center;gap:8px}.pk-trig .cur .code{font-family:ui-monospace,Consolas,monospace;color:var(--pri)}
+  .pk-trig .st{font-size:10px;font-weight:800;padding:2px 8px;border-radius:12px;background:var(--warnbg);color:var(--warn)}
+  .pk-trig .chev{color:var(--mut);transition:transform .25s}.pk-trig.open .chev{transform:rotate(180deg)}
+  .pk-panel{position:absolute;top:calc(100% + 8px);left:0;right:0;background:var(--pane);border:1px solid var(--ov);border-radius:16px;box-shadow:0 20px 50px rgba(0,0,0,.22);z-index:20;overflow:hidden;
+    transform-origin:top;opacity:0;transform:scaleY(.9);pointer-events:none;transition:.2s cubic-bezier(.2,.8,.2,1)}
+  .pk-panel.open{opacity:1;transform:none;pointer-events:auto}
+  .pk-search{display:flex;align-items:center;gap:8px;padding:11px 13px;border-bottom:1px solid var(--ov)}
+  .pk-search input{border:0;background:transparent;outline:none;color:var(--ink);font-size:14px;width:100%}
+  .pk-list{max-height:280px;overflow:auto;padding:6px}
+  .pk-item{display:flex;align-items:center;gap:10px;padding:10px 11px;border-radius:11px;cursor:pointer}
+  .pk-item:hover,.pk-item.sel{background:var(--sec)}
+  .pk-item .code{font-family:ui-monospace,Consolas,monospace;color:var(--pri);font-weight:700;font-size:12.5px}
+  .pk-item .nm{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pk-item .dot{width:8px;height:8px;border-radius:50%}.pk-item .dot.d{background:var(--warn)}.pk-item .dot.s{background:var(--good)}
+  .pk-foot{display:flex;justify-content:space-between;align-items:center;padding:10px 13px;border-top:1px solid var(--ov)}
+  .pk-foot .cnt{font-size:11.5px;color:var(--mut)}
+  .pk-new{border:0;background:var(--sec);color:var(--onsec);border-radius:20px;padding:8px 13px;font-weight:800;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
+  .htools{margin-left:auto;display:flex;gap:8px}
+  .iconbtn{width:44px;height:44px;border-radius:13px;border:1px solid var(--ov);background:var(--pane);cursor:pointer;display:grid;place-items:center;color:var(--pri)}
+  .iconbtn.dang{color:var(--warn)}
+  /* ===== layout ===== */
+  .grid{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+  @media(max-width:880px){.grid{grid-template-columns:1fr}}
+  .col{display:grid;gap:14px}
+  .card{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:16px 18px}
+  .ch{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+  .ch .ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--sec);color:var(--onsec);flex:0 0 auto}
+  .ch h3{font-family:var(--disp);font-size:15px;margin:0;flex:1}
+  .ch .addmini{border:0;background:var(--sec);color:var(--onsec);border-radius:20px;padding:7px 13px;font-weight:800;cursor:pointer;font-size:12.5px;display:inline-flex;gap:6px;align-items:center}
+  .f2{display:grid;grid-template-columns:1fr 1fr;gap:12px}@media(max-width:560px){.f2{grid-template-columns:1fr}}
+  .fld .box{display:flex;align-items:center;gap:9px;background:var(--fieldbg);border:1.5px solid transparent;border-radius:12px;padding:0 12px;height:50px;transition:.2s}
+  .fld .box:focus-within{border-color:var(--pri);background:var(--pane);box-shadow:0 0 0 4px color-mix(in srgb,var(--pri) 12%,transparent)}
+  .fld .box .mi{color:var(--mut);font-size:19px}.fld .box:focus-within .mi{color:var(--pri)}
+  .fld input{border:0;background:transparent;color:var(--ink);font-size:14.5px;outline:none;width:100%}
+  .inv{display:grid;gap:8px}
+  .invhead,.invrow{display:grid;grid-template-columns:1.4fr 1fr .6fr 1.2fr 32px;gap:8px;align-items:center}
+  .invhead{font-size:10.5px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.3px;padding:0 4px}
+  .invrow input{height:40px;border:1px solid var(--ov);border-radius:9px;background:var(--fieldbg);padding:0 9px;color:var(--ink);width:100%}
+  .invrow .del{color:var(--mut);cursor:pointer;text-align:center}
+  .addrow{border:1.5px dashed var(--ov);border-radius:11px;padding:9px;text-align:center;color:var(--pri);font-weight:800;cursor:pointer}
+  .pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(96px,1fr));gap:10px}
+  .ptile{aspect-ratio:4/3;border-radius:12px;border:1.5px dashed var(--ov);display:grid;place-items:center;color:var(--mut);font-size:11px;text-align:center;background:var(--fieldbg);position:relative;overflow:hidden}
+  .ptile.has{border-style:solid;border-color:transparent;color:#fff}
+  .ptile.has::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,#0e8b86,#0a3b39)}
+  .ptile .lb{position:relative;z-index:1;padding:4px}.ptile .ok{position:absolute;z-index:1;top:6px;right:6px;color:#fff}
+  .sum{position:sticky;top:14px;background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:16px}
+  .sum h3{font-family:var(--disp);font-size:15px;margin:0 0 12px;display:flex;align-items:center;gap:8px}
+  .ring{display:flex;align-items:center;gap:14px;margin-bottom:14px}.ring svg{width:74px;height:74px;flex:0 0 auto}
+  .ring .n{font-family:var(--disp);font-weight:800;font-size:20px}.ring .l{font-size:12px;color:var(--mut)}
+  .crow{display:flex;align-items:center;gap:8px;padding:8px 0;border-top:1px solid var(--ov);font-size:13px}
+  .crow .mi{font-size:18px}.crow .st{margin-left:auto;font-weight:800;font-size:12px}
+  .crow.ok .mi{color:var(--good)}.crow.no .mi{color:var(--warn)}
+  .savebtn{width:100%;margin-top:14px;border:0;border-radius:16px;padding:13px;font-weight:800;font-size:14px;color:#fff;cursor:pointer;
+    background:linear-gradient(135deg,var(--pri),var(--onsec));box-shadow:0 8px 22px color-mix(in srgb,var(--pri) 34%,transparent);display:flex;align-items:center;justify-content:center;gap:8px}
+  .exp{display:flex;gap:8px;margin-top:10px}
+  .exp button{flex:1;border:1px solid var(--ov);background:var(--pane);border-radius:12px;padding:9px;font-weight:700;color:var(--ink);cursor:pointer;font-size:12.5px}
+  .desc{max-width:1120px;margin:14px auto 0;padding:0 18px;color:var(--mut);font-size:12.5px}.desc b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="ehead">
+    <div class="picker" id="picker">
+      <div class="pk-trig" id="pkTrig">
+        <span class="mi loc">location_on</span>
+        <div class="val"><div class="lab">LOKASI</div>
+          <div class="cur"><span class="code" id="curCode">LOK-7AGXSR</span> · <span id="curNm">Kopdes Sukamaju</span> <span class="st">draft</span></div></div>
+        <span class="mi chev">expand_more</span>
+      </div>
+      <div class="pk-panel" id="pkPanel">
+        <div class="pk-search"><span class="mi" style="color:var(--mut)">search</span><input placeholder="Cari kode / nama lokasi…" oninput="filt(this.value)"></div>
+        <div class="pk-list" id="pkList"></div>
+        <div class="pk-foot"><span class="cnt" id="pkCnt"></span><button class="pk-new"><span class="mi">add</span> Buat lokasi baru</button></div>
+      </div>
+    </div>
+    <div class="htools">
+      <button class="iconbtn" title="Lokasi baru"><span class="mi">add</span></button>
+      <button class="iconbtn dang" title="Hapus entry"><span class="mi">delete</span></button>
+    </div>
+  </div>
+
+  <div class="grid">
+    <div class="col">
+      <div class="card">
+        <div class="ch"><span class="ic mi">location_on</span><h3>Data Lokasi</h3></div>
+        <div class="f2">
+          <div class="fld"><div class="box"><span class="mi">badge</span><input value="Kopdes Sukamaju" placeholder="Nama Lokasi"></div></div>
+          <div class="fld"><div class="box"><span class="mi">event</span><input value="26-Feb-2026" placeholder="Tanggal"></div></div>
+          <div class="fld"><div class="box"><span class="mi">engineering</span><input value="Budi" placeholder="Petugas"></div></div>
+          <div class="fld"><div class="box"><span class="mi">person_pin</span><input value="Pak Slamet" placeholder="PIC Lokasi"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="ic mi">inventory_2</span><h3>Inventory</h3><button class="addmini"><span class="mi">add</span> Baris</button></div>
+        <div class="inv">
+          <div class="invhead"><span>Nama Barang</span><span>Merk/Type</span><span>Jml</span><span>SN/Tagging</span><span></span></div>
+          <div class="invrow"><input value="Kit Starlink"><input value="Standard"><input value="1"><input value="KITX-88213"><span class="mi del">close</span></div>
+          <div class="invrow"><input value="Router"><input value="TP-Link"><input value="1"><input value="RTR-55012"><span class="mi del">close</span></div>
+          <div class="invrow"><input value="Access Point" style="border-color:var(--warn)"><input placeholder="—"><input value="1"><input placeholder="—"><span class="mi del">close</span></div>
+          <div class="addrow"><span class="mi">add</span> Tambah baris</div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><span class="ic mi">photo_camera</span><h3>Foto &amp; Capture</h3><button class="addmini"><span class="mi">upload</span> Unggah</button></div>
+        <div class="pg" id="pg"></div>
+      </div>
+    </div>
+
+    <aside>
+      <div class="sum">
+        <h3><span class="mi">assignment_turned_in</span> Ringkasan BAA</h3>
+        <div class="ring">
+          <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32" fill="none" stroke="var(--ov)" stroke-width="8"/>
+            <circle cx="40" cy="40" r="32" fill="none" stroke="var(--pri)" stroke-width="8" stroke-linecap="round" stroke-dasharray="201" stroke-dashoffset="70" transform="rotate(-90 40 40)"/>
+            <text x="40" y="45" text-anchor="middle" font-size="17" font-weight="800" fill="var(--ink)" font-family="Sora">65%</text></svg>
+          <div><div class="n">65% lengkap</div><div class="l">Status: draft</div></div>
+        </div>
+        <div class="crow ok"><span class="mi">check_circle</span> Informasi lokasi <span class="st">Lengkap</span></div>
+        <div class="crow no"><span class="mi">error</span> Inventory <span class="st">2/3</span></div>
+        <div class="crow no"><span class="mi">error</span> Foto &amp; Capture <span class="st">7/11</span></div>
+        <button class="savebtn"><span class="mi">save</span> Simpan BAA</button>
+        <div class="exp"><button>▦ Excel</button><button>▧ PDF</button></div>
+      </div>
+    </aside>
+  </div>
+  <p class="desc"><b>Opsi A revisi:</b> chip quick-nav &amp; badge progres per-seksi <b>dihapus</b> (progres cukup di panel Ringkasan). Label lokasi kiri-atas kini <b>dropdown pemilih lokasi</b> (klik untuk buka — ada pencarian + daftar + "Buat lokasi baru"), plus tombol Lokasi baru &amp; Hapus di kanan. Sisanya sama seperti Opsi A.</p>
+</div>
+<script>
+  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+  const cats=['Dashboard','Tampak Depan','Teknisi+PIC','Outdoor','Indoor','SN Kit','SN Router','SN AP','Ping','Speed','SIMKOPDES'];
+  const has=[1,1,1,1,1,0,1,0,1,1,0];
+  $('#pg').innerHTML=cats.map((c,i)=>`<div class="ptile ${has[i]?'has':''}">${has[i]?'<span class="mi ok">check_circle</span>':'<span class="mi">add_a_photo</span>'}<span class="lb">${c}</span></div>`).join('');
+  const LOCS=[['LOK-7AGXSR','Kopdes Sukamaju','d'],['LOK-1QW9ZP','Kopdes Maju Jaya','d'],['LOK-88KD2M','Kopdes Sinar Tani','s'],['LOK-3M2K7A','Kopdes Rukun','s'],['LOK-9ZX4LP','Kopdes Harapan','d']];
+  function renderList(q=''){q=q.toLowerCase();const rows=LOCS.filter(l=>(l[0]+' '+l[1]).toLowerCase().includes(q));
+    $('#pkList').innerHTML=rows.map(l=>`<div class="pk-item ${l[0]==='LOK-7AGXSR'?'sel':''}" onclick="pick('${l[0]}','${l[1]}')"><span class="dot ${l[2]}"></span><span class="code">${l[0]}</span><span class="nm">${l[1]}</span></div>`).join('')||'<div style="padding:14px;color:var(--mut)">Tidak ada lokasi cocok.</div>';
+    $('#pkCnt').textContent=rows.length+' lokasi';}
+  window.filt=renderList;
+  window.pick=(c,n)=>{$('#curCode').textContent=c;$('#curNm').textContent=n;togglePk(false);};
+  function togglePk(open){const t=$('#pkTrig'),p=$('#pkPanel');const o=open===undefined?!p.classList.contains('open'):open;
+    t.classList.toggle('open',o);p.classList.toggle('open',o);if(o)renderList('');}
+  $('#pkTrig').addEventListener('click',()=>togglePk());
+  document.addEventListener('click',e=>{if(!e.target.closest('#picker'))togglePk(false);});
+  renderList('');
+</script>
+</body>
+</html>
