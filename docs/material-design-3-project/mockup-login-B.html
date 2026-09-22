@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="id"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Login B — Split Editorial</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&family=Sora:wght@600;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{--pri:#04726f;--pri2:#08403d;--ink:#132020;--mut:#5a6a68;--ov:#dbe3e1;--disp:'Sora',system-ui;--body:'Inter',system-ui}
+  .danger{--pri:#c0392b;--pri2:#5f1a14}
+  *{box-sizing:border-box}
+  body{margin:0;height:100vh;font-family:var(--body);color:var(--ink);overflow:hidden;display:grid;grid-template-columns:1.05fr .95fr}
+  @media(max-width:800px){body{grid-template-columns:1fr}.left{display:none}}
+  .left{position:relative;overflow:hidden;color:#eafaf9;padding:48px;display:flex;flex-direction:column;justify-content:space-between;
+    background:linear-gradient(150deg,var(--pri),var(--pri2));transition:background .7s ease}
+  .left .kw{font-family:var(--disp);font-weight:800;font-size:clamp(34px,5vw,58px);line-height:1.03;letter-spacing:-1px;max-width:9ch}
+  .left .mode{display:inline-flex;align-items:center;gap:8px;font-weight:600;font-size:13px;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:8px 14px;border-radius:20px;width:max-content;transition:.5s}
+  .left .foot{font-size:12px;opacity:.7}
+  .grain{position:absolute;inset:0;opacity:.12;background:radial-gradient(circle at 30% 20%,#fff 0,transparent 40%),radial-gradient(circle at 80% 70%,#fff 0,transparent 35%);mix-blend-mode:overlay}
+  .right{display:grid;place-items:center;padding:30px;background:#fbfdfc}
+  .form{width:340px;max-width:100%;opacity:0;transform:translateY(14px);animation:in .6s cubic-bezier(.2,.8,.2,1) .1s forwards}
+  @keyframes in{to{opacity:1;transform:none}}
+  .form.shake{animation:shake .4s cubic-bezier(.36,.07,.19,.97)}
+  @keyframes shake{10%,90%{transform:translateX(-2px)}20%,80%{transform:translateX(4px)}30%,50%,70%{transform:translateX(-9px)}40%,60%{transform:translateX(9px)}}
+  .h{font-family:var(--disp);font-weight:800;font-size:24px;margin:0 0 4px}
+  .sub{color:var(--mut);font-size:13px;margin:0 0 22px;height:18px;transition:color .4s}.danger .sub{color:var(--pri)}
+  .fld{position:relative;margin-bottom:14px}
+  .fld input{width:100%;border:none;border-bottom:2px solid var(--ov);background:transparent;padding:14px 34px 8px 2px;font-size:15px;color:var(--ink);outline:none;transition:border-color .2s}
+  .fld input:focus{border-color:var(--pri)}
+  .fld label{position:absolute;left:2px;top:14px;color:var(--mut);pointer-events:none;transition:.16s;font-size:15px}
+  .fld input:focus+label,.fld input:not(:placeholder-shown)+label{top:-8px;font-size:11px;color:var(--pri);font-weight:600}
+  .eye{position:absolute;right:2px;top:12px;cursor:pointer;color:var(--mut)}
+  .btn{width:100%;margin-top:8px;border:none;background:var(--pri);color:#fff;padding:15px;border-radius:12px;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;transition:background .5s,transform .12s}
+  .btn:hover{transform:translateY(-1px)}
+  /* success: right slides out, left expands + greeting */
+  body.go{grid-template-columns:1fr 0fr;transition:grid-template-columns .7s cubic-bezier(.5,0,.1,1)}
+  body.go .right{opacity:0;transition:opacity .4s}
+  .greet{position:absolute;inset:0;display:grid;place-items:center;text-align:center;opacity:0;pointer-events:none;transition:opacity .6s}
+  .greet.on{opacity:1}
+  .greet h1{font-family:var(--disp);font-weight:800;font-size:44px;opacity:0;transform:translateY(14px) scale(.96);filter:blur(6px)}
+  .greet.on h1{animation:gin .8s cubic-bezier(.2,.8,.2,1) forwards}
+  @keyframes gin{to{opacity:1;transform:none;filter:blur(0)}}
+  .dash{position:fixed;inset:0;z-index:4;background:#eef1f1;display:grid;place-items:center;color:#3a4a48;opacity:0;pointer-events:none;transition:opacity .6s}
+  .dash.on{opacity:1}
+  .replay{position:fixed;z-index:9;right:16px;bottom:16px;background:rgba(0,0,0,.14);color:#123;border:1px solid rgba(0,0,0,.15);border-radius:20px;padding:8px 14px;cursor:pointer;font-size:12px}
+  .hint{position:fixed;z-index:9;left:16px;bottom:14px;color:#7a8a88;font-size:12px}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+</style></head>
+<body id="body">
+  <div class="left">
+    <div class="grain"></div>
+    <span class="mode" id="mode"><span class="mi">engineering</span> Mode Operator</span>
+    <div class="kw" id="kw">Berita&nbsp;Acara Aktivasi.</div>
+    <div class="foot">BAA Generator · Telkomsat</div>
+    <div class="greet" id="greet"><h1 id="greetTxt">Hi</h1></div>
+  </div>
+  <div class="right">
+    <form class="form" id="form" onsubmit="return false">
+      <h1 class="h">Selamat datang</h1>
+      <p class="sub" id="sub">Masuk untuk melanjutkan</p>
+      <div class="fld"><input id="u" placeholder=" " oninput="amb()"><label for="u">Username</label></div>
+      <div class="fld"><input id="p" type="password" placeholder=" "><label for="p">Password</label><span class="mi eye" onclick="tog()">visibility</span></div>
+      <button class="btn" id="btn" onclick="masuk()"><span class="mi">login</span> Masuk</button>
+    </form>
+  </div>
+  <div class="dash" id="dash"><div><div style="font-family:var(--disp);font-weight:800;font-size:22px">Dashboard</div><div style="text-align:center;color:#7a8a88">(halaman utama)</div></div></div>
+  <div class="hint">Ketik <b>admin</b> → merah · password <b>salah</b> → shake · lainnya → sukses</div>
+  <button class="replay" onclick="location.reload()">↻ Ulang</button>
+<script>
+  const $=s=>document.querySelector(s);
+  const isAdmin=()=>$('#u').value.trim().toLowerCase().includes('admin');
+  function amb(){const a=isAdmin();document.body.classList.toggle('danger',a);
+    $('#mode').innerHTML=a?'<span class="mi">shield_person</span> Mode Admin · zona terbatas':'<span class="mi">engineering</span> Mode Operator';
+    $('#kw').textContent=a?'Zona Admin.':'Berita Acara Aktivasi.';}
+  function tog(){const p=$('#p');const s=p.type==='password';p.type=s?'text':'password';event.target.textContent=s?'visibility_off':'visibility';}
+  function masuk(){const pass=$('#p').value;
+    if(pass==='salah'){const f=$('#form');f.classList.remove('shake');void f.offsetWidth;f.classList.add('shake');return;}
+    const nm=$('#u').value.trim()||(isAdmin()?'Admin':'Operator');
+    document.body.classList.add('go');
+    setTimeout(()=>{$('#greetTxt').textContent='Hi, '+nm+' 👋';$('#greetTxt').style.color=isAdmin()?'#ffd9d3':'#eafaf9';$('#greet').classList.add('on');},600);
+    setTimeout(()=>$('#greet').classList.remove('on'),2200);
+    setTimeout(()=>$('#dash').classList.add('on'),2600);
+  }
+</script></body></html>
