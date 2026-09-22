@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Bottleneck yang mudah dipahami</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#e9ecec;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;--track:#e2e7e6;
+    --pri:#04726f;--pri2:#0a9c97;--sec:#cfe6e5;--onsec:#00413f;--disp:'Sora',system-ui;
+    --hot:#b3452f;--hotbg:#fbe4de;--warn:#9a5b00;--warnbg:#fdeede;--info:#2a6fb0;--infobg:#e6f0fb;--good:#1c7d46}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--track:#26302f;--pri:#57d6d1;--pri2:#7ce7e2;--sec:#0e3b39;--onsec:#9ff0ec;--hot:#ff9d86;--hotbg:#3a1c14;--warn:#ffb95c;--warnbg:#3a2a10;--info:#9cc6f5;--infobg:#122238;--good:#7ddc9f}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI",Roboto,system-ui;display:grid;place-items:start center;min-height:100vh;padding:26px 16px 50px}
+  .wrap{width:520px;max-width:100%}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;line-height:1;vertical-align:-3px}
+  /* controls */
+  .ctrl{background:var(--pane);border:1px solid var(--ov);border-radius:16px;padding:14px 16px;margin-bottom:16px}
+  .ctrl .lb{font-size:12px;color:var(--mut);font-weight:700;display:flex;align-items:center;gap:6px;margin-bottom:8px}
+  .ctrl .row{display:flex;align-items:center;gap:12px}
+  .ctrl input[type=range]{flex:1;accent-color:var(--pri)}
+  .ctrl .val{font-family:var(--disp);font-weight:800;font-size:18px;min-width:96px;text-align:right}
+  /* card */
+  .card{background:var(--pane);border:1px solid var(--ov);border-radius:20px;padding:18px 18px 20px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+  .hd{display:flex;align-items:center;gap:9px;margin:0 0 2px}
+  .hd .mi{color:var(--pri);font-size:22px}
+  .hd h3{font-family:var(--disp);font-size:16px;font-weight:800;margin:0}
+  .sub{color:var(--mut);font-size:12.5px;margin:2px 0 14px}
+  /* small-sample note */
+  .note{display:flex;gap:9px;align-items:flex-start;background:var(--infobg);color:var(--info);border-radius:13px;padding:11px 13px;margin-bottom:14px;font-size:12.5px;line-height:1.45}
+  .note .mi{flex:0 0 auto;margin-top:1px}
+  /* hero (top blocker) */
+  .hero{position:relative;background:linear-gradient(135deg,var(--hotbg),color-mix(in srgb,var(--hotbg) 40%,var(--pane)));
+    border:1px solid color-mix(in srgb,var(--hot) 30%,transparent);border-radius:16px;padding:14px;margin-bottom:14px;display:flex;gap:14px;align-items:center}
+  .hero .rank{position:absolute;top:-9px;left:14px;background:var(--hot);color:#fff;font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:20px;letter-spacing:.3px}
+  .hero .ic{width:46px;height:46px;border-radius:13px;background:var(--hot);color:#fff;display:grid;place-items:center;font-size:24px;flex:0 0 auto}
+  .hero .txt{flex:1;min-width:0}
+  .hero .t1{font-weight:800;font-size:15px}
+  .hero .t2{font-size:13px;color:var(--ink)}.hero .t2 b{color:var(--hot);font-family:var(--disp)}
+  .hero .prog{height:9px;border-radius:6px;background:color-mix(in srgb,var(--hot) 18%,transparent);overflow:hidden;margin-top:8px}
+  .hero .prog>i{display:block;height:100%;background:var(--hot);border-radius:6px;transition:width .5s cubic-bezier(.2,.8,.2,1)}
+  /* rows */
+  .row2{display:flex;align-items:center;gap:12px;padding:11px 2px}
+  .row2+.row2{border-top:1px solid var(--ov)}
+  .row2 .ic{width:34px;height:34px;border-radius:10px;display:grid;place-items:center;flex:0 0 auto;font-size:19px}
+  .ic.foto{background:color-mix(in srgb,var(--pri) 15%,transparent);color:var(--pri)}
+  .ic.inv{background:color-mix(in srgb,var(--warn) 18%,transparent);color:var(--warn)}
+  .ic.data{background:color-mix(in srgb,var(--info) 16%,transparent);color:var(--info)}
+  .row2 .mid{flex:1;min-width:0}
+  .row2 .l1{font-weight:700;font-size:13.5px;display:flex;align-items:center;gap:8px}
+  .chip{font-size:10px;font-weight:800;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px}
+  .chip.foto{background:color-mix(in srgb,var(--pri) 15%,transparent);color:var(--pri)}
+  .chip.inv{background:var(--warnbg);color:var(--warn)}
+  .chip.data{background:var(--infobg);color:var(--info)}
+  .row2 .l2{font-size:12px;color:var(--mut);margin-top:3px}.row2 .l2 b{color:var(--ink)}
+  .row2 .bar{height:7px;border-radius:5px;background:var(--track);overflow:hidden;margin-top:6px}
+  .row2 .bar>i{display:block;height:100%;background:var(--pri);border-radius:5px;transition:width .5s}
+  .row2 .cnt{flex:0 0 auto;text-align:right;min-width:56px}
+  .row2 .cnt .big{font-family:var(--disp);font-weight:800;font-size:17px;line-height:1}
+  .row2 .cnt .of{font-size:10.5px;color:var(--mut)}
+  .empty{text-align:center;color:var(--mut);padding:22px 10px}
+  .empty .mi{font-size:40px;color:var(--good);display:block;margin-bottom:8px}
+  .foot{margin-top:14px;font-size:11.5px;color:var(--mut);display:flex;align-items:center;gap:7px;background:var(--track);border-radius:10px;padding:9px 11px}
+  .cap{color:var(--mut);font-size:12px;margin-top:16px;line-height:1.5}
+  .cap b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="ctrl">
+    <div class="lb"><span class="mi">tune</span> Coba geser: berapa lokasi yang sedang berjalan?</div>
+    <div class="row"><span class="mi" style="color:var(--mut)">location_on</span>
+      <input type="range" id="nd" min="1" max="40" value="1">
+      <span class="val" id="ndVal">1 lokasi</span></div>
+  </div>
+
+  <div class="card" id="card"></div>
+
+  <p class="cap"><b>Bedanya dengan versi lama:</b> angka utama sekarang <b>jumlah lokasi</b> ("8 dari 12 lokasi belum ada foto SN"), bukan persen yang membingungkan. Penghambat terbesar diangkat jadi <b>kartu #1</b>. Kalau lokasi masih sedikit, muncul catatan biru supaya kamu tidak salah baca. Setiap baris diberi label jenis: <span class="chip foto">Foto</span> <span class="chip inv">Inventory</span> <span class="chip data">Data</span>.</p>
+</div>
+
+<script>
+  const $=s=>document.querySelector(s);
+  // daftar item + "rasio" seberapa sering kurang (0..1), meniru data nyata
+  const ITEMS=[
+    {label:'Foto SN Router',type:'foto',icon:'tag',ratio:1.00},
+    {label:'Foto Tampak Depan / Plang Lokasi',type:'foto',icon:'image',ratio:0.82},
+    {label:'Inventory belum lengkap',type:'inv',icon:'inventory_2',ratio:0.68},
+    {label:'Perangkat Indoor Terpasang',type:'foto',icon:'router',ratio:0.55},
+    {label:'Field lokasi kosong (alamat, PIC, dll)',type:'data',icon:'edit_note',ratio:0.40},
+    {label:'Foto Teknisi + PIC',type:'foto',icon:'groups',ratio:0.28},
+  ];
+  const TYPEWORD={foto:'Foto',inv:'Inventory',data:'Data'};
+  function render(nd){
+    // hitung jumlah lokasi yang kurang tiap item (dibulatkan, min 1 bila ratio>0)
+    const rows=ITEMS.map(it=>({...it,n:Math.max(it.ratio>0?1:0,Math.round(it.ratio*nd))}))
+      .filter(r=>r.n>0).sort((a,b)=>b.n-a.n);
+    const top=rows[0], rest=rows.slice(1,6);
+    let html=`<div class="hd"><span class="mi">construction</span><h3>Kenapa lokasi belum selesai?</h3></div>
+      <p class="sub">Hal yang paling sering bikin lokasi <b>belum bisa ditutup</b> — diurut dari yang paling banyak menahan.</p>`;
+    if(nd<5){
+      html+=`<div class="note"><span class="mi">info</span><div>Baru <b>${nd} lokasi</b> yang berjalan, jadi angka di bawah belum menggambarkan pola tim. Makin banyak lokasi, kartu ini makin akurat menunjukkan penghambat utama.</div></div>`;
+    }
+    if(!top){
+      html+=`<div class="empty"><span class="mi">celebration</span>Tidak ada yang tertahan — semua lokasi berjalan lengkap.</div>`;
+      $('#card').innerHTML=html;return;
+    }
+    // hero
+    html+=`<div class="hero"><span class="rank">PENGHAMBAT TERBESAR</span>
+      <span class="ic"><span class="mi">${top.icon}</span></span>
+      <div class="txt"><div class="t1">${top.label}</div>
+        <div class="t2"><b>${top.n} dari ${nd}</b> lokasi belum ada ini</div>
+        <div class="prog"><i style="width:${Math.round(top.n/nd*100)}%"></i></div></div></div>`;
+    // rest
+    html+=rest.map(r=>`<div class="row2">
+      <span class="ic ${r.type}"><span class="mi">${r.icon}</span></span>
+      <div class="mid"><div class="l1">${r.label} <span class="chip ${r.type}">${TYPEWORD[r.type]}</span></div>
+        <div class="l2"><b>${r.n} dari ${nd}</b> lokasi belum lengkap</div>
+        <div class="bar"><i style="width:${Math.round(r.n/nd*100)}%"></i></div></div>
+      <div class="cnt"><div class="big">${r.n}</div><div class="of">lokasi</div></div></div>`).join('');
+    html+=`<div class="foot"><span class="mi">lightbulb</span>Fokuskan tim ke <b style="color:var(--ink);margin:0 3px">${top.label}</b> dulu untuk dampak tercepat.</div>`;
+    $('#card').innerHTML=html;
+  }
+  $('#nd').addEventListener('input',e=>{const v=+e.target.value;$('#ndVal').textContent=v+' lokasi';render(v);});
+  render(1);
+</script>
+</body>
+</html>
