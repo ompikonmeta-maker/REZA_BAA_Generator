@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Redesign dialog Tambah User</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#e7ebeb;--pane:#fcfefe;--ink:#141a19;--mut:#5a6462;--ov:#d6dbda;--fieldbg:#f2f5f5;--pri:#04726f;--pri2:#0a9c97;--sec:#cfe6e5;--onsec:#00413f;--disp:'Sora',system-ui;
+    --role:#04726f;--rolec:#cfe6e5}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1212;--pane:#191d1d;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--fieldbg:#121616;--pri:#57d6d1;--pri2:#7ce7e2;--sec:#0e3b39;--onsec:#9ff0ec}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI",Roboto,system-ui;min-height:100vh}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+  .top{display:flex;gap:10px;justify-content:center;padding:20px;flex-wrap:wrap}
+  .opt{border:1px solid var(--ov);background:var(--pane);border-radius:20px;padding:9px 15px;font-weight:800;color:var(--mut);cursor:pointer}
+  .opt.on{background:var(--sec);color:var(--onsec);border-color:transparent}
+  .scrim{position:fixed;inset:0;display:grid;place-items:center;padding:20px;background:color-mix(in srgb,#06100f 38%,transparent);backdrop-filter:blur(5px);z-index:5}
+  /* ===== DIALOG ===== */
+  .dlg{width:440px;max-width:100%;background:var(--pane);border-radius:26px;box-shadow:0 30px 80px rgba(0,0,0,.34);overflow:hidden;
+    animation:pop .42s cubic-bezier(.34,1.25,.5,1)}
+  @keyframes pop{from{opacity:0;transform:scale(.92) translateY(14px)}to{opacity:1;transform:none}}
+  /* header dengan aksen dinamis (Opsi A) */
+  .head{position:relative;padding:22px 24px 18px;overflow:hidden}
+  .head.tint{background:linear-gradient(135deg,color-mix(in srgb,var(--role) 16%,var(--pane)),var(--pane))}
+  .head .glow{position:absolute;right:-40px;top:-50px;width:150px;height:150px;border-radius:50%;
+    background:radial-gradient(circle,color-mix(in srgb,var(--role) 40%,transparent),transparent 70%);transition:background .5s}
+  .head .row{display:flex;align-items:center;gap:14px;position:relative}
+  .ava{width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:#fff;font-size:26px;flex:0 0 auto;
+    background:linear-gradient(135deg,var(--role),color-mix(in srgb,var(--role) 60%,#000 12%));box-shadow:0 8px 20px color-mix(in srgb,var(--role) 40%,transparent);transition:.45s}
+  .head h3{font-family:var(--disp);font-size:19px;margin:0}
+  .head .sub{color:var(--mut);font-size:12.5px;margin-top:2px}
+  .body{padding:6px 24px 22px}
+  /* field modern: icon leading + label mengambang + underline glow */
+  .fld{position:relative;margin-top:14px;opacity:0;transform:translateY(8px);animation:rise .5s cubic-bezier(.2,.8,.2,1) forwards}
+  .fld:nth-child(1){animation-delay:.05s}.fld:nth-child(2){animation-delay:.11s}.fld:nth-child(3){animation-delay:.17s}.fld:nth-child(4){animation-delay:.23s}
+  @keyframes rise{to{opacity:1;transform:none}}
+  .fld .box{display:flex;align-items:center;gap:10px;background:var(--fieldbg);border:1.5px solid transparent;border-radius:14px;padding:0 12px;height:54px;transition:border-color .2s,box-shadow .2s,background .2s}
+  .fld .box:focus-within{border-color:var(--pri);background:var(--pane);box-shadow:0 0 0 4px color-mix(in srgb,var(--pri) 14%,transparent)}
+  .fld .box .mi.lead{color:var(--mut);font-size:20px;transition:color .2s}
+  .fld .box:focus-within .mi.lead{color:var(--pri)}
+  .fld .in{flex:1;min-width:0;border:0;background:transparent;color:var(--ink);font-size:15px;outline:none;padding-top:12px}
+  .fld .lab{position:absolute;left:42px;top:17px;color:var(--mut);pointer-events:none;transition:.16s;font-size:15px}
+  .fld .box:focus-within+.lab,.fld.filled .lab{top:7px;left:44px;font-size:11px;color:var(--pri);font-weight:700}
+  .eye{color:var(--mut);cursor:pointer}
+  /* role selector pills */
+  .rolelab{font-size:11.5px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.4px;margin:16px 0 7px}
+  .roles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .rc{border:1.5px solid var(--ov);border-radius:14px;padding:11px 8px;text-align:center;cursor:pointer;transition:.2s;background:var(--pane)}
+  .rc .mi{font-size:22px;color:var(--mut);transition:.2s}
+  .rc .t{font-weight:800;font-size:12.5px;margin-top:3px}
+  .rc .d{font-size:10.5px;color:var(--mut)}
+  .rc.on{border-color:var(--role);background:color-mix(in srgb,var(--role) 12%,var(--pane));box-shadow:0 4px 14px color-mix(in srgb,var(--role) 22%,transparent);transform:translateY(-1px)}
+  .rc.on .mi,.rc.on .t{color:var(--role)}
+  /* password strength */
+  .pw-str{height:5px;border-radius:4px;background:var(--ov);margin-top:8px;overflow:hidden}
+  .pw-str>i{display:block;height:100%;width:0;border-radius:4px;transition:width .3s,background .3s}
+  .pw-hint{font-size:11px;color:var(--mut);margin-top:5px}
+  /* toggle aktif */
+  .active-row{display:flex;align-items:center;gap:12px;margin-top:16px;background:var(--fieldbg);border-radius:14px;padding:12px 14px}
+  .active-row .tx{flex:1}.active-row .tx b{font-weight:800}.active-row .tx small{display:block;color:var(--mut);font-size:11.5px}
+  .sw{width:48px;height:28px;border-radius:20px;background:var(--ov);position:relative;cursor:pointer;flex:0 0 auto;transition:background .25s}
+  .sw.on{background:var(--pri)}.sw::after{content:'';position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;transition:.25s cubic-bezier(.34,1.4,.5,1)}.sw.on::after{left:23px}
+  /* actions */
+  .acts{display:flex;gap:10px;justify-content:flex-end;align-items:center;padding:0 24px 22px}
+  .btn{border:0;border-radius:22px;padding:12px 22px;font-weight:800;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;transition:transform .12s,box-shadow .2s,filter .2s}
+  .btn:active{transform:scale(.95)}
+  .btn.ghost{background:transparent;color:var(--mut)}
+  .btn.save{color:#fff;background:linear-gradient(135deg,var(--role),color-mix(in srgb,var(--role) 62%,#000 10%));box-shadow:0 8px 22px color-mix(in srgb,var(--role) 40%,transparent)}
+  .btn.save:hover{filter:brightness(1.05)}
+  /* ===== Opsi B: header polos, garis aksen atas, field kartu ===== */
+  .b .head.tint{background:var(--pane)}
+  .b .head{border-top:4px solid var(--role);transition:border-color .4s}
+  .b .ava{border-radius:50%}
+  .b .fld .box{background:var(--pane);border:1.5px solid var(--ov)}
+  .b .roles{grid-template-columns:1fr}
+  .b .rc{display:flex;align-items:center;gap:10px;text-align:left}.b .rc .t{margin:0}
+</style>
+</head>
+<body>
+<div class="top">
+  <button class="opt on" data-v="a">Opsi A · Aksen dinamis</button>
+  <button class="opt" data-v="b">Opsi B · Kartu bersih</button>
+</div>
+<div class="scrim">
+  <div class="dlg a" id="dlg">
+    <div class="head tint"><div class="glow"></div>
+      <div class="row"><span class="ava" id="ava"><span class="mi" id="avaIc">badge</span></span>
+        <div><h3>Tambah user</h3><div class="sub" id="sub">Buat akun untuk operator lapangan</div></div></div>
+    </div>
+    <div class="body">
+      <div class="fld filled"><div class="box"><span class="mi lead">person</span><input class="in" value="" placeholder=" " oninput="fill(this)"></div><span class="lab">Username</span></div>
+      <div class="fld"><div class="box"><span class="mi lead">badge</span><input class="in" placeholder=" " oninput="fill(this)"></div><span class="lab">Nama lengkap</span></div>
+
+      <div class="rolelab">Role / hak akses</div>
+      <div class="roles" id="roles">
+        <div class="rc on" data-r="operator" data-c="#04726f" data-i="engineering"><span class="mi">engineering</span><div class="t">Operator</div><div class="d">isi &amp; kelola</div></div>
+        <div class="rc" data-r="viewer" data-c="#2a6fb0" data-i="visibility"><span class="mi">visibility</span><div class="t">Viewer</div><div class="d">hanya lihat</div></div>
+        <div class="rc" data-r="admin" data-c="#b3452f" data-i="shield_person"><span class="mi">shield_person</span><div class="t">Admin</div><div class="d">akses penuh</div></div>
+      </div>
+
+      <div class="fld" style="margin-top:16px"><div class="box"><span class="mi lead">lock</span><input class="in" type="password" id="pw" placeholder=" " oninput="fill(this);strength()"><span class="mi eye" onclick="tog()">visibility</span></div><span class="lab">Password</span></div>
+      <div class="pw-str"><i id="pwbar"></i></div>
+      <div class="pw-hint" id="pwhint">Kosongkan bila tak mengubah (saat edit).</div>
+
+      <div class="active-row"><span class="mi" style="color:var(--pri)">toggle_on</span>
+        <div class="tx"><b>Akun aktif</b><small>User bisa login bila aktif</small></div>
+        <div class="sw on" id="sw" onclick="this.classList.toggle('on')"></div></div>
+    </div>
+    <div class="acts"><button class="btn ghost">Batal</button><button class="btn save"><span class="mi">check</span> Simpan</button></div>
+  </div>
+</div>
+<script>
+  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+  function fill(el){el.closest('.fld').classList.toggle('filled',!!el.value)}
+  function tog(){const p=$('#pw');const s=p.type==='password';p.type=s?'text':'password';event.target.textContent=s?'visibility_off':'visibility'}
+  const SUB={operator:'Buat akun untuk operator lapangan',viewer:'Buat akun read-only (mode bos)',admin:'Buat akun dengan akses penuh'};
+  $$('.rc').forEach(rc=>rc.addEventListener('click',()=>{
+    $$('.rc').forEach(x=>x.classList.remove('on'));rc.classList.add('on');
+    const c=rc.dataset.c;document.documentElement.style.setProperty('--role',c);
+    $('#avaIc').textContent=rc.dataset.i;$('#sub').textContent=SUB[rc.dataset.r];
+  }));
+  function strength(){const v=$('#pw').value;let s=0;if(v.length>=4)s++;if(v.length>=8)s++;if(/[0-9]/.test(v)&&/[a-zA-Z]/.test(v))s++;if(/[^a-zA-Z0-9]/.test(v))s++;
+    const bar=$('#pwbar');const pct=[0,30,60,80,100][s];const col=['','#b3452f','#9a5b00','#1c7d46','#04726f'][s];
+    bar.style.width=pct+'%';bar.style.background=col;
+    $('#pwhint').textContent=v?['','Lemah','Cukup','Kuat','Sangat kuat'][s]:'Kosongkan bila tak mengubah (saat edit).';}
+  $$('.opt').forEach(o=>o.addEventListener('click',()=>{$$('.opt').forEach(x=>x.classList.remove('on'));o.classList.add('on');
+    $('#dlg').className='dlg '+o.dataset.v;$('#dlg').style.animation='none';void $('#dlg').offsetWidth;$('#dlg').style.animation='';}));
+</script>
+</body>
+</html>
