@@ -56,6 +56,45 @@ def _fit(img_w: int, img_h: int, max_w: int, max_h: int) -> tuple[int, int]:
     return int(img_w * r), int(img_h * r)
 
 
+# Karakter yang dilarang Excel untuk nama worksheet
+_BAD_SHEET = set(r':\/?*[]')
+
+
+def _safe_sheet_title(code: str, name: str, used: set) -> str:
+    """Nama worksheet = 'Kode Nama Lokasi', dibersihkan & dipotong <=31 char,
+    dan dijamin unik dalam workbook."""
+    raw = f"{code} {name}".strip() if name else (code or "Lokasi")
+    clean = "".join(" " if ch in _BAD_SHEET else ch for ch in raw)
+    clean = " ".join(clean.split()).strip("'").strip() or (code or "Lokasi")
+    base = clean[:31]
+    title = base
+    n = 2
+    while title in used or title == "":
+        suffix = f" ({n})"
+        title = base[:31 - len(suffix)].rstrip() + suffix
+        n += 1
+    used.add(title)
+    return title
+
+
+def _letterbox(path: str, box_w: int, box_h: int):
+    """Kembalikan BytesIO PNG berukuran persis box_w x box_h: foto di-fit
+    (tanpa distorsi & tanpa dipotong) lalu ditaruh di tengah kanvas putih.
+    Membuat semua foto hasil export punya ukuran yang seragam."""
+    import io
+    from PIL import Image as PILImage
+    im = PILImage.open(path)
+    if im.mode not in ("RGB",):
+        im = im.convert("RGB")
+    im.thumbnail((box_w, box_h), PILImage.LANCZOS)   # hanya mengecilkan, jaga rasio
+    canvas = PILImage.new("RGB", (box_w, box_h), (255, 255, 255))
+    canvas.paste(im, ((box_w - im.width) // 2, (box_h - im.height) // 2))
+    bio = io.BytesIO()
+    canvas.save(bio, format="PNG")
+    bio.seek(0)
+    return bio
+
+
 # Perkiraan standar Excel bila lebar kolom / tinggi baris tidak diset eksplisit
 _DEF_COL_CHARS = 8.43
 _DEF_ROW_PT = 15.0
@@ -138,31 +177,38 @@ def build_workbook(template_path: str, template_config: dict, locations: list[di
     warnings = []
     log_row = cfg["log"]["start_row"]
     log_cols = cfg["log"]["columns"]
+    used_titles: set = set()
+    _img_keep: list = []          # tahan buffer gambar sampai workbook disimpan
 
     for i, loc in enumerate(locations, start=1):
         data = loc.get("data", {})
         inv = loc.get("inventory", [])
         photos = loc.get("photos", [])
-        first = inv[0] if inv else {}
+        nama = data.get("nama_lokasi") or loc.get("name") or loc.get("code")
 
-        # --- baris ringkasan di LOG ---
-        def _set(col_key, value):
+        # --- baris LOG: satu baris per item inventory (list semua) ---
+        def _set(row, col_key, value):
             col = log_cols.get(col_key)
             if col:
-                log_ws[f"{col}{log_row}"] = value
-        _set("no", i)
-        _set("lokasi", data.get("nama_lokasi") or loc.get("name") or loc.get("code"))
-        _set("nama_barang", first.get("nama_barang", ""))
-        _set("merk_type", first.get("merk_type", ""))
-        _set("jumlah", first.get("jumlah", ""))
-        _set("sn_tagging", "; ".join(x.get("sn_tagging", "") for x in inv if x.get("sn_tagging")))
-        _set("keterangan", first.get("keterangan", ""))
-        _set("foto_lengkap", "Ya" if len(photos) >= 1 else "Belum")
-        log_row += 1
+                log_ws[f"{col}{row}"] = value
+
+        rows_inv = inv if inv else [{}]          # lokasi tanpa inventory tetap 1 baris
+        for j, item in enumerate(rows_inv):
+            if j == 0:                           # kolom identitas hanya di baris pertama
+                _set(log_row, "no", i)
+                _set(log_row, "lokasi", nama)
+                _set(log_row, "foto_lengkap", "Ya" if len(photos) >= 1 else "Belum")
+            _set(log_row, "nama_barang", item.get("nama_barang", ""))
+            _set(log_row, "merk_type", item.get("merk_type", ""))
+            _set(log_row, "jumlah", item.get("jumlah", ""))
+            _set(log_row, "sn_tagging", item.get("sn_tagging", ""))
+            _set(log_row, "keterangan", item.get("keterangan", ""))
+            log_row += 1
 
         # --- sheet detail per lokasi (duplikasi template) ---
         ws = wb.copy_worksheet(detail_tpl)
-        ws.title = loc.get("code", f"Lokasi_{i:04d}")[:31]
+        nama_only = data.get("nama_lokasi") or loc.get("name") or ""   # tanpa fallback kode
+        ws.title = _safe_sheet_title(loc.get("code", f"Lokasi_{i:04d}"), nama_only, used_titles)
 
         for cell, field in cfg["detail"].get("location_cells", {}).items():
             try:
@@ -195,11 +241,17 @@ def build_workbook(template_path: str, template_config: dict, locations: list[di
             path = p.get("path")
             if not path or not Path(path).exists():
                 continue
+            box_w = cfg["detail"]["photo_max_w"]
+            box_h = cfg["detail"]["photo_max_h"]
             try:
-                xi = XLImage(path)
-                xi.width, xi.height = _fit(xi.width, xi.height,
-                                           cfg["detail"]["photo_max_w"],
-                                           cfg["detail"]["photo_max_h"])
+                # Letterbox -> semua foto berukuran seragam (box_w x box_h)
+                try:
+                    src = _letterbox(path, box_w, box_h)
+                    xi = XLImage(src)
+                    _img_keep.append(src)          # jaga buffer sampai wb.save()
+                except Exception:
+                    xi = XLImage(path)             # fallback: foto asli
+                xi.width, xi.height = box_w, box_h
                 _place_photo(ws, xi, anchor)
             except Exception as e:
                 warnings.append(f"{ws.title}: gagal sisip foto '{cat}': {e}")
