@@ -461,6 +461,50 @@
   .bnx-empty .mi{font-size:38px;color:var(--md-sys-color-primary);display:block;margin-bottom:8px}
   .bnx-foot{margin-top:12px;font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant);display:flex;align-items:center;gap:7px;background:var(--md-sys-color-surface-container-highest);border-radius:10px;padding:9px 11px}
   .bnx-foot b{color:var(--md-sys-color-on-surface)}
+  /* ===== Template Mapping (redesign) ===== */
+  .tpl-hero{display:flex;align-items:center;gap:12px;margin-bottom:6px}
+  .tpl-hero h2{font:var(--md-sys-typescale-headline-small);font-weight:800;margin:0}
+  .tpl-savestate{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font:var(--md-sys-typescale-label-medium);font-weight:700;color:var(--good)}
+  .tpl-savestate .dot{width:8px;height:8px;border-radius:50%;background:var(--good)}
+  .tpl-savestate.dirty{color:var(--warn)}.tpl-savestate.dirty .dot{background:var(--warn)}
+  .tpltabs{display:flex;gap:4px;border-bottom:1px solid var(--md-sys-color-outline-variant);margin:8px 0 16px}
+  .tpltab{border:0;background:transparent;padding:11px 16px;color:var(--md-sys-color-on-surface-variant);font-weight:700;border-bottom:3px solid transparent;cursor:pointer;font:var(--md-sys-typescale-label-large)}
+  .tpltab.on{color:var(--md-sys-color-primary);border-color:var(--md-sys-color-primary)}
+  .tpltab:disabled{opacity:.5;cursor:not-allowed}
+  .map-ws{display:grid;grid-template-columns:210px minmax(0,1fr);gap:16px;padding-bottom:80px}
+  @media(max-width:860px){.map-ws{grid-template-columns:1fr}.map-steps{position:static!important;flex-direction:row!important;overflow:auto}}
+  .map-steps{padding:10px;position:sticky;top:14px;align-self:start;display:flex;flex-direction:column;gap:4px}
+  .mstep{display:flex;gap:10px;padding:10px;border-radius:12px;cursor:pointer;color:var(--md-sys-color-on-surface-variant);min-width:150px}
+  .mstep:hover,.mstep.on{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container)}
+  .mstep .num{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--md-sys-color-outline-variant);display:grid;place-items:center;font:var(--md-sys-typescale-label-medium);font-weight:800;flex:0 0 auto}
+  .mstep.done .num{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);border-color:var(--md-sys-color-primary)}
+  .mstep small{display:block;font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant);margin-top:1px}
+  .map-col{display:grid;gap:14px;min-width:0}
+  .map-sec{scroll-margin-top:14px}
+  .maptab-inp{width:96px;height:34px;border:1px solid var(--md-sys-color-outline-variant);border-radius:8px;padding:0 9px;background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);font-family:ui-monospace,Consolas,monospace;text-transform:uppercase}
+  .maptab-inp:focus{outline:2px solid color-mix(in srgb,var(--md-sys-color-primary) 30%,transparent);border-color:var(--md-sys-color-primary)}
+  .maptab-inp.conflict{border-color:var(--md-sys-color-error);background:var(--badbg)}
+  .map-range{background:color-mix(in srgb,var(--md-sys-color-primary) 7%,var(--md-sys-color-surface));border:1px dashed color-mix(in srgb,var(--md-sys-color-primary) 40%,transparent);border-radius:10px;padding:10px 12px;color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-small)}
+  .map-preview{border:1px dashed var(--md-sys-color-outline-variant);border-radius:12px;display:grid;place-items:center;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small);
+    background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--md-sys-color-primary) 4%,var(--md-sys-color-surface)),color-mix(in srgb,var(--md-sys-color-primary) 4%,var(--md-sys-color-surface)) 10px,var(--md-sys-color-surface) 10px,var(--md-sys-color-surface) 20px);max-height:200px}
+  .map-photorow{display:grid;grid-template-columns:1fr 120px auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--md-sys-color-outline-variant)}
+  .map-photorow .lbl{font:var(--md-sys-typescale-body-medium);font-weight:600;min-width:0}
+  .map-photorow .st{font:var(--md-sys-typescale-label-small);font-weight:700;white-space:nowrap}
+  .map-photorow .st.ok{color:var(--good)}.map-photorow .st.no{color:var(--md-sys-color-on-surface-variant)}
+  .map-actionbar{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--md-sys-color-surface) 96%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--md-sys-color-outline-variant);padding:12px 22px;display:flex;align-items:center;gap:14px;z-index:30}
+  .map-actionbar .ring{width:40px;height:40px;flex:0 0 auto}
+  .map-actionbar .sum b{font-weight:800}.map-actionbar .sum small{display:block;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small)}
+  /* drawer referensi sel */
+  .mapscrim{position:fixed;inset:0;background:color-mix(in srgb,var(--md-sys-color-scrim) 35%,transparent);opacity:0;pointer-events:none;transition:.25s;z-index:2500}
+  .mapscrim.on{opacity:1;pointer-events:auto}
+  .mapdrawer{position:fixed;top:0;right:0;height:100%;width:min(440px,94vw);background:var(--md-sys-color-surface);box-shadow:var(--md-sys-elevation-level5);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,0,0,1);z-index:2501;display:flex;flex-direction:column}
+  .mapdrawer.on{transform:none}
+  .mapdrawer .dh{padding:16px 18px;border-bottom:1px solid var(--md-sys-color-outline-variant);display:flex;align-items:center;gap:10px}
+  .mapdrawer .dh h3{margin:0;font:var(--md-sys-typescale-title-medium);font-weight:800}.mapdrawer .dh .x{margin-left:auto;cursor:pointer;color:var(--md-sys-color-on-surface-variant)}
+  .mapdrawer .db{padding:14px 18px;overflow:auto}
+  .mapref{border:1px solid var(--md-sys-color-outline-variant);border-radius:11px;padding:10px 12px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:8px}
+  .mapref:hover{border-color:var(--md-sys-color-primary);background:var(--md-sys-color-secondary-container)}
+  .mapref b{font-family:ui-monospace,Consolas,monospace}
   /* ===== Dashboard Viewer (Mode Bos) ===== */
   .vw-hero{background:linear-gradient(140deg,var(--md-sys-color-primary),var(--md-sys-color-tertiary));color:var(--md-sys-color-on-primary);border:none;position:relative;overflow:hidden}
   .vw-hero .th{color:color-mix(in srgb,var(--md-sys-color-on-primary) 88%,transparent)}.vw-hero .th .mi{color:inherit}
@@ -860,49 +904,104 @@
       </section>
 
       <section id="v-templates" class="hidden">
-        <div class="card">
-          <div class="sec"><span class="mi acc">upload_file</span><h3>Upload template baru</h3></div>
-          <div class="fgrid">
-            <div><label class="muted">File template (.xlsx)</label>
-              <div class="rowflex" style="margin-top:6px">
-                <input id="tpl-file" type="file" accept=".xlsx,.xlsm" class="hidden">
-                <md-button id="tpl-file-btn" variant="tonal" icon="attach_file">Pilih file</md-button>
-                <span id="tpl-file-name" class="muted">Belum ada file</span>
+        <div class="tpl-hero"><div><h2>Template BAA</h2><p class="muted" style="margin:2px 0 0">Kelola template Excel &amp; mapping data dalam satu tempat.</p></div>
+          <span class="tpl-savestate" id="tpl-save"><span class="dot"></span><span id="tpl-saveTxt">Semua perubahan tersimpan</span></span></div>
+        <div class="tpltabs">
+          <button class="tpltab on" data-tt="list">Daftar Template</button>
+          <button class="tpltab" data-tt="map" id="tpltab-map" disabled>Mapping Template</button>
+        </div>
+
+        <!-- TAB: DAFTAR -->
+        <div id="tpl-tab-list">
+          <div class="card">
+            <div class="sec"><span class="mi acc">upload_file</span><h3>Upload template baru</h3></div>
+            <div class="fgrid">
+              <div><label class="muted">File template (.xlsx)</label>
+                <div class="rowflex" style="margin-top:6px">
+                  <input id="tpl-file" type="file" accept=".xlsx,.xlsm" class="hidden">
+                  <md-button id="tpl-file-btn" variant="tonal" icon="attach_file">Pilih file</md-button>
+                  <span id="tpl-file-name" class="muted">Belum ada file</span>
+                </div>
+              </div>
+              <md-text-field id="tpl-name" variant="outlined" label="Nama template"></md-text-field>
+            </div>
+            <div style="margin-top:12px"><md-button id="tpl-inspect" variant="filled">Periksa worksheet</md-button></div>
+            <div id="tpl-register" class="hidden" style="margin-top:14px">
+              <div class="fgrid">
+                <div class="md-select" id="tpl-log"></div>
+                <div class="md-select" id="tpl-detail"></div>
+              </div>
+              <div style="margin-top:12px"><md-button id="tpl-do-register" variant="filled">Daftarkan &amp; aktifkan</md-button></div>
+            </div>
+          </div>
+          <div class="card"><div class="sec"><span class="mi acc">description</span><h3>Template terdaftar</h3></div>
+            <table><thead><tr><th>Nama</th><th>LOG</th><th>Detail</th><th>Aktif</th><th></th></tr></thead><tbody id="tpl-table"></tbody></table></div>
+        </div>
+
+        <!-- TAB: MAPPING -->
+        <div id="tpl-tab-map" class="hidden">
+          <div class="map-ws">
+            <nav class="map-steps card">
+              <div class="mstep on" data-go="ms1"><span class="num">1</span><div>Worksheet<small id="mstep1">—</small></div></div>
+              <div class="mstep" data-go="ms2"><span class="num">2</span><div>Kolom LOG<small id="mstep2">—</small></div></div>
+              <div class="mstep" data-go="ms3"><span class="num">3</span><div>Inventory<small id="mstep3">—</small></div></div>
+              <div class="mstep" data-go="ms4"><span class="num">4</span><div>Anchor Foto<small id="mstep4">—</small></div></div>
+              <div class="mstep" data-go="ms5"><span class="num">5</span><div>Ukuran Foto<small id="mstep5">—</small></div></div>
+            </nav>
+            <div class="map-col">
+              <div class="card map-sec" id="ms1">
+                <div class="sec"><span class="mi acc">tab</span><h3>1. Worksheet — <span id="map-tpl-name" class="mono"></span></h3></div>
+                <div class="fgrid">
+                  <div class="md-select" id="map-log"></div>
+                  <div class="md-select" id="map-detail"></div>
+                </div>
+                <div style="max-width:260px;margin-top:12px"><label class="muted">Baris mulai LOG</label><input id="map-logstart" class="maptab-inp" style="width:100%" type="number" value="3"></div>
+              </div>
+              <div class="card map-sec" id="ms2">
+                <div class="sec"><span class="mi acc">view_column</span><h3>2. Kolom LOG</h3><span class="grow"></span><md-button id="map-fillah" variant="tonal" size="xs" icon="bolt">Isi A–H</md-button></div>
+                <div class="fgrid" id="map-logcols"></div>
+              </div>
+              <div class="card map-sec" id="ms3">
+                <div class="sec"><span class="mi acc">inventory_2</span><h3>3. Tabel Inventory</h3></div>
+                <div class="fgrid" id="map-invcols"></div>
+                <div class="fgrid" style="margin-top:10px"><div><label class="muted">Baris mulai</label><input id="map-invstart" class="maptab-inp" style="width:100%" type="number" value="32"></div><div><label class="muted">Maks baris</label><input id="map-invmax" class="maptab-inp" style="width:100%" type="number" value="5"></div></div>
+                <div class="map-range" style="margin-top:12px">Rentang baris inventory: <b id="map-range" class="mono">32–36</b></div>
+              </div>
+              <div class="card map-sec" id="ms4">
+                <div class="sec"><span class="mi acc">image</span><h3>4. Anchor Foto per Kategori</h3><span class="grow"></span>
+                  <input id="map-photosearch" class="maptab-inp" style="width:150px;text-transform:none" placeholder="Cari kategori…">
+                  <md-button id="map-automatch" variant="tonal" size="xs" icon="auto_fix_high">Cocokkan otomatis</md-button></div>
+                <div id="map-conflict" class="hidden" style="color:var(--md-sys-color-error);font-weight:700;font:var(--md-sys-typescale-label-medium);margin-bottom:8px"><span class="mi" style="vertical-align:-3px">error</span> <span id="map-conflict-txt"></span></div>
+                <div id="map-photos"></div>
+                <p class="muted" style="font:var(--md-sys-typescale-label-small);margin-top:8px">Klik kolom sel → drawer referensi muncul untuk memilih.</p>
+              </div>
+              <div class="card map-sec" id="ms5">
+                <div class="sec"><span class="mi acc">aspect_ratio</span><h3>5. Ukuran Foto</h3></div>
+                <div class="fgrid">
+                  <div>
+                    <div class="fgrid"><div><label class="muted">Lebar max px</label><input id="map-pw" class="maptab-inp" style="width:100%" type="number" value="320"></div><div><label class="muted">Tinggi max px</label><input id="map-ph" class="maptab-inp" style="width:100%" type="number" value="240"></div></div>
+                    <p class="muted" style="margin-top:8px;font:var(--md-sys-typescale-label-small)">Rasio: <b id="map-ratio">4:3</b> · semua foto diseragamkan &amp; di-center di cell merge.</p>
+                  </div>
+                  <div class="map-preview" id="map-preview" style="height:150px">Preview · 320 × 240 px</div>
+                </div>
               </div>
             </div>
-            <md-text-field id="tpl-name" variant="outlined" label="Nama template"></md-text-field>
           </div>
-          <div style="margin-top:12px"><md-button id="tpl-inspect" variant="filled">Periksa worksheet</md-button></div>
-          <div id="tpl-register" class="hidden" style="margin-top:14px">
-            <div class="fgrid">
-              <div class="md-select" id="tpl-log"></div>
-              <div class="md-select" id="tpl-detail"></div>
-            </div>
-            <div style="margin-top:12px"><md-button id="tpl-do-register" variant="filled">Daftarkan &amp; aktifkan</md-button></div>
+          <div class="map-actionbar">
+            <svg class="ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="var(--md-sys-color-surface-container-highest)" stroke-width="5"/><circle id="map-ring" cx="20" cy="20" r="16" fill="none" stroke="var(--md-sys-color-primary)" stroke-width="5" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg>
+            <div class="sum"><b id="map-abarPct">0% anchor terisi</b><small id="map-abarSub">—</small></div>
+            <span class="grow"></span>
+            <md-button id="map-close" variant="text">Tutup</md-button>
+            <md-button id="map-save" variant="filled" icon="save">Simpan mapping</md-button>
           </div>
-        </div>
-        <div class="card"><div class="sec"><span class="mi acc">description</span><h3>Template terdaftar</h3></div>
-          <table><thead><tr><th>Nama</th><th>LOG</th><th>Detail</th><th>Aktif</th><th></th></tr></thead><tbody id="tpl-table"></tbody></table></div>
-        <div id="mapping" class="card hidden">
-          <div class="sec"><span class="mi acc">grid_on</span><h3>Mapping — <span id="map-tpl-name" class="mono"></span></h3></div>
-          <div class="fgrid">
-            <div class="md-select" id="map-log"></div>
-            <div class="md-select" id="map-detail"></div>
-          </div>
-          <div class="sec" style="margin-top:16px"><h3>Kolom LOG</h3></div><div class="fgrid" id="map-logcols"></div>
-          <div style="max-width:260px;margin-top:10px"><label class="muted">Baris mulai LOG</label><input id="map-logstart" type="number" value="3" style="width:100%"></div>
-          <div class="sec" style="margin-top:16px"><h3>Tabel Inventory</h3></div><div class="fgrid" id="map-invcols"></div>
-          <div class="fgrid" style="margin-top:10px"><div><label class="muted">Baris mulai</label><input id="map-invstart" type="number" value="32" style="width:100%"></div><div><label class="muted">Maks baris</label><input id="map-invmax" type="number" value="5" style="width:100%"></div></div>
-          <div class="sec" style="margin-top:16px"><h3>Anchor Foto per Kategori</h3></div>
-          <div style="display:grid;grid-template-columns:1fr 300px;gap:16px">
-            <div id="map-photos"></div>
-            <div><label class="muted">Referensi sel (klik salin)</label>
-              <div id="map-ref" style="max-height:280px;overflow:auto;border:1px solid var(--md-sys-color-outline-variant);border-radius:10px;padding:10px;font-size:12px"></div>
-              <div class="fgrid" style="margin-top:8px"><div><label class="muted">Lebar max px</label><input id="map-pw" type="number" value="320" style="width:100%"></div><div><label class="muted">Tinggi max px</label><input id="map-ph" type="number" value="240" style="width:100%"></div></div></div>
-          </div>
-          <div class="rowflex" style="margin-top:16px"><md-button id="map-save" variant="filled">Simpan mapping</md-button><md-button id="map-close" variant="text">Tutup</md-button></div>
         </div>
       </section>
+
+      <div class="mapscrim" id="mapScrim"></div>
+      <aside class="mapdrawer" id="mapDrawer">
+        <div class="dh"><span class="mi" style="color:var(--md-sys-color-primary)">grid_on</span><div><h3>Referensi Sel</h3><small class="muted" id="mapDrawerSub">Klik untuk mengisi sel aktif</small></div><span class="mi x" id="mapDrawerClose">close</span></div>
+        <div class="db"><input id="mapRefSearch" class="maptab-inp" style="width:100%;text-transform:none;margin-bottom:12px;height:40px" placeholder="Cari sel / teks…"><div id="map-ref"></div></div>
+      </aside>
 
       <section id="v-users" class="hidden">
         <div class="card">
@@ -1160,8 +1259,8 @@ async function boot(){paint();
   pickerSel=new LocationPicker($('#picker'),{onChange:v=>{if(v)openLoc(+v);},onNew:()=>$('#entry-new').click()});
   tplLogSel=new MDSelect($('#tpl-log'),{label:'Worksheet LOG'});
   tplDetailSel=new MDSelect($('#tpl-detail'),{label:'Worksheet Detail'});
-  mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG'});
-  mapDetailSel=new MDSelect($('#map-detail'),{label:'Sheet Detail',onChange:v=>renderRef(v)});
+  mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG',onChange:()=>{if(typeof mapDirty==='function'){mapDirty();mapSteps();}}});
+  mapDetailSel=new MDSelect($('#map-detail'),{label:'Sheet Detail',onChange:()=>{if(typeof mapDirty==='function'){mapDirty();mapSteps();renderRef('');}}});
   roleSel=new MDSelect($('#u-role'),{label:'Role'});roleSel.setOptions([{value:'operator',label:'operator'},{value:'viewer',label:'viewer (bos — hanya lihat)'},{value:'admin',label:'admin'}]).setValue('operator');
   locCreatorSel=new MDSelect($('#loc-creator'),{label:'Pembuat',placeholder:'Semua pembuat',onChange:()=>loadLocations()});locCreatorSel.setOptions([{value:'',label:'Semua pembuat'}]).setValue('');
   try{S.user=await api('/api/auth/me');showApp();}catch{$('#login').classList.remove('hidden');bindTips();}}
@@ -1873,26 +1972,109 @@ window.renameTpl=(id,cur)=>{askInput('Ganti nama template',cur,async nv=>{const 
   try{await api('/api/templates/'+id,{method:'PATCH',body:JSON.stringify({name})});toast('Nama diperbarui');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});};
 window.deleteTpl=(id,name)=>{confirmDo('Hapus template','Hapus template “'+name+'” beserta filenya? Tindakan ini tidak bisa dibatalkan.',async()=>{
   try{await api('/api/templates/'+id,{method:'DELETE'});toast('Template dihapus');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});};
+/* --- Tab Daftar/Mapping --- */
+function mapSwitchTab(t){const map=t==='map';
+  $('#tpl-tab-list').classList.toggle('hidden',map);$('#tpl-tab-map').classList.toggle('hidden',!map);
+  $$('.tpltab').forEach(x=>x.classList.toggle('on',x.dataset.tt===t));}
+$$('.tpltab').forEach(x=>x.addEventListener('click',()=>{if(x.disabled)return;mapSwitchTab(x.dataset.tt);}));
+$$('.mstep').forEach(s=>s.addEventListener('click',()=>{$$('.mstep').forEach(z=>z.classList.remove('on'));s.classList.add('on');
+  const el=$('#'+s.dataset.go);if(el)el.scrollIntoView({behavior:'smooth',block:'start'});}));
+function mapDirty(){$('#tpl-save').classList.add('dirty');$('#tpl-saveTxt').textContent='Perubahan belum disimpan';}
+function mapSaved(){$('#tpl-save').classList.remove('dirty');$('#tpl-saveTxt').textContent='Semua perubahan tersimpan';}
+
+let MAP_PH=[];      // [{key,label,ocr,cell}]
+let mapActive=null; // input foto yang sedang fokus
+
 window.openMapping=async id=>{S.mapTplId=id;const tpl=await api('/api/templates/'+id);const sh=await api('/api/templates/'+id+'/sheets');S.sheets=sh.sheets;
-  const map=deepMerge(structuredClone(DEFAULT_MAP),tpl.config||{});$('#map-tpl-name').textContent=tpl.name;
+  const map=deepMerge(structuredClone(DEFAULT_MAP),tpl.config||{});$('#map-tpl-name').textContent=tpl.name;$('#map-abarSub').textContent=tpl.name;
   const opts=S.sheets.map(s=>({value:s.name,label:s.name}));mapLogSel.setOptions(opts).setValue(tpl.sheet_log);mapDetailSel.setOptions(opts).setValue(tpl.sheet_detail);
-  $('#map-logcols').innerHTML=LOG_FIELDS.map(f=>`<div><label class="muted">${f}</label><input data-log="${f}" value="${esc(map.log.columns[f]||'')}" style="width:100%"></div>`).join('');
-  $('#map-logstart').value=map.log.start_row||3;
-  $('#map-invcols').innerHTML=INV_FIELDS.map(f=>`<div><label class="muted">${f}</label><input data-inv="${f}" value="${esc(map.detail.inventory.cols[f]||'')}" style="width:100%"></div>`).join('');
+  $('#map-logcols').innerHTML=LOG_FIELDS.map(f=>`<div><label class="muted">${f}</label><input data-log="${f}" class="maptab-inp" value="${esc(map.log.columns[f]||'')}" style="width:100%" oninput="mapDirty();mapSteps()"></div>`).join('');
+  $('#map-logstart').value=map.log.start_row||3;$('#map-logstart').oninput=mapDirty;
+  $('#map-invcols').innerHTML=INV_FIELDS.map(f=>`<div><label class="muted">${f}</label><input data-inv="${f}" class="maptab-inp" value="${esc(map.detail.inventory.cols[f]||'')}" style="width:100%" oninput="mapDirty();mapSteps();mapRange()"></div>`).join('');
   $('#map-invstart').value=map.detail.inventory.start_row||32;$('#map-invmax').value=map.detail.inventory.max_rows||5;
-  $('#map-photos').innerHTML=S.cats.map(c=>`<div style="display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;margin-bottom:8px"><label class="muted">${esc(c.label)}${c.ocr?' (OCR)':''}</label><input data-photo="${c.key}" placeholder="mis. B27" value="${esc((map.detail.photos||{})[c.key]||'')}" style="width:100%"></div>`).join('');
+  $('#map-invstart').oninput=()=>{mapDirty();mapRange();};$('#map-invmax').oninput=()=>{mapDirty();mapRange();};
+  MAP_PH=S.cats.map(c=>({key:c.key,label:c.label,ocr:c.ocr,cell:((map.detail.photos||{})[c.key]||'')}));
+  $('#map-photosearch').value='';renderMapPhotos();
   $('#map-pw').value=map.detail.photo_max_w||320;$('#map-ph').value=map.detail.photo_max_h||240;
-  renderRef(mapDetailSel.getValue());$('#mapping').classList.remove('hidden');$('#mapping').scrollIntoView({behavior:'smooth'});};
-function renderRef(n){const s=S.sheets.find(x=>x.name===n);const b=$('#map-ref');if(!s)return b.innerHTML='<span class="muted">—</span>';
-  b.innerHTML=s.cells.map(c=>`<code style="cursor:pointer;display:inline-block;margin:2px;padding:1px 5px;border-radius:6px;background:var(--md-sys-color-surface-container)" onclick="navigator.clipboard&&navigator.clipboard.writeText('${c.ref}');toast('Disalin: ${c.ref}')">${c.ref}: ${esc(c.text.slice(0,18))}</code>`).join('')||'<span class="muted">kosong</span>';}
+  $('#map-pw').oninput=()=>{mapDirty();mapRatio();};$('#map-ph').oninput=()=>{mapDirty();mapRatio();};
+  renderRef('');mapRange();mapRatio();mapSteps();
+  $('#tpltab-map').disabled=false;mapSwitchTab('map');mapSaved();
+  window.scrollTo({top:0,behavior:'smooth'});};
+
+function renderMapPhotos(){const q=($('#map-photosearch').value||'').toLowerCase();
+  $('#map-photos').innerHTML=MAP_PH.map((p,i)=>p.label.toLowerCase().includes(q)?
+    `<div class="map-photorow"><span class="lbl">${esc(p.label)}${p.ocr?' · <span style="color:var(--md-sys-color-primary);font-weight:700">OCR</span>':''}</span>
+      <input class="maptab-inp map-photo-inp" data-i="${i}" placeholder="mis. B27" value="${esc(p.cell)}">
+      <span class="st ${p.cell?'ok':'no'}">${p.cell?'✓ Terisi':'Belum'}</span></div>`:'').join('')
+    ||'<p class="muted">Tidak ada kategori cocok.</p>';
+  $$('.map-photo-inp').forEach(el=>{
+    el.addEventListener('focus',()=>{mapActive=el;mapOpenDrawer();});
+    el.addEventListener('input',()=>{MAP_PH[+el.dataset.i].cell=el.value.trim().toUpperCase();mapDirty();mapConflict();mapSteps();});
+  });
+  mapConflict();mapSteps();}
+$('#map-photosearch').addEventListener('input',renderMapPhotos);
+
+function mapConflict(){const seen={},dup=new Set();MAP_PH.forEach(p=>{const v=(p.cell||'').toUpperCase();if(v){if(seen[v])dup.add(v);seen[v]=1;}});
+  $$('.map-photo-inp').forEach(el=>el.classList.toggle('conflict',dup.has(el.value.trim().toUpperCase())&&!!el.value.trim()));
+  const n=$('#map-conflict');if(dup.size){n.classList.remove('hidden');$('#map-conflict-txt').textContent='Sel dipakai lebih dari sekali: '+[...dup].join(', ');}else n.classList.add('hidden');}
+
+function mapSteps(){
+  const logN=$$('[data-log]').filter(i=>i.value.trim()).length;
+  const invN=$$('[data-inv]').filter(i=>i.value.trim()).length;
+  const phN=MAP_PH.filter(p=>p.cell).length,phT=MAP_PH.length;
+  $('#mstep1').textContent=(mapLogSel.getValue()||'?')+' · '+(mapDetailSel.getValue()||'?');
+  $('#mstep2').textContent=logN+'/'+LOG_FIELDS.length+' kolom';
+  $('#mstep3').textContent=invN+'/'+INV_FIELDS.length+' field';
+  $('#mstep4').textContent=phN+'/'+phT+' anchor';
+  $('#mstep5').textContent=($('#map-pw').value||320)+'×'+($('#map-ph').value||240);
+  $('.mstep[data-go=ms2]').classList.toggle('done',logN===LOG_FIELDS.length);
+  $('.mstep[data-go=ms3]').classList.toggle('done',invN===INV_FIELDS.length);
+  $('.mstep[data-go=ms1]').classList.add('done');$('.mstep[data-go=ms5]').classList.add('done');
+  $('.mstep[data-go=ms4]').classList.toggle('done',phN===phT&&phT>0);
+  const pct=phT?Math.round(phN/phT*100):0;$('#map-abarPct').textContent=pct+'% anchor terisi';
+  const C=2*Math.PI*16;$('#map-ring').style.strokeDasharray=C;$('#map-ring').style.strokeDashoffset=C*(1-(phT?phN/phT:0));}
+
+function mapRange(){const s=parseInt($('#map-invstart').value)||0,m=parseInt($('#map-invmax').value)||0;
+  const cols=$$('[data-inv]').map(i=>i.value.trim().toUpperCase()).filter(Boolean);
+  const c1=cols.length?cols.reduce((a,b)=>a<b?a:b):'B',c2=cols.length?cols.reduce((a,b)=>a>b?a:b):'H';
+  $('#map-range').textContent=`${c1}${s}:${c2}${Math.max(s,s+m-1)}`;}
+function mapRatio(){const w=parseInt($('#map-pw').value)||1,h=parseInt($('#map-ph').value)||1;
+  const g=(a,b)=>b?g(b,a%b):a,d=g(w,h);$('#map-ratio').textContent=`${w/d}:${h/d}`;
+  const p=$('#map-preview');p.textContent=`Preview · ${w} × ${h} px`;p.style.aspectRatio=`${w}/${h}`;p.style.height='auto';mapSteps();}
+
+/* drawer referensi sel */
+function mapOpenDrawer(){$('#mapScrim').classList.add('on');$('#mapDrawer').classList.add('on');
+  $('#mapDrawerSub').textContent=mapActive?('Isi untuk: '+MAP_PH[+mapActive.dataset.i].label):'Klik untuk mengisi sel aktif';
+  $('#mapRefSearch').value='';renderRef('');}
+function mapCloseDrawer(){$('#mapScrim').classList.remove('on');$('#mapDrawer').classList.remove('on');}
+$('#mapDrawerClose').addEventListener('click',mapCloseDrawer);$('#mapScrim').addEventListener('click',mapCloseDrawer);
+$('#mapRefSearch').addEventListener('input',e=>renderRef(e.target.value));
+function renderRef(q){q=(q||'').toLowerCase();const s=S.sheets.find(x=>x.name===mapDetailSel.getValue())||S.sheets[0];const b=$('#map-ref');
+  if(!s){b.innerHTML='<span class="muted">—</span>';return;}
+  const rows=s.cells.filter(c=>(c.ref+' '+c.text).toLowerCase().includes(q));
+  b.innerHTML=rows.map(c=>`<div class="mapref" onclick="mapPickRef('${c.ref}')"><span><b>${c.ref}</b><br><small class="muted">${esc(c.text.slice(0,32))}</small></span><span class="mi" style="color:var(--md-sys-color-primary)">add</span></div>`).join('')||'<span class="muted">Tidak ada sel cocok.</span>';}
+window.mapPickRef=ref=>{if(!mapActive){toast('Pilih kolom sel dulu');return;}
+  const i=+mapActive.dataset.i;MAP_PH[i].cell=ref;mapActive.value=ref;mapDirty();renderMapPhotos();mapCloseDrawer();toast(ref+' → '+MAP_PH[i].label);};
+
+/* cocokkan otomatis: skor kemiripan kata label vs teks sel */
+function mapAutoMatch(){const s=S.sheets.find(x=>x.name===mapDetailSel.getValue())||S.sheets[0];if(!s)return;
+  const stop=new Set(['foto','capture','dan','the','di','ke','yang','per','tes']);
+  const toks=t=>t.toLowerCase().replace(/[^a-z0-9 ]/g,' ').split(/\s+/).filter(w=>w.length>2&&!stop.has(w));
+  let n=0;MAP_PH.forEach(p=>{if(p.cell)return;const pt=toks(p.label);let best=null,bs=0;
+    s.cells.forEach(c=>{const ct=new Set(toks(c.text));let sc=pt.reduce((a,w)=>a+(ct.has(w)?1:0),0);if(sc>bs){bs=sc;best=c;}});
+    if(best&&bs>=1&&!MAP_PH.some(x=>x.cell===best.ref)){p.cell=best.ref;n++;}});
+  renderMapPhotos();if(n){mapDirty();toast(n+' kategori dicocokkan otomatis');}else toast('Tidak ada yang cocok — isi manual');}
+$('#map-automatch').addEventListener('click',mapAutoMatch);
+$('#map-fillah').addEventListener('click',()=>{$$('#map-logcols [data-log]').forEach((e,i)=>e.value=String.fromCharCode(65+i));mapDirty();mapSteps();toast('Kolom A–H diisi');});
+
 $('#map-save')&&$('#map-save').addEventListener('click',async()=>{const cfg=structuredClone(DEFAULT_MAP);
   $$('[data-log]').forEach(i=>cfg.log.columns[i.dataset.log]=i.value.trim().toUpperCase());cfg.log.start_row=parseInt($('#map-logstart').value)||3;
   $$('[data-inv]').forEach(i=>cfg.detail.inventory.cols[i.dataset.inv]=i.value.trim().toUpperCase());
   cfg.detail.inventory.start_row=parseInt($('#map-invstart').value)||32;cfg.detail.inventory.max_rows=parseInt($('#map-invmax').value)||5;
-  cfg.detail.photos={};$$('[data-photo]').forEach(i=>{if(i.value.trim())cfg.detail.photos[i.dataset.photo]=i.value.trim().toUpperCase();});
+  cfg.detail.photos={};MAP_PH.forEach(p=>{if(p.cell)cfg.detail.photos[p.key]=p.cell.trim().toUpperCase();});
   cfg.detail.photo_max_w=parseInt($('#map-pw').value)||320;cfg.detail.photo_max_h=parseInt($('#map-ph').value)||240;
-  try{await api('/api/templates/'+S.mapTplId+'/mapping',{method:'PUT',body:JSON.stringify({config:cfg,sheet_log:mapLogSel.getValue(),sheet_detail:mapDetailSel.getValue()})});toast('Mapping tersimpan');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
-$('#map-close')&&$('#map-close').addEventListener('click',()=>$('#mapping').classList.add('hidden'));
+  try{await api('/api/templates/'+S.mapTplId+'/mapping',{method:'PUT',body:JSON.stringify({config:cfg,sheet_log:mapLogSel.getValue(),sheet_detail:mapDetailSel.getValue()})});mapSaved();toast('Mapping tersimpan');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
+$('#map-close')&&$('#map-close').addEventListener('click',()=>mapSwitchTab('list'));
 
 let USR_ROWS=[],editUserId=null;
 async function loadUsers(){try{USR_ROWS=await api('/api/users');
