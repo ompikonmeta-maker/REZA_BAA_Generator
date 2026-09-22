@@ -1,0 +1,138 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Date picker modern</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#e8ebeb;--pane:#fcfefe;--ink:#141a19;--mut:#5a6462;--ov:#dbe0df;--fieldbg:#f2f5f5;--pri:#04726f;--pri2:#0a9c97;--sec:#cfe6e5;--onsec:#00413f;--disp:'Sora',system-ui;--good:#1c7d46;--todaybg:#fdeede;--today:#9a5b00}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1212;--pane:#191d1d;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2a3130;--fieldbg:#121616;--pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec;--todaybg:#3a2a10;--today:#ffb95c}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI",Roboto,system-ui}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+  .wrap{max-width:640px;margin:0 auto;padding:30px 18px 80px}
+  h1{font-family:var(--disp);font-size:21px;margin:0 0 4px}.sub{color:var(--mut);margin:0 0 20px}
+  .picker-opt{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:24px}
+  .opt{border:1px solid var(--ov);background:var(--pane);border-radius:20px;padding:9px 15px;font-weight:800;color:var(--mut);cursor:pointer}
+  .opt.on{background:var(--sec);color:var(--onsec);border-color:transparent}
+  /* field */
+  .field{position:relative;max-width:320px}
+  .field label{display:block;font-size:11.5px;font-weight:800;color:var(--mut);margin-bottom:6px;text-transform:uppercase;letter-spacing:.3px}
+  .fbox{display:flex;align-items:center;gap:10px;background:var(--fieldbg);border:1.5px solid transparent;border-radius:14px;padding:0 14px;height:54px;cursor:pointer;transition:.2s}
+  .fbox:hover,.fbox.open{border-color:var(--pri);background:var(--pane);box-shadow:0 0 0 4px color-mix(in srgb,var(--pri) 12%,transparent)}
+  .fbox .mi.cal{color:var(--pri)}
+  .fbox .val{flex:1;font-size:15.5px;font-weight:600}
+  .fbox .val.empty{color:var(--mut);font-weight:400}
+  .fbox .chev{color:var(--mut);transition:transform .25s}.fbox.open .chev{transform:rotate(180deg)}
+  /* popover */
+  .pop{position:absolute;top:calc(100% + 8px);left:0;width:308px;max-width:calc(100vw - 36px);background:var(--pane);border:1px solid var(--ov);border-radius:20px;box-shadow:0 24px 60px rgba(0,0,0,.24);z-index:20;padding:14px;
+    transform-origin:top left;opacity:0;transform:scale(.94) translateY(-6px);pointer-events:none;transition:.2s cubic-bezier(.2,.85,.3,1)}
+  .pop.open{opacity:1;transform:none;pointer-events:auto}
+  .cal-head{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+  .cal-title{flex:1;font-family:var(--disp);font-weight:800;font-size:15px;cursor:pointer;padding:6px 10px;border-radius:10px}
+  .cal-title:hover{background:var(--sec)}
+  .navb{width:34px;height:34px;border-radius:10px;border:0;background:transparent;color:var(--mut);cursor:pointer;display:grid;place-items:center}
+  .navb:hover{background:var(--sec);color:var(--ink)}
+  .quick{display:flex;gap:6px;margin-bottom:10px;flex-wrap:wrap}
+  .qc{border:1px solid var(--ov);background:var(--pane);border-radius:16px;padding:5px 11px;font-size:12px;font-weight:700;color:var(--pri);cursor:pointer}
+  .qc:hover{background:var(--sec)}
+  .dow{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;margin-bottom:4px}
+  .dow span{text-align:center;font-size:10.5px;font-weight:800;color:var(--mut)}
+  .days{display:grid;grid-template-columns:repeat(7,1fr);gap:2px}
+  .day{aspect-ratio:1;display:grid;place-items:center;border-radius:11px;cursor:pointer;font-size:13.5px;font-weight:600;transition:background .12s,transform .12s;position:relative}
+  .day:hover{background:var(--sec)}
+  .day.off{color:color-mix(in srgb,var(--mut) 60%,transparent);font-weight:400}
+  .day.today{color:var(--today);font-weight:800}
+  .day.today::after{content:'';position:absolute;bottom:5px;width:4px;height:4px;border-radius:50%;background:var(--today)}
+  .day.sel{background:var(--pri);color:#fff;font-weight:800;box-shadow:0 4px 12px color-mix(in srgb,var(--pri) 40%,transparent);animation:pick .28s cubic-bezier(.34,1.4,.5,1)}
+  @keyframes pick{from{transform:scale(.6)}}
+  .day.sel.today::after{background:#fff}
+  /* month/year quick grid */
+  .mygrid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
+  .my{padding:11px 4px;text-align:center;border-radius:11px;cursor:pointer;font-weight:700;font-size:13px}
+  .my:hover{background:var(--sec)}.my.on{background:var(--pri);color:#fff}
+  .yhead{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
+  .foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px}
+  .foot .clr{border:0;background:transparent;color:var(--mut);font-weight:700;cursor:pointer;font-size:12.5px}
+  .foot .ok{border:0;background:var(--pri);color:#fff;border-radius:16px;padding:8px 16px;font-weight:800;cursor:pointer}
+  .desc{color:var(--mut);font-size:12.5px;margin-top:26px;line-height:1.7}.desc b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Date picker — pilih tanggal</h1>
+  <p class="sub">Klik field untuk buka kalender. Pilih gaya di bawah.</p>
+  <div class="picker-opt">
+    <button class="opt on" data-o="a">A · Kalender minimalis</button>
+    <button class="opt" data-o="b">B · + Aksi cepat</button>
+    <button class="opt" data-o="c">C · Navigasi bulan/tahun</button>
+  </div>
+
+  <div class="field" id="field">
+    <label>Tanggal Aktivasi</label>
+    <div class="fbox" id="fbox"><span class="mi cal">calendar_month</span><span class="val" id="val">26 Feb 2026</span><span class="mi chev">expand_more</span></div>
+    <div class="pop" id="pop"></div>
+  </div>
+
+  <p class="desc" id="desc"></p>
+</div>
+<script>
+  const $=s=>document.querySelector(s);
+  const MON=['Januari','Februari','Maret','April','Mei','Juni','Juli','Agustus','September','Oktober','November','Desember'];
+  const MONS=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const DOW=['Sen','Sel','Rab','Kam','Jum','Sab','Min'];
+  let mode='a', view=new Date(2026,1,1), sel=new Date(2026,1,26), sub='days'; // sub: days|months|years
+  const today=new Date();
+  const fmt=d=>d?`${d.getDate()} ${MONS[d.getMonth()]} ${d.getFullYear()}`:'';
+  const same=(a,b)=>a&&b&&a.getFullYear()==b.getFullYear()&&a.getMonth()==b.getMonth()&&a.getDate()==b.getDate();
+
+  function render(){
+    const p=$('#pop');
+    if(sub==='months'){p.innerHTML=monthsView();bindMY();return;}
+    if(sub==='years'){p.innerHTML=yearsView();bindMY();return;}
+    let h=`<div class="cal-head"><button class="navb" onclick="nav(-1)"><span class="mi">chevron_left</span></button>
+      <div class="cal-title" onclick="${mode==='c'?"go('months')":''}">${MON[view.getMonth()]} ${view.getFullYear()}</div>
+      <button class="navb" onclick="nav(1)"><span class="mi">chevron_right</span></button></div>`;
+    if(mode==='b')h+=`<div class="quick"><span class="qc" onclick="quick(0)">Hari ini</span><span class="qc" onclick="quick(-1)">Kemarin</span><span class="qc" onclick="quick('m1')">Awal bulan</span></div>`;
+    h+='<div class="dow">'+DOW.map(d=>`<span>${d}</span>`).join('')+'</div><div class="days">';
+    const first=new Date(view.getFullYear(),view.getMonth(),1);
+    let start=(first.getDay()+6)%7; // Senin=0
+    const dim=new Date(view.getFullYear(),view.getMonth()+1,0).getDate();
+    const prevDim=new Date(view.getFullYear(),view.getMonth(),0).getDate();
+    for(let i=0;i<start;i++){const d=prevDim-start+1+i;h+=`<div class="day off">${d}</div>`;}
+    for(let d=1;d<=dim;d++){const dt=new Date(view.getFullYear(),view.getMonth(),d);
+      const cl=['day'];if(same(dt,today))cl.push('today');if(same(dt,sel))cl.push('sel');
+      h+=`<div class="${cl.join(' ')}" onclick="pickDay(${d})">${d}</div>`;}
+    const rem=(7-((start+dim)%7))%7;for(let i=1;i<=rem;i++)h+=`<div class="day off">${i}</div>`;
+    h+='</div>';
+    h+=`<div class="foot"><button class="clr" onclick="clr()">Hapus</button><button class="ok" onclick="close_()">Selesai</button></div>`;
+    p.innerHTML=h;
+  }
+  function monthsView(){let h=`<div class="yhead"><button class="navb" onclick="yrNav(-1)"><span class="mi">chevron_left</span></button>
+    <div class="cal-title" onclick="go('years')">${view.getFullYear()}</div><button class="navb" onclick="yrNav(1)"><span class="mi">chevron_right</span></button></div><div class="mygrid">`;
+    h+=MONS.map((m,i)=>`<div class="my ${i==view.getMonth()?'on':''}" onclick="pickMonth(${i})">${m}</div>`).join('');return h+'</div>';}
+  function yearsView(){const base=view.getFullYear()-6;let h=`<div class="yhead"><button class="navb" onclick="yrNav(-12)"><span class="mi">chevron_left</span></button>
+    <div class="cal-title">${base}–${base+11}</div><button class="navb" onclick="yrNav(12)"><span class="mi">chevron_right</span></button></div><div class="mygrid">`;
+    for(let y=base;y<base+12;y++)h+=`<div class="my ${y==view.getFullYear()?'on':''}" onclick="pickYear(${y})">${y}</div>`;return h+'</div>';}
+  function bindMY(){}
+  window.nav=d=>{view=new Date(view.getFullYear(),view.getMonth()+d,1);render();};
+  window.yrNav=d=>{view=new Date(view.getFullYear()+d,view.getMonth(),1);render();};
+  window.go=s=>{sub=s;render();};
+  window.pickMonth=i=>{view=new Date(view.getFullYear(),i,1);sub='days';render();};
+  window.pickYear=y=>{view=new Date(y,view.getMonth(),1);sub='months';render();};
+  window.pickDay=d=>{sel=new Date(view.getFullYear(),view.getMonth(),d);$('#val').textContent=fmt(sel);$('#val').classList.remove('empty');render();setTimeout(close_,180);};
+  window.quick=w=>{let d=new Date();if(w===-1)d.setDate(d.getDate()-1);if(w==='m1')d=new Date(d.getFullYear(),d.getMonth(),1);sel=d;view=new Date(d);$('#val').textContent=fmt(sel);$('#val').classList.remove('empty');render();setTimeout(close_,180);};
+  window.clr=()=>{sel=null;$('#val').textContent='Pilih tanggal';$('#val').classList.add('empty');render();};
+  window.close_=()=>{$('#pop').classList.remove('open');$('#fbox').classList.remove('open');sub='days';};
+  function open(){sub='days';if(sel){view=new Date(sel);}render();$('#pop').classList.add('open');$('#fbox').classList.add('open');}
+  $('#fbox').addEventListener('click',()=>{$('#pop').classList.contains('open')?close_():open();});
+  document.addEventListener('click',e=>{if(!e.target.closest('#field'))close_();});
+  const DESC={a:'<b>A · Kalender minimalis.</b> Popover bersih: navigasi bulan (‹ ›), hari ini bertanda titik, tanggal terpilih ber-highlight bulat dengan animasi. Cukup untuk kebanyakan kasus.',
+    b:'<b>B · + Aksi cepat.</b> Sama seperti A + chip cepat "Hari ini / Kemarin / Awal bulan" — mempercepat input tanggal aktivasi yang biasanya dekat hari ini.',
+    c:'<b>C · Navigasi bulan/tahun.</b> Klik judul bulan → pilih bulan; klik tahun → pilih tahun (grid). Cepat lompat ke tanggal jauh tanpa klik ‹ › berkali-kali.'};
+  document.querySelectorAll('.opt').forEach(o=>o.addEventListener('click',()=>{document.querySelectorAll('.opt').forEach(x=>x.classList.remove('on'));o.classList.add('on');mode=o.dataset.o;$('#desc').innerHTML=DESC[mode];if($('#pop').classList.contains('open'))render();}));
+  $('#desc').innerHTML=DESC.a;
+</script>
+</body>
+</html>
