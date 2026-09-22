@@ -120,15 +120,21 @@
   .set-savebtn.on:active{transform:translateY(0)}
   /* ===== Dialog User (redesign Opsi A) ===== */
   #userDlg{--urole:var(--md-sys-color-primary)}
-  .udlg{display:flex;flex-direction:column;gap:12px;min-width:320px;max-width:400px}
-  .uhead{display:flex;align-items:center;gap:14px;padding:14px;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--urole) 15%,var(--md-sys-color-surface)),var(--md-sys-color-surface));transition:background .4s}
-  .uava{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;color:#fff;font-size:25px;flex:0 0 auto;background:linear-gradient(135deg,var(--urole),color-mix(in srgb,var(--urole) 62%,#000 10%));box-shadow:0 8px 20px color-mix(in srgb,var(--urole) 38%,transparent);transition:.4s}
+  .udlg{display:flex;flex-direction:column;gap:12px;min-width:330px;width:420px;max-width:100%}
+  .uhead{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--urole) 16%,var(--md-sys-color-surface)),var(--md-sys-color-surface));transition:background .45s}
+  .uhead .uglow{position:absolute;right:-40px;top:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--urole) 40%,transparent),transparent 70%);transition:background .5s;pointer-events:none}
+  .uava{position:relative;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:#fff;font-size:26px;flex:0 0 auto;background:linear-gradient(135deg,var(--urole),color-mix(in srgb,var(--urole) 62%,#000 10%));box-shadow:0 8px 20px color-mix(in srgb,var(--urole) 38%,transparent);transition:.45s}
+  .uhead .uht{position:relative}
   .uhead .ut{font-family:var(--md-sys-typescale-headline-small);font-weight:800}
   .uhead .usub{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);transition:color .3s}
-  .ufield{display:flex;align-items:center;gap:10px;background:var(--md-sys-color-surface-container-highest);border:1.5px solid transparent;border-radius:13px;padding:0 13px;height:52px;transition:.2s}
-  .ufield:focus-within{border-color:var(--urole);background:var(--md-sys-color-surface);box-shadow:0 0 0 4px color-mix(in srgb,var(--urole) 14%,transparent)}
-  .ufield>.mi{color:var(--md-sys-color-on-surface-variant);font-size:20px}.ufield:focus-within>.mi{color:var(--urole)}
-  .ufield input{flex:1;min-width:0;border:0;background:transparent;color:var(--md-sys-color-on-surface);font-size:15px;outline:none}
+  .ufield{position:relative}
+  .ufield .ubox{display:flex;align-items:center;gap:10px;background:var(--md-sys-color-surface-container-highest);border:1.5px solid transparent;border-radius:14px;padding:0 12px;height:54px;transition:border-color .2s,box-shadow .2s,background .2s}
+  .ufield .ubox:focus-within{border-color:var(--urole);background:var(--md-sys-color-surface);box-shadow:0 0 0 4px color-mix(in srgb,var(--urole) 14%,transparent)}
+  .ufield .ubox>.mi.lead{color:var(--md-sys-color-on-surface-variant);font-size:20px;transition:color .2s}
+  .ufield .ubox:focus-within>.mi.lead{color:var(--urole)}
+  .ufield input{flex:1;min-width:0;border:0;background:transparent;color:var(--md-sys-color-on-surface);font-size:15px;outline:none;padding-top:12px}
+  .ufield .ulab{position:absolute;left:42px;top:17px;color:var(--md-sys-color-on-surface-variant);pointer-events:none;transition:.16s;font-size:15px}
+  .ufield:focus-within .ulab,.ufield.filled .ulab{top:8px;left:44px;font-size:11px;color:var(--urole);font-weight:700}
   .ufield .ueye{cursor:pointer}
   .urolelab{font:var(--md-sys-typescale-label-small);font-weight:800;color:var(--md-sys-color-on-surface-variant);text-transform:uppercase;letter-spacing:.4px;margin-top:4px}
   .uroles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -354,32 +360,35 @@
 
   /* summary panel */
   .summary .card{margin-bottom:0}
-  .sum-title{font:var(--md-sys-typescale-title-large);margin:0}
-  .sum-sub{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin:2px 0 16px}
-  .sum-pct{font:var(--md-sys-typescale-title-medium)}
-  .bar{height:10px;border-radius:5px;background:var(--md-sys-color-surface-container-highest);overflow:hidden;margin:8px 0 12px}
-  .bar>span{display:block;height:100%;background:var(--md-sys-color-primary);border-radius:5px;transition:width .4s var(--md-sys-motion-easing-emphasized-decelerate)}
-  /* baris progress: highlight saja, tanpa garis pemisah */
-  .crow{display:flex;justify-content:space-between;align-items:center;gap:8px;padding:9px 10px;margin:3px -6px;border-radius:10px;font:var(--md-sys-typescale-body-medium)}
-  .crow.warn{background:var(--warn-bg)}
-  .crow .st{font-weight:700;text-align:right}.crow .st.ok{color:var(--md-sys-color-primary)}.crow .st.no{color:var(--md-sys-color-on-surface-variant)}.crow .st.warn{color:var(--warn)}
-  .miss{margin:2px 0 6px;padding:0 10px}
-  .miss .mt{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant);margin-bottom:4px}
-  .miss .row{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);display:flex;align-items:center;gap:7px;padding:2px 0}
-  .miss .row .mi{font-size:17px;color:var(--warn)}
-  .miss .row.done{color:var(--md-sys-color-on-surface-variant);text-decoration:line-through;opacity:.75}
-  .miss .row.done .mi{color:var(--md-sys-color-primary);text-decoration:none}
+  .sum-head{display:flex;align-items:center;gap:9px;margin-bottom:6px}
+  .sum-head .mi{font-size:22px;color:var(--md-sys-color-on-surface)}
+  .sum-title{font:var(--md-sys-typescale-title-large);font-weight:800;margin:0}
+  .sum-sub{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin:2px 0 0}
+  /* donut ring */
+  .sum-top{display:flex;align-items:center;gap:16px;margin:10px 0 4px}
+  .sum-ring{position:relative;width:92px;height:92px;flex:0 0 auto;display:grid;place-items:center}
+  .sum-ring svg{width:92px;height:92px;transform:rotate(-90deg)}
+  .sum-ring circle{fill:none;stroke-width:8}
+  .sum-ring .trk{stroke:var(--md-sys-color-surface-container-highest)}
+  .sum-ring .prg{stroke:var(--md-sys-color-primary);stroke-linecap:round;stroke-dasharray:226.19;stroke-dashoffset:226.19;transition:stroke-dashoffset .5s var(--md-sys-motion-easing-emphasized-decelerate),stroke .3s}
+  .sum-ring-pct{position:absolute;font:var(--md-sys-typescale-title-medium);font-weight:800}
+  .sum-top-txt .sum-pct{font:var(--md-sys-typescale-headline-small);font-weight:800}
+  /* baris progress: ikon status + label + nilai */
+  .sum-rows{margin-top:12px;border-top:1px solid var(--md-sys-color-outline-variant);padding-top:6px}
+  .crow{display:flex;align-items:center;gap:10px;padding:11px 10px;margin:0 -6px;border-radius:10px;font:var(--md-sys-typescale-body-large);border-bottom:1px solid var(--md-sys-color-outline-variant)}
+  .crow:last-child{border-bottom:0}
+  .crow .lbl{flex:1}
+  .crow .ci{font-size:20px;flex:0 0 auto;color:var(--warn)}
+  .crow.ok-row .ci{color:var(--md-sys-color-primary)}
+  .crow .st{font-weight:800;text-align:right}.crow .st.ok{color:var(--md-sys-color-on-surface)}.crow .st.no{color:var(--md-sys-color-on-surface-variant)}.crow .st.warn{color:var(--md-sys-color-on-surface)}
   /* border kartu Data Lokasi seragam dengan kartu lain (highlight cukup di panel) */
   .card.warn-outline{border-color:var(--md-sys-color-outline-variant)}
   /* Admin-only: sembunyikan tambah/hapus baris inventory untuk operator */
   .is-operator #inv-add,.is-operator .tr md-icon-button{display:none}
-  .sum-actions{margin-top:16px;display:flex;flex-direction:column;gap:0}
+  .sum-actions{margin-top:16px;display:flex;flex-direction:column;gap:10px}
   .sum-actions #save-btn{width:100%}
   .sum-actions #save-btn::part(button){width:100%}
-  .exp-group{margin-top:14px;padding-top:14px;border-top:1px solid var(--md-sys-color-outline-variant)}
-  .exp-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
-  .exp-head span{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
-  .exp2{display:flex;gap:8px}.exp2 md-button{flex:1}.exp2 md-button::part(button){width:100%}
+  .exp2{display:flex;gap:10px}.exp2 md-button{flex:1}.exp2 md-button::part(button){width:100%}
   .hint{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin-top:12px}
   /* export massal (Log Lokasi) */
   .exp-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:color-mix(in srgb,var(--md-sys-color-primary) 7%,transparent);border:1px solid color-mix(in srgb,var(--md-sys-color-primary) 22%,transparent);border-radius:14px;padding:10px 14px;margin-bottom:14px}
@@ -994,14 +1003,22 @@
 
           <aside class="summary">
             <div class="card">
-              <h2 class="sum-title">Ringkasan BAA</h2>
-              <p class="sum-sub" id="sum-status">Status: draft</p>
-              <div class="sum-pct"><span id="sum-pct">0%</span> lengkap</div>
-              <div class="bar"><span id="sum-bar" style="width:0%"></span></div>
-              <div class="crow" id="sum-loc-row"><span>Informasi lokasi</span><span class="st no" id="sum-loc">Belum</span></div>
-              <div class="crow"><span>Inventory</span><span class="st" id="sum-inv">0 item</span></div>
-              <div class="crow" id="sum-foto-row"><span>Foto &amp; Capture</span><span class="st" id="sum-foto">0 / 0</span></div>
-              <div class="miss hidden" id="sum-foto-miss"></div>
+              <div class="sum-head"><span class="mi">assignment</span><h2 class="sum-title">Ringkasan BAA</h2></div>
+              <div class="sum-top">
+                <div class="sum-ring">
+                  <svg viewBox="0 0 84 84"><circle class="trk" cx="42" cy="42" r="36"/><circle class="prg" id="sum-ring-prg" cx="42" cy="42" r="36"/></svg>
+                  <span class="sum-ring-pct" id="sum-ring-pct">0%</span>
+                </div>
+                <div class="sum-top-txt">
+                  <div class="sum-pct"><span id="sum-pct">0%</span> lengkap</div>
+                  <p class="sum-sub" id="sum-status">Status: draft</p>
+                </div>
+              </div>
+              <div class="sum-rows">
+                <div class="crow" id="sum-loc-row"><span class="mi ci" id="sum-loc-ic">error</span><span class="lbl">Informasi lokasi</span><span class="st no" id="sum-loc">Belum</span></div>
+                <div class="crow" id="sum-inv-row"><span class="mi ci" id="sum-inv-ic">error</span><span class="lbl">Inventory</span><span class="st" id="sum-inv">0 item</span></div>
+                <div class="crow" id="sum-foto-row"><span class="mi ci" id="sum-foto-ic">error</span><span class="lbl">Foto &amp; Capture</span><span class="st" id="sum-foto">0 / 0</span></div>
+              </div>
               <div class="sum-actions">
                 <md-button variant="filled" size="l" icon="save" id="save-btn">Simpan BAA</md-button>
                 <div class="exp2">
@@ -1020,7 +1037,9 @@
           <div class="rowflex" style="margin-bottom:14px;flex-wrap:wrap;gap:10px">
             <md-text-field id="loc-search" variant="outlined" label="Cari kode / nama" leading-icon="search" style="min-width:220px"></md-text-field>
             <div class="md-select" id="loc-creator"></div>
-            <md-text-field id="loc-date" variant="outlined" label="Tanggal dibuat" type="date" style="min-width:180px"></md-text-field>
+            <div style="position:relative;min-width:190px"><input type="hidden" id="loc-date" value="">
+              <div class="datefield" id="loc-date-field" onclick="dpOpenFilter(this)"><span class="mi">calendar_month</span>
+              <span class="dfv ph">Tanggal dibuat</span><span class="mi" style="color:var(--md-sys-color-on-surface-variant)">expand_more</span></div></div>
             <md-button variant="text" id="loc-clear" icon="filter_alt_off">Reset</md-button>
             <span class="grow"></span>
             <md-segmented-button id="loc-filter"><button data-value="all" selected>Semua</button><button data-value="draft">Draft</button><button data-value="selesai">Selesai</button></md-segmented-button>
@@ -1240,19 +1259,19 @@
 
 <md-dialog id="userDlg">
   <div class="udlg">
-    <div class="uhead">
+    <div class="uhead"><div class="uglow"></div>
       <span class="uava"><span class="mi" id="uAvaIc">engineering</span></span>
-      <div><div class="ut" id="userDlgTitle">Tambah user</div><div class="usub" id="uSub">Buat akun untuk operator lapangan</div></div>
+      <div class="uht"><div class="ut" id="userDlgTitle">Tambah user</div><div class="usub" id="uSub">Buat akun untuk operator lapangan</div></div>
     </div>
-    <div class="ufield"><span class="mi">person</span><input id="u-username" placeholder="Username" autocomplete="off"></div>
-    <div class="ufield"><span class="mi">badge</span><input id="u-fullname" placeholder="Nama lengkap" autocomplete="off"></div>
+    <div class="ufield"><div class="ubox"><span class="mi lead">person</span><input id="u-username" placeholder=" " autocomplete="off" oninput="uFill(this)"></div><span class="ulab">Username</span></div>
+    <div class="ufield"><div class="ubox"><span class="mi lead">badge</span><input id="u-fullname" placeholder=" " autocomplete="off" oninput="uFill(this)"></div><span class="ulab">Nama lengkap</span></div>
     <div class="urolelab">Role / hak akses</div>
     <div class="uroles" id="uRoles">
       <div class="urc" data-r="operator" data-c="#04726f" data-i="engineering"><span class="mi">engineering</span><div class="t">Operator</div><div class="d">isi &amp; kelola</div></div>
       <div class="urc" data-r="viewer" data-c="#2a6fb0" data-i="visibility"><span class="mi">visibility</span><div class="t">Viewer</div><div class="d">hanya lihat</div></div>
       <div class="urc" data-r="admin" data-c="#b3452f" data-i="shield_person"><span class="mi">shield_person</span><div class="t">Admin</div><div class="d">akses penuh</div></div>
     </div>
-    <div class="ufield"><span class="mi">lock</span><input id="u-pass" type="password" placeholder="Password" autocomplete="new-password"><span class="mi ueye" id="uEye">visibility</span></div>
+    <div class="ufield"><div class="ubox"><span class="mi lead">lock</span><input id="u-pass" type="password" placeholder=" " autocomplete="new-password" oninput="uFill(this)"><span class="mi ueye" id="uEye">visibility</span></div><span class="ulab">Password</span></div>
     <div class="upw-str"><i id="uPwbar"></i></div>
     <div class="upw-hint" id="uPwHint">Kosongkan bila tak mengubah (saat edit).</div>
     <label class="uactive"><input type="checkbox" id="u-active" checked hidden><span class="usw"></span><span class="utx"><b>Akun aktif</b><small>User bisa login bila akun aktif</small></span></label>
@@ -1874,36 +1893,33 @@ function computeState(){
   const data=collectData();const fields=S.locFields;
   const filledF=fields.filter(f=>(data[f.key]||'').trim()).length;
   const locDone=fields.length?filledF===fields.length:Object.values(data).some(v=>(v||'').trim());
-  const rows=$$('#inv-body .tr');let cells=0,filledCells=0,items=0;
-  rows.forEach(tr=>{const vals=[...tr.querySelectorAll('[data-iv]')].map(i=>i.value.trim());if(vals.some(v=>v)){items++;cells+=vals.length;filledCells+=vals.filter(v=>v).length;}});
+  const rows=$$('#inv-body .tr');let cells=0,filledCells=0,items=0,rowsDone=0;
+  rows.forEach(tr=>{const vals=[...tr.querySelectorAll('[data-iv]')].map(i=>i.value.trim());if(vals.some(v=>v)){items++;cells+=vals.length;const fc=vals.filter(v=>v).length;filledCells+=fc;if(fc===vals.length)rowsDone++;}});
   const rc=requiredCats();const byCat={};activePhotos().forEach(p=>byCat[p.category]=1);
   const fotoDone=rc.filter(c=>byCat[c.key]).length;const missing=rc.filter(c=>!byCat[c.key]).map(c=>c.label);
   const checklist=rc.map(c=>({label:c.label,done:!!byCat[c.key]}));
   const invOk=items>0&&filledCells===cells;const fotoOk=rc.length>0&&fotoDone>=rc.length;
-  return {data,fields,filledF,locDone,items,cells,filledCells,invOk,rc,fotoDone,fotoOk,missing,checklist,complete:locDone&&invOk&&fotoOk};
+  return {data,fields,filledF,locDone,items,cells,filledCells,rowsDone,invOk,rc,fotoDone,fotoOk,missing,checklist,complete:locDone&&invOk&&fotoOk};
 }
 function updateSummary(){
   if(!S.loc)return;const s=computeState();
   const total=(s.fields.length||1)+1+s.rc.length;
   const done=(s.fields.length?s.filledF:(s.locDone?1:0))+(s.invOk?1:(s.items>0?0.5:0))+s.fotoDone;
   const pct=Math.round(done/total*100);
-  $('#sum-pct').textContent=pct+'%';$('#sum-bar').style.width=pct+'%';
+  $('#sum-pct').textContent=pct+'%';$('#sum-ring-pct').textContent=pct+'%';
+  const C=226.19;$('#sum-ring-prg').style.strokeDashoffset=(C*(1-pct/100)).toFixed(1);
   $('#sum-status').textContent='Status: '+(S.loc.status||'draft');
+  const setRow=(rowId,icId,valEl,done,valText)=>{
+    $(rowId).classList.toggle('ok-row',done);
+    $(icId).textContent=done?'check_circle':'error';
+    valEl.textContent=valText;valEl.className='st '+(done?'ok':'warn');};
   const l=$('#sum-loc');
-  if(s.locDone){l.textContent='Lengkap';l.className='st ok';}
-  else{l.textContent='Belum lengkap · '+s.filledF+'/'+s.fields.length;l.className='st warn';}
-  $('#sum-loc-row').classList.toggle('warn',!s.locDone);
+  setRow('#sum-loc-row','#sum-loc-ic',l,s.locDone,s.locDone?'Lengkap':(s.filledF+'/'+s.fields.length));
   const locCard=$('#loc-fields').closest('.card');if(locCard)locCard.classList.toggle('warn-outline',!s.locDone);
-  const iv=$('#sum-inv');iv.textContent=s.items+' item · '+s.filledCells+'/'+s.cells+' terisi';
-  iv.className='st '+(s.invOk?'ok':(s.items>0?'warn':'no'));
-  const ft=$('#sum-foto');ft.textContent=s.fotoDone+' / '+s.rc.length;ft.className='st '+(s.fotoOk?'ok':'warn');
-  $('#sum-foto-row').classList.toggle('warn',!s.fotoOk);
-  const miss=$('#sum-foto-miss');
-  if(s.checklist.length){
-    const list=[...s.checklist].sort((a,b)=>(a.done?1:0)-(b.done?1:0)); /* belum di atas, sudah di bawah */
-    miss.innerHTML='<div class="mt">Foto Checklist</div>'+
-      list.map(it=>`<div class="row${it.done?' done':''}"><span class="mi">${it.done?'check_box':'check_box_outline_blank'}</span>${esc(it.label)}</div>`).join('');
-    miss.classList.remove('hidden');}else miss.classList.add('hidden');
+  const iv=$('#sum-inv');
+  setRow('#sum-inv-row','#sum-inv-ic',iv,s.invOk,s.items>0?(s.rowsDone+'/'+s.items):'0 item');
+  const ft=$('#sum-foto');
+  setRow('#sum-foto-row','#sum-foto-ic',ft,s.fotoOk,s.fotoDone+'/'+s.rc.length);
 }
 
 /* photos — tile kompak: klik=Edit, ⋯=aksi lain, strip SN (OCR), undo bercincin in-tile */
@@ -2217,8 +2233,10 @@ function locLack(l){
 window.openFromLog=id=>{gotoEntry();openLoc(id);};
 $('#loc-search').addEventListener('input',()=>{clearTimeout(locSearchTimer);locSearchTimer=setTimeout(loadLocations,300);});
 $('#loc-filter').addEventListener('change',e=>{S.locFilter=e.detail.value;loadLocations();});
-$('#loc-date').addEventListener('change',loadLocations);
-$('#loc-clear').addEventListener('click',()=>{$('#loc-search').value='';$('#loc-date').setAttribute('value','');
+function locDateSet(iso){const hid=$('#loc-date');hid.value=iso||'';const v=$('#loc-date-field .dfv');
+  v.textContent=iso?dpFmt(iso):'Tanggal dibuat';v.classList.toggle('ph',!iso);$('#loc-date-field').classList.toggle('active',!!iso);}
+window.dpOpenFilter=el=>{DP.open(el,$('#loc-date').value||'',iso=>{locDateSet(iso);loadLocations();});};
+$('#loc-clear').addEventListener('click',()=>{$('#loc-search').value='';locDateSet('');
   locCreatorSel&&locCreatorSel.setValue('');S.locFilter='all';
   const seg=$('#loc-filter');seg&&seg.querySelectorAll('button').forEach(b=>b.toggleAttribute('selected',b.dataset.value==='all'));
   loadLocations();});
@@ -2411,7 +2429,9 @@ function openUser(u){editUserId=u?u.id:null;$('#userDlgTitle').textContent=u?'Ed
   $('#u-username').value=u?u.username:'';$('#u-fullname').value=u?(u.full_name||''):'';
   $('#u-pass').value='';$('#u-pass').type='password';$('#uEye').textContent='visibility';
   $('#u-active').checked=u?!!u.active:true;setUserRole(u?u.role:'operator');uStrength();
+  ['#u-username','#u-fullname','#u-pass'].forEach(s=>uFill($(s)));
   $('#uPwHint').textContent=u?'Kosongkan bila tak mengubah.':'Minimal 4 karakter.';$('#userDlg').show();setTimeout(()=>$('#u-username').focus(),80);}
+window.uFill=el=>{const f=el.closest('.ufield');if(f)f.classList.toggle('filled',!!el.value);};
 $('#usr-add').addEventListener('click',()=>openUser(null));
 $('#userCancel').addEventListener('click',()=>$('#userDlg').close());
 $('#userSave').addEventListener('click',async()=>{const body={username:$('#u-username').value.trim(),full_name:$('#u-fullname').value.trim(),role:userRole(),active:$('#u-active').checked,password:$('#u-pass').value};
