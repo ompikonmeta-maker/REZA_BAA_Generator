@@ -118,6 +118,34 @@
   .set-savebtn.on{background:var(--save-active);color:#fff;cursor:pointer;box-shadow:0 6px 18px color-mix(in srgb,var(--save-active) 42%,transparent)}
   .set-savebtn.on:hover{transform:translateY(-1px)}
   .set-savebtn.on:active{transform:translateY(0)}
+  /* ===== Dialog User (redesign Opsi A) ===== */
+  #userDlg{--urole:var(--md-sys-color-primary)}
+  .udlg{display:flex;flex-direction:column;gap:12px;min-width:320px;max-width:400px}
+  .uhead{display:flex;align-items:center;gap:14px;padding:14px;border-radius:16px;background:linear-gradient(135deg,color-mix(in srgb,var(--urole) 15%,var(--md-sys-color-surface)),var(--md-sys-color-surface));transition:background .4s}
+  .uava{width:50px;height:50px;border-radius:15px;display:grid;place-items:center;color:#fff;font-size:25px;flex:0 0 auto;background:linear-gradient(135deg,var(--urole),color-mix(in srgb,var(--urole) 62%,#000 10%));box-shadow:0 8px 20px color-mix(in srgb,var(--urole) 38%,transparent);transition:.4s}
+  .uhead .ut{font-family:var(--md-sys-typescale-headline-small);font-weight:800}
+  .uhead .usub{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);transition:color .3s}
+  .ufield{display:flex;align-items:center;gap:10px;background:var(--md-sys-color-surface-container-highest);border:1.5px solid transparent;border-radius:13px;padding:0 13px;height:52px;transition:.2s}
+  .ufield:focus-within{border-color:var(--urole);background:var(--md-sys-color-surface);box-shadow:0 0 0 4px color-mix(in srgb,var(--urole) 14%,transparent)}
+  .ufield>.mi{color:var(--md-sys-color-on-surface-variant);font-size:20px}.ufield:focus-within>.mi{color:var(--urole)}
+  .ufield input{flex:1;min-width:0;border:0;background:transparent;color:var(--md-sys-color-on-surface);font-size:15px;outline:none}
+  .ufield .ueye{cursor:pointer}
+  .urolelab{font:var(--md-sys-typescale-label-small);font-weight:800;color:var(--md-sys-color-on-surface-variant);text-transform:uppercase;letter-spacing:.4px;margin-top:4px}
+  .uroles{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .urc{border:1.5px solid var(--md-sys-color-outline-variant);border-radius:13px;padding:10px 6px;text-align:center;cursor:pointer;transition:.2s;background:var(--md-sys-color-surface)}
+  .urc .mi{font-size:21px;color:var(--md-sys-color-on-surface-variant);transition:.2s}
+  .urc .t{font-weight:800;font-size:12.5px;margin-top:2px}.urc .d{font-size:10px;color:var(--md-sys-color-on-surface-variant)}
+  .urc.on{border-color:var(--urc-c,var(--urole));background:color-mix(in srgb,var(--urc-c,var(--urole)) 12%,var(--md-sys-color-surface));box-shadow:0 4px 14px color-mix(in srgb,var(--urc-c,var(--urole)) 22%,transparent);transform:translateY(-1px)}
+  .urc.on .mi,.urc.on .t{color:var(--urc-c,var(--urole))}
+  .upw-str{height:5px;border-radius:4px;background:var(--md-sys-color-surface-container-highest);overflow:hidden;margin-top:2px}
+  .upw-str>i{display:block;height:100%;width:0;border-radius:4px;transition:width .3s,background .3s}
+  .upw-hint{font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant)}
+  .uactive{display:flex;align-items:center;gap:12px;background:var(--md-sys-color-surface-container-highest);border-radius:13px;padding:11px 14px;cursor:pointer;margin-top:2px}
+  .uactive .usw{width:46px;height:26px;border-radius:20px;background:var(--md-sys-color-outline-variant);position:relative;flex:0 0 auto;transition:background .25s}
+  .uactive input:checked+.usw{background:var(--urole)}
+  .uactive .usw::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.25s cubic-bezier(.34,1.4,.5,1)}
+  .uactive input:checked+.usw::after{left:23px}
+  .uactive .utx{flex:1}.uactive .utx b{font-weight:800}.uactive .utx small{display:block;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small)}
   .nav-foot{margin-top:auto;display:flex;gap:4px;justify-content:center;padding-top:8px;border-top:1px solid var(--md-sys-color-outline-variant)}
 
   .canvas{flex:1 1 auto;min-width:0;background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level1);display:flex;flex-direction:column;overflow:hidden}
@@ -1112,15 +1140,25 @@
 </md-dialog>
 
 <md-dialog id="userDlg">
-  <span slot="headline" id="userDlgTitle">User</span>
-  <div style="display:flex;flex-direction:column;gap:10px;min-width:300px">
-    <md-text-field id="u-username" variant="outlined" label="Username"></md-text-field>
-    <md-text-field id="u-fullname" variant="outlined" label="Nama lengkap"></md-text-field>
-    <div class="md-select" id="u-role"></div>
-    <md-text-field id="u-pass" variant="outlined" label="Password" type="password" supporting-text="Kosongkan bila tak mengubah (saat edit)"></md-text-field>
-    <label class="ck" style="display:flex;align-items:center;gap:8px"><input type="checkbox" id="u-active" checked style="width:18px;height:18px;accent-color:var(--md-sys-color-primary)"> Aktif</label>
+  <div class="udlg">
+    <div class="uhead">
+      <span class="uava"><span class="mi" id="uAvaIc">engineering</span></span>
+      <div><div class="ut" id="userDlgTitle">Tambah user</div><div class="usub" id="uSub">Buat akun untuk operator lapangan</div></div>
+    </div>
+    <div class="ufield"><span class="mi">person</span><input id="u-username" placeholder="Username" autocomplete="off"></div>
+    <div class="ufield"><span class="mi">badge</span><input id="u-fullname" placeholder="Nama lengkap" autocomplete="off"></div>
+    <div class="urolelab">Role / hak akses</div>
+    <div class="uroles" id="uRoles">
+      <div class="urc" data-r="operator" data-c="#04726f" data-i="engineering"><span class="mi">engineering</span><div class="t">Operator</div><div class="d">isi &amp; kelola</div></div>
+      <div class="urc" data-r="viewer" data-c="#2a6fb0" data-i="visibility"><span class="mi">visibility</span><div class="t">Viewer</div><div class="d">hanya lihat</div></div>
+      <div class="urc" data-r="admin" data-c="#b3452f" data-i="shield_person"><span class="mi">shield_person</span><div class="t">Admin</div><div class="d">akses penuh</div></div>
+    </div>
+    <div class="ufield"><span class="mi">lock</span><input id="u-pass" type="password" placeholder="Password" autocomplete="new-password"><span class="mi ueye" id="uEye">visibility</span></div>
+    <div class="upw-str"><i id="uPwbar"></i></div>
+    <div class="upw-hint" id="uPwHint">Kosongkan bila tak mengubah (saat edit).</div>
+    <label class="uactive"><input type="checkbox" id="u-active" checked hidden><span class="usw"></span><span class="utx"><b>Akun aktif</b><small>User bisa login bila akun aktif</small></span></label>
   </div>
-  <div slot="actions"><md-button variant="text" id="userCancel">Batal</md-button><md-button variant="filled" id="userSave">Simpan</md-button></div>
+  <div slot="actions"><md-button variant="text" id="userCancel">Batal</md-button><md-button variant="filled" id="userSave" icon="check">Simpan</md-button></div>
 </md-dialog>
 
 <md-dialog id="pwDlg">
@@ -1286,7 +1324,7 @@ async function boot(){paint();
   tplDetailSel=new MDSelect($('#tpl-detail'),{label:'Worksheet Detail'});
   mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG',onChange:()=>{if(typeof mapDirty==='function'){mapDirty();mapSteps();}}});
   mapDetailSel=new MDSelect($('#map-detail'),{label:'Sheet Detail',onChange:()=>{if(typeof mapDirty==='function'){mapDirty();mapSteps();renderRef('');}}});
-  roleSel=new MDSelect($('#u-role'),{label:'Role'});roleSel.setOptions([{value:'operator',label:'operator'},{value:'viewer',label:'viewer (bos — hanya lihat)'},{value:'admin',label:'admin'}]).setValue('operator');
+  // role user kini via kartu (uRoles), bukan dropdown
   locCreatorSel=new MDSelect($('#loc-creator'),{label:'Pembuat',placeholder:'Semua pembuat',onChange:()=>loadLocations()});locCreatorSel.setOptions([{value:'',label:'Semua pembuat'}]).setValue('');
   try{S.user=await api('/api/auth/me');showApp();}catch{$('#login').classList.remove('hidden');bindTips();}}
 /* Auto-deteksi tipe admin (aksen merah) via peek endpoint */
@@ -2135,12 +2173,27 @@ async function loadUsers(){try{USR_ROWS=await api('/api/users');
 window.usrMenu=(btn,u)=>{const row=USR_ROWS.find(x=>x.id===u.id);openMenu(btn,[
   {icon:'edit',label:'Edit / reset password',fn:()=>openUser(row)},
   {icon:'delete',label:'Hapus',fn:()=>delUser(row)}]);};
+const U_SUB={operator:'Buat akun untuk operator lapangan',viewer:'Buat akun read-only (mode bos)',admin:'Buat akun dengan akses penuh'};
+function setUserRole(r){const cards=$$('#uRoles .urc');let sel=null;
+  cards.forEach(c=>{const on=c.dataset.r===r;c.classList.toggle('on',on);c.style.setProperty('--urc-c',c.dataset.c);if(on)sel=c;});
+  if(sel){$('#userDlg').style.setProperty('--urole',sel.dataset.c);$('#uAvaIc').textContent=sel.dataset.i;
+    $('#uSub').textContent=(editUserId?'Ubah akun · ':'')+U_SUB[r];}}
+function userRole(){const on=$('#uRoles .urc.on');return on?on.dataset.r:'operator';}
+$$('#uRoles .urc').forEach(c=>c.addEventListener('click',()=>setUserRole(c.dataset.r)));
+function uStrength(){const v=$('#u-pass').value;let s=0;if(v.length>=4)s++;if(v.length>=8)s++;if(/[0-9]/.test(v)&&/[a-zA-Z]/.test(v))s++;if(/[^a-zA-Z0-9]/.test(v))s++;
+  const bar=$('#uPwbar');bar.style.width=[0,30,60,80,100][s]+'%';bar.style.background=['transparent','var(--bad,#a3312a)','#9a5b00','#1c7d46','var(--md-sys-color-primary)'][s];
+  if(!editUserId||v)$('#uPwHint').textContent=v?['','Lemah','Cukup','Kuat','Sangat kuat'][s]:'Minimal 4 karakter.';
+  else $('#uPwHint').textContent='Kosongkan bila tak mengubah (saat edit).';}
+$('#u-pass').addEventListener('input',uStrength);
+$('#uEye').addEventListener('click',()=>{const p=$('#u-pass');const s=p.type==='password';p.type=s?'text':'password';$('#uEye').textContent=s?'visibility_off':'visibility';});
 function openUser(u){editUserId=u?u.id:null;$('#userDlgTitle').textContent=u?'Edit user':'Tambah user';
-  $('#u-username').setAttribute('value',u?u.username:'');$('#u-fullname').setAttribute('value',u?(u.full_name||''):'');
-  roleSel.setValue(u?u.role:'operator');$('#u-pass').setAttribute('value','');$('#u-active').checked=u?!!u.active:true;$('#userDlg').show();}
+  $('#u-username').value=u?u.username:'';$('#u-fullname').value=u?(u.full_name||''):'';
+  $('#u-pass').value='';$('#u-pass').type='password';$('#uEye').textContent='visibility';
+  $('#u-active').checked=u?!!u.active:true;setUserRole(u?u.role:'operator');uStrength();
+  $('#uPwHint').textContent=u?'Kosongkan bila tak mengubah.':'Minimal 4 karakter.';$('#userDlg').show();setTimeout(()=>$('#u-username').focus(),80);}
 $('#usr-add').addEventListener('click',()=>openUser(null));
 $('#userCancel').addEventListener('click',()=>$('#userDlg').close());
-$('#userSave').addEventListener('click',async()=>{const body={username:$('#u-username').value.trim(),full_name:$('#u-fullname').value.trim(),role:roleSel.getValue(),active:$('#u-active').checked,password:$('#u-pass').value};
+$('#userSave').addEventListener('click',async()=>{const body={username:$('#u-username').value.trim(),full_name:$('#u-fullname').value.trim(),role:userRole(),active:$('#u-active').checked,password:$('#u-pass').value};
   try{ if(editUserId){await api('/api/users/'+editUserId,{method:'PUT',body:JSON.stringify(body)});}
     else{ if(!body.username||body.password.length<4)return toast('Username & password (min 4) wajib');await api('/api/users',{method:'POST',body:JSON.stringify(body)});}
     $('#userDlg').close();toast('User tersimpan');loadUsers();}catch(e){toast('Gagal: '+e.message);}});
