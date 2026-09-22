@@ -798,7 +798,7 @@
   <main class="canvas">
     <header class="topbar">
       <span class="page-title" id="pageTitle">Dashboard</span>
-      <span class="grow"></span>
+      <span class="grow" id="topGrow"></span>
       <span class="rowflex hidden" id="entryTools">
         <div class="locpick" id="picker"></div>
         <md-icon-button id="entry-new" variant="tonal" data-tip="Lokasi baru"><span>add</span></md-icon-button>
@@ -1486,6 +1486,7 @@ $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   $('#setToggle').classList.remove('active');$('#navSettings').classList.remove('open');  /* tutup accordion Pengaturan */
   const v=n.dataset.view;['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
   $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');$('#setSaveWrap').classList.add('hidden');
+  $('#pageTitle').classList.toggle('hidden',v==='entry');$('#topGrow').classList.toggle('hidden',v==='entry');
   if(v==='dashboard')loadDashboard();if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
   revealCards($('#v-'+v));}));
 
@@ -1497,7 +1498,7 @@ function showSetSub(key){curSetSub=key;const cfg=SET_SUBS[key];
   $$('.subnav').forEach(s=>s.classList.toggle('active',s.dataset.sub===key));
   Object.values(SET_SUBS).forEach(c=>{const el=$('#'+c.id);if(el)el.classList.toggle('hidden',c.id!==cfg.id);});
   const active=$('#'+cfg.id);if(active){active.classList.remove('setview');void active.offsetWidth;active.classList.add('setview');}
-  $('#pageTitle').textContent='Pengaturan · '+cfg.title;setSaveShow(key);}
+  $('#pageTitle').textContent='Pengaturan · '+cfg.title;$('#pageTitle').classList.remove('hidden');$('#topGrow').classList.remove('hidden');setSaveShow(key);}
 /* Tombol Simpan + status di bar judul untuk submenu field (lokasi/inventory/photo) */
 const SETFS_SAVE={lokasi:{sel:'#lf-save',lbl:'Simpan field'},inventory:{sel:'#di-save',lbl:'Simpan default'},photo:{sel:'#pc-save',lbl:'Simpan kategori'}};
 function setSaveShow(key){const w=$('#setSaveWrap');if(!w)return;
@@ -1523,7 +1524,7 @@ function openSettings(sub){
   const sv=SET_VIEWS[sub];
   if(sv){
     ['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==sv.view));
-    $('#pageTitle').textContent='Pengaturan · '+sv.title;$('#setSaveWrap').classList.add('hidden');sv.load();revealCards($('#v-'+sv.view));
+    $('#pageTitle').textContent='Pengaturan · '+sv.title;$('#pageTitle').classList.remove('hidden');$('#topGrow').classList.remove('hidden');$('#setSaveWrap').classList.add('hidden');sv.load();revealCards($('#v-'+sv.view));
   }else{
     ['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='settings'));
     loadSettingsPage();showSetSub(sub);
@@ -2254,7 +2255,7 @@ window.locMenu=(btn,l)=>{const items=[
   if(l.cd)items.push({icon:'delete',label:'Hapus',fn:()=>confirmDelete(l.id,l.code,false)});openMenu(btn,items);};
 function gotoEntry(){$$('.navitem[data-view]').forEach(x=>x.classList.toggle('active',x.dataset.view==='entry'));
   ['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='entry'));
-  $('#pageTitle').textContent='Entry BAA';$('#entryTools').classList.remove('hidden');}
+  $('#pageTitle').classList.add('hidden');$('#topGrow').classList.add('hidden');$('#entryTools').classList.remove('hidden');}
 
 /* DELETE */
 let delTarget=null,delFromEntry=false;
