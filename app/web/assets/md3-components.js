@@ -532,8 +532,8 @@
             border-radius:${outlined ? 'var(--md-sys-shape-corner-extra-small)' : 'var(--md-sys-shape-corner-extra-small-top)'};
             ${outlined ? `border:1px solid ${error ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-outline)'};`
                        : `border-bottom:1px solid ${error ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-on-surface-variant)'};`}
-            transition:border-color ${EASE_STD}; }
-          .field:focus-within{ ${outlined ? `border:2px solid ${accent}; padding:0 15px;` : `border-bottom:2px solid ${accent};`} }
+            transition:border-color ${EASE_STD}, box-shadow ${EASE_STD}, background ${EASE_STD}; }
+          .field:focus-within{ ${outlined ? `border:2px solid ${accent}; padding:0 15px; box-shadow:0 0 0 4px color-mix(in srgb, ${accent} 13%, transparent);` : `border-bottom:2px solid ${accent};`} }
           label{ position:absolute; left:${lead ? '48px' : '16px'}; top:50%; transform:translateY(-50%);
             color:${error ? 'var(--md-sys-color-error)' : 'var(--md-sys-color-on-surface-variant)'};
             font:var(--md-sys-typescale-body-large); pointer-events:none; background:${outlined ? 'var(--md-sys-color-surface)' : 'transparent'}; padding:0 4px;

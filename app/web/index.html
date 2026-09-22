@@ -80,20 +80,17 @@
   .navgroup .chev{margin-left:auto;font-size:20px;transition:transform .32s var(--md-sys-motion-easing-emphasized)}
   .navgroup.open .grouphead .chev{transform:rotate(180deg)}
   .shell.rail .navgroup .chev{opacity:0;max-width:0}
-  .navsub{overflow:hidden;max-height:0;opacity:0;position:relative;margin-top:2px;
-    transition:max-height .38s var(--md-sys-motion-easing-emphasized),opacity .26s var(--md-sys-motion-easing-emphasized)}
-  .navgroup.open .navsub{max-height:280px;opacity:1}
-  .shell.rail .navgroup .navsub{max-height:0!important;opacity:0}
+  /* accordion mulus: grid-template-rows 0fr->1fr (tinggi otomatis, tanpa hiccup) */
+  .navsub{display:grid;grid-template-rows:0fr;opacity:0;position:relative;margin-top:0;
+    transition:grid-template-rows .34s var(--md-sys-motion-easing-emphasized),opacity .24s ease,margin-top .34s var(--md-sys-motion-easing-emphasized)}
+  .navsub-inner{overflow:hidden;min-height:0;display:flex;flex-direction:column}
+  .navgroup.open .navsub{grid-template-rows:1fr;opacity:1;margin-top:2px}
+  .shell.rail .navgroup .navsub{grid-template-rows:0fr!important;opacity:0}
   .subnav{display:flex;align-items:center;gap:12px;height:44px;margin:2px 0 2px 16px;padding:0 14px;border-radius:22px;cursor:pointer;
     color:var(--md-sys-color-on-surface-variant);text-decoration:none;white-space:nowrap;position:relative;overflow:hidden;
-    transform:translateY(-6px);opacity:0;transition:transform .34s var(--md-sys-motion-spring-default-spatial),opacity .3s,background .15s}
+    transition:background .15s}
   .subnav::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .15s}
   .subnav:hover::before{opacity:.07}
-  .navgroup.open .subnav{transform:none;opacity:1}
-  .navgroup.open .subnav:nth-child(1){transition-delay:.04s}
-  .navgroup.open .subnav:nth-child(2){transition-delay:.09s}
-  .navgroup.open .subnav:nth-child(3){transition-delay:.14s}
-  .navgroup.open .subnav:nth-child(4){transition-delay:.19s}
   .subnav .mi{font-size:19px}
   .subnav .lbl{font:var(--md-sys-typescale-label-large)}
   .subnav.active{background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container);font-weight:600}
@@ -154,8 +151,11 @@
   .uactive input:checked+.usw::after{left:23px}
   .uactive .utx{flex:1}.uactive .utx b{font-weight:800}.uactive .utx small{display:block;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small)}
   /* ===== Date picker kustom (Opsi C) ===== */
-  .datefield{display:flex;align-items:center;gap:9px;background:var(--md-sys-color-surface-container-highest);border:1.5px solid transparent;border-radius:12px;padding:0 12px;height:50px;cursor:pointer;transition:.2s}
-  .datefield:hover,.datefield.open{border-color:var(--md-sys-color-primary);background:var(--md-sys-color-surface);box-shadow:0 0 0 4px color-mix(in srgb,var(--md-sys-color-primary) 12%,transparent)}
+  /* field tanggal: seragam dengan md-text-field outlined */
+  .datefield{display:flex;align-items:center;gap:9px;background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline);border-radius:var(--md-sys-shape-corner-extra-small);padding:0 14px;height:56px;cursor:pointer;
+    transition:border-color .24s cubic-bezier(.2,.8,.2,1),box-shadow .24s cubic-bezier(.2,.8,.2,1),background .24s cubic-bezier(.2,.8,.2,1)}
+  .datefield:hover{border-color:var(--md-sys-color-on-surface)}
+  .datefield.open{border:2px solid var(--md-sys-color-primary);padding:0 13px;box-shadow:0 0 0 4px color-mix(in srgb,var(--md-sys-color-primary) 13%,transparent)}
   .datefield>.mi{color:var(--md-sys-color-primary);font-size:19px}
   .datefield .dfv{flex:1;font-size:14.5px;font-weight:600}.datefield .dfv.ph{color:var(--md-sys-color-on-surface-variant);font-weight:400}
   .datefield .dflab{position:absolute}
@@ -375,9 +375,9 @@
   .sum-ring-pct{position:absolute;font:var(--md-sys-typescale-title-medium);font-weight:800}
   .sum-top-txt .sum-pct{font:var(--md-sys-typescale-headline-small);font-weight:800}
   /* baris progress: ikon status + label + nilai */
-  .sum-rows{margin-top:12px;border-top:1px solid var(--md-sys-color-outline-variant);padding-top:6px}
-  .crow{display:flex;align-items:center;gap:10px;padding:11px 10px;margin:0 -6px;border-radius:10px;font:var(--md-sys-typescale-body-large);border-bottom:1px solid var(--md-sys-color-outline-variant)}
-  .crow:last-child{border-bottom:0}
+  .sum-rows{margin-top:10px}
+  .crow{display:flex;align-items:center;gap:10px;padding:10px;margin:0 -6px;border-radius:10px;font:var(--md-sys-typescale-body-large);transition:background .15s}
+  .crow:hover{background:var(--md-sys-color-surface-container-highest)}
   .crow .lbl{flex:1}
   .crow .ci{font-size:20px;flex:0 0 auto;color:var(--warn)}
   .crow.ok-row .ci{color:var(--md-sys-color-primary)}
@@ -779,14 +779,14 @@
     <a class="navitem" data-view="locations" data-tip="Log Lokasi"><span class="mi">table_rows</span><span class="lbl">Log Lokasi</span><span class="pill" id="loc-count"></span></a>
     <div class="navgroup admin-only" id="navSettings">
       <a class="navitem grouphead" id="setToggle" data-tip="Pengaturan"><span class="mi">settings</span><span class="lbl">Pengaturan</span><span class="mi chev">expand_more</span></a>
-      <div class="navsub">
+      <div class="navsub"><div class="navsub-inner">
         <a class="subnav" data-sub="lokasi"><span class="mi">list_alt</span><span class="lbl">Field Data Lokasi</span></a>
         <a class="subnav" data-sub="inventory"><span class="mi">inventory_2</span><span class="lbl">Field Inventory</span></a>
         <a class="subnav" data-sub="photo"><span class="mi">photo_library</span><span class="lbl">Field Photo &amp; Capture</span></a>
         <a class="subnav" data-sub="users"><span class="mi">group</span><span class="lbl">Users</span></a>
         <a class="subnav" data-sub="templates"><span class="mi">description</span><span class="lbl">Template</span></a>
         <a class="subnav" data-sub="backup"><span class="mi">backup</span><span class="lbl">BackUp &amp; Restore</span></a>
-      </div>
+      </div></div>
     </div>
     <div class="nav-foot">
       <md-icon-button id="pwBtn" data-tip="Ganti password"><span>password</span></md-icon-button>
