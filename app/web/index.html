@@ -24,11 +24,49 @@
   h2{font:var(--md-sys-typescale-headline-small);margin:0}
   h3{font:var(--md-sys-typescale-title-medium);margin:0}
 
-  /* Login */
-  #login{min-height:100vh;display:grid;place-items:center;padding:20px}
-  #login .box{width:100%;max-width:360px;background:var(--md-sys-color-surface);border-radius:28px;padding:28px;box-shadow:var(--md-sys-elevation-level1)}
-  #login .brand{display:flex;align-items:center;gap:10px;font:var(--md-sys-typescale-title-large);margin-bottom:16px}
-  #login md-text-field{width:100%;margin:8px 0}
+  /* Login (redesign) */
+  #login{min-height:100vh;display:grid;place-items:center;padding:20px;position:relative;overflow:hidden;
+    background:
+     radial-gradient(1000px 520px at 18% 8%, color-mix(in srgb,var(--md-sys-color-primary) 45%, #07201f) 0%, transparent 60%),
+     radial-gradient(820px 460px at 88% 92%, color-mix(in srgb,var(--md-sys-color-primary) 34%, #07201f) 0%, transparent 55%),
+     linear-gradient(140deg,#0c2726,#0e2a2a 55%,#081f1e)}
+  #login .lg-blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.42;pointer-events:none;animation:lgdrift 18s ease-in-out infinite alternate}
+  #login .lg-blob.b1{width:360px;height:360px;left:-80px;top:-60px;background:color-mix(in srgb,var(--md-sys-color-primary) 80%,#fff)}
+  #login .lg-blob.b2{width:300px;height:300px;right:-60px;bottom:-40px;background:color-mix(in srgb,var(--md-sys-color-primary) 65%,#fff);animation-delay:-6s}
+  #login .lg-blob.b3{width:200px;height:200px;left:42%;top:60%;background:color-mix(in srgb,var(--md-sys-color-primary) 50%,#000);animation-delay:-10s}
+  @keyframes lgdrift{to{transform:translate(28px,-22px) scale(1.12)}}
+  #login .lg-stars{position:absolute;inset:0;z-index:0}
+  #login .lg-stars .st{position:absolute;width:2px;height:2px;border-radius:50%;background:#cfeeed}
+  .lgcard{position:relative;z-index:2;width:380px;max-width:calc(100vw - 32px);background:var(--md-sys-color-surface);
+    border-radius:26px;padding:30px 28px;box-shadow:var(--md-sys-elevation-level5),0 30px 80px rgba(0,0,0,.4);
+    opacity:0;transform:translateY(18px) scale(.965);filter:blur(6px);animation:lgrise .6s cubic-bezier(.2,.8,.2,1) forwards}
+  @keyframes lgrise{to{opacity:1;transform:none;filter:blur(0)}}
+  .lgcard>*{opacity:0;transform:translateY(10px);animation:lgpop .5s cubic-bezier(.2,.8,.2,1) forwards}
+  .lgcard>*:nth-child(1){animation-delay:.14s}.lgcard>*:nth-child(2){animation-delay:.20s}.lgcard>*:nth-child(3){animation-delay:.26s}
+  .lgcard>*:nth-child(4){animation-delay:.32s}.lgcard>*:nth-child(5){animation-delay:.38s}.lgcard>*:nth-child(6){animation-delay:.44s}.lgcard>*:nth-child(7){animation-delay:.50s}
+  @keyframes lgpop{to{opacity:1;transform:none}}
+  .lgcard.admin{--md-sys-color-primary:#6b4fb0}
+  .lg-brand{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .lg-logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;color:var(--md-sys-color-on-primary);font-size:24px;
+    background:linear-gradient(135deg,var(--md-sys-color-primary),color-mix(in srgb,var(--md-sys-color-primary) 60%,#000));box-shadow:0 6px 16px color-mix(in srgb,var(--md-sys-color-primary) 35%,transparent)}
+  .lg-nm{font:var(--md-sys-typescale-headline-small);font-weight:800;letter-spacing:-.3px}
+  .lg-sub{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-small);margin:0 0 18px}
+  .lg-seg{display:flex;background:var(--md-sys-color-surface-container-high);border-radius:14px;padding:4px;margin-bottom:20px;position:relative}
+  .lg-seg button{flex:1;border:none;background:transparent;color:var(--md-sys-color-on-surface-variant);padding:10px;border-radius:11px;cursor:pointer;font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:7px;z-index:1;transition:color .2s}
+  .lg-seg .ind{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);border-radius:11px;background:var(--md-sys-color-surface);box-shadow:var(--md-sys-elevation-level1);transition:transform .28s cubic-bezier(.34,1.4,.5,1)}
+  .lg-seg.op .ind{transform:translateX(100%)}
+  .lg-seg button.on{color:var(--md-sys-color-primary)}
+  .lg-fld{position:relative;margin-bottom:14px}
+  .lg-fld input{width:100%;border:1.5px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);border-radius:13px;padding:17px 40px 7px 14px;font-size:15px;color:var(--md-sys-color-on-surface);outline:none;transition:border-color .18s,box-shadow .18s}
+  .lg-fld input:focus{border-color:var(--md-sys-color-primary);box-shadow:0 0 0 3px color-mix(in srgb,var(--md-sys-color-primary) 16%,transparent)}
+  .lg-fld label{position:absolute;left:14px;top:15px;color:var(--md-sys-color-on-surface-variant);pointer-events:none;transition:.16s;font-size:15px}
+  .lg-fld input:focus+label,.lg-fld input:not(:placeholder-shown)+label{top:6px;font-size:11px;color:var(--md-sys-color-primary);font-weight:600}
+  .lg-fld .eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--md-sys-color-on-surface-variant);user-select:none}
+  .lg-btn{width:100%;border:none;background:linear-gradient(135deg,var(--md-sys-color-primary),color-mix(in srgb,var(--md-sys-color-primary) 62%,#000));color:var(--md-sys-color-on-primary);padding:15px;border-radius:14px;font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 10px 24px color-mix(in srgb,var(--md-sys-color-primary) 30%,transparent);transition:transform .12s,box-shadow .2s}
+  .lg-btn:hover{transform:translateY(-1px)}.lg-btn:active{transform:translateY(0)}
+  .lg-foot{text-align:center;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small);margin:16px 0 0}
+  .lg-err{color:var(--md-sys-color-error);font:var(--md-sys-typescale-body-small);margin:10px 0 0;text-align:center}
+  @media(prefers-reduced-motion:reduce){.lgcard,.lgcard>*,#login .lg-blob{animation:none!important;opacity:1!important;transform:none!important;filter:none!important}}
   .brand .dot{width:36px;height:36px;border-radius:11px;background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);display:grid;place-items:center}
 
   /* Shell */
@@ -438,14 +476,20 @@
 <body>
 
 <div id="login">
-  <div class="box">
-    <div class="brand"><span class="dot mi fill">inventory_2</span> BAA Generator</div>
-    <p class="muted" style="margin:0 0 8px">Login awal: <b>admin</b> / <b>admin</b></p>
-    <md-text-field id="lg-user" variant="outlined" label="Username"></md-text-field>
-    <md-text-field id="lg-pass" variant="outlined" label="Password" type="password"></md-text-field>
-    <div style="margin-top:14px"><md-button id="lg-btn" variant="filled" size="m" style="width:100%">Masuk</md-button></div>
-    <p id="lg-err" class="muted hidden" style="color:var(--md-sys-color-error);margin-top:12px"></p>
-  </div>
+  <div class="lg-blob b1"></div><div class="lg-blob b2"></div><div class="lg-blob b3"></div>
+  <div class="lg-stars" id="lgStars"></div>
+  <form class="lgcard" id="lgCard" onsubmit="return false">
+    <div class="lg-brand"><span class="lg-logo mi" id="lgLogo">shield_person</span><span class="lg-nm">BAA Generator</span></div>
+    <p class="lg-sub" id="lgSub">Masuk sebagai <b>Administrator</b></p>
+    <div class="lg-seg" id="lgSeg"><span class="ind"></span>
+      <button type="button" class="on" data-r="admin"><span class="mi">shield_person</span>Admin</button>
+      <button type="button" data-r="op"><span class="mi">engineering</span>Operator</button>
+    </div>
+    <div class="lg-fld"><input id="lg-user" placeholder=" " autocomplete="username"><label for="lg-user">Username</label></div>
+    <div class="lg-fld"><input id="lg-pass" type="password" placeholder=" " autocomplete="current-password"><label for="lg-pass">Password</label><span class="mi eye" id="lgEye">visibility</span></div>
+    <button type="button" class="lg-btn" id="lg-btn"><span class="mi">login</span> <span id="lgBtnT">Masuk sebagai Admin</span></button>
+    <p id="lg-err" class="lg-err hidden"></p>
+  </form>
 </div>
 
 <div id="app" class="shell hidden">
@@ -967,7 +1011,25 @@ async function boot(){paint();
   mapDetailSel=new MDSelect($('#map-detail'),{label:'Sheet Detail',onChange:v=>renderRef(v)});
   roleSel=new MDSelect($('#u-role'),{label:'Role'});roleSel.setOptions([{value:'operator',label:'operator'},{value:'admin',label:'admin'}]).setValue('operator');
   try{S.user=await api('/api/auth/me');showApp();}catch{$('#login').classList.remove('hidden');bindTips();}}
-$('#lg-btn').addEventListener('click',async()=>{try{await api('/api/auth/login',{method:'POST',body:JSON.stringify({username:$('#lg-user').value,password:$('#lg-pass').value})});S.user=await api('/api/auth/me');showApp();}catch(e){const el=$('#lg-err');el.textContent=e.message;el.classList.remove('hidden');}});
+let lgRole='admin';
+/* mode Admin/Operator (pembeda tampilan + peringatan ringan) */
+$('#lgStars').innerHTML=Array.from({length:38},()=>`<span class="st" style="left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:${(.2+Math.random()*.6).toFixed(2)}"></span>`).join('');
+$('#lgSeg').querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+  $('#lgSeg').querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  lgRole=b.dataset.r;const admin=lgRole==='admin';
+  $('#lgSeg').classList.toggle('op',!admin);$('#lgCard').classList.toggle('admin',admin);
+  $('#lgLogo').textContent=admin?'shield_person':'engineering';
+  $('#lgSub').innerHTML=`Masuk sebagai <b>${admin?'Administrator':'Operator'}</b>`;
+  $('#lgBtnT').textContent=`Masuk sebagai ${admin?'Admin':'Operator'}`;
+  $('#lg-err').classList.add('hidden');}));
+$('#lgEye').addEventListener('click',()=>{const p=$('#lg-pass');const s=p.type==='password';p.type=s?'text':'password';$('#lgEye').textContent=s?'visibility_off':'visibility';});
+$('#lg-btn').addEventListener('click',async()=>{const el=$('#lg-err');el.classList.add('hidden');
+  try{await api('/api/auth/login',{method:'POST',body:JSON.stringify({username:$('#lg-user').value,password:$('#lg-pass').value})});
+    S.user=await api('/api/auth/me');
+    const wantAdmin=lgRole==='admin',isAdmin=S.user.role==='admin';
+    if(wantAdmin!==isAdmin)toast(`Kamu masuk sebagai ${isAdmin?'Administrator':'Operator'}`);
+    showApp();
+  }catch(e){el.textContent=e.message;el.classList.remove('hidden');}});
 $('#lg-pass').addEventListener('keydown',e=>{if(e.key==='Enter')$('#lg-btn').click()});
 $('#logoutBtn').addEventListener('click',async()=>{await api('/api/auth/logout',{method:'POST'});location.reload();});
 $('#themeBtn').addEventListener('click',()=>{const c=MD3.getTheme();MD3.setTheme(c==='dark'?'light':'dark');applyCalm();});
