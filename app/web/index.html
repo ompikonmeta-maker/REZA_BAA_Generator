@@ -487,10 +487,15 @@
   .map-range{background:color-mix(in srgb,var(--md-sys-color-primary) 7%,var(--md-sys-color-surface));border:1px dashed color-mix(in srgb,var(--md-sys-color-primary) 40%,transparent);border-radius:10px;padding:10px 12px;color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-small)}
   .map-preview{border:1px dashed var(--md-sys-color-outline-variant);border-radius:12px;display:grid;place-items:center;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small);
     background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--md-sys-color-primary) 4%,var(--md-sys-color-surface)),color-mix(in srgb,var(--md-sys-color-primary) 4%,var(--md-sys-color-surface)) 10px,var(--md-sys-color-surface) 10px,var(--md-sys-color-surface) 20px);max-height:200px}
-  .map-photorow{display:grid;grid-template-columns:1fr 120px auto;gap:12px;align-items:center;padding:9px 0;border-bottom:1px solid var(--md-sys-color-outline-variant)}
-  .map-photorow .lbl{font:var(--md-sys-typescale-body-medium);font-weight:600;min-width:0}
-  .map-photorow .st{font:var(--md-sys-typescale-label-small);font-weight:700;white-space:nowrap}
+  .map-photorow{display:grid;grid-template-columns:minmax(0,1fr) 132px 74px 38px;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid var(--md-sys-color-outline-variant)}
+  .map-photorow .lbl{font:var(--md-sys-typescale-body-medium);font-weight:600;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .map-photorow .map-photo-inp{width:100%}
+  .map-photorow .st{font:var(--md-sys-typescale-label-small);font-weight:700;white-space:nowrap;text-align:right}
   .map-photorow .st.ok{color:var(--good)}.map-photorow .st.no{color:var(--md-sys-color-on-surface-variant)}
+  .map-photorow .pickbtn{width:34px;height:34px;border:1px solid var(--md-sys-color-outline-variant);background:var(--md-sys-color-surface);border-radius:8px;display:grid;place-items:center;cursor:pointer;color:var(--md-sys-color-primary)}
+  .map-photorow .pickbtn:hover{background:var(--md-sys-color-secondary-container)}
+  .map-photorow .pickbtn .mi{font-size:18px}
+  .maptab-inp::placeholder{text-transform:none;color:var(--md-sys-color-on-surface-variant);opacity:.7}
   .map-actionbar{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--md-sys-color-surface) 96%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--md-sys-color-outline-variant);padding:12px 22px;display:flex;align-items:center;gap:14px;z-index:30}
   .map-actionbar .ring{width:40px;height:40px;flex:0 0 auto}
   .map-actionbar .sum b{font-weight:800}.map-actionbar .sum small{display:block;color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small)}
@@ -2003,15 +2008,18 @@ window.openMapping=async id=>{S.mapTplId=id;const tpl=await api('/api/templates/
 
 function renderMapPhotos(){const q=($('#map-photosearch').value||'').toLowerCase();
   $('#map-photos').innerHTML=MAP_PH.map((p,i)=>p.label.toLowerCase().includes(q)?
-    `<div class="map-photorow"><span class="lbl">${esc(p.label)}${p.ocr?' · <span style="color:var(--md-sys-color-primary);font-weight:700">OCR</span>':''}</span>
-      <input class="maptab-inp map-photo-inp" data-i="${i}" placeholder="mis. B27" value="${esc(p.cell)}">
-      <span class="st ${p.cell?'ok':'no'}">${p.cell?'✓ Terisi':'Belum'}</span></div>`:'').join('')
+    `<div class="map-photorow"><span class="lbl" title="${esc(p.label)}">${esc(p.label)}${p.ocr?' · <span style="color:var(--md-sys-color-primary);font-weight:700">OCR</span>':''}</span>
+      <input class="maptab-inp map-photo-inp" data-i="${i}" placeholder="ketik / pilih" value="${esc(p.cell)}">
+      <span class="st ${p.cell?'ok':'no'}">${p.cell?'✓ Terisi':'Belum'}</span>
+      <button class="pickbtn" data-i="${i}" data-tip="Pilih sel dari sheet"><span class="mi">grid_on</span></button></div>`:'').join('')
     ||'<p class="muted">Tidak ada kategori cocok.</p>';
   $$('.map-photo-inp').forEach(el=>{
-    el.addEventListener('focus',()=>{mapActive=el;mapOpenDrawer();});
     el.addEventListener('input',()=>{MAP_PH[+el.dataset.i].cell=el.value.trim().toUpperCase();mapDirty();mapConflict();mapSteps();});
+    el.addEventListener('focus',()=>{mapActive=el;});   // hanya tandai aktif, TIDAK buka drawer (biar bisa ketik manual)
+    el.addEventListener('blur',()=>{const st=el.closest('.map-photorow').querySelector('.st');const v=el.value.trim();st.className='st '+(v?'ok':'no');st.textContent=v?'✓ Terisi':'Belum';});
   });
-  mapConflict();mapSteps();}
+  $$('.pickbtn').forEach(b=>b.addEventListener('click',()=>{mapActive=$(`.map-photo-inp[data-i="${b.dataset.i}"]`);mapOpenDrawer();}));
+  bindTips();mapConflict();mapSteps();}
 $('#map-photosearch').addEventListener('input',renderMapPhotos);
 
 function mapConflict(){const seen={},dup=new Set();MAP_PH.forEach(p=>{const v=(p.cell||'').toUpperCase();if(v){if(seen[v])dup.add(v);seen[v]=1;}});
