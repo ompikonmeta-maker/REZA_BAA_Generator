@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Foto grid tile kompak (fitur lengkap)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#e8ebeb;--pane:#fcfefe;--ink:#141a19;--mut:#5a6462;--ov:#dbe0df;--fieldbg:#f2f5f5;--pri:#04726f;--pri2:#0a9c97;--sec:#cfe6e5;--onsec:#00413f;--tert:#7a5cc0;--disp:'Sora',system-ui;--warn:#9a5b00;--warnbg:#fdeede;--bad:#a3312a}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1212;--pane:#191d1d;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2a3130;--fieldbg:#121616;--pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec;--warn:#ffb95c;--warnbg:#3a2a10}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI",Roboto,system-ui}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+  .wrap{max-width:820px;margin:0 auto;padding:26px 18px 70px}
+  .card{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:16px 18px}
+  .ch{display:flex;align-items:center;gap:11px;margin-bottom:6px}
+  .ch .ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--sec);color:var(--onsec)}
+  .ch h3{font-family:var(--disp);font-size:15px;margin:0;flex:1}
+  .ch .addmini{border:0;background:var(--sec);color:var(--onsec);border-radius:20px;padding:7px 13px;font-weight:800;cursor:pointer;font-size:12.5px;display:inline-flex;gap:6px;align-items:center}
+  .hint{color:var(--mut);font-size:11.5px;margin:2px 0 12px}
+  .pg{display:grid;grid-template-columns:repeat(auto-fill,minmax(132px,1fr));gap:12px}
+  .tile{position:relative;border-radius:14px;overflow:hidden;background:var(--fieldbg);border:1.5px solid var(--ov)}
+  .tile .thumb{aspect-ratio:4/3;display:block;position:relative}
+  .tile.has .thumb{background:linear-gradient(135deg,#0e8b86,#0a3b39);cursor:pointer}
+  .tile.empty .thumb{display:grid;place-items:center;color:var(--mut);cursor:pointer;border:0}
+  .tile.empty .thumb .mi{font-size:26px;color:var(--pri)}
+  /* label + status */
+  .tile .cap{position:absolute;left:0;right:0;bottom:0;padding:7px 9px;background:linear-gradient(to top,rgba(0,0,0,.6),transparent);color:#fff;font-size:11.5px;font-weight:700}
+  .tile.empty .cap{position:static;color:var(--ink);background:none;padding:8px 9px 10px;text-align:center}
+  .tile .ok{position:absolute;top:7px;left:7px;color:#fff;filter:drop-shadow(0 1px 2px rgba(0,0,0,.4));z-index:2}
+  .tile .more{position:absolute;top:5px;right:5px;z-index:3;width:28px;height:28px;border-radius:9px;border:0;background:rgba(255,255,255,.9);color:#1a1c1d;display:grid;place-items:center;cursor:pointer;opacity:0;transition:.15s}
+  .tile:hover .more,.tile:focus-within .more{opacity:1}
+  @media(hover:none){.tile .more{opacity:1}}
+  /* SN strip (kategori OCR) */
+  .sn{position:absolute;left:0;right:0;bottom:0;z-index:2;display:flex;align-items:center;gap:6px;background:color-mix(in srgb,var(--tert) 88%,#000);color:#fff;padding:5px 8px;font-size:11px;font-weight:800;cursor:text}
+  .sn .mi{font-size:14px}.sn .v{flex:1;min-width:0;font-family:ui-monospace,Consolas,monospace;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sn.warn{background:var(--warn)}
+  .sn input{flex:1;min-width:0;border:0;border-radius:5px;padding:2px 5px;font-family:ui-monospace,Consolas,monospace;font-weight:700}
+  /* undo overlay in-tile */
+  .undo{position:absolute;inset:0;z-index:4;background:rgba(20,26,25,.86);color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+  .undo.on{display:flex}
+  .undo svg{width:40px;height:40px;transform:rotate(-90deg)}
+  .undo svg circle{fill:none;stroke-width:4}.undo .t{stroke:rgba(255,255,255,.25)}.undo .p{stroke:#fff;stroke-linecap:round;stroke-dasharray:113;animation:drain 5s linear forwards}
+  @keyframes drain{from{stroke-dashoffset:0}to{stroke-dashoffset:113}}
+  .undo .ub{border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;border-radius:16px;padding:4px 12px;font-weight:800;cursor:pointer;font-size:11px}
+  /* menu */
+  .menu{position:fixed;z-index:50;background:var(--pane);border:1px solid var(--ov);border-radius:12px;box-shadow:0 16px 40px rgba(0,0,0,.24);padding:6px;min-width:180px;display:none}
+  .menu.on{display:block;animation:mpop .16s ease}
+  @keyframes mpop{from{opacity:0;transform:translateY(-4px)}}
+  .menu button{display:flex;align-items:center;gap:10px;width:100%;border:0;background:transparent;color:var(--ink);padding:9px 10px;border-radius:8px;cursor:pointer;font-weight:600;font-size:13px;text-align:left}
+  .menu button:hover{background:var(--sec)}
+  .menu button.dang{color:var(--bad)}.menu button .mi{font-size:18px;color:var(--mut)}
+  .menu button.dang .mi{color:var(--bad)}
+  .menu .sep{height:1px;background:var(--ov);margin:5px 0}
+  .legend{margin-top:18px;color:var(--mut);font-size:12px;line-height:1.7}.legend b{color:var(--ink)}
+  .uncat{margin-top:14px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="ch"><span class="ic mi">photo_camera</span><h3>Foto &amp; Capture</h3><span style="color:var(--mut);font-weight:800;font-size:12.5px">7 / 11</span><button class="addmini"><span class="mi">upload</span> Unggah</button></div>
+    <p class="hint"><span class="mi" style="font-size:14px">info</span> Unggah sekaligus → kategori otomatis dari nama file, SN langsung di-OCR. Klik tile untuk atur/crop; menu ⋯ untuk aksi lain.</p>
+    <div class="pg" id="pg"></div>
+
+    <div class="uncat">
+      <div class="ch" style="margin:16px 0 6px"><span class="ic mi">help</span><h3 style="font-size:14px">Belum terkategori</h3></div>
+      <div class="pg" id="pgu"></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <b>Semua fitur foto tetap ada</b>, dikemas ke tile kompak:<br>
+    • <b>Klik tile</b> = Edit/sesuaikan (reposisi/zoom/crop) &nbsp;•&nbsp; <b>⋯</b> = Baca SN, Isi SN ke Inventory, Ganti foto, Hapus<br>
+    • <b>✓</b> = sudah terisi &nbsp;•&nbsp; <b>strip SN</b> (kategori OCR) tampil di bawah tile, <b>klik untuk koreksi</b> &nbsp;•&nbsp; Hapus → <b>undo bercincin timer</b> di dalam tile<br>
+    • Tile kosong = klik untuk unggah &nbsp;•&nbsp; foto <b>belum terkategori</b> punya menu "Pindah kategori"
+  </div>
+</div>
+
+<div class="menu" id="menu"></div>
+
+<script>
+  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+  // key, label, ocr, filled, sn
+  const CATS=[
+    {k:'dash',l:'Dashboard',ocr:0,f:1},
+    {k:'depan',l:'Tampak Depan',ocr:0,f:1},
+    {k:'teknisi',l:'Teknisi+PIC',ocr:0,f:1},
+    {k:'outdoor',l:'Outdoor',ocr:0,f:1},
+    {k:'indoor',l:'Indoor',ocr:0,f:1},
+    {k:'snkit',l:'SN Kit',ocr:1,f:0,sn:''},
+    {k:'snrtr',l:'SN Router',ocr:1,f:1,sn:'RTR-55012'},
+    {k:'snap',l:'SN Access Point',ocr:1,f:1,sn:''},
+    {k:'ping',l:'Ping',ocr:0,f:1},
+    {k:'speed',l:'Speed',ocr:0,f:1},
+    {k:'simk',l:'SIMKOPDES',ocr:0,f:0},
+  ];
+  function tile(c,i){
+    if(!c.f) return `<div class="tile empty"><div class="thumb" onclick="alert('Unggah foto: ${c.l}')"><span class="mi">add_a_photo</span></div><div class="cap">${c.l}${c.ocr?' · <span style="color:var(--pri)">OCR</span>':''}</div></div>`;
+    const snStrip=c.ocr?(c.sn
+      ? `<div class="sn" onclick="editSn(this,${i})"><span class="mi">tag</span><span class="v" title="${c.sn}">${c.sn}</span></div>`
+      : `<div class="sn warn" onclick="openMenu(event,${i})"><span class="mi">document_scanner</span><span class="v">SN belum terbaca</span></div>`):'';
+    return `<div class="tile has" data-i="${i}">
+      <div class="thumb" onclick="alert('Edit/sesuaikan: ${c.l}')"><span class="mi ok">check_circle</span></div>
+      <button class="more" onclick="openMenu(event,${i})"><span class="mi">more_vert</span></button>
+      ${c.ocr?'':`<div class="cap">${c.l}</div>`}
+      ${c.ocr?`<div class="cap" style="bottom:26px">${c.l}</div>`:''}
+      ${snStrip}
+      <div class="undo"><svg viewBox="0 0 40 40"><circle class="t" cx="20" cy="20" r="18"/><circle class="p" cx="20" cy="20" r="18"/></svg><button class="ub" onclick="undo(this)">Urungkan</button></div>
+    </div>`;
+  }
+  $('#pg').innerHTML=CATS.map(tile).join('');
+  $('#pgu').innerHTML=`<div class="tile has"><div class="thumb"></div><button class="more" onclick="openMenuU(event)"><span class="mi">more_vert</span></button><div class="cap">IMG_2231.jpg</div></div>`;
+
+  function editSn(el,i){const cur=CATS[i].sn;el.innerHTML=`<input value="${cur}"><span class="mi" style="cursor:pointer" onclick="applySn(${i})" title="Isi ke Inventory">arrow_forward</span>`;
+    const inp=el.querySelector('input');inp.focus();inp.select();
+    inp.addEventListener('keydown',e=>{if(e.key==='Enter'){CATS[i].sn=inp.value;render();}});
+    inp.addEventListener('blur',()=>{CATS[i].sn=inp.value;render();});}
+  function applySn(i){alert('SN "'+CATS[i].sn+'" diisi ke baris Inventory (mapping kategori→item).');}
+  function render(){$('#pg').innerHTML=CATS.map(tile).join('');}
+
+  // menu ⋯
+  let mi=-1;
+  function openMenu(e,i){e.stopPropagation();mi=i;const c=CATS[i];
+    const items=[['tune','Edit / sesuaikan',0]];
+    if(c.ocr)items.push(['barcode_scanner','Baca SN',0]);
+    if(c.ocr&&c.sn)items.push(['arrow_forward','Isi SN ke Inventory',0]);
+    items.push(['swap_horiz','Ganti foto',0],['delete','Hapus',1]);
+    showMenu(e,items,(idx)=>{const lbl=items[idx][1];if(lbl==='Hapus'){del(i);}else alert(lbl+' — '+c.l);});}
+  function openMenuU(e){e.stopPropagation();showMenu(e,[['drive_file_move','Pindah kategori',0],['delete','Hapus',1]],idx=>alert(idx===0?'Pilih kategori tujuan…':'Hapus foto'));}
+  function showMenu(e,items,onPick){const m=$('#menu');
+    m.innerHTML=items.map((it,idx)=>`${it[1]==='Hapus'?'<div class="sep"></div>':''}<button class="${it[2]?'dang':''}" data-idx="${idx}"><span class="mi">${it[0]}</span>${it[1]}</button>`).join('');
+    m.querySelectorAll('button').forEach(b=>b.onclick=()=>{closeMenu();onPick(+b.dataset.idx);});
+    m.classList.add('on');const r=e.currentTarget.getBoundingClientRect();
+    m.style.left=Math.min(r.left,window.innerWidth-200)+'px';m.style.top=(r.bottom+6)+'px';}
+  function closeMenu(){$('#menu').classList.remove('on');}
+  document.addEventListener('click',e=>{if(!e.target.closest('#menu')&&!e.target.closest('.more')&&!e.target.closest('.sn.warn'))closeMenu();});
+
+  function del(i){const t=$$('.tile')[i];const u=t.querySelector('.undo');u.classList.add('on');
+    const p=u.querySelector('.p');p.style.animation='none';void p.offsetWidth;p.style.animation='';
+    t._to=setTimeout(()=>{u.classList.remove('on');CATS[i].f=0;CATS[i].sn='';render();},5000);}
+  function undo(btn){const t=btn.closest('.tile');clearTimeout(t._to);t.querySelector('.undo').classList.remove('on');}
+</script>
+</body>
+</html>
