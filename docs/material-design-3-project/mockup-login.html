@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Login BAA</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#0e2a2a;--card:#fcfefe;--ink:#132020;--mut:#5a6a68;--ov:#dbe3e1;--fill:#eef3f2;
+    --pri:#04726f;--pri2:#0a4d4a;--onp:#fff;--sec:#cfe6e5;--onsec:#00413f;--admin:#7a5cc0;--disp:'Sora',system-ui,sans-serif;}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--card:#141a1a;--ink:#e6efee;--mut:#9fb0ae;--ov:#2c3736;--fill:#1c2423;}}
+  *{box-sizing:border-box}
+  body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);font:15px/1.5 "Segoe UI",Roboto,system-ui,sans-serif;
+    display:grid;place-items:center;overflow:hidden;position:relative}
+  /* aurora background */
+  .aurora{position:fixed;inset:0;z-index:0;overflow:hidden;background:
+    radial-gradient(1200px 600px at 20% 10%, #0b3b39 0%, transparent 60%),
+    radial-gradient(900px 500px at 90% 90%, #0a4d4a 0%, transparent 55%),
+    linear-gradient(140deg,#0c2726,#0e2a2a 50%,#08201f)}
+  .blob{position:absolute;border-radius:50%;filter:blur(60px);opacity:.5;animation:drift 18s ease-in-out infinite alternate}
+  .b1{width:360px;height:360px;background:#0e8b86;left:-80px;top:-60px}
+  .b2{width:300px;height:300px;background:#12b0a8;right:-60px;bottom:-40px;animation-delay:-6s}
+  .b3{width:200px;height:200px;background:#0a5f5b;left:40%;top:60%;animation-delay:-10s}
+  @keyframes drift{to{transform:translate(30px,-24px) scale(1.12)}}
+  .stars{position:fixed;inset:0;z-index:0}
+  .st{position:absolute;width:2px;height:2px;border-radius:50%;background:#cfeeed;opacity:.5}
+  /* card */
+  .card{position:relative;z-index:2;width:380px;max-width:calc(100vw - 32px);background:var(--card);
+    border-radius:26px;padding:30px 28px;box-shadow:0 30px 80px rgba(0,0,0,.45),0 2px 8px rgba(0,0,0,.2);
+    opacity:0;transform:translateY(18px) scale(.965);filter:blur(6px);animation:rise .6s cubic-bezier(.2,.8,.2,1) forwards}
+  @keyframes rise{to{opacity:1;transform:none;filter:blur(0)}}
+  .card>*{opacity:0;transform:translateY(10px);animation:pop .5s cubic-bezier(.2,.8,.2,1) forwards}
+  .card>*:nth-child(1){animation-delay:.14s}.card>*:nth-child(2){animation-delay:.20s}
+  .card>*:nth-child(3){animation-delay:.26s}.card>*:nth-child(4){animation-delay:.32s}
+  .card>*:nth-child(5){animation-delay:.38s}.card>*:nth-child(6){animation-delay:.44s}
+  @keyframes pop{to{opacity:1;transform:none}}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:4px}
+  .brand .logo{width:44px;height:44px;border-radius:14px;display:grid;place-items:center;color:#fff;font-size:24px;
+    background:linear-gradient(135deg,var(--pri),var(--pri2));box-shadow:0 6px 16px rgba(4,114,111,.35);transition:background .3s}
+  .brand .nm{font-family:var(--disp);font-weight:800;font-size:20px;letter-spacing:-.3px}
+  .sub{color:var(--mut);font-size:13px;margin:0 0 18px;transition:color .2s}
+  /* segmented */
+  .seg{display:flex;background:var(--fill);border-radius:14px;padding:4px;margin-bottom:20px;position:relative}
+  .seg button{flex:1;border:none;background:transparent;color:var(--mut);padding:10px;border-radius:11px;cursor:pointer;
+    font-weight:700;font-size:13.5px;display:flex;align-items:center;justify-content:center;gap:7px;z-index:1;transition:color .2s}
+  .seg .ind{position:absolute;top:4px;left:4px;width:calc(50% - 4px);height:calc(100% - 8px);border-radius:11px;
+    background:var(--card);box-shadow:0 2px 8px rgba(0,0,0,.12);transition:transform .28s cubic-bezier(.34,1.4,.5,1),background .3s}
+  .seg.op .ind{transform:translateX(100%)}
+  .seg button.on{color:var(--pri)}
+  .fld{position:relative;margin-bottom:14px}
+  .fld input{width:100%;border:1.5px solid var(--ov);background:var(--card);border-radius:13px;padding:16px 14px 8px;
+    font-size:15px;color:var(--ink);outline:none;transition:border-color .18s,box-shadow .18s}
+  .fld input:focus{border-color:var(--pri);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 16%,transparent)}
+  .fld label{position:absolute;left:14px;top:14px;color:var(--mut);pointer-events:none;transition:.16s;font-size:15px}
+  .fld input:focus+label,.fld input:not(:placeholder-shown)+label{top:6px;font-size:11px;color:var(--pri);font-weight:600}
+  .fld .eye{position:absolute;right:10px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--mut);user-select:none}
+  .btn{width:100%;border:none;background:linear-gradient(135deg,var(--pri),var(--pri2));color:#fff;padding:15px;border-radius:14px;
+    font-weight:700;font-size:15px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;
+    box-shadow:0 10px 24px rgba(4,114,111,.32);transition:transform .12s,box-shadow .2s,background .3s}
+  .btn:hover{transform:translateY(-1px);box-shadow:0 14px 30px rgba(4,114,111,.4)}
+  .btn:active{transform:translateY(0)}
+  .foot{text-align:center;color:var(--mut);font-size:11.5px;margin:16px 0 0}
+  /* admin accent */
+  .card.admin{--pri:#6b4fb0;--pri2:#4a3480}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;line-height:1;vertical-align:-3px}
+  .replay{position:fixed;z-index:3;right:16px;bottom:16px;background:rgba(255,255,255,.12);color:#dfeeed;border:1px solid rgba(255,255,255,.2);
+    border-radius:20px;padding:8px 14px;cursor:pointer;font-size:12px}
+</style>
+</head>
+<body>
+  <div class="aurora"><div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div></div>
+  <div class="stars" id="stars"></div>
+
+  <form class="card" id="card" onsubmit="return false">
+    <div class="brand"><span class="logo mi" id="logo">shield_person</span><span class="nm">BAA Generator</span></div>
+    <p class="sub" id="sub">Masuk sebagai <b>Administrator</b></p>
+    <div class="seg" id="seg">
+      <span class="ind"></span>
+      <button type="button" class="on" data-r="admin"><span class="mi">shield_person</span>Admin</button>
+      <button type="button" data-r="op"><span class="mi">engineering</span>Operator</button>
+    </div>
+    <div class="fld"><input id="u" placeholder=" " autocomplete="username"><label for="u">Username</label></div>
+    <div class="fld"><input id="p" type="password" placeholder=" " autocomplete="current-password"><label for="p">Password</label><span class="mi eye" id="eye" onclick="tog()">visibility</span></div>
+    <button class="btn" id="btn"><span class="mi">login</span> <span id="btnt">Masuk sebagai Admin</span></button>
+    <p class="foot">Belum bisa masuk? Hubungi administrator.</p>
+  </form>
+  <button class="replay" onclick="replay()">↻ Putar ulang animasi</button>
+
+<script>
+  const $=s=>document.querySelector(s);
+  // stars
+  $('#stars').innerHTML=Array.from({length:40},()=>`<span class="st" style="left:${Math.random()*100}%;top:${Math.random()*100}%;opacity:${(.2+Math.random()*.6).toFixed(2)}"></span>`).join('');
+  // toggle
+  const seg=$('#seg');
+  seg.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    seg.querySelectorAll('button').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+    const admin=b.dataset.r==='admin';seg.classList.toggle('op',!admin);
+    $('#card').classList.toggle('admin',admin);
+    $('#logo').textContent=admin?'shield_person':'engineering';
+    $('#sub').innerHTML=`Masuk sebagai <b>${admin?'Administrator':'Operator'}</b>`;
+    $('#btnt').textContent=`Masuk sebagai ${admin?'Admin':'Operator'}`;
+  }));
+  function tog(){const p=$('#p');const e=$('#eye');const s=p.type==='password';p.type=s?'text':'password';e.textContent=s?'visibility_off':'visibility';}
+  function replay(){const c=$('#card');c.style.animation='none';[...c.children].forEach(x=>x.style.animation='none');void c.offsetWidth;
+    c.style.animation='';[...c.children].forEach(x=>x.style.animation='');}
+</script>
+</body>
+</html>
