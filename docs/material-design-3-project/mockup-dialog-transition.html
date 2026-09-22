@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Transisi dialog (masuk & keluar halus)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#eef1f1;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;--pri:#04726f;--sec:#cfe6e5;--onsec:#00413f;--disp:'Sora',system-ui;--dur:.34s}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI",Roboto,system-ui;min-height:100vh}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+  .wrap{max-width:760px;margin:0 auto;padding:40px 20px}
+  h1{font-family:var(--disp);font-size:22px}
+  .demo-content{background:var(--pane);border:1px solid var(--ov);border-radius:16px;padding:18px;margin:16px 0}
+  .btn{border:0;border-radius:20px;padding:11px 18px;font-weight:800;cursor:pointer;background:var(--pri);color:#fff;display:inline-flex;align-items:center;gap:8px}
+  .btn.ghost{background:var(--sec);color:var(--onsec)}
+  .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin:14px 0}
+  .ctl{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mut)}
+  .ctl input[type=range]{accent-color:var(--pri)}
+  /* ===== OVERLAY (pola dari skill) ===== */
+  .overlay{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;padding:20px;
+    background:color-mix(in srgb,#06100f 0%,transparent);backdrop-filter:blur(0px);-webkit-backdrop-filter:blur(0px);
+    pointer-events:none;transition:background var(--dur) ease,backdrop-filter var(--dur) ease,-webkit-backdrop-filter var(--dur) ease}
+  .overlay.show{display:flex}
+  .overlay.open{background:color-mix(in srgb,#06100f 42%,transparent);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);pointer-events:auto}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .overlay.open{background:color-mix(in srgb,#000 62%,transparent)}}
+  .dlg{background:var(--pane);color:var(--ink);border-radius:24px;padding:22px;min-width:320px;max-width:440px;box-shadow:0 24px 70px rgba(0,0,0,.35);
+    opacity:0;transform:scale(.94) translateY(10px);
+    transition:opacity var(--dur) cubic-bezier(.4,0,.2,1),transform var(--dur) cubic-bezier(.34,1.2,.64,1)}
+  .overlay.open .dlg{opacity:1;transform:none}
+  .dlg h3{font-family:var(--disp);font-size:18px;margin:0 0 10px}
+  .dlg p{color:var(--mut);margin:0 0 18px}
+  .dlg .acts{display:flex;justify-content:flex-end;gap:10px}
+  .note{color:var(--mut);font-size:12.5px;margin-top:18px}.note b{color:var(--ink)}
+  .kbd{font-family:ui-monospace,Consolas,monospace;background:var(--sec);color:var(--onsec);border-radius:6px;padding:1px 6px;font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Transisi dialog — masuk &amp; keluar halus</h1>
+  <div class="demo-content">
+    <p style="margin:0 0 6px">Klik untuk membuka dialog. Perhatikan: background <b>dim + blur bertahap</b>, kartu <b>pop</b> dengan sedikit pantul, dan saat ditutup semuanya <b>membalik halus</b> (bukan langsung hilang).</p>
+    <div class="row">
+      <button class="btn" onclick="openOv()"><span class="mi">open_in_new</span> Buka dialog</button>
+      <span class="ctl">Durasi <input type="range" id="dur" min="200" max="600" step="20" value="340" oninput="setDur(this.value)"> <b id="durTxt">340ms</b></span>
+    </div>
+  </div>
+  <p class="note"><b>Detail:</b> scrim &amp; blur transisi via <span class="kbd">background</span>/<span class="kbd">backdrop-filter</span>; kartu opacity + <span class="kbd">scale .94→1</span> dengan easing spring. Saat tutup: hapus kelas <span class="kbd">open</span> (transisi mundur) lalu unmount setelah durasi selesai. Pola ini akan dipasang di komponen <span class="kbd">&lt;md-dialog&gt;</span> sehingga <b>berlaku ke semua dialog</b> (edit foto, baca SN, user, konfirmasi, dll).</p>
+</div>
+
+<div class="overlay" id="ov" onclick="if(event.target===this)closeOv()">
+  <div class="dlg">
+    <h3>Hapus entry ini?</h3>
+    <p>Entry <b>LOK-7AGXSR</b> beserta seluruh foto akan dihapus permanen. Tindakan ini tidak bisa dibatalkan.</p>
+    <div class="acts"><button class="btn ghost" onclick="closeOv()">Batal</button><button class="btn" onclick="closeOv()"><span class="mi">delete</span> Hapus</button></div>
+  </div>
+</div>
+
+<script>
+  const ov=document.getElementById('ov');
+  let DUR=340;
+  function setDur(v){DUR=+v;document.documentElement.style.setProperty('--dur',(v/1000)+'s');document.getElementById('durTxt').textContent=v+'ms';}
+  function openOv(){ov.classList.add('show');requestAnimationFrame(()=>requestAnimationFrame(()=>ov.classList.add('open')));}
+  function closeOv(){ov.classList.remove('open');setTimeout(()=>ov.classList.remove('show'),DUR+60);}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&ov.classList.contains('open'))closeOv();});
+</script>
+</body>
+</html>
