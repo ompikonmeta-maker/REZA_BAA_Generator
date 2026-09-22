@@ -107,7 +107,9 @@
   .canvas{flex:1 1 auto;min-width:0;background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level1);display:flex;flex-direction:column;overflow:hidden}
   .topbar{display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
   .topbar .page-title{font:var(--md-sys-typescale-headline-small);margin:0}
-  .canvas-body{padding:22px;overflow-y:scroll;scrollbar-gutter:stable}
+  .canvas-body{padding:22px;overflow-y:auto;scrollbar-gutter:stable}
+  /* Batasi lebar konten submenu (Pengaturan/Users/Template) di layar besar */
+  #v-settings,#v-users,#v-templates{max-width:900px;margin-inline:auto}
   .code-chip{display:inline-flex;align-items:center;gap:6px;background:var(--md-sys-color-surface-container-highest);color:var(--md-sys-color-on-surface-variant);border-radius:9px;padding:4px 10px;font:var(--md-sys-typescale-label-medium)}
   .code-chip .mi{font-size:16px}
 
@@ -846,6 +848,7 @@
               <div class="drop">
                 <span class="mi">cloud_upload</span>
                 <div class="muted" style="margin-top:4px">Unggah — kategori otomatis dari nama file, SN langsung di-OCR</div>
+                <div class="muted" style="margin-top:4px;font:var(--md-sys-typescale-label-small)"><span class="mi" style="font-size:14px;vertical-align:-2px">info</span> Foto yang diunggah sekaligus disimpan apa adanya (rasio asli, tanpa dipotong). Klik <b>Edit</b> pada foto untuk crop 4:3 kapan saja.</div>
                 <div class="drop-actions">
                   <md-button variant="tonal" icon="upload" id="btn-auto">Unggah otomatis</md-button>
                   <md-button variant="text" icon="folder" id="btn-folder">Pilih folder</md-button>
