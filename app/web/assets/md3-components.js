@@ -785,30 +785,49 @@
   /* ================================================================
      md-dialog
      ================================================================ */
+  const DIALOG_DUR = 340;   // ms — transisi masuk/keluar dialog
   class MdDialog extends HTMLElement {
     static get observedAttributes() { return ['open']; }
-    connectedCallback() { this.render(); }
-    attributeChangedCallback() { if (this.shadowRoot) this.render(); }
+    connectedCallback() { if (!this.shadowRoot) this.render(); this._sync(); }
+    attributeChangedCallback() { if (this.shadowRoot) this._sync(); }
     show() { this.setAttribute('open', ''); }
     close() { this.removeAttribute('open'); }
-    render() {
-      const root = this.shadowRoot || this.attachShadow({ mode: 'open' });
+    /* Kelola transisi lewat kelas .dlg-open (bukan render ulang), agar masuk &
+       keluar sama-sama beranimasi: scrim dim+blur bertahap, kartu fade+pop. */
+    _sync() {
       const open = this.hasAttribute('open');
+      clearTimeout(this._t);
+      if (open) {
+        this.style.display = 'grid';
+        requestAnimationFrame(() => requestAnimationFrame(() => this.classList.add('dlg-open')));
+      } else {
+        this.classList.remove('dlg-open');
+        if (this.style.display === 'none' || this.style.display === '') { this.style.display = 'none'; return; }
+        this._t = setTimeout(() => { this.style.display = 'none'; }, DIALOG_DUR + 60);
+      }
+    }
+    render() {
+      const root = this.attachShadow({ mode: 'open' });
       root.innerHTML = `
         <style>
-          :host{ position:fixed; inset:0; z-index:2000; display:${open ? 'grid' : 'none'}; place-items:center; }
-          .scrim{ position:absolute; inset:0; background:color-mix(in srgb,var(--md-sys-color-scrim) 55%,transparent);
-            animation:fade ${EASE_STD}; }
+          :host{ position:fixed; inset:0; z-index:2000; display:none; place-items:center; }
+          .scrim{ position:absolute; inset:0; background:transparent;
+            backdrop-filter:blur(0px); -webkit-backdrop-filter:blur(0px);
+            transition:background ${DIALOG_DUR}ms ease, backdrop-filter ${DIALOG_DUR}ms ease, -webkit-backdrop-filter ${DIALOG_DUR}ms ease; }
+          :host(.dlg-open) .scrim{ background:color-mix(in srgb,var(--md-sys-color-scrim) 55%,transparent);
+            backdrop-filter:blur(6px); -webkit-backdrop-filter:blur(6px); }
           .dlg{ position:relative; max-width:560px; min-width:280px; width:calc(100% - 48px);
             background:var(--md-sys-color-surface); color:var(--md-sys-color-on-surface);
             border:1px solid var(--md-sys-color-outline-variant);
             border-radius:var(--md-sys-shape-corner-extra-large); padding:24px;
-            box-shadow:var(--md-sys-elevation-level5); animation:pop ${SPRING_STD}; }
+            box-shadow:var(--md-sys-elevation-level5);
+            opacity:0; transform:scale(.94) translateY(8px);
+            transition:opacity ${DIALOG_DUR}ms cubic-bezier(.4,0,.2,1), transform ${DIALOG_DUR}ms cubic-bezier(.34,1.2,.64,1); }
+          :host(.dlg-open) .dlg{ opacity:1; transform:none; }
+          @media (prefers-reduced-motion:reduce){ .scrim,.dlg{ transition:none; } }
           .headline{ font:var(--md-sys-typescale-headline-small); margin-bottom:16px; }
           .content{ font:var(--md-sys-typescale-body-medium); color:var(--md-sys-color-on-surface-variant); }
           .actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:24px; }
-          @keyframes fade{ from{opacity:0;} }
-          @keyframes pop{ from{opacity:0; transform:scale(.85);} }
         </style>
         <div class="scrim" part="scrim"></div>
         <div class="dlg" role="dialog" aria-modal="true">
@@ -816,8 +835,7 @@
           <div class="content"><slot></slot></div>
           <div class="actions"><slot name="actions"></slot></div>
         </div>`;
-      const scrim = root.querySelector('.scrim');
-      if (scrim) scrim.addEventListener('click', () => this.close());
+      root.querySelector('.scrim').addEventListener('click', () => this.close());
     }
   }
   define('md-dialog', MdDialog);
