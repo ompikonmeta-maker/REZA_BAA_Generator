@@ -1,0 +1,226 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Dashboard Viewer (Mode Bos)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#e9ecec;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;--track:#dfe4e3;
+    --pri:#04726f;--pri2:#0a9c97;--sec:#cfe6e5;--onsec:#00413f;--disp:'Sora',system-ui;
+    --good:#1c7d46;--goodbg:#dcf0e2;--warn:#9a5b00;--warnbg:#fdeede;--bad:#a3312a;--badbg:#fbe4e2;--info:#2a6fb0;--infobg:#e2eefb}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--track:#28302f;--pri:#57d6d1;--pri2:#7ce7e2;--sec:#0e3b39;--onsec:#9ff0ec;--good:#7ddc9f;--goodbg:#123522;--warn:#ffb95c;--warnbg:#3a2a10;--bad:#ffb1a8;--badbg:#3a1714;--info:#9cc6f5;--infobg:#12243a;}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",Roboto,system-ui,sans-serif}
+  .wrap{max-width:1200px;margin:0 auto;padding:20px 22px 44px}
+  .hd{display:flex;align-items:center;gap:12px;margin:0 0 2px}
+  .hd h1{font-family:var(--disp);font-size:22px;font-weight:800;margin:0}
+  .ro{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font-size:11.5px;font-weight:700;color:var(--info);background:var(--infobg);padding:5px 11px;border-radius:20px}
+  .ro .mi{font-size:15px}
+  .hello{color:var(--mut);font-size:13px;margin:0 0 16px}
+  /* summary strip */
+  .strip{display:grid;grid-template-columns:repeat(6,1fr);gap:12px;margin-bottom:14px}
+  @media(max-width:900px){.strip{grid-template-columns:repeat(2,1fr)}}
+  .kpi{background:var(--pane);border:1px solid var(--ov);border-radius:16px;padding:14px}
+  .kpi .t{color:var(--mut);font-size:11.5px;font-weight:600;display:flex;align-items:center;gap:6px}
+  .kpi .n{font-size:24px;font-weight:800;margin-top:6px;letter-spacing:-.5px;font-family:var(--disp)}
+  .kpi .d{font-size:11px;margin-top:2px;font-weight:700}.up{color:var(--good)}.down{color:var(--bad)}.flat{color:var(--mut)}
+  .grid{display:grid;grid-template-columns:repeat(12,1fr);gap:14px}
+  .tile{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:16px;min-width:0}
+  .c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}.c4{grid-column:span 4}.c8{grid-column:span 8}.c12{grid-column:span 12}
+  @media(max-width:900px){.c7,.c5,.c6,.c4,.c8{grid-column:span 12}}
+  .th{font-size:14px;font-weight:700;margin:0 0 12px;display:flex;align-items:center;gap:8px}.th .grow{margin-left:auto}
+  .th .mi{color:var(--pri)}
+  /* HERO: proyeksi selesai */
+  .hero{background:linear-gradient(140deg,var(--pri),var(--onsec));color:#eafaf9;border:none;position:relative;overflow:hidden}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .hero{background:linear-gradient(140deg,#0a5250,#04302e)}}
+  .hero .grain{position:absolute;inset:0;opacity:.14;background:radial-gradient(circle at 82% 12%,#fff 0,transparent 42%),radial-gradient(circle at 12% 88%,#fff 0,transparent 38%);pointer-events:none}
+  .hero .th{color:#cbeeeb}.hero .th .mi{color:#bfeae7}
+  .heroflex{display:flex;align-items:center;gap:22px;position:relative;flex-wrap:wrap}
+  .ring{--p:71;position:relative;width:150px;height:150px;flex:0 0 auto}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .cc{fill:none;stroke-width:14;stroke-linecap:round}
+  .ring .bg{stroke:rgba(255,255,255,.18)}.ring .fg{stroke:#8ff3ee;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+  .ring .lab{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+  .ring .lab b{font-family:var(--disp);font-size:34px;font-weight:800;display:block;line-height:1}
+  .ring .lab span{font-size:11px;opacity:.85}
+  .heromain{flex:1;min-width:220px}
+  .heromain .big{font-family:var(--disp);font-size:20px;font-weight:800;margin:0 0 4px}
+  .heromain .eta{font-size:13px;opacity:.9;margin:0 0 12px}
+  .heromain .eta b{color:#bff7f2}
+  .barline{height:12px;border-radius:8px;background:rgba(255,255,255,.16);overflow:hidden;position:relative}
+  .barline>i{display:block;height:100%;background:linear-gradient(90deg,#7ce7e2,#c7fffb);border-radius:8px;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+  .barmark{display:flex;justify-content:space-between;font-size:10.5px;opacity:.8;margin-top:5px}
+  .whatif{display:flex;align-items:center;gap:10px;margin-top:14px;background:rgba(255,255,255,.1);border-radius:12px;padding:10px 12px}
+  .whatif .mi{font-size:18px}
+  .whatif input[type=range]{flex:1;accent-color:#bff7f2}
+  .whatif .val{font-weight:800;font-family:var(--disp);min-width:66px;text-align:right}
+  /* donut status */
+  .donut{display:flex;align-items:center;gap:16px}
+  .dchart{width:120px;height:120px;flex:0 0 auto}
+  .dlegend .li{display:flex;align-items:center;gap:8px;font-size:12.5px;padding:4px 0}
+  .dlegend .sw{width:12px;height:12px;border-radius:4px;flex:0 0 auto}.dlegend b{margin-left:auto;font-weight:800}
+  /* throughput bars */
+  .vbars{display:flex;align-items:flex-end;gap:8px;height:120px;padding-top:20px}
+  .vbars .b{flex:1;background:linear-gradient(180deg,var(--pri),color-mix(in srgb,var(--pri) 55%,var(--track)));border-radius:6px 6px 0 0;position:relative;min-height:3px;transition:height .6s}
+  .vbars .b.now{background:linear-gradient(180deg,var(--pri2),var(--pri))}
+  .vbars .b span{position:absolute;top:-18px;left:50%;transform:translateX(-50%);font-size:11px;font-weight:700;color:var(--mut)}
+  .vx{display:flex;gap:8px;margin-top:6px}.vx div{flex:1;text-align:center;font-size:10px;color:var(--mut)}
+  /* bottleneck */
+  .bn{display:flex;align-items:center;gap:10px;padding:7px 0}
+  .bn .lbl{width:160px;font-size:12.5px}.bn .bar{flex:1;height:12px;border-radius:6px;background:var(--track);overflow:hidden}
+  .bn .bar>i{display:block;height:100%;background:var(--pri);transition:width .6s}.bn .v{width:38px;text-align:right;font-size:12px;font-weight:700;color:var(--mut)}
+  /* activity feed */
+  .feed .it{display:flex;gap:12px;padding:10px 4px}.feed .it+.it{border-top:1px solid var(--ov)}
+  .fico{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:0 0 auto;color:#fff}
+  .feed .tx{flex:1;min-width:0;font-size:12.8px}.feed .tx .code{font-family:ui-monospace,Consolas,monospace;color:var(--pri);font-weight:700}
+  .feed .tx .mt{color:var(--mut);font-size:11px}
+  .feed .ago{color:var(--mut);font-size:11px;white-space:nowrap}
+  /* streak / momentum */
+  .streak{display:flex;align-items:center;gap:14px}
+  .flame{font-size:40px}
+  .streak .big{font-family:var(--disp);font-size:26px;font-weight:800;line-height:1}
+  .streak .mut{color:var(--mut);font-size:12px}
+  .dots{display:flex;gap:4px;margin-top:8px}
+  .dots i{width:13px;height:13px;border-radius:4px;background:var(--track)}
+  .dots i.on{background:var(--good)}.dots i.today{outline:2px solid var(--pri);outline-offset:1px}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;line-height:1;vertical-align:-3px}
+  .cap{max-width:1200px;margin:18px auto 0;padding:0 22px;color:var(--mut);font-size:12px}
+  .cap b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hd"><h1>Selamat malam, Pak Direktur</h1>
+    <span class="ro"><span class="mi">visibility</span> Mode Viewer — hanya lihat</span></div>
+  <p class="hello">Ringkasan progres aktivasi Starlink · diperbarui 15:32 · <span id="today"></span></p>
+
+  <!-- KPI strip -->
+  <div class="strip">
+    <div class="kpi"><div class="t"><span class="mi">table_rows</span>Total Lokasi</div><div class="n">248</div><div class="d up">▲ 18 minggu ini</div></div>
+    <div class="kpi"><div class="t"><span class="mi">task_alt</span>Selesai</div><div class="n">176</div><div class="d up">71% dari target</div></div>
+    <div class="kpi"><div class="t"><span class="mi">pending_actions</span>Sisa</div><div class="n">72</div><div class="d flat">dalam proses</div></div>
+    <div class="kpi"><div class="t"><span class="mi">speed</span>Kecepatan</div><div class="n">32<span style="font-size:12px">/mgg</span></div><div class="d up">▲ 4 vs mgg lalu</div></div>
+    <div class="kpi"><div class="t"><span class="mi">timer</span>Rata-rata</div><div class="n">3,4<span style="font-size:12px">hr</span></div><div class="d up">▲ makin cepat</div></div>
+    <div class="kpi"><div class="t"><span class="mi">event_available</span>Proyeksi</div><div class="n" id="kpiEta" style="font-size:19px">—</div><div class="d flat">estimasi tuntas</div></div>
+  </div>
+
+  <div class="grid">
+    <!-- HERO proyeksi -->
+    <div class="tile hero c8">
+      <div class="grain"></div>
+      <div class="th"><span class="mi">rocket_launch</span> Proyeksi Penyelesaian</div>
+      <div class="heroflex">
+        <div class="ring" id="ring">
+          <svg width="150" height="150" viewBox="0 0 150 150">
+            <circle class="cc bg" cx="75" cy="75" r="63"></circle>
+            <circle class="cc fg" id="ringFg" cx="75" cy="75" r="63"></circle>
+          </svg>
+          <div class="lab"><div><b id="ringPct">71%</b><span>176 / 248</span></div></div>
+        </div>
+        <div class="heromain">
+          <p class="big">72 lokasi lagi menuju garis akhir</p>
+          <p class="eta">Dengan kecepatan sekarang, seluruh lokasi diproyeksikan tuntas sekitar <b id="etaDate">—</b> (± <span id="etaWeeks">—</span> minggu lagi).</p>
+          <div class="barline"><i id="heroBar" style="width:71%"></i></div>
+          <div class="barmark"><span>0</span><span>Target 248</span></div>
+          <div class="whatif">
+            <span class="mi">tune</span>
+            <span>Skenario kecepatan</span>
+            <input type="range" id="wf" min="16" max="52" value="32">
+            <span class="val" id="wfVal">32/mgg</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- momentum / streak -->
+    <div class="tile c4">
+      <div class="th"><span class="mi">local_fire_department</span> Momentum Tim</div>
+      <div class="streak">
+        <span class="flame">🔥</span>
+        <div><div class="big">12 hari</div><div class="mut">beruntun ada lokasi selesai</div></div>
+      </div>
+      <div class="dots" id="dots"></div>
+      <p class="mut" style="margin:12px 0 0;font-size:12px">Minggu ini <b style="color:var(--ink)">32 lokasi</b> — rekor tertinggi bulan ini.</p>
+    </div>
+
+    <!-- status donut -->
+    <div class="tile c4">
+      <div class="th"><span class="mi">donut_large</span> Status Lokasi</div>
+      <div class="donut">
+        <svg class="dchart" id="donut" viewBox="0 0 120 120"></svg>
+        <div class="dlegend" style="flex:1" id="dlegend"></div>
+      </div>
+    </div>
+
+    <!-- throughput -->
+    <div class="tile c8">
+      <div class="th"><span class="mi">insights</span> Tren Penyelesaian · 8 minggu terakhir</div>
+      <div class="vbars" id="vbars"></div>
+      <div class="vx" id="vx"></div>
+    </div>
+
+    <!-- activity feed -->
+    <div class="tile c7">
+      <div class="th"><span class="mi">bolt</span> Denyut Pekerjaan — aktivitas terkini</div>
+      <div class="feed" id="feed"></div>
+    </div>
+
+    <!-- bottleneck -->
+    <div class="tile c5">
+      <div class="th"><span class="mi">construction</span> Apa yang paling sering tertunda</div>
+      <div id="bn"></div>
+      <p style="color:var(--mut);font-size:11.5px;margin:12px 0 0">Kategori yang paling sering belum lengkap di lokasi draft — bukan penilaian orang, tapi titik yang butuh dorongan.</p>
+    </div>
+  </div>
+</div>
+<p class="cap"><b>Mode Bos (Viewer).</b> Sama seperti Konsol Supervisor, tapi <b>tanpa</b> kartu "Perlu Perhatian — Tim Menurun" dan "Peringkat Performa" (yang menilai per-orang). Diganti fokus eksekutif: proyeksi tuntas + skenario what-if, momentum/streak, status, tren, denyut pekerjaan. Semua read-only.</p>
+
+<script>
+  const $=s=>document.querySelector(s);
+  const DONE=176,TOTAL=248,REMAIN=TOTAL-DONE,VEL=32;
+  const MON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+  const fmt=d=>d.getDate()+' '+MON[d.getMonth()]+' '+d.getFullYear();
+  $('#today').textContent=fmt(new Date());
+  // ring
+  const C=2*Math.PI*63,pct=Math.round(DONE/TOTAL*100);
+  $('#ringFg').style.strokeDasharray=C;
+  requestAnimationFrame(()=>{$('#ringFg').style.strokeDashoffset=C*(1-DONE/TOTAL);});
+  $('#ringPct').textContent=pct+'%';
+  // ETA what-if
+  function eta(v){const wk=Math.ceil(REMAIN/Math.max(1,v));const d=new Date();d.setDate(d.getDate()+wk*7);return {wk,d};}
+  function paintEta(v){const e=eta(v);$('#etaDate').textContent=fmt(e.d);$('#etaWeeks').textContent=e.wk;
+    $('#kpiEta').textContent=MON[e.d.getMonth()]+' '+e.d.getFullYear();}
+  paintEta(VEL);
+  $('#wf').addEventListener('input',e=>{const v=+e.target.value;$('#wfVal').textContent=v+'/mgg';paintEta(v);});
+  // streak dots (14 hari)
+  const days=[1,1,1,0,1,1,1,1,1,1,0,1,1,1];
+  $('#dots').innerHTML=days.map((d,i)=>`<i class="${d?'on':''} ${i===days.length-1?'today':''}"></i>`).join('');
+  // donut status
+  const SEG=[['Selesai',176,'var(--good)'],['Dalam proses',63,'var(--pri)'],['Draft mangkrak',9,'var(--warn)']];
+  const tot=SEG.reduce((a,b)=>a+b[1],0);let off=0;const R=46,CC=2*Math.PI*R;
+  $('#donut').innerHTML=SEG.map(s=>{const frac=s[1]/tot;const el=`<circle cx="60" cy="60" r="${R}" fill="none" stroke="${s[2]}" stroke-width="16"
+    stroke-dasharray="${(frac*CC).toFixed(1)} ${CC}" stroke-dashoffset="${(-off*CC).toFixed(1)}" transform="rotate(-90 60 60)"/>`;off+=frac;return el;}).join('')
+    +`<text x="60" y="56" text-anchor="middle" font-size="20" font-weight="800" fill="var(--ink)" font-family="Sora">${pct}%</text><text x="60" y="72" text-anchor="middle" font-size="9" fill="var(--mut)">selesai</text>`;
+  $('#dlegend').innerHTML=SEG.map(s=>`<div class="li"><span class="sw" style="background:${s[2]}"></span>${s[0]}<b>${s[1]}</b></div>`).join('');
+  // throughput
+  const TP=[24,28,26,30,35,33,36,32],mx=Math.max(...TP);
+  $('#vbars').innerHTML=TP.map((v,i)=>`<div class="b ${i===TP.length-1?'now':''}" style="height:${Math.round(v/mx*100)}%"><span>${v}</span></div>`).join('');
+  $('#vx').innerHTML=['-7','-6','-5','-4','-3','-2','-1','kini'].map(x=>`<div>${x}</div>`).join('');
+  // bottleneck
+  const BN=[['Foto SN Kit/Router',42],['Inventory belum lengkap',30],['Foto Ping/Speed',18],['Field lokasi kosong',10]];
+  $('#bn').innerHTML=BN.map(b=>`<div class="bn"><span class="lbl">${b[0]}</span><span class="bar"><i style="width:${b[1]}%"></i></span><span class="v">${b[1]}%</span></div>`).join('');
+  // feed
+  const FE=[
+    ['check_circle','var(--good)','LOK-7F3K9Q','Kopdes Sukamaju','Ditandai <b>selesai</b> oleh Budi','8 mnt lalu'],
+    ['photo_camera','var(--pri)','LOK-1QW9ZP','Kopdes Maju Jaya','Unggah 6 foto + SN terbaca','24 mnt lalu'],
+    ['check_circle','var(--good)','LOK-88KD2M','Kopdes Sinar Tani','Ditandai <b>selesai</b> oleh Sari','1 jam lalu'],
+    ['inventory_2','var(--info)','LOK-3M2K7A','Kopdes Rukun','Inventory dilengkapi (5 item)','2 jam lalu'],
+    ['add_location','var(--pri)','LOK-9ZX4LP','Kopdes Harapan','Lokasi baru dibuat oleh Eko','3 jam lalu'],
+  ];
+  $('#feed').innerHTML=FE.map(f=>`<div class="it"><span class="fico" style="background:${f[1]}"><span class="mi">${f[0]}</span></span>
+    <div class="tx"><span class="code">${f[2]}</span> · ${f[3]}<div class="mt">${f[4]}</div></div><span class="ago">${f[5]}</span></div>`).join('');
+</script>
+</body>
+</html>
