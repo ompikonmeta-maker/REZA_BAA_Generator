@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="id"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Foto A — Hover Toolbar</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#eaeced;--pane:#fcfcfd;--ink:#1a1c1d;--mut:#5a6462;--ov:#c7cccb;--pri:#04726f;--sec:#cfe6e5;--onsec:#00413f;--warn:#9a5b00}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI",Roboto,system-ui;display:grid;place-items:center;min-height:100vh}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;line-height:1;vertical-align:-3px}
+  .wrap{width:320px}
+  .cap{font-size:12px;color:var(--mut);text-align:center;margin-top:14px}
+  /* photo card */
+  .pcard{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:12px;position:relative;overflow:hidden}
+  .hd{display:flex;align-items:center;gap:8px;font-weight:600;font-size:13px;margin-bottom:8px}.hd .mi{color:var(--pri)}
+  .snap{position:relative;aspect-ratio:4/3;border-radius:12px;overflow:hidden;background:#2a3b3a}
+  .snap img{width:100%;height:100%;object-fit:cover;display:block}
+  .bar{position:absolute;left:0;right:0;bottom:0;display:flex;gap:6px;padding:10px;justify-content:center;
+    background:linear-gradient(to top,rgba(0,0,0,.55),transparent);transform:translateY(100%);opacity:0;transition:.25s cubic-bezier(.2,.8,.2,1)}
+  .snap:hover .bar{transform:none;opacity:1}
+  .bar button{border:none;background:rgba(255,255,255,.92);color:#1a1c1d;width:40px;height:40px;border-radius:12px;cursor:pointer;display:grid;place-items:center;font-size:20px;box-shadow:0 4px 12px rgba(0,0,0,.25);transition:transform .12s}
+  .bar button:hover{transform:translateY(-2px)}.bar button.del{color:#a3312a}
+  /* undo overlay in-card */
+  .undo{position:absolute;inset:0;background:rgba(20,26,25,.82);color:#fff;display:none;flex-direction:column;align-items:center;justify-content:center;gap:10px;backdrop-filter:blur(2px)}
+  .undo.on{display:flex;animation:fade .25s}
+  @keyframes fade{from{opacity:0}}
+  .ring{width:52px;height:52px;transform:rotate(-90deg)}
+  .ring circle{fill:none;stroke-width:4}.ring .t{stroke:rgba(255,255,255,.25)}.ring .p{stroke:#fff;stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+  .undo .u{position:absolute;font-size:12px;font-weight:700}
+  .undo .btn{border:1px solid rgba(255,255,255,.5);background:transparent;color:#fff;padding:8px 18px;border-radius:20px;cursor:pointer;font-weight:700;display:flex;gap:7px;align-items:center}
+  .undo .msg{font-size:12px;opacity:.85}
+  /* editor */
+  .ed{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;place-items:center;z-index:5}
+  .ed.on{display:grid;animation:fade .2s}
+  .edc{background:var(--pane);border-radius:22px;width:360px;max-width:92vw;padding:18px;box-shadow:0 30px 80px rgba(0,0,0,.4)}
+  .edc h3{margin:0 0 12px;font-size:16px}
+  .stage{position:relative;aspect-ratio:1;border-radius:14px;overflow:hidden;background:#0e1413;touch-action:none;cursor:grab}
+  .stage img{position:absolute;left:50%;top:50%;width:120%;transform:translate(-50%,-50%) scale(var(--z,1));transform-origin:center;user-select:none;pointer-events:none}
+  .grid{position:absolute;inset:0;pointer-events:none;background:
+    linear-gradient(rgba(255,255,255,.35) 1px,transparent 1px) 0 33.3%/100% 33.3%,
+    linear-gradient(90deg,rgba(255,255,255,.35) 1px,transparent 1px) 33.3% 0/33.3% 100%;box-shadow:inset 0 0 0 2px rgba(255,255,255,.5)}
+  .zrow{display:flex;align-items:center;gap:10px;margin:14px 0 6px}
+  .zrow input[type=range]{flex:1;accent-color:var(--pri)}
+  .asp{display:inline-flex;background:var(--bg);border-radius:10px;padding:3px;margin:6px 0 2px}
+  .asp button{border:none;background:transparent;color:var(--mut);padding:6px 12px;border-radius:8px;cursor:pointer;font-weight:600;font-size:12.5px}
+  .asp button.on{background:var(--pane);color:var(--pri);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+  .edact{display:flex;gap:8px;margin-top:14px}
+  .edact .grow{flex:1}
+  .btn2{border:none;border-radius:20px;padding:10px 16px;font-weight:700;cursor:pointer;display:flex;gap:7px;align-items:center;font-size:13px}
+  .filled{background:var(--pri);color:#fff}.tonal{background:var(--sec);color:var(--onsec)}.ghost{background:transparent;color:var(--mut)}
+</style></head>
+<body>
+<div class="wrap">
+  <div class="pcard">
+    <div class="hd"><span class="mi">image</span> Capture Dashboard (STARMON)</div>
+    <div class="snap" id="snap">
+      <img src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230e8b86'/%3E%3Cstop offset='1' stop-color='%230a3b39'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='600' height='600' fill='url(%23g)'/%3E%3Cg stroke='%23fff' stroke-opacity='0.25'%3E%3Cpath d='M0 150H600M0 300H600M0 450H600M150 0V600M300 0V600M450 0V600'/%3E%3C/g%3E%3Ccircle cx='300' cy='300' r='120' fill='%23fff' fill-opacity='0.15'/%3E%3Ctext x='300' y='316' font-family='sans-serif' font-size='44' fill='%23fff' text-anchor='middle'%3EFOTO%3C/text%3E%3C/svg%3E" alt="">
+      <div class="bar">
+        <button title="Edit" onclick="openEd()"><span class="mi">tune</span></button>
+        <button title="Ganti"><span class="mi">swap_horiz</span></button>
+        <button class="del" title="Hapus" onclick="del()"><span class="mi">delete</span></button>
+      </div>
+      <div class="undo" id="undo">
+        <div style="position:relative;display:grid;place-items:center">
+          <svg class="ring" viewBox="0 0 52 52"><circle class="t" cx="26" cy="26" r="22"></circle><circle class="p" id="ring" cx="26" cy="26" r="22"></circle></svg>
+          <span class="u" id="cd">5</span>
+        </div>
+        <div class="msg">Foto dihapus</div>
+        <button class="btn" onclick="undo()"><span class="mi">undo</span> Urungkan</button>
+      </div>
+    </div>
+  </div>
+  <div class="cap"><b>Opsi A — Hover Toolbar.</b> Arahkan kursor ke foto → toolbar muncul (Edit · Ganti · Hapus). Hapus → undo ber-cincin timer di dalam kartu.</div>
+</div>
+
+<div class="ed" id="ed"><div class="edc">
+  <h3>Sesuaikan foto</h3>
+  <div class="stage" id="stage"><img src="data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='600'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%230e8b86'/%3E%3Cstop offset='1' stop-color='%230a3b39'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='600' height='600' fill='url(%23g)'/%3E%3Cg stroke='%23fff' stroke-opacity='0.25'%3E%3Cpath d='M0 150H600M0 300H600M0 450H600M150 0V600M300 0V600M450 0V600'/%3E%3C/g%3E%3Ccircle cx='300' cy='300' r='120' fill='%23fff' fill-opacity='0.15'/%3E%3Ctext x='300' y='316' font-family='sans-serif' font-size='44' fill='%23fff' text-anchor='middle'%3EFOTO%3C/text%3E%3C/svg%3E" id="edImg"><div class="grid"></div></div>
+  <div class="asp"><button class="on">1:1</button><button>4:3</button><button>Bebas</button></div>
+  <div class="zrow"><span class="mi">zoom_out</span><input type="range" min="100" max="260" value="120" id="z"><span class="mi">zoom_in</span></div>
+  <div class="edact">
+    <button class="btn2 ghost" onclick="closeEd()">Batal</button><span class="grow"></span>
+    <button class="btn2 tonal"><span class="mi">restart_alt</span>Reset</button>
+    <button class="btn2 filled"><span class="mi">check</span>Simpan</button>
+  </div>
+</div></div>
+
+<script>
+  const $=s=>document.querySelector(s);
+  // editor drag + zoom
+  const st=$('#stage'),im=$('#edImg');let z=1.2,dx=0,dy=0,drag=false,px,py;
+  function apply(){im.style.transform=`translate(calc(-50% + ${dx}px),calc(-50% + ${dy}px)) scale(${z})`;}
+  $('#z').addEventListener('input',e=>{z=e.target.value/100;apply();});
+  st.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;st.style.cursor='grabbing';st.setPointerCapture(e.pointerId);});
+  st.addEventListener('pointermove',e=>{if(!drag)return;dx+=e.clientX-px;dy+=e.clientY-py;px=e.clientX;py=e.clientY;apply();});
+  st.addEventListener('pointerup',()=>{drag=false;st.style.cursor='grab';});
+  window.openEd=()=>{$('#ed').classList.add('on');apply();};window.closeEd=()=>$('#ed').classList.remove('on');
+  document.querySelectorAll('.asp button').forEach(b=>b.onclick=()=>{document.querySelectorAll('.asp button').forEach(x=>x.classList.remove('on'));b.classList.add('on');});
+  // delete + undo timer
+  let t,left,C=2*Math.PI*22;$('#ring').style.strokeDasharray=C;
+  window.del=()=>{$('#undo').classList.add('on');left=5;$('#cd').textContent=left;$('#ring').style.strokeDashoffset=0;
+    requestAnimationFrame(()=>$('#ring').style.strokeDashoffset=C);
+    clearInterval(t);t=setInterval(()=>{left--;$('#cd').textContent=left;if(left<=0){clearInterval(t);$('#undo').classList.remove('on');/*commit*/}},1000);};
+  window.undo=()=>{clearInterval(t);$('#undo').classList.remove('on');$('#ring').style.strokeDashoffset=0;};
+</script></body></html>
