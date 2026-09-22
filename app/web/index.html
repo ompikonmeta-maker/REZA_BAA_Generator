@@ -102,19 +102,22 @@
   /* Sub-view transisi konten Pengaturan */
   .setview{animation:setenter .34s var(--md-sys-motion-easing-emphasized) both}
   @keyframes setenter{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
-  /* Kartu Simpan mengambang (selalu terlihat, kanan-atas) */
-  #lf-save,#di-save,#pc-save{display:none}   /* tombol simpan lama disembunyikan, diganti kartu mengambang */
-  .setfs{position:fixed;top:78px;right:24px;z-index:35;display:flex;align-items:center;gap:10px;
-    background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;
-    padding:8px 10px 8px 12px;box-shadow:var(--md-sys-elevation-level3)}
-  .setfs.hidden{display:none}
-  .setfs .setfs-chip{display:inline-flex;align-items:center;gap:7px;font:var(--md-sys-typescale-label-medium);font-weight:800;
-    padding:6px 11px;border-radius:20px;background:color-mix(in srgb,var(--md-sys-color-primary) 14%,transparent);color:var(--md-sys-color-primary)}
-  .setfs .setfs-chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
-  .setfs.dirty .setfs-chip{background:color-mix(in srgb,var(--md-sys-color-error) 15%,transparent);color:var(--md-sys-color-error)}
-  .setfs.dirty{animation:setfsPulse 1.8s ease-in-out infinite}
-  @keyframes setfsPulse{0%,100%{box-shadow:var(--md-sys-elevation-level3)}50%{box-shadow:0 6px 26px color-mix(in srgb,var(--md-sys-color-primary) 45%,transparent)}}
-  @media(max-width:600px){.setfs{top:auto;bottom:16px;right:16px}}
+  /* Tombol Simpan + status di bar judul (submenu Pengaturan) */
+  :root{--save-active:#ec5a73}
+  #lf-save,#di-save,#pc-save{display:none}   /* tombol simpan lama disembunyikan, diganti tombol di bar judul */
+  #setSaveWrap{display:inline-flex;align-items:center;gap:12px}
+  #setSaveWrap.hidden{display:none}
+  .set-status{display:inline-flex;align-items:center;gap:7px;font:var(--md-sys-typescale-label-medium);font-weight:700;transition:color .3s ease}
+  .set-status .dot{width:8px;height:8px;border-radius:50%;background:currentColor;transition:background .3s ease}
+  .set-status.ok{color:var(--md-sys-color-primary)}
+  .set-status.dirty{color:var(--save-active)}
+  .set-savebtn{border:0;border-radius:20px;padding:9px 17px;font:var(--md-sys-typescale-label-large);font-weight:800;display:inline-flex;align-items:center;gap:7px;
+    background:var(--md-sys-color-surface-container-highest);color:var(--md-sys-color-on-surface-variant);cursor:not-allowed;box-shadow:0 0 0 rgba(0,0,0,0);
+    transition:background .35s cubic-bezier(.2,.8,.2,1),color .35s ease,box-shadow .35s ease,transform .15s ease}
+  .set-savebtn .mi{font-size:18px}
+  .set-savebtn.on{background:var(--save-active);color:#fff;cursor:pointer;box-shadow:0 6px 18px color-mix(in srgb,var(--save-active) 42%,transparent)}
+  .set-savebtn.on:hover{transform:translateY(-1px)}
+  .set-savebtn.on:active{transform:translateY(0)}
   .nav-foot{margin-top:auto;display:flex;gap:4px;justify-content:center;padding-top:8px;border-top:1px solid var(--md-sys-color-outline-variant)}
 
   .canvas{flex:1 1 auto;min-width:0;background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level1);display:flex;flex-direction:column;overflow:hidden}
@@ -684,6 +687,10 @@
         <md-icon-button id="entry-new" variant="tonal" data-tip="Lokasi baru"><span>add</span></md-icon-button>
         <md-icon-button id="entry-del" data-tip="Hapus entry" class="hidden"><span>delete</span></md-icon-button>
       </span>
+      <span class="hidden" id="setSaveWrap">
+        <span class="set-status ok" id="setStatus"><span class="dot"></span><span id="setStatusTxt">Tersimpan</span></span>
+        <button class="set-savebtn" id="setSaveBtn" disabled><span class="mi">save</span> <span id="setSaveLbl">Simpan</span></button>
+      </span>
     </header>
 
     <div class="canvas-body">
@@ -1033,10 +1040,6 @@
       </section>
 
       <section id="v-settings" class="hidden">
-        <div class="setfs hidden" id="setfs">
-          <span class="setfs-chip"><span class="dot"></span><span id="setfs-txt">Tersimpan</span></span>
-          <md-button variant="filled" icon="save" id="setfs-btn">Simpan</md-button>
-        </div>
         <div class="card setview hidden" id="set-lokasi">
           <div class="sec"><span class="mi acc">list_alt</span><h3>Field Data Lokasi</h3><span class="grow"></span>
             <md-button id="lf-add" variant="tonal" icon="add">Field</md-button></div>
@@ -1328,7 +1331,7 @@ $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
   $('#setToggle').classList.remove('active');$('#navSettings').classList.remove('open');  /* tutup accordion Pengaturan */
   const v=n.dataset.view;['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
-  $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');
+  $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');$('#setSaveWrap').classList.add('hidden');
   if(v==='dashboard')loadDashboard();if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
   revealCards($('#v-'+v));}));
 
@@ -1340,18 +1343,20 @@ function showSetSub(key){curSetSub=key;const cfg=SET_SUBS[key];
   $$('.subnav').forEach(s=>s.classList.toggle('active',s.dataset.sub===key));
   Object.values(SET_SUBS).forEach(c=>{const el=$('#'+c.id);if(el)el.classList.toggle('hidden',c.id!==cfg.id);});
   const active=$('#'+cfg.id);if(active){active.classList.remove('setview');void active.offsetWidth;active.classList.add('setview');}
-  $('#pageTitle').textContent='Pengaturan · '+cfg.title;setfsShow(key);}
-/* Kartu Simpan mengambang untuk submenu field (lokasi/inventory/photo) */
-const SETFS_SAVE={lokasi:'#lf-save',inventory:'#di-save',photo:'#pc-save'};
-function setfsShow(key){const el=$('#setfs');if(!el)return;
-  if(SETFS_SAVE[key]){el.classList.remove('hidden');setfsDirty(false);}else el.classList.add('hidden');}
-function setfsDirty(d){const el=$('#setfs');if(!el)return;el.classList.toggle('dirty',d);
-  $('#setfs-txt').textContent=d?'Belum disimpan':'Tersimpan';}
+  $('#pageTitle').textContent='Pengaturan · '+cfg.title;setSaveShow(key);}
+/* Tombol Simpan + status di bar judul untuk submenu field (lokasi/inventory/photo) */
+const SETFS_SAVE={lokasi:{sel:'#lf-save',lbl:'Simpan field'},inventory:{sel:'#di-save',lbl:'Simpan default'},photo:{sel:'#pc-save',lbl:'Simpan kategori'}};
+function setSaveShow(key){const w=$('#setSaveWrap');if(!w)return;
+  if(SETFS_SAVE[key]){w.classList.remove('hidden');$('#setSaveLbl').textContent=SETFS_SAVE[key].lbl;setSaveDirty(false);}
+  else w.classList.add('hidden');}
+function setSaveDirty(d){$('#setStatus').className='set-status '+(d?'dirty':'ok');
+  $('#setStatusTxt').textContent=d?'Belum disimpan':'Tersimpan';
+  const b=$('#setSaveBtn');b.classList.toggle('on',d);b.disabled=!d;}
 (function(){const v=$('#v-settings');if(!v)return;
-  const mark=()=>{if(SETFS_SAVE[curSetSub])setfsDirty(true);};
+  const mark=()=>{if(SETFS_SAVE[curSetSub])setSaveDirty(true);};
   v.addEventListener('input',mark);v.addEventListener('change',mark);
   v.addEventListener('click',e=>{if(SETFS_SAVE[curSetSub]&&e.target.closest('.segt button,.ecard-del,#lf-add,#di-add,#pc-add'))mark();});
-  $('#setfs-btn').addEventListener('click',()=>{const sel=SETFS_SAVE[curSetSub];if(!sel)return;$(sel).click();setfsDirty(false);});})();
+  $('#setSaveBtn').addEventListener('click',()=>{const c=SETFS_SAVE[curSetSub];if(!c||$('#setSaveBtn').disabled)return;$(c.sel).click();setSaveDirty(false);});})();
 /* sub yang mengarah ke view tersendiri (bukan kartu di v-settings) */
 const SET_VIEWS={users:{view:'users',title:'Users',load:()=>loadUsers()},templates:{view:'templates',title:'Template',load:()=>loadTemplates()}};
 function openSettings(sub){
@@ -1364,7 +1369,7 @@ function openSettings(sub){
   const sv=SET_VIEWS[sub];
   if(sv){
     ['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==sv.view));
-    $('#pageTitle').textContent='Pengaturan · '+sv.title;sv.load();revealCards($('#v-'+sv.view));
+    $('#pageTitle').textContent='Pengaturan · '+sv.title;$('#setSaveWrap').classList.add('hidden');sv.load();revealCards($('#v-'+sv.view));
   }else{
     ['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!=='settings'));
     loadSettingsPage();showSetSub(sub);
