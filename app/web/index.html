@@ -2180,7 +2180,10 @@ $('#pc-save').addEventListener('click',async()=>{const categories=$$('#pc-list .
     keywords:(g('keywords').value||'').split(',').map(s=>s.trim()).filter(Boolean),
     prefixes:(g('prefixes').value||'').split(',').map(s=>s.trim().toUpperCase()).filter(Boolean),
     sn_item:(g('sn_item').value||'').trim()};}).filter(c=>c.key&&c.label);
-  try{await api('/api/settings/photo-categories',{method:'PUT',body:JSON.stringify({categories})});S.cats=categories;toast('Kategori foto tersimpan');}catch(e){toast('Gagal: '+e.message);}});
+  try{await api('/api/settings/photo-categories',{method:'PUT',body:JSON.stringify({categories})});S.cats=categories;
+    // Sinkronkan badge OCR/label di mapping yang sedang terbuka (tanpa perlu buka ulang)
+    if(typeof MAP_PH!=='undefined'&&MAP_PH.length){MAP_PH.forEach(p=>{const c=S.cats.find(x=>x.key===p.key);if(c){p.ocr=c.ocr;p.label=c.label;}});if(typeof renderMapPhotos==='function')renderMapPhotos();}
+    toast('Kategori foto tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 
 function diRow(n=''){return `<div class="ecard di" data-di>
   <div class="erow"><input class="labelf" data-k="name" placeholder="Nama barang" value="${esc(n)}">${delBtnCell()}</div>
