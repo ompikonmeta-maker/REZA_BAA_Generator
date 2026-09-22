@@ -22,6 +22,20 @@ class ChangePwIn(BaseModel):
     new_password: str
 
 
+class PeekIn(BaseModel):
+    username: str
+
+
+@router.post("/peek")
+def peek(body: PeekIn, conn: sqlite3.Connection = Depends(get_db)):
+    """Cek ringan apakah username (aktif) bertipe admin — untuk aksen 'zona' di
+    layar login. Hanya balas admin true/false (tanpa info keberadaan user)."""
+    row = conn.execute(
+        "SELECT role FROM users WHERE username=? AND active=1", (body.username.strip(),)
+    ).fetchone()
+    return {"admin": bool(row and row["role"] == "admin")}
+
+
 def _public(user) -> dict:
     return {
         "id": user["id"],
