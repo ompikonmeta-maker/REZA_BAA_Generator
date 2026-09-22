@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Save bar sticky submenu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#eef1f1;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;--pri:#04726f;--sec:#cfe6e5;--onsec:#00413f;--cyan:#7de7e6;--disp:'Sora',system-ui;
+    --good:#1c7d46;--goodbg:#dcf0e2;--warn:#9a5b00;--warnbg:#fdeede;--maxw:900px}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec;--cyan:#123634;--good:#7ddc9f;--goodbg:#123522;--warn:#ffb95c;--warnbg:#3a2a10}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",Roboto,system-ui}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+  .top{padding:16px 20px;border-bottom:1px solid var(--ov);background:var(--pane)}
+  .top b{font-family:var(--disp);font-size:18px}
+  .canvas{padding:22px;padding-bottom:96px;max-width:var(--maxw);margin:0 auto}
+  .card{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:16px 18px}
+  .hd{display:flex;align-items:center;gap:9px;margin-bottom:14px}.hd .mi{color:var(--pri)}.hd h3{font-family:var(--disp);font-size:16px;margin:0}
+  .hd .add{margin-left:auto;background:var(--cyan);color:#00514e;border:0;border-radius:20px;padding:8px 15px;font-weight:800;cursor:pointer}
+  .frow{display:flex;align-items:center;gap:14px;background:color-mix(in srgb,var(--ink) 3%,var(--pane));border-radius:12px;padding:10px 12px;margin-bottom:10px}
+  .frow .key{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--mut);background:var(--pane);border:1px solid var(--ov);border-radius:8px;padding:8px 10px;width:150px}
+  .frow .nm{font-weight:700;flex:1;min-width:0}
+  .tg{width:46px;height:26px;border-radius:20px;background:var(--ov);position:relative;cursor:pointer;flex:0 0 auto}
+  .tg.on{background:var(--pri)}.tg::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.tg.on::after{left:23px}
+  .tglab{font-size:12.5px;color:var(--mut);width:40px}
+  /* SAVE BAR */
+  .savebar{position:fixed;left:0;right:0;bottom:0;z-index:30;background:color-mix(in srgb,var(--pane) 96%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--ov);
+    padding:12px 22px;display:flex;align-items:center;gap:14px}
+  .savebar .inner{max-width:var(--maxw);margin:0 auto;width:100%;display:flex;align-items:center;gap:14px}
+  .chip{display:inline-flex;align-items:center;gap:8px;font-weight:700;font-size:13px;padding:7px 13px;border-radius:20px}
+  .chip.ok{background:var(--goodbg);color:var(--good)}
+  .chip.dirty{background:var(--warnbg);color:var(--warn)}
+  .chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+  .btn{margin-left:auto;border:0;border-radius:22px;padding:11px 20px;font-weight:800;font-size:14px;cursor:pointer;display:inline-flex;align-items:center;gap:8px;
+    background:var(--ov);color:var(--mut);transition:.2s}
+  .btn.hot{background:var(--pri);color:#fff;box-shadow:0 6px 18px color-mix(in srgb,var(--pri) 35%,transparent);animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 6px 18px color-mix(in srgb,var(--pri) 30%,transparent)}50%{box-shadow:0 6px 26px color-mix(in srgb,var(--pri) 55%,transparent)}}
+  .hintbar{font-size:12px;color:var(--mut)}
+  .note{max-width:var(--maxw);margin:16px auto 0;color:var(--mut);font-size:12.5px}.note b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="top"><b>Pengaturan · Field Data Lokasi</b></div>
+<div class="canvas">
+  <div class="card">
+    <div class="hd"><span class="mi">list_alt</span><h3>Field Data Lokasi</h3><button class="add"><span class="mi">add</span> Field</button></div>
+    <div id="rows"></div>
+  </div>
+  <p class="note"><b>Ide:</b> tombol Simpan pindah ke <b>bar bawah yang selalu terlihat</b>. Saat kamu ubah sesuatu, statusnya berubah kuning <b>"Belum disimpan"</b> dan tombol Simpan menyala + berdenyut. Setelah disimpan kembali hijau <b>"Tersimpan"</b>. Coba klik salah satu toggle di bawah.</p>
+</div>
+
+<div class="savebar"><div class="inner">
+  <span class="chip ok" id="chip"><span class="dot"></span><span id="chipTxt">Semua perubahan tersimpan</span></span>
+  <span class="hintbar" id="hint"></span>
+  <button class="btn" id="save"><span class="mi">save</span> Simpan field</button>
+</div></div>
+
+<script>
+  const F=[['nama_lokasi','Nama Lokasi / Koperasi',true],['tanggal','Tanggal Aktivasi',false],['teknisi','Teknisi',false],['pic','PIC Lokasi',false]];
+  document.getElementById('rows').innerHTML=F.map((f,i)=>`<div class="frow"><span class="key">${f[0]}</span><span class="nm">${f[1]}</span>
+    <span class="tg ${f[2]?'on':''}" data-i="${i}"></span><span class="tglab">Wajib</span></div>`).join('');
+  let dirty=false;
+  function setDirty(d){dirty=d;const chip=document.getElementById('chip'),btn=document.getElementById('save');
+    chip.className='chip '+(d?'dirty':'ok');document.getElementById('chipTxt').textContent=d?'Ada perubahan belum disimpan':'Semua perubahan tersimpan';
+    btn.classList.toggle('hot',d);document.getElementById('hint').textContent=d?'Jangan lupa klik Simpan →':'';}
+  document.querySelectorAll('.tg').forEach(t=>t.addEventListener('click',()=>{t.classList.toggle('on');setDirty(true);}));
+  document.getElementById('save').addEventListener('click',()=>{if(!dirty)return;setDirty(false);});
+  setDirty(false);
+</script>
+</body>
+</html>
