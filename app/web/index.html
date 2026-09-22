@@ -120,7 +120,8 @@
   .set-savebtn.on:active{transform:translateY(0)}
   /* ===== Dialog User (redesign Opsi A) ===== */
   #userDlg{--urole:var(--md-sys-color-primary)}
-  .udlg{display:flex;flex-direction:column;gap:12px;min-width:330px;width:420px;max-width:100%}
+  .udlg{display:flex;flex-direction:column;gap:12px;width:100%;min-width:0}
+  #userDlg::part(dialog){max-width:440px}
   .uhead{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--urole) 16%,var(--md-sys-color-surface)),var(--md-sys-color-surface));transition:background .45s}
   .uhead .uglow{position:absolute;right:-40px;top:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--urole) 40%,transparent),transparent 70%);transition:background .5s;pointer-events:none}
   .uava{position:relative;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:#fff;font-size:26px;flex:0 0 auto;background:linear-gradient(135deg,var(--urole),color-mix(in srgb,var(--urole) 62%,#000 10%));box-shadow:0 8px 20px color-mix(in srgb,var(--urole) 38%,transparent);transition:.45s}

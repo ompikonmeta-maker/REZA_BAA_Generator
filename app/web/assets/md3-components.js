@@ -830,7 +830,7 @@
           .actions{ display:flex; justify-content:flex-end; gap:8px; margin-top:24px; }
         </style>
         <div class="scrim" part="scrim"></div>
-        <div class="dlg" role="dialog" aria-modal="true">
+        <div class="dlg" part="dialog" role="dialog" aria-modal="true">
           <div class="headline"><slot name="headline"></slot></div>
           <div class="content"><slot></slot></div>
           <div class="actions"><slot name="actions"></slot></div>
