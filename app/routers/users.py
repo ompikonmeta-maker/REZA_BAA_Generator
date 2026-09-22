@@ -11,6 +11,8 @@ from ..deps import audit, current_user, get_db, require_admin
 
 router = APIRouter(prefix="/api", tags=["users"])
 
+ROLES = ("admin", "operator", "viewer")
+
 
 class UserIn(BaseModel):
     username: str
@@ -31,6 +33,8 @@ def list_users(conn: sqlite3.Connection = Depends(get_db), user=Depends(require_
 @router.post("/users")
 def create_user(body: UserIn, conn: sqlite3.Connection = Depends(get_db),
                 user=Depends(require_admin)):
+    if body.role not in ROLES:
+        raise HTTPException(400, "Role tidak valid")
     if conn.execute("SELECT 1 FROM users WHERE username=?", (body.username.strip(),)).fetchone():
         raise HTTPException(400, "Username sudah dipakai")
     if len(body.password) < 4:
@@ -49,6 +53,8 @@ def create_user(body: UserIn, conn: sqlite3.Connection = Depends(get_db),
 @router.put("/users/{uid}")
 def update_user(uid: int, body: UserIn, conn: sqlite3.Connection = Depends(get_db),
                 user=Depends(require_admin)):
+    if body.role not in ROLES:
+        raise HTTPException(400, "Role tidak valid")
     row = conn.execute("SELECT * FROM users WHERE id=?", (uid,)).fetchone()
     if not row:
         raise HTTPException(404, "User tidak ditemukan")

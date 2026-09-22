@@ -145,10 +145,16 @@ def stats(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)
 
 @router.get("/stats/supervisor")
 def supervisor(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
-    """Metrik performa per-user untuk konsol supervisor (admin)."""
+    """Metrik performa untuk konsol supervisor (admin) & dashboard viewer (bos).
+
+    Perhitungan per-user (peringkat & 'perlu perhatian') hanya menghitung user
+    tipe **operator** — admin & viewer dikecualikan karena bukan pelaksana
+    lapangan. Metrik tim (total, velocity, throughput, bottleneck) tetap
+    mencakup seluruh lokasi.
+    """
     from fastapi import HTTPException
-    if user["role"] != "admin":
-        raise HTTPException(403, "Khusus admin")
+    if user["role"] not in ("admin", "viewer"):
+        raise HTTPException(403, "Khusus admin atau viewer")
     import json
     today = date.today()
     monday = today - timedelta(days=today.weekday())      # Senin minggu ini
@@ -180,14 +186,18 @@ def supervisor(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_
     stalled = conn.execute(
         "SELECT COUNT(*) c FROM locations WHERE status!='selesai' AND date(updated_at)<?", [cutoff7]
     ).fetchone()["c"] or 0
-    users_active = conn.execute("SELECT COUNT(*) c FROM users WHERE active=1").fetchone()["c"] or 0
-    users_total = conn.execute("SELECT COUNT(*) c FROM users").fetchone()["c"] or 0
+    # Hanya operator yang dihitung sebagai 'tim lapangan' (exclude admin & viewer).
+    users_active = conn.execute(
+        "SELECT COUNT(*) c FROM users WHERE active=1 AND role='operator'").fetchone()["c"] or 0
+    users_total = conn.execute(
+        "SELECT COUNT(*) c FROM users WHERE role='operator'").fetchone()["c"] or 0
     throughput = [completed(wk(j), wk(j - 1)) for j in range(7, -1, -1)]
 
-    # per-user
+    # per-user (khusus operator — admin & viewer dikecualikan dari peringkat/perhatian)
     users = []
     for u in conn.execute(
-        "SELECT id, COALESCE(NULLIF(full_name,''),username) nm FROM users WHERE active=1"
+        "SELECT id, COALESCE(NULLIF(full_name,''),username) nm FROM users "
+        "WHERE active=1 AND role='operator'"
     ).fetchall():
         r = conn.execute(
             "SELECT COUNT(*) t, SUM(CASE WHEN status='selesai' THEN 1 ELSE 0 END) d "
@@ -260,12 +270,33 @@ def supervisor(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_
     items.sort(key=lambda x: -x[1])
     bottleneck = [{"label": l, "pct": round(c / nd * 100)} for l, c in items[:5]] if nd else []
 
+    # aktivitas terkini tim (global) untuk 'denyut pekerjaan' di dashboard viewer
+    feed = [dict(r) for r in conn.execute(
+        "SELECT username,action,entity,entity_id,detail,created_at FROM audit_log "
+        "ORDER BY id DESC LIMIT 8"
+    ).fetchall()]
+
+    # momentum/streak tim: hari beruntun (mundur dari hari ini) yang ADA lokasi selesai
+    done_days = {r["d"] for r in conn.execute(
+        "SELECT DISTINCT date(updated_at) d FROM locations WHERE status='selesai'"
+    ).fetchall()}
+    streak = 0
+    cur = today
+    while cur.isoformat() in done_days:
+        streak += 1
+        cur -= timedelta(days=1)
+    week = [1 if (today - timedelta(days=6 - i)).isoformat() in done_days else 0 for i in range(7)]
+
     return {
         "name": user["full_name"] or user["username"],
+        "role": user["role"],
         "summary": {"total": total, "done": done, "pct": pct,
                     "vel_this": vel_this, "vel_prev": vel_prev, "cycle": cycle,
                     "stalled": stalled, "users_active": users_active, "users_total": users_total},
         "users": users,
         "bottleneck": bottleneck,
         "throughput": throughput,
+        "feed": feed,
+        "streak": streak,
+        "week": week,
     }

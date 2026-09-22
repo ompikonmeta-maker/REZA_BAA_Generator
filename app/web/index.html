@@ -430,6 +430,50 @@
   .sbn{display:flex;align-items:center;gap:10px;padding:7px 0}
   .sbn .lbl{width:150px;font:var(--md-sys-typescale-body-small)}.sbn .bar{flex:1;height:12px;border-radius:6px;background:var(--md-sys-color-surface-container-highest);overflow:hidden}
   .sbn .bar>i{display:block;height:100%;background:var(--md-sys-color-primary)}.sbn .v{width:38px;text-align:right;font:var(--md-sys-typescale-label-medium);font-weight:700;color:var(--md-sys-color-on-surface-variant)}
+  /* ===== Dashboard Viewer (Mode Bos) ===== */
+  .vw-hero{background:linear-gradient(140deg,var(--md-sys-color-primary),var(--md-sys-color-tertiary));color:var(--md-sys-color-on-primary);border:none;position:relative;overflow:hidden}
+  .vw-hero .th{color:color-mix(in srgb,var(--md-sys-color-on-primary) 88%,transparent)}.vw-hero .th .mi{color:inherit}
+  .vwflex{display:flex;align-items:center;gap:22px;flex-wrap:wrap}
+  .vwring{position:relative;width:150px;height:150px;flex:0 0 auto}
+  .vwring svg{transform:rotate(-90deg)}.vwring .cc{fill:none;stroke-width:14;stroke-linecap:round}
+  .vwring .bg{stroke:color-mix(in srgb,#fff 26%,transparent)}.vwring .fg{stroke:#fff;transition:stroke-dashoffset 1s cubic-bezier(.2,.8,.2,1)}
+  .vwring .lab{position:absolute;inset:0;display:grid;place-content:center;text-align:center}
+  .vwring .lab b{font:var(--md-sys-typescale-display-small);font-weight:800;display:block;line-height:1}
+  .vwring .lab span{font:var(--md-sys-typescale-label-small);opacity:.9}
+  .vwmain{flex:1;min-width:230px}
+  .vwmain .big{font:var(--md-sys-typescale-title-large);font-weight:800;margin:0 0 4px}
+  .vwmain .eta{font:var(--md-sys-typescale-body-medium);opacity:.92;margin:0 0 12px}.vwmain .eta b{font-weight:800}
+  .vwbar{height:12px;border-radius:8px;background:color-mix(in srgb,#fff 22%,transparent);overflow:hidden}
+  .vwbar>i{display:block;height:100%;background:#fff;border-radius:8px;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+  .vwmark{display:flex;justify-content:space-between;font:var(--md-sys-typescale-label-small);opacity:.85;margin-top:5px}
+  .vwwf{display:flex;align-items:center;gap:10px;margin-top:14px;background:color-mix(in srgb,#fff 14%,transparent);border-radius:12px;padding:10px 12px}
+  .vwwf input[type=range]{flex:1;accent-color:#fff}
+  .vwwf .val{font-weight:800;min-width:64px;text-align:right}
+  .vwstreak{display:flex;align-items:center;gap:14px}
+  .vwstreak .fl{font-size:38px;color:var(--md-sys-color-primary);vertical-align:-4px}
+  .vwstreak .big{font:var(--md-sys-typescale-headline-medium);font-weight:800;line-height:1}
+  .vwstreak .mut{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant)}
+  .vwdots{display:flex;gap:5px;margin-top:10px}
+  .vwdots i{width:14px;height:14px;border-radius:5px;background:var(--md-sys-color-surface-container-highest)}
+  .vwdots i.on{background:var(--md-sys-color-primary)}.vwdots i.today{outline:2px solid var(--md-sys-color-primary);outline-offset:1px}
+  .vwdonut{display:flex;align-items:center;gap:16px}.vwdonut svg{width:120px;height:120px;flex:0 0 auto}
+  .vwleg .li{display:flex;align-items:center;gap:8px;font:var(--md-sys-typescale-body-medium);padding:4px 0}
+  .vwleg .sw{width:12px;height:12px;border-radius:4px;flex:0 0 auto}.vwleg b{margin-left:auto;font-weight:800}
+  .vwfeed .it{display:flex;gap:12px;padding:10px 4px}.vwfeed .it+.it{border-top:1px solid var(--md-sys-color-outline-variant)}
+  .vwfeed .fico{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:0 0 auto;color:var(--md-sys-color-on-primary);background:var(--md-sys-color-primary)}
+  .vwfeed .tx{flex:1;min-width:0;font:var(--md-sys-typescale-body-medium)}
+  .vwfeed .tx .mt{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small)}
+  .vw-ro{margin-left:auto;display:inline-flex;align-items:center;gap:6px;font:var(--md-sys-typescale-label-medium);font-weight:700;color:var(--md-sys-color-primary);background:var(--md-sys-color-primary-container);padding:5px 11px;border-radius:20px}
+  .vw-ro .mi{font-size:16px}
+  /* Viewer read-only: sembunyikan semua kontrol tulis */
+  .is-viewer #entry-new,.is-viewer #entry-del,.is-viewer #save-btn,.is-viewer #inv-add,
+  .is-viewer .tr md-icon-button,.is-viewer .drop,.is-viewer #ocr-note,
+  .is-viewer .snap .actbar,.is-viewer .snap.empty,.is-viewer .pf-undo,
+  .is-viewer .lp-new{display:none!important}
+  .is-viewer .snap{cursor:default}
+  .is-viewer .ro-note{display:flex}
+  .ro-note{display:none;align-items:center;gap:8px;background:var(--md-sys-color-secondary-container);color:var(--md-sys-color-on-secondary-container);
+    border-radius:12px;padding:10px 14px;font:var(--md-sys-typescale-body-small);margin-bottom:12px}
   /* drawer */
   .sup-scrim{position:fixed;inset:0;background:color-mix(in srgb,var(--md-sys-color-scrim) 40%,transparent);opacity:0;pointer-events:none;transition:opacity .28s;z-index:2400}
   .sup-scrim.on{opacity:1;pointer-events:auto}
@@ -648,12 +692,63 @@
             </div>
           </div>
         </div>
+
+        <div id="dashViewer" class="hidden">
+          <div class="sup-head">
+            <div><h2 style="font:var(--md-sys-typescale-title-large);font-weight:800;margin:0">Ringkasan Progres</h2><p class="sub" id="vwSub">perkembangan pekerjaan</p></div>
+            <span class="vw-ro"><span class="mi">visibility</span> Mode Viewer — hanya lihat</span>
+          </div>
+          <div class="sup-strip" id="vwStrip"></div>
+          <div class="dash">
+            <div class="dtile vw-hero" style="grid-column:span 8">
+              <div class="th"><span class="mi">rocket_launch</span> Proyeksi Penyelesaian</div>
+              <div class="vwflex">
+                <div class="vwring">
+                  <svg width="150" height="150" viewBox="0 0 150 150"><circle class="cc bg" cx="75" cy="75" r="63"></circle><circle class="cc fg" id="vwRingFg" cx="75" cy="75" r="63"></circle></svg>
+                  <div class="lab"><div><b id="vwPct">0%</b><span id="vwRingSub">0 / 0</span></div></div>
+                </div>
+                <div class="vwmain">
+                  <p class="big" id="vwBig">—</p>
+                  <p class="eta">Dengan kecepatan sekarang, seluruh lokasi diproyeksikan tuntas sekitar <b id="vwEtaDate">—</b> (± <span id="vwEtaWeeks">—</span> minggu lagi).</p>
+                  <div class="vwbar"><i id="vwBar" style="width:0%"></i></div>
+                  <div class="vwmark"><span>0</span><span id="vwTarget">Target</span></div>
+                  <div class="vwwf"><span class="mi">tune</span><span>Skenario kecepatan</span><input type="range" id="vwWf" min="4" max="80" value="20"><span class="val" id="vwWfVal">20/mgg</span></div>
+                </div>
+              </div>
+            </div>
+            <div class="dtile" style="grid-column:span 4">
+              <div class="th"><span class="mi">local_fire_department</span> Momentum Tim</div>
+              <div class="vwstreak"><span class="mi fl">local_fire_department</span><div><div class="big" id="vwStreakN">0 hari</div><div class="mut">beruntun ada lokasi selesai</div></div></div>
+              <div class="vwdots" id="vwWeek"></div>
+              <p class="mut" id="vwStreakNote" style="margin:12px 0 0;font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant)"></p>
+            </div>
+            <div class="dtile" style="grid-column:span 4">
+              <div class="th"><span class="mi">donut_large</span> Status Lokasi</div>
+              <div class="vwdonut"><svg id="vwDonut" viewBox="0 0 120 120"></svg><div class="vwleg" style="flex:1" id="vwLeg"></div></div>
+            </div>
+            <div class="dtile" style="grid-column:span 8">
+              <div class="th"><span class="mi">insights</span> Tren Penyelesaian · 8 minggu terakhir</div>
+              <div class="vbars" id="vwVbars"></div>
+              <div class="vx" id="vwVx"></div>
+            </div>
+            <div class="dtile" style="grid-column:span 7">
+              <div class="th"><span class="mi">bolt</span> Denyut Pekerjaan — aktivitas terkini</div>
+              <div class="vwfeed" id="vwFeed"></div>
+            </div>
+            <div class="dtile" style="grid-column:span 5">
+              <div class="th"><span class="mi">construction</span> Paling sering tertunda</div>
+              <div id="vwBn"></div>
+              <p style="color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-label-small);margin:12px 0 0">Titik yang paling sering belum lengkap di lokasi draft — bukan penilaian orang.</p>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section id="v-entry" class="hidden">
         <div id="entry-empty" class="card muted">Pilih lokasi di kanan atas, atau buat lokasi baru untuk mulai.</div>
         <div id="entry-form" class="entry-grid hidden">
           <div class="entry-main">
+            <div class="ro-note"><span class="mi">lock</span> Mode Viewer — kamu hanya bisa melihat entry ini, tanpa mengubah.</div>
             <div class="card">
               <div class="sec"><span class="mi acc">location_on</span><h3>Data Lokasi</h3></div>
               <div class="fgrid" id="loc-fields"></div>
@@ -1036,7 +1131,7 @@ async function boot(){paint();
   tplDetailSel=new MDSelect($('#tpl-detail'),{label:'Worksheet Detail'});
   mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG'});
   mapDetailSel=new MDSelect($('#map-detail'),{label:'Sheet Detail',onChange:v=>renderRef(v)});
-  roleSel=new MDSelect($('#u-role'),{label:'Role'});roleSel.setOptions([{value:'operator',label:'operator'},{value:'admin',label:'admin'}]).setValue('operator');
+  roleSel=new MDSelect($('#u-role'),{label:'Role'});roleSel.setOptions([{value:'operator',label:'operator'},{value:'viewer',label:'viewer (bos — hanya lihat)'},{value:'admin',label:'admin'}]).setValue('operator');
   locCreatorSel=new MDSelect($('#loc-creator'),{label:'Pembuat',placeholder:'Semua pembuat',onChange:()=>loadLocations()});locCreatorSel.setOptions([{value:'',label:'Semua pembuat'}]).setValue('');
   try{S.user=await api('/api/auth/me');showApp();}catch{$('#login').classList.remove('hidden');bindTips();}}
 /* Auto-deteksi tipe admin (aksen merah) via peek endpoint */
@@ -1070,6 +1165,7 @@ async function showApp(){$('#login').classList.add('hidden');$('#app').classList
   await S.settingsReady;
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
   $('#app').classList.toggle('is-operator',S.user.role!=='admin');
+  $('#app').classList.toggle('is-viewer',S.user.role==='viewer');
   refreshPicker();loadLocations();loadCreators();loadDashboard();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
   if(S.user.must_change)setTimeout(()=>openPw(true),400);}
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
@@ -1174,9 +1270,12 @@ async function loadDashboard(){
   paintDashSky();                                            /* hero sapaan utk semua peran */
   $('#dHello').textContent=`${greetWord()}, ${esc(s.name)}`;
   const t=s.totals;
+  const isViewer=s.role==='viewer';
   $('#dChipTxt').textContent=t.draft?`${t.draft} lokasi menunggu diselesaikan`:'Semua lokasi selesai';
-  $('#dashOp').classList.toggle('hidden',isAdmin);
+  $('#dashOp').classList.toggle('hidden',isAdmin||isViewer);
   $('#dashSuper').classList.toggle('hidden',!isAdmin);
+  $('#dashViewer').classList.toggle('hidden',!isViewer);
+  if(isViewer){loadViewer();return;}
   if(isAdmin){loadSupervisor(s.name);return;}
   const isA=s.role==='admin';
   const kpis=isA
@@ -1266,6 +1365,66 @@ window.supDrill=id=>{const u=SUP_USERS.find(x=>x.id===id);if(!u)return;const c=S
   $('#supHelpBtn').addEventListener('click',()=>$('#helpDlg').show());
   $('#helpOk').addEventListener('click',()=>$('#helpDlg').close());})();
 
+/* ===== DASHBOARD VIEWER (Mode Bos) ===== */
+let VW_D=null;
+async function loadViewer(){
+  let d;try{d=await api('/api/stats/supervisor');}catch(e){return;}
+  VW_D=d;const m=d.summary;const total=m.total||0,done=m.done||0,remain=Math.max(0,total-done);
+  $('#vwSub').textContent=`perkembangan pekerjaan · ${done} dari ${total} lokasi selesai`;
+  $('#dChipTxt').textContent=remain?`${remain} lokasi menunggu diselesaikan`:'Semua lokasi selesai';
+  // ring
+  const C=2*Math.PI*63;const fg=$('#vwRingFg');fg.style.strokeDasharray=C.toFixed(1);fg.style.strokeDashoffset=C.toFixed(1);
+  requestAnimationFrame(()=>{fg.style.strokeDashoffset=(C*(1-(total?done/total:0))).toFixed(1);});
+  $('#vwPct').textContent=(m.pct||0)+'%';$('#vwRingSub').textContent=`${done} / ${total}`;
+  $('#vwBig').textContent=remain?`${remain} lokasi lagi menuju garis akhir`:'Semua lokasi sudah selesai 🎯'.replace(' 🎯','');
+  $('#vwBar').style.width=(m.pct||0)+'%';$('#vwTarget').textContent='Target '+total;
+  // what-if ETA
+  const vel=Math.max(1,m.vel_this||0);const wf=$('#vwWf');
+  wf.min=2;wf.max=Math.max(20,vel*3);wf.value=vel;
+  const paintEta=v=>{const wk=remain?Math.ceil(remain/Math.max(1,v)):0;const dt=new Date();dt.setDate(dt.getDate()+wk*7);
+    $('#vwWfVal').textContent=v+'/mgg';
+    $('#vwEtaDate').textContent=remain?vwFullDate(dt):'sudah tuntas';$('#vwEtaWeeks').textContent=wk;
+    vwSetKpiEta(remain?(_IDMON[dt.getMonth()]+' '+dt.getFullYear()):'—');};
+  paintEta(vel);wf.oninput=e=>paintEta(+e.target.value);
+  // KPI strip
+  const etaW=remain?Math.ceil(remain/vel):0;const etaD=new Date();etaD.setDate(etaD.getDate()+etaW*7);
+  $('#vwStrip').innerHTML=[
+    ['table_rows','Total Lokasi',total,''],
+    ['task_alt','Selesai',done,(m.pct||0)+'% dari target'],
+    ['pending_actions','Sisa',remain,'dalam proses'],
+    ['speed','Kecepatan',(m.vel_this||0)+'<span style="font-size:12px">/mgg</span>',vwWow(m)],
+    ['timer','Rata-rata',(m.cycle||0)+'<span style="font-size:12px"> hr</span>','per lokasi'],
+    ['event_available','Proyeksi',remain?`<span style="font-size:18px">${_IDMON[etaD.getMonth()]} ${etaD.getFullYear()}</span>`:'—','estimasi tuntas'],
+  ].map(k=>`<div class="sk"><div class="t"><span class="mi">${k[0]}</span>${k[1]}</div><div class="n">${k[2]}</div><div class="d">${k[3]||'&nbsp;'}</div></div>`).join('');
+  // momentum
+  $('#vwStreakN').textContent=(d.streak||0)+' hari';
+  $('#vwWeek').innerHTML=['S','S','R','K','J','S','M'].map((x,i)=>`<i class="${d.week&&d.week[i]?'on':''} ${i===6?'today':''}"></i>`).join('');
+  $('#vwStreakNote').innerHTML=`Minggu ini <b style="color:var(--md-sys-color-on-surface)">${m.vel_this||0} lokasi</b> selesai${m.vel_prev?` · minggu lalu ${m.vel_prev}`:''}.`;
+  // donut status
+  const proc=Math.max(0,remain-(m.stalled||0));
+  const SEG=[['Selesai',done,'var(--md-sys-color-primary)'],['Dalam proses',proc,'var(--md-sys-color-tertiary)'],['Draft mangkrak >7 hr',m.stalled||0,'var(--md-sys-color-error)']];
+  const tot=SEG.reduce((a,b)=>a+b[1],0)||1;let off=0;const R=46,CC=2*Math.PI*R;
+  $('#vwDonut').innerHTML=SEG.map(s=>{const f=s[1]/tot;const el=`<circle cx="60" cy="60" r="${R}" fill="none" stroke="${s[2]}" stroke-width="16" stroke-dasharray="${(f*CC).toFixed(1)} ${CC.toFixed(1)}" stroke-dashoffset="${(-off*CC).toFixed(1)}" transform="rotate(-90 60 60)"/>`;off+=f;return el;}).join('')
+    +`<text x="60" y="57" text-anchor="middle" font-size="19" font-weight="800" fill="var(--md-sys-color-on-surface)">${m.pct||0}%</text><text x="60" y="72" text-anchor="middle" font-size="9" fill="var(--md-sys-color-on-surface-variant)">selesai</text>`;
+  $('#vwLeg').innerHTML=SEG.map(s=>`<div class="li"><span class="sw" style="background:${s[2]}"></span>${s[0]}<b>${s[1]}</b></div>`).join('');
+  // throughput
+  const tp=d.throughput||[];const mx=Math.max(...tp,1);
+  $('#vwVbars').innerHTML=tp.map(v=>`<div class="b" style="height:${Math.round(v/mx*100)}%"><span>${v}</span></div>`).join('');
+  $('#vwVx').innerHTML=['-7','-6','-5','-4','-3','-2','-1','kini'].map(x=>`<div>${x}</div>`).join('');
+  // feed
+  $('#vwFeed').innerHTML=(d.feed||[]).length?d.feed.map(f=>`<div class="it"><span class="fico"><span class="mi">${vwFeedIcon(f.action)}</span></span>
+    <div class="tx"><b>${esc(f.username||'—')}</b> ${actionLabel(f)}<div class="mt">${timeAgo(f.created_at)}</div></div></div>`).join('')
+    :'<p class="muted" style="padding:8px 4px">Belum ada aktivitas.</p>';
+  // bottleneck
+  $('#vwBn').innerHTML=(d.bottleneck||[]).length?d.bottleneck.map(b=>`<div class="sbn"><span class="lbl">${esc(b.label)}</span><span class="bar"><i style="width:${b.pct}%"></i></span><span class="v">${b.pct}%</span></div>`).join('')
+    :'<p class="muted" style="padding:10px 4px">Tidak ada draft tertahan.</p>';
+}
+function vwFullDate(dt){return dt.getDate()+' '+_IDMON[dt.getMonth()]+' '+dt.getFullYear();}
+function vwSetKpiEta(txt){const el=document.querySelector('#vwStrip .sk:last-child .n');if(el)el.innerHTML=`<span style="font-size:18px">${txt}</span>`;}
+function vwWow(m){if(!m.vel_prev)return '<span class="flat">—</span>';const w=Math.round((m.vel_this-m.vel_prev)/m.vel_prev*100);
+  return w>=0?`<span class="up">▲ ${w}%</span>`:`<span class="down">▼ ${Math.abs(w)}%</span>`;}
+function vwFeedIcon(a){return ({create:'add_location',update:'edit',save_inventory:'inventory_2',upload_photos:'photo_camera',delete:'delete',delete_photo:'delete',rename:'edit',register:'description',activate:'star'})[a]||'bolt';}
+
 function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats;} /* semua kategori wajib */
 
 /* ENTRY */
@@ -1288,8 +1447,11 @@ async function openLoc(id){S.loc=await api('/api/locations/'+id);
   pickerSel.setValue(String(id));
   $('#entry-empty').classList.add('hidden');$('#entry-form').classList.remove('hidden');
   $('#entry-del').classList.remove('hidden');
-  renderLocFields();renderInventory();renderPhotos();updateSummary();bindTips();
+  renderLocFields();renderInventory();renderPhotos();updateSummary();bindTips();lockEntry();
   requestAnimationFrame(()=>revealCards($('#v-entry')));}
+/* Viewer: kunci semua field entry (read-only) — tombol tulis sudah disembunyikan via CSS */
+function lockEntry(){if(!S.user||S.user.role!=='viewer')return;
+  $$('#entry-form md-text-field, #entry-form input, #entry-form textarea').forEach(el=>el.setAttribute('disabled',''));}
 function renderLocFields(){$('#loc-fields').innerHTML=S.locFields.map(f=>
   `<md-text-field data-lf="${f.key}" variant="outlined" label="${esc(f.label)}${f.required?' *':''}" type="${f.type==='date'?'date':'text'}" value="${esc(S.loc.data[f.key]||'')}"></md-text-field>`).join('');}
 function merkOpts(name){return (S.itemMerks&&S.itemMerks[(name||'').trim()])||[];}

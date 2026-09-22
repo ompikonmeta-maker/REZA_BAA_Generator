@@ -9,7 +9,7 @@ from fastapi import APIRouter, Depends, HTTPException, Query
 from pydantic import BaseModel
 
 from .. import config, db
-from ..deps import audit, current_user, get_db
+from ..deps import audit, current_user, get_db, require_editor
 
 router = APIRouter(prefix="/api/locations", tags=["locations"])
 
@@ -168,7 +168,7 @@ def location_options(conn: sqlite3.Connection = Depends(get_db), user=Depends(cu
 
 @router.post("")
 def create_location(body: LocationIn, conn: sqlite3.Connection = Depends(get_db),
-                    user=Depends(current_user)):
+                    user=Depends(require_editor)):
     import json
     code = _gen_code(conn)
     now = db.now_iso()
@@ -195,7 +195,7 @@ def get_location(loc_id: int, conn: sqlite3.Connection = Depends(get_db),
 
 @router.put("/{loc_id}")
 def update_location(loc_id: int, body: LocationIn, conn: sqlite3.Connection = Depends(get_db),
-                    user=Depends(current_user)):
+                    user=Depends(require_editor)):
     import json
     row = conn.execute("SELECT * FROM locations WHERE id=?", (loc_id,)).fetchone()
     if not row:
@@ -212,7 +212,7 @@ def update_location(loc_id: int, body: LocationIn, conn: sqlite3.Connection = De
 
 @router.put("/{loc_id}/inventory")
 def save_inventory(loc_id: int, body: InventoryIn, conn: sqlite3.Connection = Depends(get_db),
-                   user=Depends(current_user)):
+                   user=Depends(require_editor)):
     if not conn.execute("SELECT 1 FROM locations WHERE id=?", (loc_id,)).fetchone():
         raise HTTPException(404, "Lokasi tidak ditemukan")
     conn.execute("DELETE FROM inventory_items WHERE location_id=?", (loc_id,))
@@ -230,7 +230,7 @@ def save_inventory(loc_id: int, body: InventoryIn, conn: sqlite3.Connection = De
 
 @router.delete("/{loc_id}")
 def delete_location(loc_id: int, conn: sqlite3.Connection = Depends(get_db),
-                    user=Depends(current_user)):
+                    user=Depends(require_editor)):
     row = conn.execute("SELECT * FROM locations WHERE id=?", (loc_id,)).fetchone()
     if not row:
         raise HTTPException(404, "Lokasi tidak ditemukan")

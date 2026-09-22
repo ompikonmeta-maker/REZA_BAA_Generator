@@ -33,6 +33,18 @@ def require_admin(user=Depends(current_user)):
     return user
 
 
+def require_editor(user=Depends(current_user)):
+    """Boleh menulis (buat/ubah/hapus data entry): admin & operator.
+
+    Viewer (mode bos) hanya boleh melihat — semua endpoint tulis memakai guard
+    ini agar viewer ditolak di sisi server, bukan sekadar disembunyikan di UI.
+    """
+    if user["role"] not in ("admin", "operator"):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN,
+                            detail="Akun ini hanya bisa melihat (viewer)")
+    return user
+
+
 def audit(conn: sqlite3.Connection, user, action: str, entity: str = "", entity_id="", detail: str = ""):
     conn.execute(
         "INSERT INTO audit_log(user_id, username, action, entity, entity_id, detail, created_at) "

@@ -13,7 +13,7 @@ from fastapi import (APIRouter, Depends, File, Form, HTTPException, UploadFile)
 from fastapi.responses import FileResponse
 
 from .. import config, db
-from ..deps import audit, current_user, get_db
+from ..deps import audit, current_user, get_db, require_editor
 from ..services import autosort, ocr
 
 router = APIRouter(prefix="/api", tags=["photos"])
@@ -31,7 +31,7 @@ def upload_photos(
     category: str = Form(default=""),          # jika diisi -> paksa ke kategori ini (upload manual per-slot)
     relpaths: str = Form(default="[]"),        # opsional: path relatif per file (untuk deteksi subfolder)
     conn: sqlite3.Connection = Depends(get_db),
-    user=Depends(current_user),
+    user=Depends(require_editor),
 ):
     loc = conn.execute("SELECT * FROM locations WHERE id=?", (loc_id,)).fetchone()
     if not loc:
@@ -105,7 +105,7 @@ def upload_photos(
 
 @router.patch("/photos/{photo_id}")
 def reassign_photo(photo_id: int, payload: dict, conn: sqlite3.Connection = Depends(get_db),
-                   user=Depends(current_user)):
+                   user=Depends(require_editor)):
     """Pindahkan foto ke kategori lain (drag manual). Re-OCR bila perlu."""
     row = conn.execute("SELECT * FROM photos WHERE id=?", (photo_id,)).fetchone()
     if not row:
@@ -135,7 +135,7 @@ def reassign_photo(photo_id: int, payload: dict, conn: sqlite3.Connection = Depe
 
 @router.post("/photos/{photo_id}/reocr")
 def reocr_photo(photo_id: int, conn: sqlite3.Connection = Depends(get_db),
-                user=Depends(current_user)):
+                user=Depends(require_editor)):
     row = conn.execute("SELECT * FROM photos WHERE id=?", (photo_id,)).fetchone()
     if not row:
         raise HTTPException(404, "Foto tidak ditemukan")
@@ -156,7 +156,7 @@ def photo_file(photo_id: int, conn: sqlite3.Connection = Depends(get_db),
 
 @router.delete("/photos/{photo_id}")
 def delete_photo(photo_id: int, conn: sqlite3.Connection = Depends(get_db),
-                 user=Depends(current_user)):
+                 user=Depends(require_editor)):
     row = conn.execute("SELECT * FROM photos WHERE id=?", (photo_id,)).fetchone()
     if not row:
         raise HTTPException(404, "Foto tidak ditemukan")
