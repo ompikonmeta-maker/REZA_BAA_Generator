@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Lebar konten submenu</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#eef1f1;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;--pri:#04726f;--sec:#cfe6e5;--onsec:#00413f;--cyan:#7de7e6;--disp:'Sora',system-ui;--maxw:900px}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec;--cyan:#123634}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",Roboto,system-ui}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+  .bar{position:sticky;top:0;z-index:5;background:var(--pane);border-bottom:1px solid var(--ov);padding:12px 20px;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+  .bar b{font-family:var(--disp)}
+  .seg{display:inline-flex;border:1px solid var(--ov);border-radius:20px;overflow:hidden}
+  .seg button{border:0;background:transparent;padding:8px 14px;cursor:pointer;font-weight:700;color:var(--mut)}
+  .seg button.on{background:var(--sec);color:var(--onsec)}
+  .rowc{display:flex;align-items:center;gap:8px;color:var(--mut);font-size:13px}
+  .canvas{padding:22px}
+  /* konten submenu; .cap = dibatasi 900px & rata tengah */
+  .wrap.cap{max-width:var(--maxw);margin:0 auto}
+  .ruler{max-width:var(--maxw);margin:0 auto 12px;height:22px;position:relative;color:var(--pri);font-size:11px;font-weight:800}
+  .ruler.full{max-width:none}
+  .ruler::before,.ruler::after{content:'';position:absolute;top:10px;width:1px;height:10px;background:var(--pri)}
+  .ruler::before{left:0}.ruler::after{right:0}
+  .ruler i{position:absolute;top:6px;left:0;right:0;border-top:1px dashed var(--pri)}
+  .ruler span{position:absolute;top:0;left:50%;transform:translateX(-50%);background:var(--bg);padding:0 8px}
+  .title{font-family:var(--disp);font-size:19px;font-weight:800;margin:0 0 14px;max-width:var(--maxw)}
+  .title.full{max-width:none}
+  .card{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:16px 18px}
+  .hd{display:flex;align-items:center;gap:9px;margin-bottom:14px}.hd .mi{color:var(--pri)}.hd h3{font-family:var(--disp);font-size:16px;margin:0}
+  .hd .add{margin-left:auto;background:var(--cyan);color:#00514e;border:0;border-radius:20px;padding:8px 15px;font-weight:800;cursor:pointer}
+  .frow{display:flex;align-items:center;gap:14px;background:color-mix(in srgb,var(--ink) 3%,var(--pane));border-radius:12px;padding:10px 12px;margin-bottom:10px}
+  .frow .key{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--mut);background:var(--pane);border:1px solid var(--ov);border-radius:8px;padding:8px 10px;width:150px}
+  .frow .nm{font-weight:700;flex:1;min-width:0}
+  .pill{display:inline-flex;border:1px solid var(--ov);border-radius:20px;overflow:hidden}
+  .pill button{border:0;background:transparent;padding:6px 12px;font-weight:700;color:var(--mut);cursor:pointer;font-size:12.5px}
+  .pill button.on{background:var(--pane);color:var(--pri);box-shadow:inset 0 0 0 1px var(--ov)}
+  .tg{width:46px;height:26px;border-radius:20px;background:var(--ov);position:relative;cursor:pointer;flex:0 0 auto}
+  .tg.on{background:var(--pri)}.tg::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.tg.on::after{left:23px}
+  .tglab{font-size:12.5px;color:var(--mut);width:40px}
+  .x{color:var(--mut);cursor:pointer}
+  .cap-note{max-width:var(--maxw);margin:16px auto 0;color:var(--mut);font-size:12.5px}
+  .cap-note.full{max-width:none}.cap-note b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="bar">
+  <b>Lebar konten submenu</b>
+  <div class="seg"><button id="bCap" class="on" onclick="setMode('cap')">Dibatasi 900px</button><button id="bFull" onclick="setMode('full')">Full-width (sekarang)</button></div>
+  <span class="rowc"><span class="mi">info</span> Simulasi layar lebar — perhatikan lebar field.</span>
+</div>
+<div class="canvas">
+  <div class="ruler cap" id="ruler"><i></i><span id="rulerTxt">± 900 px</span></div>
+  <h2 class="title cap" id="title">Pengaturan · Field Data Lokasi</h2>
+  <div class="wrap cap" id="wrap">
+    <div class="card">
+      <div class="hd"><span class="mi">list_alt</span><h3>Field Data Lokasi</h3><button class="add"><span class="mi">add</span> Field</button></div>
+      <div id="rows"></div>
+    </div>
+  </div>
+  <p class="cap-note cap" id="note"><b>Dibatasi 900px:</b> di layar besar konten tidak melebar berlebihan, field lebih nyaman dibaca & fokus di tengah. Nilai bisa diubah (mis. 880–960px).</p>
+</div>
+<script>
+  const F=[['nama_lokasi','Nama Lokasi / Koperasi','Teks',true],['tanggal','Tanggal Aktivasi','Tanggal',false],['teknisi','Teknisi','Teks',false],['pic','PIC Lokasi','Teks',false]];
+  document.getElementById('rows').innerHTML=F.map(f=>`<div class="frow">
+    <span class="key">${f[0]}</span><span class="nm">${f[1]}</span>
+    <span class="pill"><button class="${f[2]==='Teks'?'on':''}">Teks</button><button class="${f[2]==='Tanggal'?'on':''}">Tanggal</button></span>
+    <span class="tg ${f[3]?'on':''}"></span><span class="tglab">Wajib</span><span class="mi x">close</span></div>`).join('');
+  function setMode(m){const cap=m==='cap';
+    document.getElementById('bCap').classList.toggle('on',cap);document.getElementById('bFull').classList.toggle('on',!cap);
+    ['wrap','title','note','ruler'].forEach(id=>document.getElementById(id).classList.toggle('cap',cap)&&0);
+    ['wrap','title','note','ruler'].forEach(id=>document.getElementById(id).classList.toggle('full',!cap));
+    document.getElementById('rulerTxt').textContent=cap?'± 900 px':'selebar layar';}
+</script>
+</body>
+</html>
