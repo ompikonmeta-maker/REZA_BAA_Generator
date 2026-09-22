@@ -262,13 +262,15 @@ def supervisor(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_
             data = {}
         if any(not str(data.get(f["key"], "")).strip() for f in fields):
             field_bad += 1
-    items = [(l, c) for l, c in miss.items() if c > 0]
+    items = [(l, c, "foto") for l, c in miss.items() if c > 0]
     if inv_bad:
-        items.append(("Inventory belum lengkap", inv_bad))
+        items.append(("Inventory belum lengkap", inv_bad, "inv"))
     if field_bad:
-        items.append(("Field lokasi kosong", field_bad))
+        items.append(("Field lokasi kosong", field_bad, "data"))
     items.sort(key=lambda x: -x[1])
-    bottleneck = [{"label": l, "pct": round(c / nd * 100)} for l, c in items[:5]] if nd else []
+    bottleneck = [{"label": l, "count": c, "total": nd,
+                   "pct": round(c / nd * 100), "kind": k}
+                  for l, c, k in items[:6]] if nd else []
 
     # aktivitas terkini tim (global) untuk 'denyut pekerjaan' di dashboard viewer
     feed = [dict(r) for r in conn.execute(
