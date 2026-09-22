@@ -56,6 +56,63 @@ def _fit(img_w: int, img_h: int, max_w: int, max_h: int) -> tuple[int, int]:
     return int(img_w * r), int(img_h * r)
 
 
+# Perkiraan standar Excel bila lebar kolom / tinggi baris tidak diset eksplisit
+_DEF_COL_CHARS = 8.43
+_DEF_ROW_PT = 15.0
+
+
+def _col_px(ws, col_idx: int) -> int:
+    """Lebar kolom (1-based) dalam piksel."""
+    from openpyxl.utils import get_column_letter
+    dim = ws.column_dimensions.get(get_column_letter(col_idx))
+    w = dim.width if (dim is not None and dim.width) else None
+    if not w:
+        w = (ws.sheet_format.defaultColWidth or _DEF_COL_CHARS)
+    return int(round(w * 7 + 5))          # rumus lebar Excel (MDW=7, Calibri 11)
+
+
+def _row_px(ws, row_idx: int) -> int:
+    """Tinggi baris (1-based) dalam piksel."""
+    from openpyxl.utils.units import points_to_pixels
+    dim = ws.row_dimensions.get(row_idx)
+    h = dim.height if (dim is not None and dim.height) else None
+    if not h:
+        h = (ws.sheet_format.defaultRowHeight or _DEF_ROW_PT)
+    return int(round(points_to_pixels(h)))
+
+
+def _place_photo(ws, xi, anchor: str) -> None:
+    """Tempel gambar. Bila sel anchor adalah bagian dari cell yang di-merge,
+    gambar diletakkan di TENGAH (horizontal + vertikal) area merge. Bila bukan
+    merge, perilaku tetap seperti biasa (pojok kiri-atas sel anchor)."""
+    from openpyxl.utils.cell import coordinate_to_tuple
+    from openpyxl.utils.units import pixels_to_EMU
+    from openpyxl.drawing.spreadsheet_drawing import OneCellAnchor, AnchorMarker
+    from openpyxl.drawing.xdr import XDRPositiveSize2D
+
+    row, col = coordinate_to_tuple(anchor)
+    rng = None
+    for m in ws.merged_cells.ranges:
+        if m.min_row <= row <= m.max_row and m.min_col <= col <= m.max_col:
+            rng = m
+            break
+    if rng is None:                        # bukan cell merge -> biasa
+        ws.add_image(xi, anchor)
+        return
+
+    area_w = sum(_col_px(ws, c) for c in range(rng.min_col, rng.max_col + 1))
+    area_h = sum(_row_px(ws, r) for r in range(rng.min_row, rng.max_row + 1))
+    off_x = max(0, (area_w - int(xi.width)) // 2)
+    off_y = max(0, (area_h - int(xi.height)) // 2)
+    marker = AnchorMarker(col=rng.min_col - 1, colOff=pixels_to_EMU(off_x),
+                          row=rng.min_row - 1, rowOff=pixels_to_EMU(off_y))
+    xi.anchor = OneCellAnchor(
+        _from=marker,
+        ext=XDRPositiveSize2D(pixels_to_EMU(int(xi.width)), pixels_to_EMU(int(xi.height))),
+    )
+    ws.add_image(xi)
+
+
 def build_workbook(template_path: str, template_config: dict, locations: list[dict],
                    out_path: str) -> dict:
     """locations: list of dict {code,name,data,inventory:[...],photos:[{category,path,...}]}"""
@@ -143,7 +200,7 @@ def build_workbook(template_path: str, template_config: dict, locations: list[di
                 xi.width, xi.height = _fit(xi.width, xi.height,
                                            cfg["detail"]["photo_max_w"],
                                            cfg["detail"]["photo_max_h"])
-                ws.add_image(xi, anchor)
+                _place_photo(ws, xi, anchor)
             except Exception as e:
                 warnings.append(f"{ws.title}: gagal sisip foto '{cat}': {e}")
 
