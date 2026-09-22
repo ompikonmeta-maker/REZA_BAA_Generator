@@ -1,0 +1,236 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Template Mapping (MD3)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#e9ecec;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;--track:#e2e7e6;
+    --pri:#04726f;--pri2:#0a9c97;--sec:#cfe6e5;--onsec:#00413f;--secc:#d7e7e5;--disp:'Sora',system-ui;
+    --good:#1c7d46;--goodbg:#dcf0e2;--warn:#9a5b00;--warnbg:#fdeede;--bad:#a3312a;--badbg:#fbe4e2}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--track:#26302f;--pri:#57d6d1;--pri2:#7ce7e2;--sec:#0e3b39;--onsec:#9ff0ec;--secc:#123634;--good:#7ddc9f;--goodbg:#123522;--warn:#ffb95c;--warnbg:#3a2a10;--bad:#ffb1a8;--badbg:#3a1714}}
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",Roboto,system-ui}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;line-height:1;vertical-align:-3px}
+  .wrap{max-width:1180px;margin:0 auto;padding:22px 22px 120px}
+  .hero{display:flex;align-items:flex-start;gap:16px;margin-bottom:16px}
+  .hero h1{font-family:var(--disp);font-size:23px;font-weight:800;margin:0 0 3px}
+  .hero p{margin:0;color:var(--mut);font-size:13px}
+  .hero .save{margin-left:auto;display:inline-flex;align-items:center;gap:7px;font-size:12.5px;font-weight:700;color:var(--good)}
+  .hero .save .d{width:8px;height:8px;border-radius:50%;background:var(--good)}
+  .hero .save.dirty{color:var(--warn)}.hero .save.dirty .d{background:var(--warn)}
+  .btn{border:1px solid var(--ov);background:var(--pane);color:var(--ink);padding:9px 14px;border-radius:20px;font-weight:700;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px}
+  .btn .mi{font-size:18px}
+  .btn.pri{background:var(--pri);color:#fff;border-color:var(--pri)}
+  .btn.soft{background:var(--sec);color:var(--onsec);border-color:transparent}
+  .tabs{display:flex;gap:4px;border-bottom:1px solid var(--ov);margin:6px 0 18px}
+  .tab{border:0;background:transparent;padding:11px 16px;color:var(--mut);font-weight:700;border-bottom:3px solid transparent;cursor:pointer}
+  .tab.on{color:var(--pri);border-color:var(--pri)}
+  .panel{background:var(--pane);border:1px solid var(--ov);border-radius:18px}
+  table{width:100%;border-collapse:collapse}
+  th{text-align:left;color:var(--mut);font-size:11.5px;font-weight:700;padding:12px 12px;border-bottom:1px solid var(--ov);text-transform:uppercase;letter-spacing:.3px}
+  td{padding:13px 12px;border-bottom:1px solid var(--ov)}
+  .badge{display:inline-flex;padding:3px 10px;border-radius:20px;background:var(--goodbg);color:var(--good);font-size:11.5px;font-weight:800}
+  .cell{font-family:ui-monospace,Consolas,monospace}
+  /* workspace */
+  .ws{display:grid;grid-template-columns:220px minmax(0,1fr);gap:16px}
+  @media(max-width:860px){.ws{grid-template-columns:1fr}.steps{position:static!important;flex-direction:row!important;overflow:auto}}
+  .steps{padding:10px;position:sticky;top:14px;align-self:start;display:flex;flex-direction:column;gap:4px}
+  .step{display:flex;gap:10px;padding:10px;border-radius:12px;cursor:pointer;color:var(--mut);min-width:150px}
+  .step:hover,.step.on{background:var(--sec);color:var(--onsec)}
+  .step .num{width:24px;height:24px;border-radius:50%;border:1.5px solid var(--ov);display:grid;place-items:center;font-size:12px;font-weight:800;flex:0 0 auto}
+  .step.done .num{background:var(--pri);color:#fff;border-color:var(--pri)}
+  .step small{display:block;color:var(--mut);font-size:11px;margin-top:1px}
+  .col{display:grid;gap:14px}
+  .sec{padding:18px;scroll-margin-top:14px}
+  .sec-h{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+  .sec-h h2{font-family:var(--disp);font-size:16px;margin:0}.sec-h .hint{color:var(--mut);font-size:12px;margin:2px 0 0}
+  .sec-h .tool{margin-left:auto;display:flex;gap:8px}
+  .grid{display:grid;gap:12px}.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}
+  @media(max-width:600px){.g2,.g3{grid-template-columns:1fr}}
+  label.lb{display:block;font-size:12px;font-weight:700;color:var(--mut);margin-bottom:5px}
+  .ctl{width:100%;height:40px;border:1px solid var(--ov);border-radius:10px;padding:0 11px;background:var(--pane);color:var(--ink)}
+  .ctl:focus{outline:2px solid color-mix(in srgb,var(--pri) 30%,transparent);border-color:var(--pri)}
+  .range{background:color-mix(in srgb,var(--pri) 7%,var(--pane));border:1px dashed color-mix(in srgb,var(--pri) 40%,transparent);border-radius:10px;padding:10px 12px;color:var(--onsec);font-size:13px}
+  .maptab input{width:88px;height:34px;border:1px solid var(--ov);border-radius:8px;padding:0 9px;background:var(--pane);color:var(--ink);font-family:ui-monospace,Consolas,monospace;text-transform:uppercase}
+  .maptab input.conflict{border-color:var(--bad);background:var(--badbg)}
+  .ok{color:var(--good);font-weight:700;font-size:12px}.warn{color:var(--bad);font-weight:700;font-size:12px}
+  .search{height:38px;border:1px solid var(--ov);border-radius:20px;padding:0 12px;background:var(--pane);color:var(--ink);width:190px}
+  .preview{border:1px dashed var(--ov);border-radius:12px;background:repeating-linear-gradient(45deg,color-mix(in srgb,var(--pri) 4%,var(--pane)),color-mix(in srgb,var(--pri) 4%,var(--pane)) 10px,var(--pane) 10px,var(--pane) 20px);display:grid;place-items:center;color:var(--mut);font-size:12px;max-height:220px}
+  /* action bar */
+  .actionbar{position:fixed;left:0;right:0;bottom:0;background:color-mix(in srgb,var(--pane) 96%,transparent);backdrop-filter:blur(10px);border-top:1px solid var(--ov);padding:12px 22px;display:flex;align-items:center;gap:14px;z-index:30}
+  .actionbar .ring{width:40px;height:40px;flex:0 0 auto}
+  .actionbar .sum b{font-weight:800}.actionbar .sum small{color:var(--mut);display:block;font-size:12px}
+  .actionbar .sp{margin-left:auto;display:flex;gap:10px}
+  /* drawer */
+  .scrim{position:fixed;inset:0;background:color-mix(in srgb,#000 35%,transparent);opacity:0;pointer-events:none;transition:.25s;z-index:40}
+  .scrim.on{opacity:1;pointer-events:auto}
+  .drawer{position:fixed;top:0;right:0;height:100%;width:min(460px,94vw);background:var(--pane);box-shadow:-16px 0 40px rgba(0,0,0,.2);transform:translateX(100%);transition:transform .28s cubic-bezier(.2,0,0,1);z-index:41;display:flex;flex-direction:column}
+  .drawer.on{transform:none}
+  .dh{padding:18px;border-bottom:1px solid var(--ov);display:flex;align-items:center;gap:10px}
+  .dh h3{font-family:var(--disp);margin:0;font-size:16px}.dh .x{margin-left:auto;cursor:pointer;color:var(--mut)}
+  .db{padding:14px 18px;overflow:auto}
+  .ref{border:1px solid var(--ov);border-radius:11px;padding:11px 13px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;margin-bottom:8px}
+  .ref:hover{border-color:var(--pri);background:var(--sec)}
+  .ref b{font-family:ui-monospace,Consolas,monospace}
+  .toast{position:fixed;left:50%;bottom:80px;transform:translateX(-50%);background:var(--ink);color:var(--pane);padding:11px 16px;border-radius:10px;z-index:60;opacity:0;transition:.2s}
+  .toast.on{opacity:1}
+  .cap{color:var(--mut);font-size:12px;margin-top:16px}.cap b{color:var(--ink)}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="hero">
+    <div><h1>Template BAA</h1><p>Kelola template Excel & mapping data dalam satu tempat.</p></div>
+    <span class="save" id="save"><span class="d"></span><span id="saveTxt">Semua perubahan tersimpan</span></span>
+  </div>
+
+  <div class="tabs"><button class="tab on" data-t="list">Daftar Template</button><button class="tab" data-t="map">Mapping Template</button></div>
+
+  <!-- TAB: DAFTAR -->
+  <div id="tabList">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:12px"><button class="btn pri"><span class="mi">upload_file</span>Upload template</button></div>
+    <div class="panel" style="padding:6px 14px">
+      <table><thead><tr><th>Nama</th><th>Worksheet LOG</th><th>Worksheet Detail</th><th>Status</th><th style="text-align:right">Aksi</th></tr></thead>
+      <tbody>
+        <tr><td><b>Template_BAA.xlsx</b><br><small style="color:var(--mut)">Diperbarui hari ini</small></td><td class="cell">LOG</td><td class="cell">Lokasi_0001</td><td><span class="badge">Aktif</span></td>
+          <td style="text-align:right;white-space:nowrap"><button class="btn soft" onclick="go('map')"><span class="mi">tune</span>Mapping</button>
+          <button class="btn" style="padding:8px"><span class="mi">edit</span></button>
+          <button class="btn" style="padding:8px;color:var(--bad)"><span class="mi">delete</span></button></td></tr>
+        <tr><td><b>Template_Lama.xlsx</b><br><small style="color:var(--mut)">3 hari lalu</small></td><td class="cell">LOG</td><td class="cell">Detail</td><td><span style="color:var(--mut);font-size:12px">nonaktif</span></td>
+          <td style="text-align:right;white-space:nowrap"><button class="btn soft" onclick="go('map')"><span class="mi">tune</span>Mapping</button>
+          <button class="btn" style="padding:8px"><span class="mi">star</span></button>
+          <button class="btn" style="padding:8px;color:var(--bad)"><span class="mi">delete</span></button></td></tr>
+      </tbody></table>
+    </div>
+  </div>
+
+  <!-- TAB: MAPPING -->
+  <div id="tabMap" style="display:none">
+    <div class="ws">
+      <nav class="steps panel">
+        <div class="step done on" data-go="s1"><span class="num">1</span><div>Worksheet<small>2 sheet</small></div></div>
+        <div class="step done" data-go="s2"><span class="num">2</span><div>Kolom LOG<small id="cLog">8 terisi</small></div></div>
+        <div class="step done" data-go="s3"><span class="num">3</span><div>Inventory<small>5 field</small></div></div>
+        <div class="step" data-go="s4"><span class="num">4</span><div>Anchor Foto<small id="cPhoto">0/11</small></div></div>
+        <div class="step done" data-go="s5"><span class="num">5</span><div>Ukuran Foto<small>320×240</small></div></div>
+      </nav>
+
+      <div class="col">
+        <section class="panel sec" id="s1">
+          <div class="sec-h"><span class="mi" style="color:var(--pri)">tab</span><div><h2>1. Worksheet</h2><p class="hint">Sumber data utama dari file Excel.</p></div>
+            <div class="tool"><button class="btn"><span class="mi">refresh</span>Periksa ulang</button></div></div>
+          <div class="grid g3">
+            <div><label class="lb">Sheet LOG</label><select class="ctl" onchange="dirty()"><option>LOG</option><option>Lokasi_0001</option></select></div>
+            <div><label class="lb">Sheet Detail</label><select class="ctl" onchange="dirty()"><option>Lokasi_0001</option><option>LOG</option></select></div>
+            <div><label class="lb">Baris mulai LOG</label><input class="ctl" type="number" value="3" onchange="dirty()"></div>
+          </div>
+        </section>
+
+        <section class="panel sec" id="s2">
+          <div class="sec-h"><span class="mi" style="color:var(--pri)">view_column</span><div><h2>2. Kolom LOG</h2><p class="hint">Edit huruf kolom. Tab untuk pindah.</p></div>
+            <div class="tool"><button class="btn" onclick="fillAH()"><span class="mi">bolt</span>Isi A–H</button></div></div>
+          <div style="overflow:auto"><table><thead><tr><th>Field BAA</th><th>Kolom</th><th>Header terdeteksi</th><th>Status</th></tr></thead><tbody id="logRows"></tbody></table></div>
+        </section>
+
+        <section class="panel sec" id="s3">
+          <div class="sec-h"><span class="mi" style="color:var(--pri)">inventory_2</span><div><h2>3. Tabel Inventory</h2><p class="hint">Kolom & rentang baris item.</p></div></div>
+          <div class="grid g3" id="invFields"></div>
+          <div class="grid g2" style="margin-top:12px">
+            <div><label class="lb">Baris mulai</label><input id="r0" class="ctl" type="number" value="32" oninput="rng()"></div>
+            <div><label class="lb">Maks baris</label><input id="rN" class="ctl" type="number" value="5" oninput="rng()"></div>
+          </div>
+          <div class="range" style="margin-top:12px">Rentang hasil: <b id="rngT" class="cell">B32:H36</b></div>
+        </section>
+
+        <section class="panel sec" id="s4">
+          <div class="sec-h"><span class="mi" style="color:var(--pri)">image</span><div><h2>4. Anchor Foto per Kategori</h2><p class="hint">Klik input sel lalu pilih dari drawer, atau pakai Cocokkan otomatis.</p></div>
+            <div class="tool"><input id="pSearch" class="search" placeholder="Cari kategori…" oninput="renderPhotos()"><button class="btn soft" onclick="autoMatch()"><span class="mi">auto_fix_high</span>Cocokkan otomatis</button></div></div>
+          <div id="conflictNote" style="display:none;margin-bottom:10px;color:var(--bad);font-weight:700;font-size:12.5px"><span class="mi">error</span> <span id="conflictTxt"></span></div>
+          <div style="overflow:auto"><table><thead><tr><th>Kategori Foto</th><th>Sel tujuan</th><th>Referensi</th><th>Status</th></tr></thead><tbody id="photoRows"></tbody></table></div>
+        </section>
+
+        <section class="panel sec" id="s5">
+          <div class="sec-h"><span class="mi" style="color:var(--pri)">aspect_ratio</span><div><h2>5. Ukuran Foto</h2><p class="hint">Batas ukuran saat foto dimasukkan (semua foto diseragamkan).</p></div></div>
+          <div class="grid g2">
+            <div><div class="grid g2">
+              <div><label class="lb">Lebar maks (px)</label><input id="iw" class="ctl" type="number" value="320" oninput="prev()"></div>
+              <div><label class="lb">Tinggi maks (px)</label><input id="ih" class="ctl" type="number" value="240" oninput="prev()"></div>
+            </div><div style="color:var(--mut);font-size:12px;margin-top:8px">Rasio: <b id="ratio">4:3</b> · foto di-center di cell merge</div></div>
+            <div class="preview" id="prev" style="height:150px">Preview · 320 × 240 px</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- action bar -->
+<div class="actionbar" id="abar" style="display:none">
+  <svg class="ring" viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="var(--track)" stroke-width="5"/><circle id="ring" cx="20" cy="20" r="16" fill="none" stroke="var(--pri)" stroke-width="5" stroke-linecap="round" transform="rotate(-90 20 20)"/></svg>
+  <div class="sum"><b id="abarPct">0% anchor terisi</b><small id="abarSub">Template_BAA.xlsx</small></div>
+  <div class="sp"><button class="btn" onclick="go('list')">Tutup</button><button class="btn pri" onclick="save()"><span class="mi">save</span>Simpan mapping</button></div>
+</div>
+
+<!-- drawer -->
+<div class="scrim" id="scrim" onclick="closeD()"></div>
+<aside class="drawer" id="drawer">
+  <div class="dh"><span class="mi" style="color:var(--pri)">grid_on</span><div><h3>Referensi Sel</h3><small style="color:var(--mut)" id="dSub">Klik untuk mengisi sel aktif</small></div><span class="mi x" onclick="closeD()">close</span></div>
+  <div class="db"><input class="ctl" style="margin-bottom:12px" placeholder="Cari sel / teks…" oninput="renderRefs(this.value)"><div id="refs"></div></div>
+</aside>
+<div class="toast" id="toast"></div>
+
+<script>
+  const $=s=>document.querySelector(s);
+  const LOG=[['no','A','No'],['lokasi','B','Lokasi'],['nama_barang','C','Nama Barang'],['merk_type','D','Merk / Type'],['jumlah','E','Jumlah'],['sn_tagging','F','SN / Tagging'],['keterangan','G','Keterangan'],['foto_lengkap','H','Foto Lengkap']];
+  const INV=[['nama_barang','B'],['merk_type','C'],['jumlah','E'],['sn_tagging','F'],['keterangan','H']];
+  const PH=[['Capture Dashboard (STARMON)','','CAPTURE DASHBOARD'],['Foto Tampak Depan / Plang Lokasi','','LAMPIRAN AKTIVASI'],['Foto Teknisi + PIC','','FOTO TEKNISI + PIC'],['Perangkat Outdoor Terpasang','','FOTO PERANGKAT OUTDOOR'],['Perangkat Indoor Terpasang','','FOTO PERANGKAT INDOOR'],['Foto SN Kit Starlink (OCR)','','FOTO SN KIT'],['Foto SN Router (OCR)','','FOTO SN ROUTER'],['Foto SN Access Point (OCR)','','FOTO SN ACCESS POINT'],['Capture Tes Ping','','CAPTURE TES PING'],['Capture Tes Bandwidth / Speed','','TES BANDWIDTH / SPEED'],['Capture Buka Situs SIMKOPDES','','CAPTURE SIMKOPDES']];
+  const REFS=[['B27','CAPTURE DASHBOARD'],['B59','LAMPIRAN AKTIVASI'],['B76','FOTO TEKNISI + PIC'],['K11','FOTO PERANGKAT OUTDOOR'],['K28','FOTO PERANGKAT INDOOR'],['K59','FOTO SN KIT'],['K76','FOTO SN ROUTER'],['T9','FOTO SN ACCESS POINT'],['T28','CAPTURE TES PING'],['T59','TES BANDWIDTH / SPEED'],['T76','CAPTURE SIMKOPDES']];
+  let active=null;
+
+  function go(t){$('#tabList').style.display=t==='list'?'':'none';$('#tabMap').style.display=t==='map'?'':'none';
+    document.querySelectorAll('.tab').forEach(x=>x.classList.toggle('on',x.dataset.t===t));$('#abar').style.display=t==='map'?'flex':'none';}
+  document.querySelectorAll('.tab').forEach(x=>x.onclick=()=>go(x.dataset.t));
+  document.querySelectorAll('.step').forEach(s=>s.onclick=()=>{document.querySelectorAll('.step').forEach(z=>z.classList.remove('on'));s.classList.add('on');$('#'+s.dataset.go).scrollIntoView({behavior:'smooth',block:'start'});});
+
+  function renderLog(){$('#logRows').innerHTML=LOG.map(r=>`<tr><td class="cell"><b>${r[0]}</b></td><td><input class="maptab" value="${r[1]}" maxlength="3" oninput="dirty()"></td><td style="color:var(--mut)">${r[2]}</td><td class="ok">✓ Valid</td></tr>`).join('');}
+  function renderInv(){$('#invFields').innerHTML=INV.map(r=>`<div><label class="lb">${r[0]}</label><input class="ctl cell" value="${r[1]}" oninput="dirty()"></div>`).join('');}
+  function renderPhotos(){const q=($('#pSearch').value||'').toLowerCase();
+    $('#photoRows').innerHTML=PH.map((r,i)=>r[0].toLowerCase().includes(q)?`<tr><td><b>${r[0]}</b></td>
+      <td><input class="maptab pcell" data-i="${i}" value="${r[1]}" placeholder="—" onfocus="active=this" oninput="dirty();checkConflict()"></td>
+      <td style="color:var(--mut)">${r[2]}</td><td>${r[1]?'<span class=ok>✓ Terisi</span>':'<span class=warn>Belum</span>'}</td></tr>`:'').join('');
+    document.querySelectorAll('.pcell').forEach(el=>el.addEventListener('focus',()=>{active=el;openD();}));
+    updateProgress();checkConflict();}
+  function renderRefs(q){q=(q||'').toLowerCase();$('#refs').innerHTML=REFS.filter(r=>(r[0]+r[1]).toLowerCase().includes(q))
+    .map(r=>`<div class="ref" onclick="pick('${r[0]}')"><span><b>${r[0]}</b><br><small style="color:var(--mut)">${r[1]}</small></span><span class="mi" style="color:var(--pri)">add</span></div>`).join('');}
+
+  function openD(){$('#scrim').classList.add('on');$('#drawer').classList.add('on');renderRefs('');
+    $('#dSub').textContent=active?('Isi untuk: '+PH[active.dataset.i][0]):'Klik untuk mengisi sel aktif';}
+  function closeD(){$('#scrim').classList.remove('on');$('#drawer').classList.remove('on');}
+  function pick(v){if(!active){toast('Pilih sel tujuan dulu');return;}active.value=v;PH[active.dataset.i][1]=v;closeD();dirty();renderPhotos();toast(v+' diterapkan');}
+
+  function autoMatch(){let n=0;PH.forEach(p=>{if(p[1])return;const hit=REFS.find(r=>r[1]===p[2]);if(hit){p[1]=hit[0];n++;}});
+    renderPhotos();dirty();toast(n?`${n} kategori dicocokkan otomatis`:'Tidak ada yang cocok');}
+  function checkConflict(){const seen={},dup=new Set();PH.forEach(p=>{if(p[1]){if(seen[p[1]])dup.add(p[1]);seen[p[1]]=1;}});
+    document.querySelectorAll('.pcell').forEach(el=>el.classList.toggle('conflict',dup.has(el.value)&&el.value));
+    const note=$('#conflictNote');if(dup.size){note.style.display='';$('#conflictTxt').textContent='Sel dipakai lebih dari sekali: '+[...dup].join(', ');}else note.style.display='none';}
+  function updateProgress(){const filled=PH.filter(p=>p[1]).length,pct=Math.round(filled/PH.length*100);
+    $('#cPhoto').textContent=filled+'/'+PH.length;$('#abarPct').textContent=pct+'% anchor terisi';
+    const C=2*Math.PI*16;$('#ring').style.strokeDasharray=C;$('#ring').style.strokeDashoffset=C*(1-filled/PH.length);
+    document.querySelector('.step[data-go=s4]').classList.toggle('done',filled===PH.length);}
+
+  function fillAH(){document.querySelectorAll('#logRows .maptab').forEach((e,i)=>e.value=String.fromCharCode(65+i));dirty();toast('Kolom A–H diisi');}
+  function rng(){const s=+$('#r0').value||0,m=+$('#rN').value||0;$('#rngT').textContent=`B${s}:H${Math.max(s,s+m-1)}`;dirty();}
+  function gcd(a,b){return b?gcd(b,a%b):a}
+  function prev(){let w=+$('#iw').value||1,h=+$('#ih').value||1,d=gcd(w,h);$('#ratio').textContent=`${w/d}:${h/d}`;
+    const p=$('#prev');p.textContent=`Preview · ${w} × ${h} px`;p.style.aspectRatio=`${w}/${h}`;p.style.height='auto';dirty();}
+  function dirty(){$('#save').classList.add('dirty');$('#saveTxt').textContent='Perubahan belum disimpan';}
+  function save(){$('#save').classList.remove('dirty');$('#saveTxt').textContent='Semua perubahan tersimpan';toast('Mapping tersimpan');}
+  let tt;function toast(t){const e=$('#toast');e.textContent=t;e.classList.add('on');clearTimeout(tt);tt=setTimeout(()=>e.classList.remove('on'),2200);}
+
+  renderLog();renderInv();renderPhotos();
+</script>
+</body>
+</html>
