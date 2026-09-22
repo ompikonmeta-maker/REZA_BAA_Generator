@@ -381,6 +381,19 @@
   .exp-head span{font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
   .exp2{display:flex;gap:8px}.exp2 md-button{flex:1}.exp2 md-button::part(button){width:100%}
   .hint{font:var(--md-sys-typescale-body-small);color:var(--md-sys-color-on-surface-variant);margin-top:12px}
+  /* export massal (Log Lokasi) */
+  .exp-bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;background:color-mix(in srgb,var(--md-sys-color-primary) 7%,transparent);border:1px solid color-mix(in srgb,var(--md-sys-color-primary) 22%,transparent);border-radius:14px;padding:10px 14px;margin-bottom:14px}
+  .exp-bar .lbl{display:flex;align-items:center;gap:6px;font:var(--md-sys-typescale-label-large);font-weight:700;color:var(--md-sys-color-primary)}
+  .exp-bar .lbl .mi{font-size:18px}
+  .exp-bar .cnt{font:var(--md-sys-typescale-label-medium)}
+  .exp-bar .grow{flex:1}
+  .is-viewer #loc-exp-bar{display:none}
+  .exp-scope{display:flex;flex-direction:column;gap:8px}
+  .exp-opt{display:flex;gap:11px;align-items:flex-start;border:1.5px solid var(--md-sys-color-outline-variant);border-radius:13px;padding:11px 13px;cursor:pointer;transition:border-color .15s,background .15s}
+  .exp-opt.sel{border-color:var(--md-sys-color-primary);background:color-mix(in srgb,var(--md-sys-color-primary) 8%,transparent)}
+  .exp-opt input{margin-top:2px;accent-color:var(--md-sys-color-primary)}
+  .exp-note{display:flex;gap:8px;align-items:flex-start;background:var(--md-sys-color-surface-container-high);border-radius:11px;padding:9px 12px;margin-top:12px;font:var(--md-sys-typescale-label-medium);color:var(--md-sys-color-on-surface-variant)}
+  .exp-note .mi{font-size:16px;color:var(--md-sys-color-primary);flex:0 0 auto}
 
   table{width:100%;border-collapse:collapse;font:var(--md-sys-typescale-body-medium)}
   th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--md-sys-color-outline-variant)}
@@ -1012,6 +1025,13 @@
             <span class="grow"></span>
             <md-segmented-button id="loc-filter"><button data-value="all" selected>Semua</button><button data-value="draft">Draft</button><button data-value="selesai">Selesai</button></md-segmented-button>
           </div>
+          <div class="exp-bar" id="loc-exp-bar">
+            <span class="lbl"><span class="mi">download</span> Export massal</span>
+            <span class="cnt muted" id="loc-exp-cnt"></span>
+            <span class="grow"></span>
+            <md-button variant="outlined" icon="grid_on" id="loc-exp-xlsx">Excel (template)</md-button>
+            <md-button variant="outlined" icon="picture_as_pdf" id="loc-exp-pdf">PDF per-lokasi (ZIP)</md-button>
+          </div>
           <table><thead><tr><th>Kode</th><th>Nama Lokasi</th><th>Pembuat</th><th>Dibuat</th><th>INV</th><th>Foto</th><th>Status</th><th>Kurang</th><th></th></tr></thead><tbody id="loc-table"></tbody></table>
           <div class="rowflex" style="margin-top:12px;align-items:center">
             <span id="loc-info" class="muted" style="font:var(--md-sys-typescale-body-small)"></span>
@@ -1197,6 +1217,19 @@
   <span slot="headline" id="cfmTitle">Konfirmasi</span>
   <div id="cfmMsg"></div>
   <div slot="actions"><md-button variant="text" id="cfmCancel">Batal</md-button><md-button variant="filled" id="cfmOk">Ya</md-button></div>
+</md-dialog>
+
+<md-dialog id="expBulkDlg">
+  <span slot="headline" id="expTitle">Export</span>
+  <div style="min-width:340px;max-width:420px">
+    <p id="expDesc" class="muted" style="margin:0 0 12px"></p>
+    <div class="exp-scope">
+      <label class="exp-opt sel"><input type="radio" name="expScope" value="filter" checked><span><b>Hasil filter saat ini</b><br><span class="muted" id="expOptFilter"></span></span></label>
+      <label class="exp-opt"><input type="radio" name="expScope" value="all"><span><b>Semua lokasi</b><br><span class="muted" id="expOptAll"></span></span></label>
+    </div>
+    <div class="exp-note"><span class="mi">info</span><span id="expNote"></span></div>
+  </div>
+  <div slot="actions"><md-button variant="text" id="expCancel">Batal</md-button><md-button variant="filled" id="expOk">Buat</md-button></div>
 </md-dialog>
 
 <md-dialog id="inpDlg">
@@ -2127,7 +2160,51 @@ function renderLocTable(){
     <td class="loc-lack">${locLack(l)}</td>
     <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`;}).join('')||'<tr><td colspan=9 class="muted">Tidak ada data</td></tr>';
   $('#loc-info').textContent=LOC_TOTAL?`Menampilkan ${Math.min(LOC_ROWS.length,LOC_TOTAL)} dari ${LOC_TOTAL}`:'';
+  const cnt=$('#loc-exp-cnt');if(cnt)cnt.textContent=LOC_TOTAL?`${LOC_TOTAL} lokasi cocok filter`:'Tidak ada lokasi';
   $('#loc-more').classList.toggle('hidden',LOC_ROWS.length>=LOC_TOTAL);bindTips();}
+/* ---- Export massal Log Lokasi (Excel template + PDF per-lokasi ZIP) ---- */
+function locFilterParams(){
+  const q=($('#loc-search').value||'').trim();
+  const st=S.locFilter||'all';
+  const cr=(locCreatorSel&&locCreatorSel.getValue())||'';
+  const dt=($('#loc-date').value||'').trim();
+  return `q=${encodeURIComponent(q)}&status=${st}&creator=${cr||0}&date=${encodeURIComponent(dt)}`;
+}
+function locFilterLabel(){
+  const st=S.locFilter||'all';const bits=[];
+  bits.push('status: '+(st==='all'?'Semua':st));
+  const q=($('#loc-search').value||'').trim();if(q)bits.push('cari: "'+q+'"');
+  const dt=($('#loc-date').value||'').trim();if(dt)bits.push('tanggal: '+dpFmt(dt));
+  const cr=(locCreatorSel&&locCreatorSel.getValue())||'';if(cr)bits.push('pembuat terpilih');
+  return bits.join(' · ');
+}
+let _expKind='excel';
+async function openBulkExport(kind){
+  _expKind=kind;
+  const isPdf=kind==='pdfzip';
+  $('#expTitle').textContent=isPdf?'Export PDF per-lokasi (ZIP)':'Export Excel (template)';
+  $('#expDesc').textContent=isPdf
+    ?'Tiap lokasi jadi satu PDF detail terpisah (tanpa sheet LOG), dibundel ke satu ZIP.'
+    :'Satu workbook dari template aktif: sheet LOG + worksheet detail tiap lokasi.';
+  $('#expNote').innerHTML=isPdf?'File: <b>PDF_BAA_(tanggal).zip</b> — 1 PDF per lokasi.':'File: <b>Log_BAA_(tanggal).xlsx</b> — dibuat dari template aktif.';
+  $('#expOptFilter').textContent=(LOC_TOTAL||0)+' lokasi ('+locFilterLabel()+')';
+  $('#expOptAll').textContent='menghitung…';
+  $$('#expBulkDlg .exp-opt').forEach((l,i)=>{l.classList.toggle('sel',i===0);l.querySelector('input').checked=(i===0);});
+  $('#expBulkDlg').show();
+  try{const r=await api('/api/locations?page=1&size=1&status=all');$('#expOptAll').textContent=(r.total||0)+' lokasi di database';}
+  catch{$('#expOptAll').textContent='semua lokasi di database';}
+}
+$('#loc-exp-xlsx').addEventListener('click',()=>openBulkExport('excel'));
+$('#loc-exp-pdf').addEventListener('click',()=>openBulkExport('pdfzip'));
+$$('#expBulkDlg .exp-opt').forEach(l=>l.addEventListener('click',()=>{
+  $$('#expBulkDlg .exp-opt').forEach(x=>x.classList.remove('sel'));l.classList.add('sel');l.querySelector('input').checked=true;}));
+$('#expCancel').addEventListener('click',()=>$('#expBulkDlg').close());
+$('#expOk').addEventListener('click',()=>{
+  const scope=($('#expBulkDlg input[name="expScope"]:checked')||{}).value||'filter';
+  if(scope==='filter'&&!LOC_TOTAL){toast('Tidak ada lokasi pada filter ini');return;}
+  const base=_expKind==='pdfzip'?'/api/export/pdf-zip':'/api/export/excel';
+  const url=scope==='all'?`${base}?scope=all`:`${base}?scope=filter&${locFilterParams()}`;
+  $('#expBulkDlg').close();toast('Menyiapkan file…');location.href=url;});
 /* Daftar kekurangan: foto + field lokasi kosong + inventory belum lengkap (inv_ok dari server) */
 function locLack(l){
   const parts=[];

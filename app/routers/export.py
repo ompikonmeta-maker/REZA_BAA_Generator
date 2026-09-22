@@ -2,7 +2,9 @@
 from __future__ import annotations
 
 import json
+import re
 import sqlite3
+import zipfile
 from datetime import datetime
 from pathlib import Path
 
@@ -17,9 +19,34 @@ from ..services import pdf as pdf_svc
 router = APIRouter(prefix="/api/export", tags=["export"])
 
 
-def _gather_locations(conn: sqlite3.Connection, scope: str, loc_id: int | None) -> list[dict]:
+def _filter_where(q: str, status: str, creator: int, date: str):
+    """Bangun klausa WHERE yang sama dengan GET /api/locations (Log Lokasi)."""
+    where, params = [], []
+    if q.strip():
+        like = f"%{q.strip()}%"
+        where.append("(code LIKE ? OR name LIKE ?)")
+        params += [like, like]
+    if status in ("draft", "selesai"):
+        where.append("status = ?")
+        params.append(status)
+    if creator:
+        where.append("created_by = ?")
+        params.append(creator)
+    if date.strip():
+        where.append("date(created_at,'localtime') = ?")
+        params.append(date.strip())
+    wsql = ("WHERE " + " AND ".join(where)) if where else ""
+    return wsql, params
+
+
+def _gather_locations(conn: sqlite3.Connection, scope: str, loc_id: int | None,
+                      q: str = "", status: str = "all", creator: int = 0,
+                      date: str = "") -> list[dict]:
     if scope == "all":
         rows = conn.execute("SELECT * FROM locations ORDER BY id").fetchall()
+    elif scope == "filter":
+        wsql, params = _filter_where(q, status, creator, date)
+        rows = conn.execute(f"SELECT * FROM locations {wsql} ORDER BY id", params).fetchall()
     else:
         if not loc_id:
             raise HTTPException(400, "loc_id wajib untuk scope 'one'")
@@ -48,19 +75,28 @@ def _stamp(prefix: str, ext: str) -> Path:
     return config.OUTPUT_DIR / f"{prefix}_{ts}.{ext}"
 
 
+def _safe_name(s: str) -> str:
+    """Nama file aman (untuk entri ZIP)."""
+    s = re.sub(r'[\\/:*?"<>|]+', " ", (s or "")).strip()
+    return re.sub(r"\s+", " ", s) or "lokasi"
+
+
 @router.get("/excel")
 def export_excel(scope: str = Query("one"), loc_id: int | None = None,
+                 q: str = Query(""), status: str = Query("all"),
+                 creator: int = Query(0), date: str = Query(""),
                  conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
     tpl = conn.execute("SELECT * FROM templates WHERE active=1 ORDER BY id DESC LIMIT 1").fetchone()
     if not tpl:
         raise HTTPException(400, "Belum ada template aktif. Daftarkan template dulu di menu Template.")
     if not Path(tpl["path"]).exists():
         raise HTTPException(400, "File template hilang di server.")
-    locs = _gather_locations(conn, scope, loc_id)
+    locs = _gather_locations(conn, scope, loc_id, q, status, creator, date)
     tcfg = json.loads(tpl["config_json"]) if tpl["config_json"] else {}
     tcfg["sheet_log"] = tpl["sheet_log"]
     tcfg["sheet_detail"] = tpl["sheet_detail"]
-    out = _stamp("BAA" if scope == "all" else (locs[0]["code"]), "xlsx")
+    prefix = locs[0]["code"] if scope == "one" else "Log_BAA"
+    out = _stamp(prefix, "xlsx")
     res = excel_svc.build_workbook(tpl["path"], tcfg, locs, str(out))
     audit(conn, user, "export_excel", "export", scope, out.name)
     resp = FileResponse(str(out), filename=out.name,
@@ -72,11 +108,43 @@ def export_excel(scope: str = Query("one"), loc_id: int | None = None,
 
 @router.get("/pdf")
 def export_pdf(scope: str = Query("one"), loc_id: int | None = None,
+               q: str = Query(""), status: str = Query("all"),
+               creator: int = Query(0), date: str = Query(""),
                conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
-    locs = _gather_locations(conn, scope, loc_id)
+    locs = _gather_locations(conn, scope, loc_id, q, status, creator, date)
     cats = db.get_setting(conn, "photo_categories", [])
     title = db.get_setting(conn, "app_title", "Berita Acara Aktivasi")
-    out = _stamp("BAA" if scope == "all" else (locs[0]["code"]), "pdf")
+    out = _stamp(locs[0]["code"] if scope == "one" else "BAA", "pdf")
     pdf_svc.build_pdf(locs, cats, str(out), app_title=title)
     audit(conn, user, "export_pdf", "export", scope, out.name)
     return FileResponse(str(out), filename=out.name, media_type="application/pdf")
+
+
+@router.get("/pdf-zip")
+def export_pdf_zip(scope: str = Query("filter"), loc_id: int | None = None,
+                   q: str = Query(""), status: str = Query("all"),
+                   creator: int = Query(0), date: str = Query(""),
+                   conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
+    """Satu PDF detail per lokasi (tanpa LOG sheet), dibundel dalam satu ZIP."""
+    locs = _gather_locations(conn, scope, loc_id, q, status, creator, date)
+    cats = db.get_setting(conn, "photo_categories", [])
+    title = db.get_setting(conn, "app_title", "Berita Acara Aktivasi")
+    zpath = _stamp("PDF_BAA", "zip")
+    used: set[str] = set()
+    with zipfile.ZipFile(zpath, "w", zipfile.ZIP_DEFLATED) as zf:
+        for loc in locs:
+            nm = _safe_name(f"{loc.get('code','')} {loc.get('name','') or loc.get('data',{}).get('nama_lokasi','')}")
+            entry = f"{nm}.pdf"
+            i = 2
+            while entry.lower() in used:
+                entry = f"{nm} ({i}).pdf"; i += 1
+            used.add(entry.lower())
+            tmp = config.OUTPUT_DIR / f"_tmp_{loc['id']}.pdf"
+            pdf_svc.build_pdf([loc], cats, str(tmp), app_title=title)
+            zf.write(str(tmp), entry)
+            try:
+                tmp.unlink()
+            except OSError:
+                pass
+    audit(conn, user, "export_pdf_zip", "export", scope, zpath.name)
+    return FileResponse(str(zpath), filename=zpath.name, media_type="application/zip")
