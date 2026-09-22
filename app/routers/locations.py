@@ -71,6 +71,8 @@ def list_locations(
     size: int = Query(50, ge=1, le=200),
     q: str = Query(""),
     status: str = Query("all"),
+    creator: int = Query(0),          # filter berdasarkan pembuat (user id); 0 = semua
+    date: str = Query(""),            # filter tanggal dibuat (YYYY-MM-DD, waktu lokal)
     conn: sqlite3.Connection = Depends(get_db),
     user=Depends(current_user),
 ):
@@ -87,6 +89,12 @@ def list_locations(
     if status in ("draft", "selesai"):
         where.append("l.status = ?")
         params.append(status)
+    if creator:
+        where.append("l.created_by = ?")
+        params.append(creator)
+    if date.strip():
+        where.append("date(l.created_at,'localtime') = ?")
+        params.append(date.strip())
     wsql = ("WHERE " + " AND ".join(where)) if where else ""
 
     total = conn.execute(
@@ -95,7 +103,9 @@ def list_locations(
 
     offset = (page - 1) * size
     rows = conn.execute(
-        f"""SELECT l.id, l.code, l.name, l.status, l.data_json, l.created_by, l.updated_at,
+        f"""SELECT l.id, l.code, l.name, l.status, l.data_json, l.created_by,
+              l.created_at, l.updated_at,
+              COALESCE(NULLIF(TRIM(u.full_name),''), u.username, '—') AS creator_name,
               (SELECT COUNT(*) FROM photos p WHERE p.location_id = l.id) AS photo_count,
               (SELECT GROUP_CONCAT(DISTINCT category) FROM photos p WHERE p.location_id = l.id) AS photo_cats,
               (SELECT COUNT(*) FROM inventory_items i WHERE i.location_id = l.id) AS inv_count,
@@ -103,7 +113,8 @@ def list_locations(
                    TRIM(COALESCE(i.nama_barang,'')) = '' OR TRIM(COALESCE(i.merk_type,'')) = '' OR
                    TRIM(COALESCE(i.jumlah,'')) = '' OR TRIM(COALESCE(i.sn_tagging,'')) = '' OR
                    TRIM(COALESCE(i.keterangan,'')) = '')) AS inv_bad
-            FROM locations l {wsql} ORDER BY l.id DESC LIMIT ? OFFSET ?""",
+            FROM locations l LEFT JOIN users u ON u.id = l.created_by
+            {wsql} ORDER BY l.id DESC LIMIT ? OFFSET ?""",
         params + [size, offset],
     ).fetchall()
 
@@ -113,7 +124,8 @@ def list_locations(
             "id": r["id"], "code": r["code"], "name": r["name"], "status": r["status"],
             "data": json.loads(r["data_json"]), "photo_count": r["photo_count"],
             "inv_count": r["inv_count"], "updated_at": r["updated_at"],
-            "created_by": r["created_by"],
+            "created_at": r["created_at"], "created_by": r["created_by"],
+            "creator_name": r["creator_name"],
             "photo_cats": (r["photo_cats"].split(",") if r["photo_cats"] else []),
             "inv_ok": r["inv_count"] > 0 and r["inv_bad"] == 0,
             "can_delete": is_admin or r["created_by"] == user["id"],
@@ -121,6 +133,18 @@ def list_locations(
         for r in rows
     ]
     return {"rows": result, "total": total, "page": page, "size": size}
+
+
+@router.get("/creators")
+def location_creators(conn: sqlite3.Connection = Depends(get_db), user=Depends(current_user)):
+    """Daftar pembuat entry (untuk filter Log Lokasi)."""
+    rows = conn.execute(
+        """SELECT u.id, COALESCE(NULLIF(TRIM(u.full_name),''), u.username) AS name,
+                  COUNT(l.id) AS n
+           FROM users u JOIN locations l ON l.created_by = u.id
+           GROUP BY u.id ORDER BY name COLLATE NOCASE"""
+    ).fetchall()
+    return {"creators": [dict(r) for r in rows]}
 
 
 @router.get("/options")

@@ -211,6 +211,34 @@
   .sn-chip{display:inline-flex;align-items:center;gap:6px;background:var(--md-sys-color-tertiary-container);color:var(--md-sys-color-on-tertiary-container);border-radius:9px;padding:4px 9px;font:var(--md-sys-typescale-label-medium)}
   .sn-chip .mi{font-size:16px}
   .sn-chip .add{cursor:pointer;font-size:16px}
+  /* Foto Opsi A: hover toolbar + undo in-card + OCR footer */
+  .snap .actbar{position:absolute;left:0;right:0;bottom:0;display:flex;gap:6px;padding:9px;justify-content:center;
+    background:linear-gradient(to top,rgba(0,0,0,.55),transparent);transform:translateY(100%);opacity:0;transition:transform .25s cubic-bezier(.2,.8,.2,1),opacity .25s}
+  .snap:hover .actbar{transform:none;opacity:1}
+  .snap .actbar button{border:none;background:rgba(255,255,255,.92);color:#1a1c1d;width:36px;height:36px;border-radius:11px;cursor:pointer;display:grid;place-items:center;box-shadow:0 4px 12px rgba(0,0,0,.28);transition:transform .12s}
+  .snap .actbar button:hover{transform:translateY(-2px)}
+  .snap .actbar button .mi{font-size:19px}
+  .snap .actbar button.del{color:#a3312a}
+  .pf-undo{position:absolute;inset:0;background:rgba(20,26,25,.82);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:9px;backdrop-filter:blur(2px)}
+  .pf-undo .ringwrap{position:relative;display:grid;place-items:center}
+  .pf-undo svg{width:46px;height:46px;transform:rotate(-90deg)}
+  .pf-undo svg circle{fill:none;stroke-width:4}
+  .pf-undo svg .t{stroke:rgba(255,255,255,.25)}
+  .pf-undo svg .p{stroke:#fff;stroke-linecap:round;stroke-dasharray:126;animation:ringdrain 5s linear forwards}
+  @keyframes ringdrain{from{stroke-dashoffset:0}to{stroke-dashoffset:126}}
+  .pf-undo .mi.c{position:absolute;font-size:18px}
+  .pf-undo .msg{font:var(--md-sys-typescale-label-medium)}
+  .pf-undo .ub{border:1px solid rgba(255,255,255,.55);background:transparent;color:#fff;padding:7px 15px;border-radius:20px;cursor:pointer;font-weight:700;display:flex;gap:6px;align-items:center}
+  .pf-undo .ub .mi{font-size:17px}
+  /* OCR footer */
+  .snbox{display:flex;align-items:center;gap:8px;background:var(--md-sys-color-tertiary-container);border-radius:11px;padding:6px 6px 6px 11px;min-width:0}
+  .snbox .sn{flex:1;min-width:0;font-family:ui-monospace,Consolas,monospace;font-weight:700;color:var(--md-sys-color-on-tertiary-container);font-size:12.5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;cursor:text}
+  .snbox input.sn{background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-tertiary);border-radius:7px;padding:5px 7px;white-space:normal}
+  .snbox .sact{border:none;background:transparent;color:var(--md-sys-color-on-tertiary-container);width:28px;height:28px;border-radius:7px;cursor:pointer;display:grid;place-items:center;flex:0 0 auto}
+  .snbox .sact .mi{font-size:17px}
+  .snbox .sact:hover{background:color-mix(in srgb,var(--md-sys-color-on-tertiary-container) 12%,transparent)}
+  .ocr-lab{display:flex;align-items:center;gap:5px;font:var(--md-sys-typescale-label-small);font-weight:700;color:var(--md-sys-color-primary);margin:10px 0 5px 2px;text-transform:uppercase;letter-spacing:.3px}
+  .ocr-lab .mi{font-size:13px}
 
   /* summary panel */
   .summary .card{margin-bottom:0}
@@ -579,7 +607,7 @@
           </div>
           <div class="dtile dside hidden" id="dStreakTile">
             <div class="th"><span class="mi">local_fire_department</span> Konsistensi Kamu</div>
-            <div class="streak"><span class="fire">🔥</span> <span class="big" id="dStreakN">0</span> <span class="muted">hari beruntun</span><div class="week" id="dWeek"></div></div>
+            <div class="streak"><span class="mi" style="font-size:26px;color:var(--md-sys-color-primary);vertical-align:-4px">local_fire_department</span> <span class="big" id="dStreakN">0</span> <span class="muted">hari beruntun</span><div class="week" id="dWeek"></div></div>
           </div>
           <div class="dtile dacts">
             <div class="th"><span class="mi">bolt</span> Akses Cepat</div>
@@ -688,12 +716,15 @@
 
       <section id="v-locations" class="hidden">
         <div class="card">
-          <div class="rowflex" style="margin-bottom:14px">
-            <md-text-field id="loc-search" variant="outlined" label="Cari kode / nama" leading-icon="search" style="min-width:260px"></md-text-field>
+          <div class="rowflex" style="margin-bottom:14px;flex-wrap:wrap;gap:10px">
+            <md-text-field id="loc-search" variant="outlined" label="Cari kode / nama" leading-icon="search" style="min-width:220px"></md-text-field>
+            <div class="md-select" id="loc-creator"></div>
+            <md-text-field id="loc-date" variant="outlined" label="Tanggal dibuat" type="date" style="min-width:180px"></md-text-field>
+            <md-button variant="text" id="loc-clear" icon="filter_alt_off">Reset</md-button>
             <span class="grow"></span>
             <md-segmented-button id="loc-filter"><button data-value="all" selected>Semua</button><button data-value="draft">Draft</button><button data-value="selesai">Selesai</button></md-segmented-button>
           </div>
-          <table><thead><tr><th>Kode</th><th>Nama Lokasi</th><th>INV</th><th>Foto</th><th>Status</th><th>Kurang</th><th></th></tr></thead><tbody id="loc-table"></tbody></table>
+          <table><thead><tr><th>Kode</th><th>Nama Lokasi</th><th>Pembuat</th><th>Dibuat</th><th>INV</th><th>Foto</th><th>Status</th><th>Kurang</th><th></th></tr></thead><tbody id="loc-table"></tbody></table>
           <div class="rowflex" style="margin-top:12px;align-items:center">
             <span id="loc-info" class="muted" style="font:var(--md-sys-typescale-body-small)"></span>
             <span class="grow"></span>
@@ -819,6 +850,18 @@
   <div slot="actions"><md-button variant="text" id="delCancel">Batal</md-button><md-button variant="filled" id="delOk">Hapus</md-button></div>
 </md-dialog>
 
+<md-dialog id="cfmDlg">
+  <span slot="headline" id="cfmTitle">Konfirmasi</span>
+  <div id="cfmMsg"></div>
+  <div slot="actions"><md-button variant="text" id="cfmCancel">Batal</md-button><md-button variant="filled" id="cfmOk">Ya</md-button></div>
+</md-dialog>
+
+<md-dialog id="inpDlg">
+  <span slot="headline" id="inpTitle">Masukkan nilai</span>
+  <div style="min-width:300px"><md-text-field id="inpField" variant="outlined" label=""></md-text-field></div>
+  <div slot="actions"><md-button variant="text" id="inpCancel">Batal</md-button><md-button variant="filled" id="inpOk">Simpan</md-button></div>
+</md-dialog>
+
 <md-dialog id="userDlg">
   <span slot="headline" id="userDlgTitle">User</span>
   <div style="display:flex;flex-direction:column;gap:10px;min-width:300px">
@@ -879,11 +922,6 @@
   </div>
   <div slot="actions"><md-button variant="text" id="sn-cancel">Tutup</md-button><md-button variant="filled" id="sn-save" icon="check">Simpan SN</md-button></div>
 </md-dialog>
-
-<div id="undoBar" class="hidden" style="position:fixed;bottom:20px;left:50%;transform:translateX(-50%);z-index:9999;display:flex;align-items:center;gap:14px;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);padding:10px 16px;border-radius:12px;box-shadow:var(--md-sys-elevation-level3)">
-  <span id="undoText">Foto dihapus</span><span id="undoCount" class="muted" style="color:var(--md-sys-color-inverse-on-surface);opacity:.7"></span>
-  <button id="undoBtn" style="border:none;background:none;color:var(--md-sys-color-inverse-primary);font:var(--md-sys-typescale-label-large);cursor:pointer">URUNGKAN</button>
-</div>
 
 <div class="tip" id="tip"></div>
 <div class="toast" id="toast"></div>
@@ -999,6 +1037,7 @@ async function boot(){paint();
   mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG'});
   mapDetailSel=new MDSelect($('#map-detail'),{label:'Sheet Detail',onChange:v=>renderRef(v)});
   roleSel=new MDSelect($('#u-role'),{label:'Role'});roleSel.setOptions([{value:'operator',label:'operator'},{value:'admin',label:'admin'}]).setValue('operator');
+  locCreatorSel=new MDSelect($('#loc-creator'),{label:'Pembuat',placeholder:'Semua pembuat',onChange:()=>loadLocations()});locCreatorSel.setOptions([{value:'',label:'Semua pembuat'}]).setValue('');
   try{S.user=await api('/api/auth/me');showApp();}catch{$('#login').classList.remove('hidden');bindTips();}}
 /* Auto-deteksi tipe admin (aksen merah) via peek endpoint */
 let lgPeekT=null,lgIsAdmin=false;
@@ -1016,7 +1055,7 @@ $('#lg-btn').addEventListener('click',async()=>{const el=$('#lg-err');el.classLi
     S.user=await api('/api/auth/me');
     const nm=(S.user.full_name||S.user.username||'').trim()||'Teman';
     $('#lgCard').classList.add('gone');$('#lgIris').classList.add('on');
-    setTimeout(()=>{$('#lgGreetTxt').textContent='Hi, '+nm+' 👋';$('#lgGreet').classList.add('on');},700);
+    setTimeout(()=>{$('#lgGreetTxt').textContent='Hi, '+nm;$('#lgGreet').classList.add('on');},700);
     setTimeout(()=>$('#lgGreet').classList.remove('on'),2300);
     setTimeout(()=>{showApp();$('#lgGreet').classList.remove('on');$('#lgIris').classList.remove('on');$('#lgCard').classList.remove('gone');},2750);
   }catch(e){const c=$('#lgCard');c.classList.remove('shake');void c.offsetWidth;c.classList.add('shake');
@@ -1031,7 +1070,7 @@ async function showApp(){$('#login').classList.add('hidden');$('#app').classList
   await S.settingsReady;
   if(S.user.role!=='admin')$$('.admin-only').forEach(x=>x.classList.add('hidden'));
   $('#app').classList.toggle('is-operator',S.user.role!=='admin');
-  refreshPicker();loadLocations();loadDashboard();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
+  refreshPicker();loadLocations();loadCreators();loadDashboard();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
   if(S.user.must_change)setTimeout(()=>openPw(true),400);}
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
@@ -1135,7 +1174,7 @@ async function loadDashboard(){
   paintDashSky();                                            /* hero sapaan utk semua peran */
   $('#dHello').textContent=`${greetWord()}, ${esc(s.name)}`;
   const t=s.totals;
-  $('#dChipTxt').textContent=t.draft?`${t.draft} lokasi menunggu diselesaikan`:'Semua lokasi selesai 🎉';
+  $('#dChipTxt').textContent=t.draft?`${t.draft} lokasi menunggu diselesaikan`:'Semua lokasi selesai';
   $('#dashOp').classList.toggle('hidden',isAdmin);
   $('#dashSuper').classList.toggle('hidden',!isAdmin);
   if(isAdmin){loadSupervisor(s.name);return;}
@@ -1148,7 +1187,7 @@ async function loadDashboard(){
   requestAnimationFrame(()=>{arc.style.strokeDashoffset=(C*(1-s.pct/100)).toFixed(1);});
   $('#dPct').textContent=s.pct+'%';$('#dLgDone').textContent=t.done;$('#dLgDraft').textContent=t.draft;
   dBars(s.trend);
-  $('#dAttn').innerHTML=s.attention.length?s.attention.map(a=>`<div class="drow" onclick="openFromLog(${a.id})"><span class="code">${esc(a.code)}</span><span class="nm"><b>${esc(a.data.nama_lokasi||a.name||'(tanpa nama)')}</b><div class="l">${locLack(a)}</div></span><span class="badge">draft</span></div>`).join(''):'<p class="muted" style="padding:8px 4px">Tidak ada yang tertunda 🎉</p>';
+  $('#dAttn').innerHTML=s.attention.length?s.attention.map(a=>`<div class="drow" onclick="openFromLog(${a.id})"><span class="code">${esc(a.code)}</span><span class="nm"><b>${esc(a.data.nama_lokasi||a.name||'(tanpa nama)')}</b><div class="l">${locLack(a)}</div></span><span class="badge">draft</span></div>`).join(''):'<p class="muted" style="padding:8px 4px">Tidak ada yang tertunda</p>';
   buildDashHeat(s.heat);
   $('#dLeadTile').classList.toggle('hidden',!isA);$('#dStreakTile').classList.toggle('hidden',isA);
   if(isA){const mx=Math.max(1,...s.leaderboard.map(l=>l.total));
@@ -1193,7 +1232,7 @@ async function loadSupervisor(name){
     <span class="sup-ava" style="background:${SUP_COL[u.id%SUP_COL.length]}">${esc((u.name[0]||'?').toUpperCase())}</span>
     <div class="who"><div class="nm">${esc(u.name)}</div><div class="rs">${esc(u.reason||'perlu dipantau')}</div></div>
     <span class="spill ${u.health}"><span class="mi">${u.health==='b'?'trending_down':'schedule'}</span>${healthLabel(u.health)}</span></div>`).join('')
-    :'<p class="muted" style="padding:10px 4px">Semua teknisi on-track 👍</p>';
+    :'<p class="muted" style="padding:10px 4px">Semua teknisi on-track</p>';
   // bottleneck
   $('#supBn').innerHTML=(d.bottleneck||[]).length?d.bottleneck.map(b=>`<div class="sbn"><span class="lbl">${esc(b.label)}</span><span class="bar"><i style="width:${b.pct}%"></i></span><span class="v">${b.pct}%</span></div>`).join('')
     :'<p class="muted" style="padding:10px 4px">Tidak ada draft tertahan.</p>';
@@ -1318,31 +1357,69 @@ function updateSummary(){
     miss.classList.remove('hidden');}else miss.classList.add('hidden');
 }
 
-/* photos — uniform cards */
+/* photos — Opsi A: hover toolbar, 1 foto/kategori, OCR footer editable, undo in-card */
 function renderPhotos(){
   $('#ocr-note').textContent=S.ocr?'':'OCR nonaktif di server (Tesseract belum terpasang) — SN bisa diisi manual.';
-  const byCat={};activePhotos().forEach(p=>{(byCat[p.category]=byCat[p.category]||[]).push(p);});
-  const filled=S.cats.filter(c=>(byCat[c.key]||[]).length).length;
+  const all=(S.loc&&S.loc.photos)||[];
+  const activeByCat={};activePhotos().forEach(p=>{(activeByCat[p.category]=activeByCat[p.category]||[]).push(p);});
+  const filled=S.cats.filter(c=>(activeByCat[c.key]||[]).length).length;
   $('#foto-count').textContent=filled+' / '+S.cats.length;
-  $('#photo-slots').innerHTML=S.cats.map(c=>{const ps=byCat[c.key]||[];const first=ps[0];
-    const snap=first
-      ? `<div class="snap" onclick="openGallery('${c.key}')"><img src="/api/photos/${first.id}/file" loading="lazy">${ps.length>1?`<span class="badge">${ps.length} foto</span>`:''}<button class="x" onclick="event.stopPropagation();softRemove(${first.id})">close</button></div>`
-      : `<div class="snap empty" onclick="pick('${c.key}')"><span class="mi" style="font-size:30px;color:var(--md-sys-color-primary)">add_a_photo</span></div>`;
-    let foot='<div class="foot"></div>';
-    if(c.ocr){const sn=ps.find(p=>p.ocr_serial);const fp=ps[0];
-      foot=`<div class="foot" style="flex-wrap:wrap">
-        ${sn?`<span class="sn-chip"><span class="mi">document_scanner</span>${esc(sn.ocr_serial)}<span class="mi add" onclick="applySnToInventory('${c.key}','${esc(sn.ocr_serial)}')" title="isi ke inventory">arrow_forward</span></span>`:''}
-        ${fp?`<md-button variant="text" size="xs" icon="barcode_scanner" onclick="openSnReader(${fp.id},'${c.key}')">Baca SN</md-button>`:'<span class="muted" style="font:var(--md-sys-typescale-body-small)">unggah foto SN</span>'}
-      </div>`;}
-    return `<div class="pcard ${c.ocr?'sn':''}"><div class="hd"><span class="mi">${c.ocr?'tag':'image'}</span><span>${esc(c.label)}</span></div>${snap}${foot}</div>`;}).join('');
-  const un=byCat['uncategorized']||[];$('#uncat-wrap').classList.toggle('hidden',!un.length);
+  $('#photo-slots').innerHTML=S.cats.map(c=>{
+    const ph=(activeByCat[c.key]||[])[0];
+    const pending=all.find(p=>p.category===c.key&&pendingDel.has(p.id));
+    let snap;
+    if(pending){
+      snap=`<div class="snap"><img src="/api/photos/${pending.id}/file" style="filter:brightness(.45)">
+        <div class="pf-undo"><div class="ringwrap"><svg viewBox="0 0 46 46"><circle class="t" cx="23" cy="23" r="20"/><circle class="p" cx="23" cy="23" r="20"/></svg><span class="mi c">delete</span></div>
+        <div class="msg">Foto dihapus</div><button class="ub" onclick="undoDel(${pending.id})"><span class="mi">undo</span>Urungkan</button></div></div>`;
+    }else if(ph){
+      snap=`<div class="snap"><img src="/api/photos/${ph.id}/file" loading="lazy" onclick="editExisting(${ph.id},'${c.key}')">
+        <div class="actbar">
+          <button data-tip="Edit / sesuaikan" onclick="editExisting(${ph.id},'${c.key}')"><span class="mi">tune</span></button>
+          ${c.ocr?`<button data-tip="Baca SN" onclick="openSnReader(${ph.id},'${c.key}')"><span class="mi">barcode_scanner</span></button>`:''}
+          <button data-tip="Ganti foto" onclick="replacePhoto(${ph.id},'${c.key}')"><span class="mi">swap_horiz</span></button>
+          <button class="del" data-tip="Hapus" onclick="softRemove(${ph.id})"><span class="mi">delete</span></button>
+        </div></div>`;
+    }else{
+      snap=`<div class="snap empty" onclick="pick('${c.key}')"><span class="mi" style="font-size:30px;color:var(--md-sys-color-primary)">add_a_photo</span></div>`;
+    }
+    let foot='';
+    if(c.ocr){
+      if(ph){const sn=(ph.ocr_serial||'').trim();
+        foot=`<div class="ocr-lab"><span class="mi">document_scanner</span>${sn?'SN terdeteksi · bisa dikoreksi':'SN belum terbaca'}</div>`+
+          (sn?`<div class="snbox"><span class="sn" title="${esc(sn)}" onclick="editSn(this,${ph.id})">${esc(sn)}</span>
+             <button class="sact" data-tip="Edit SN" onclick="editSn(this.parentElement.querySelector('.sn'),${ph.id})"><span class="mi">edit</span></button>
+             <button class="sact" data-tip="Isi ke Inventory" onclick="applySnToInventory('${c.key}','${esc(sn)}')"><span class="mi">arrow_forward</span></button></div>`
+           :`<md-button variant="tonal" size="xs" icon="barcode_scanner" onclick="openSnReader(${ph.id},'${c.key}')">Baca SN</md-button>`);
+      }else{foot=`<div class="ocr-lab"><span class="mi">document_scanner</span>Perlu foto SN</div>`;}
+    }
+    return `<div class="pcard ${c.ocr?'sn':''}"><div class="hd"><span class="mi">${c.ocr?'tag':'image'}</span><span>${esc(c.label)}</span></div>${snap}<div class="foot" style="display:block;min-height:0;margin-top:${c.ocr?'0':'8px'}">${foot}</div></div>`;
+  }).join('');
+  const un=activePhotos().filter(p=>p.category==='uncategorized');
+  $('#uncat-wrap').classList.toggle('hidden',!un.length);
   $('#uncat-slots').innerHTML=un.map(p=>`<div class="pcard"><div class="hd"><span class="mi">help</span><span>Belum terkategori</span></div>
-    <div class="snap"><img src="/api/photos/${p.id}/file"><button class="x" onclick="softRemove(${p.id})">close</button></div>
-    <div class="foot"><md-button variant="tonal" size="xs" icon="drive_file_move" onclick="reassignMenu(this,${p.id})">Pindah</md-button></div></div>`).join('');
+    <div class="snap"><img src="/api/photos/${p.id}/file">
+      <div class="actbar"><button data-tip="Pindah kategori" onclick="reassignMenu(this,${p.id})"><span class="mi">drive_file_move</span></button><button class="del" data-tip="Hapus" onclick="softRemove(${p.id})"><span class="mi">delete</span></button></div>
+    </div></div>`).join('');
   bindTips();
 }
 function pickFiles(multi,cb){const inp=document.createElement('input');inp.type='file';inp.accept='image/*';inp.multiple=!!multi;inp.onchange=()=>cb(inp.files);inp.click();}
-window.pick=cat=>pickFiles(true,files=>{ if(files.length===1) openEditor(files[0],blob=>uploadBlob(cat,blob,files[0].name)); else doUpload(files,cat,[]); });
+window.pick=cat=>pickFiles(false,files=>{const f=files[0];if(!f)return;openEditor(f,blob=>uploadBlob(cat,blob,f.name));});
+/* Edit foto yang sudah ada: buka editor (juga sbg preview fit), simpan -> ganti */
+window.editExisting=async(id,cat)=>{try{const r=await fetch('/api/photos/'+id+'/file',{credentials:'same-origin'});const b=await r.blob();
+  const f=new File([b],'foto.jpg',{type:b.type||'image/jpeg'});
+  openEditor(f,async blob=>{const nf=new File([blob],'foto.jpg',{type:'image/jpeg'});const fd=new FormData();
+    fd.append('files',nf);fd.append('category',cat);fd.append('relpaths',JSON.stringify(['foto.jpg']));
+    try{const rr=await fetch('/api/locations/'+S.loc.id+'/photos',{method:'POST',credentials:'same-origin',body:fd});if(!rr.ok)throw new Error((await rr.json()).detail);
+      S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();toast('Foto diperbarui');}catch(e){toast('Gagal: '+e.message);}});
+  }catch(e){toast('Gagal memuat foto');}};
+/* Koreksi SN hasil OCR (inline) */
+window.editSn=(el,id)=>{if(!el||el.tagName==='INPUT')return;const v=el.textContent;
+  const inp=document.createElement('input');inp.className='sn';inp.value=v;el.replaceWith(inp);inp.focus();inp.select();
+  let done=false;const commit=async()=>{if(done)return;done=true;const nv=inp.value.trim();
+    try{await api('/api/photos/'+id,{method:'PATCH',body:JSON.stringify({ocr_serial:nv})});}catch(e){}
+    const ph=(S.loc.photos||[]).find(p=>p.id===id);if(ph)ph.ocr_serial=nv;renderPhotos();toast('SN diperbarui');};
+  inp.addEventListener('blur',commit);inp.addEventListener('keydown',e=>{if(e.key==='Enter')inp.blur();else if(e.key==='Escape'){inp.value=v;inp.blur();}});};
 window.useSerial=s=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow({sn_tagging:s}));bindTips();updateSummary();toast('Baris inventory + SN ditambah');};
 /* Tautkan SN ke baris inventory sesuai mapping kategori->item (dari Pengaturan) */
 window.applySnToInventory=(cat,serial)=>{if(!serial)return;
@@ -1353,23 +1430,18 @@ window.applySnToInventory=(cat,serial)=>{if(!serial)return;
   else{$('#inv-body').insertAdjacentHTML('beforeend',invRow({nama_barang:item||'',sn_tagging:serial}));bindTips();}
   updateSummary();toast(target?('SN → '+item):'Baris inventory + SN ditambah');};
 
-/* ---- soft delete + undo (timer) ---- */
+/* ---- soft delete + undo in-card (timer 5s, cincin di dalam kartu) ---- */
 const pendingDel=new Map();  // id -> timeoutId
 function activePhotos(){return (S.loc&&S.loc.photos||[]).filter(p=>!pendingDel.has(p.id));}
-let undoTimer=null;
 window.softRemove=id=>{
   if(pendingDel.has(id))return;
   pendingDel.set(id,setTimeout(()=>commitDelete(id),5000));
-  renderPhotos();updateSummary();showUndo(id);
+  renderPhotos();updateSummary();
 };
-async function commitDelete(id){pendingDel.delete(id);hideUndo();
+window.undoDel=id=>{const t=pendingDel.get(id);if(t)clearTimeout(t);pendingDel.delete(id);renderPhotos();updateSummary();toast('Dibatalkan');};
+async function commitDelete(id){pendingDel.delete(id);
   try{await api('/api/photos/'+id,{method:'DELETE'});S.loc=await api('/api/locations/'+S.loc.id);}catch{}
-  renderPhotos();updateSummary();if($('#galDlg').hasAttribute('open')&&galCat)openGallery(galCat);}
-function showUndo(id){const bar=$('#undoBar');bar.classList.remove('hidden');let n=5;$('#undoCount').textContent='('+n+'s)';
-  clearInterval(undoTimer);undoTimer=setInterval(()=>{n--;$('#undoCount').textContent='('+n+'s)';if(n<=0)clearInterval(undoTimer);},1000);
-  bar._id=id;}
-function hideUndo(){$('#undoBar').classList.add('hidden');clearInterval(undoTimer);}
-$('#undoBtn').addEventListener('click',()=>{const id=$('#undoBar')._id;const t=pendingDel.get(id);if(t)clearTimeout(t);pendingDel.delete(id);hideUndo();renderPhotos();updateSummary();if($('#galDlg').hasAttribute('open')&&galCat)openGallery(galCat);});
+  renderPhotos();updateSummary();}
 
 /* ---- editor: zoom + crop rasio ---- */
 let ed={};
@@ -1401,7 +1473,7 @@ window.replacePhoto=(oldId,cat)=>pickFiles(false,files=>{const f=files[0];if(!f)
   openEditor(f,async blob=>{const nf=new File([blob],f.name,{type:'image/jpeg'});
     const fd=new FormData();fd.append('files',nf);fd.append('category',cat);fd.append('relpaths',JSON.stringify([f.name]));
     try{const r=await fetch('/api/locations/'+S.loc.id+'/photos',{method:'POST',credentials:'same-origin',body:fd});if(!r.ok)throw new Error((await r.json()).detail);
-      await api('/api/photos/'+oldId,{method:'DELETE'});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();openGallery(cat);toast('Foto diganti');}catch(e){toast('Gagal: '+e.message);}});});
+      S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();toast('Foto diganti');}catch(e){toast('Gagal: '+e.message);}});});
 window.reassignMenu=(btn,pid)=>openMenu(btn,S.cats.map(c=>({icon:c.ocr?'tag':'image',label:c.label,fn:async()=>{await api('/api/photos/'+pid,{method:'PATCH',body:JSON.stringify({category:c.key})});S.loc=await api('/api/locations/'+S.loc.id);renderPhotos();updateSummary();toast('Dipindah');}})));
 async function doUpload(files,category,relpaths){if(!files||!files.length)return;const fd=new FormData();
   [...files].forEach(f=>fd.append('files',f));if(category)fd.append('category',category);
@@ -1483,10 +1555,17 @@ $('#exp-pdf').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return to
 
 /* LOCATIONS — paginasi + cari/filter server-side */
 let LOC_ROWS=[],LOC_PAGE=1,LOC_TOTAL=0;const LOC_SIZE=50;let locSearchTimer=null;
+const _IDMON=['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Agu','Sep','Okt','Nov','Des'];
+/* Format "26-Feb-2026 15:30" (waktu lokal) dari ISO UTC */
+function fmtDateTime(iso){if(!iso)return '—';const d=new Date(iso);if(isNaN(d))return '—';
+  const p=n=>String(n).padStart(2,'0');
+  return `${p(d.getDate())}-${_IDMON[d.getMonth()]}-${d.getFullYear()} ${p(d.getHours())}:${p(d.getMinutes())}`;}
 function fetchLocPage(page){
   const q=encodeURIComponent(($('#loc-search').value||'').trim());
   const st=S.locFilter||'all';
-  return api(`/api/locations?page=${page}&size=${LOC_SIZE}&q=${q}&status=${st}`);
+  const cr=(locCreatorSel&&locCreatorSel.getValue())||'';
+  const dt=($('#loc-date').value||'').trim();
+  return api(`/api/locations?page=${page}&size=${LOC_SIZE}&q=${q}&status=${st}&creator=${cr||0}&date=${encodeURIComponent(dt)}`);
 }
 async function loadLocations(){LOC_PAGE=1;const r=await fetchLocPage(1);
   LOC_ROWS=r.rows||[];LOC_TOTAL=r.total||0;renderLocTable();}
@@ -1498,10 +1577,12 @@ function renderLocTable(){
     const stCls=l.status==='selesai'?'ok':'warn';
     return `<tr><td><a class="loc-link mono" onclick='openFromLog(${l.id})'>${esc(l.code)}</a></td>
     <td>${esc(l.data.nama_lokasi||l.name||'')}</td>
+    <td>${esc(l.creator_name||'—')}</td>
+    <td class="mono" style="white-space:nowrap">${fmtDateTime(l.created_at)}</td>
     <td>${l.inv_count}</td><td>${present}/${S.cats.length}</td>
     <td><span class="loc-st ${stCls}">${esc(l.status)}</span></td>
     <td class="loc-lack">${locLack(l)}</td>
-    <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`;}).join('')||'<tr><td colspan=7 class="muted">Tidak ada data</td></tr>';
+    <td style="text-align:right"><md-icon-button data-tip="Aksi" onclick='locMenu(this,${JSON.stringify({id:l.id,code:l.code,cd:l.can_delete})})'><span>more_vert</span></md-icon-button></td></tr>`;}).join('')||'<tr><td colspan=9 class="muted">Tidak ada data</td></tr>';
   $('#loc-info').textContent=LOC_TOTAL?`Menampilkan ${Math.min(LOC_ROWS.length,LOC_TOTAL)} dari ${LOC_TOTAL}`:'';
   $('#loc-more').classList.toggle('hidden',LOC_ROWS.length>=LOC_TOTAL);bindTips();}
 /* Daftar kekurangan: foto + field lokasi kosong + inventory belum lengkap (inv_ok dari server) */
@@ -1516,7 +1597,17 @@ function locLack(l){
 window.openFromLog=id=>{gotoEntry();openLoc(id);};
 $('#loc-search').addEventListener('input',()=>{clearTimeout(locSearchTimer);locSearchTimer=setTimeout(loadLocations,300);});
 $('#loc-filter').addEventListener('change',e=>{S.locFilter=e.detail.value;loadLocations();});
+$('#loc-date').addEventListener('change',loadLocations);
+$('#loc-clear').addEventListener('click',()=>{$('#loc-search').value='';$('#loc-date').setAttribute('value','');
+  locCreatorSel&&locCreatorSel.setValue('');S.locFilter='all';
+  const seg=$('#loc-filter');seg&&seg.querySelectorAll('button').forEach(b=>b.toggleAttribute('selected',b.dataset.value==='all'));
+  loadLocations();});
 $('#loc-more-btn').addEventListener('click',loadMoreLoc);
+let locCreatorSel=null;
+async function loadCreators(){if(!locCreatorSel)return;
+  try{const d=await api('/api/locations/creators');
+    locCreatorSel.setOptions([{value:'',label:'Semua pembuat'}].concat((d.creators||[]).map(c=>({value:String(c.id),label:c.name+' ('+c.n+')'}))));
+    if(!locCreatorSel.getValue())locCreatorSel.setValue('');}catch(e){}}
 window.locMenu=(btn,l)=>{const items=[
   {icon:'edit',label:'Buka / Edit',fn:()=>{gotoEntry();openLoc(l.id);}},
   {icon:'grid_on',label:'Export Excel',fn:()=>location.href='/api/export/excel?scope=one&loc_id='+l.id},
@@ -1535,6 +1626,15 @@ $('#delOk').addEventListener('click',async()=>{try{await api('/api/locations/'+d
   if(delFromEntry){S.loc=null;$('#entry-form').classList.add('hidden');$('#entry-empty').classList.remove('hidden');$('#entry-del').classList.add('hidden');}
   refreshPicker();loadLocations();}catch(e){toast('Gagal: '+e.message);$('#delDlg').close();}});
 
+/* Dialog konfirmasi & input generik */
+let _cfmFn=null,_inpFn=null;
+window.confirmDo=(title,msg,fn)=>{_cfmFn=fn;$('#cfmTitle').textContent=title;$('#cfmMsg').innerHTML=msg;$('#cfmDlg').show();};
+$('#cfmCancel').addEventListener('click',()=>$('#cfmDlg').close());
+$('#cfmOk').addEventListener('click',()=>{$('#cfmDlg').close();const f=_cfmFn;_cfmFn=null;if(f)f();});
+window.askInput=(title,cur,fn)=>{_inpFn=fn;$('#inpTitle').textContent=title;const f=$('#inpField');f.setAttribute('value',cur||'');$('#inpDlg').show();setTimeout(()=>f.focus&&f.focus(),60);};
+$('#inpCancel').addEventListener('click',()=>$('#inpDlg').close());
+$('#inpOk').addEventListener('click',()=>{$('#inpDlg').close();const v=$('#inpField').value;const f=_inpFn;_inpFn=null;if(f)f(v);});
+
 /* TEMPLATES + MAPPING */
 $('#tpl-file-btn')&&$('#tpl-file-btn').addEventListener('click',()=>$('#tpl-file').click());
 $('#tpl-file')&&$('#tpl-file').addEventListener('change',e=>{$('#tpl-file-name').textContent=e.target.files[0]?.name||'Belum ada file';});
@@ -1549,9 +1649,16 @@ $('#tpl-do-register')&&$('#tpl-do-register').addEventListener('click',async()=>{
     $('#tpl-register').classList.add('hidden');$('#tpl-file').value='';$('#tpl-file-name').textContent='Belum ada file';toast('Terdaftar & aktif');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
 async function loadTemplates(){const rows=await api('/api/templates');
   $('#tpl-table').innerHTML=rows.map(t=>`<tr><td>${esc(t.name)}</td><td class="mono">${esc(t.sheet_log)}</td><td class="mono">${esc(t.sheet_detail)}</td>
-    <td>${t.active?'<span class="count">aktif</span>':''}</td><td style="text-align:right">
-    <md-button variant="tonal" size="xs" onclick="openMapping(${t.id})">Mapping</md-button>${t.active?'':`<md-button variant="text" size="xs" onclick="activateTpl(${t.id})">Aktifkan</md-button>`}</td></tr>`).join('')||'<tr><td colspan=5 class="muted">Belum ada template</td></tr>';}
+    <td>${t.active?'<span class="count">aktif</span>':''}</td><td style="text-align:right;white-space:nowrap">
+    <md-button variant="tonal" size="xs" onclick="openMapping(${t.id})">Mapping</md-button>${t.active?'':`<md-button variant="text" size="xs" onclick="activateTpl(${t.id})">Aktifkan</md-button>`}
+    <md-icon-button size="xs" data-tip="Ganti nama" onclick="renameTpl(${t.id},'${esc(t.name).replace(/'/g,"\\'")}')"><span class="mi">edit</span></md-icon-button>
+    ${t.active?'':`<md-icon-button size="xs" data-tip="Hapus" onclick="deleteTpl(${t.id},'${esc(t.name).replace(/'/g,"\\'")}')"><span class="mi">delete</span></md-icon-button>`}</td></tr>`).join('')||'<tr><td colspan=5 class="muted">Belum ada template</td></tr>';
+  bindTips();}
 window.activateTpl=async id=>{await api('/api/templates/'+id+'/activate',{method:'POST'});toast('Diaktifkan');loadTemplates();};
+window.renameTpl=(id,cur)=>{askInput('Ganti nama template',cur,async nv=>{const name=(nv||'').trim();if(!name||name===cur)return;
+  try{await api('/api/templates/'+id,{method:'PATCH',body:JSON.stringify({name})});toast('Nama diperbarui');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});};
+window.deleteTpl=(id,name)=>{confirmDo('Hapus template','Hapus template “'+name+'” beserta filenya? Tindakan ini tidak bisa dibatalkan.',async()=>{
+  try{await api('/api/templates/'+id,{method:'DELETE'});toast('Template dihapus');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});};
 window.openMapping=async id=>{S.mapTplId=id;const tpl=await api('/api/templates/'+id);const sh=await api('/api/templates/'+id+'/sheets');S.sheets=sh.sheets;
   const map=deepMerge(structuredClone(DEFAULT_MAP),tpl.config||{});$('#map-tpl-name').textContent=tpl.name;
   const opts=S.sheets.map(s=>({value:s.name,label:s.name}));mapLogSel.setOptions(opts).setValue(tpl.sheet_log);mapDetailSel.setOptions(opts).setValue(tpl.sheet_detail);
@@ -1559,7 +1666,7 @@ window.openMapping=async id=>{S.mapTplId=id;const tpl=await api('/api/templates/
   $('#map-logstart').value=map.log.start_row||3;
   $('#map-invcols').innerHTML=INV_FIELDS.map(f=>`<div><label class="muted">${f}</label><input data-inv="${f}" value="${esc(map.detail.inventory.cols[f]||'')}" style="width:100%"></div>`).join('');
   $('#map-invstart').value=map.detail.inventory.start_row||32;$('#map-invmax').value=map.detail.inventory.max_rows||5;
-  $('#map-photos').innerHTML=S.cats.map(c=>`<div style="display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;margin-bottom:8px"><label class="muted">${esc(c.label)}${c.ocr?' 🔎':''}</label><input data-photo="${c.key}" placeholder="mis. B27" value="${esc((map.detail.photos||{})[c.key]||'')}" style="width:100%"></div>`).join('');
+  $('#map-photos').innerHTML=S.cats.map(c=>`<div style="display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center;margin-bottom:8px"><label class="muted">${esc(c.label)}${c.ocr?' (OCR)':''}</label><input data-photo="${c.key}" placeholder="mis. B27" value="${esc((map.detail.photos||{})[c.key]||'')}" style="width:100%"></div>`).join('');
   $('#map-pw').value=map.detail.photo_max_w||320;$('#map-ph').value=map.detail.photo_max_h||240;
   renderRef(mapDetailSel.getValue());$('#mapping').classList.remove('hidden');$('#mapping').scrollIntoView({behavior:'smooth'});};
 function renderRef(n){const s=S.sheets.find(x=>x.name===n);const b=$('#map-ref');if(!s)return b.innerHTML='<span class="muted">—</span>';

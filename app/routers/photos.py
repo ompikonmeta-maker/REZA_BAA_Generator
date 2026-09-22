@@ -73,6 +73,19 @@ def upload_photos(
         if autosort.category_needs_ocr(cat_key, categories):
             ocr_serial, ocr_text = ocr.read_serial(fpath)
 
+        # Satu kategori = maksimal satu foto: buang foto lama di kategori yang
+        # sama (kecuali "uncategorized" yang boleh menampung banyak).
+        if cat_key and cat_key != "uncategorized":
+            for old in conn.execute(
+                "SELECT id,path FROM photos WHERE location_id=? AND category=?",
+                (loc_id, cat_key),
+            ).fetchall():
+                try:
+                    Path(old["path"]).unlink(missing_ok=True)
+                except Exception:
+                    pass
+                conn.execute("DELETE FROM photos WHERE id=?", (old["id"],))
+
         cur = conn.execute(
             "INSERT INTO photos(location_id,category,orig_name,filename,path,ocr_text,"
             "ocr_serial,matched_by,uploaded_by,created_at) VALUES(?,?,?,?,?,?,?,?,?,?)",

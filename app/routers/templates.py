@@ -112,6 +112,44 @@ def activate_template(tpl_id: int, conn: sqlite3.Connection = Depends(get_db),
     return {"ok": True}
 
 
+class RenameIn(BaseModel):
+    name: str
+
+
+@router.patch("/{tpl_id}")
+def rename_template(tpl_id: int, body: RenameIn, conn: sqlite3.Connection = Depends(get_db),
+                    user=Depends(require_admin)):
+    """Ganti nama template terdaftar."""
+    name = body.name.strip()
+    if not name:
+        raise HTTPException(400, "Nama tidak boleh kosong")
+    if not conn.execute("SELECT 1 FROM templates WHERE id=?", (tpl_id,)).fetchone():
+        raise HTTPException(404, "Template tidak ditemukan")
+    conn.execute("UPDATE templates SET name=? WHERE id=?", (name, tpl_id))
+    conn.commit()
+    audit(conn, user, "rename", "template", tpl_id, name)
+    return {"ok": True, "name": name}
+
+
+@router.delete("/{tpl_id}")
+def delete_template(tpl_id: int, conn: sqlite3.Connection = Depends(get_db),
+                    user=Depends(require_admin)):
+    """Hapus template beserta file-nya. Template aktif tidak boleh dihapus."""
+    row = conn.execute("SELECT * FROM templates WHERE id=?", (tpl_id,)).fetchone()
+    if not row:
+        raise HTTPException(404, "Template tidak ditemukan")
+    if row["active"]:
+        raise HTTPException(400, "Template aktif tidak bisa dihapus — aktifkan template lain dulu")
+    try:
+        Path(row["path"]).unlink(missing_ok=True)
+    except Exception:
+        pass
+    conn.execute("DELETE FROM templates WHERE id=?", (tpl_id,))
+    conn.commit()
+    audit(conn, user, "delete", "template", tpl_id, row["name"])
+    return {"ok": True}
+
+
 @router.get("/{tpl_id}")
 def get_template(tpl_id: int, conn: sqlite3.Connection = Depends(get_db),
                  user=Depends(current_user)):
