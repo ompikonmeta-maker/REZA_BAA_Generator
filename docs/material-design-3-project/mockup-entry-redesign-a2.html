@@ -56,7 +56,8 @@
   .fld .box .mi{color:var(--mut);font-size:19px}.fld .box:focus-within .mi{color:var(--pri)}
   .fld input{border:0;background:transparent;color:var(--ink);font-size:14.5px;outline:none;width:100%}
   .inv{display:grid;gap:8px}
-  .invhead,.invrow{display:grid;grid-template-columns:1.4fr 1fr .6fr 1.2fr 32px;gap:8px;align-items:center}
+  .invhead,.invrow{display:grid;grid-template-columns:minmax(110px,1fr) minmax(95px,.85fr) 56px minmax(115px,1.05fr) minmax(120px,1.2fr) 30px;gap:8px;align-items:center}
+  @media(max-width:640px){.invhead{display:none}.invrow{grid-template-columns:1fr 1fr;gap:6px}.invrow .del{grid-column:span 2;text-align:right}}
   .invhead{font-size:10.5px;font-weight:800;color:var(--mut);text-transform:uppercase;letter-spacing:.3px;padding:0 4px}
   .invrow input{height:40px;border:1px solid var(--ov);border-radius:9px;background:var(--fieldbg);padding:0 9px;color:var(--ink);width:100%}
   .invrow .del{color:var(--mut);cursor:pointer;text-align:center}
@@ -117,10 +118,10 @@
       <div class="card">
         <div class="ch"><span class="ic mi">inventory_2</span><h3>Inventory</h3><button class="addmini"><span class="mi">add</span> Baris</button></div>
         <div class="inv">
-          <div class="invhead"><span>Nama Barang</span><span>Merk/Type</span><span>Jml</span><span>SN/Tagging</span><span></span></div>
-          <div class="invrow"><input value="Kit Starlink"><input value="Standard"><input value="1"><input value="KITX-88213"><span class="mi del">close</span></div>
-          <div class="invrow"><input value="Router"><input value="TP-Link"><input value="1"><input value="RTR-55012"><span class="mi del">close</span></div>
-          <div class="invrow"><input value="Access Point" style="border-color:var(--warn)"><input placeholder="—"><input value="1"><input placeholder="—"><span class="mi del">close</span></div>
+          <div class="invhead"><span>Nama Barang</span><span>Merk/Type</span><span>Jml</span><span>SN/Tagging</span><span>Keterangan</span><span></span></div>
+          <div class="invrow"><input value="Kit Starlink"><input value="Standard"><input value="1"><input value="KITX-88213"><input value="Baik"><span class="mi del">close</span></div>
+          <div class="invrow"><input value="Router"><input value="TP-Link"><input value="1"><input value="RTR-55012"><input value="Baik"><span class="mi del">close</span></div>
+          <div class="invrow"><input value="Access Point" style="border-color:var(--warn)"><input placeholder="—"><input value="1"><input placeholder="—"><input placeholder="—"><span class="mi del">close</span></div>
           <div class="addrow"><span class="mi">add</span> Tambah baris</div>
         </div>
       </div>
