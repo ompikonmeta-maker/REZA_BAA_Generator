@@ -897,13 +897,9 @@
               <div class="miss hidden" id="sum-foto-miss"></div>
               <div class="sum-actions">
                 <md-button variant="filled" size="l" icon="save" id="save-btn">Simpan BAA</md-button>
-                <div class="exp-group">
-                  <div class="exp-head"><span>Cakupan</span>
-                    <md-segmented-button id="scope"><button data-value="one" selected>Lokasi ini</button><button data-value="all">Semua</button></md-segmented-button></div>
-                  <div class="exp2">
-                    <md-button variant="outlined" icon="grid_on" id="exp-xlsx">Excel</md-button>
-                    <md-button variant="outlined" icon="picture_as_pdf" id="exp-pdf">PDF</md-button>
-                  </div>
+                <div class="exp2">
+                  <md-button variant="outlined" icon="grid_on" id="exp-xlsx">Excel</md-button>
+                  <md-button variant="outlined" icon="picture_as_pdf" id="exp-pdf">PDF</md-button>
                 </div>
               </div>
               <p class="hint">Export sebaiknya setelah data wajib lengkap; tombol tetap dapat dicoba.</p>
@@ -1899,17 +1895,24 @@ $('#sn-save').addEventListener('click',async()=>{const val=$('#sn-serial').value
     if(val)applySnToInventory(cat,val);else updateSummary();
     $('#snDlg').close();toast('SN disimpan'+(val?': '+val:''));}catch(e){toast('Gagal: '+e.message);}});
 
-/* scope + save + export */
-$('#scope').addEventListener('change',e=>{S.scope=e.detail.value;});
+/* save + export (selalu lokasi aktif) */
 $('#save-btn').addEventListener('click',async()=>{try{const st=computeState();
   const status=st.complete?'selesai':'draft';
   await api('/api/locations/'+S.loc.id,{method:'PUT',body:JSON.stringify({name:st.data.nama_lokasi||'',data:st.data,status})});
   await api('/api/locations/'+S.loc.id+'/inventory',{method:'PUT',body:JSON.stringify({items:collectInventory()})});
   toast(status==='selesai'?'Tersimpan — BAA lengkap ✓':'Tersimpan (draft)');
   await openLoc(S.loc.id);refreshPicker();loadLocations();}catch(e){toast('Gagal: '+e.message);}});
-function expUrl(k){return S.scope==='all'?`/api/export/${k}?scope=all`:`/api/export/${k}?scope=one&loc_id=${S.loc?S.loc.id:''}`;}
-$('#exp-xlsx').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return toast('Pilih lokasi');location.href=expUrl('excel');});
-$('#exp-pdf').addEventListener('click',()=>{if(!S.loc&&S.scope==='one')return toast('Pilih lokasi');location.href=expUrl('pdf');});
+/* Export selalu untuk lokasi yang sedang aktif; konfirmasi dulu sebelum unduh */
+function askExport(kind){        // kind: 'excel' | 'pdf'
+  if(!S.loc)return toast('Pilih lokasi dulu');
+  const nm=(S.loc.data&&S.loc.data.nama_lokasi)||S.loc.name||'';
+  const lbl=kind==='excel'?'Excel':'PDF';
+  confirmDo('Unduh '+lbl,
+    `Unduh dokumen BAA <b>${lbl}</b> untuk lokasi <b>${esc(S.loc.code)}</b>${nm?' · '+esc(nm):''}?`,
+    ()=>{location.href=`/api/export/${kind}?scope=one&loc_id=${S.loc.id}`;});
+}
+$('#exp-xlsx').addEventListener('click',()=>askExport('excel'));
+$('#exp-pdf').addEventListener('click',()=>askExport('pdf'));
 
 /* LOCATIONS — paginasi + cari/filter server-side */
 let LOC_ROWS=[],LOC_PAGE=1,LOC_TOTAL=0;const LOC_SIZE=50;let locSearchTimer=null;
