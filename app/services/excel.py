@@ -95,6 +95,26 @@ def _letterbox(path: str, box_w: int, box_h: int):
     return bio
 
 
+def _copy_print_settings(src, dst) -> None:
+    """openpyxl copy_worksheet() tidak menyalin print area & pengaturan cetak.
+    Salin manual agar sheet hasil tetap punya Print Area seperti template."""
+    import copy
+    try:
+        if src.print_area:
+            dst.print_area = src.print_area
+    except Exception:
+        pass
+    for attr in ("page_setup", "page_margins", "print_options",
+                 "sheet_properties", "print_title_rows", "print_title_cols"):
+        try:
+            val = getattr(src, attr)
+            if val is None:
+                continue
+            setattr(dst, attr, copy.copy(val) if not isinstance(val, str) else val)
+        except Exception:
+            pass
+
+
 # Perkiraan standar Excel bila lebar kolom / tinggi baris tidak diset eksplisit
 _DEF_COL_CHARS = 8.43
 _DEF_ROW_PT = 15.0
@@ -209,6 +229,7 @@ def build_workbook(template_path: str, template_config: dict, locations: list[di
         ws = wb.copy_worksheet(detail_tpl)
         nama_only = data.get("nama_lokasi") or loc.get("name") or ""   # tanpa fallback kode
         ws.title = _safe_sheet_title(loc.get("code", f"Lokasi_{i:04d}"), nama_only, used_titles)
+        _copy_print_settings(detail_tpl, ws)   # copy_worksheet tak menyalin print area/page setup
 
         for cell, field in cfg["detail"].get("location_cells", {}).items():
             try:

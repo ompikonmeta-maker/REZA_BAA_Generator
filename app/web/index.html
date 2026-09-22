@@ -741,7 +741,7 @@
             <div class="feed" id="dFeed"></div>
           </div>
           <div class="dtile dside" id="dLeadTile">
-            <div class="th"><span class="mi">military_tech</span> Kinerja Teknisi</div>
+            <div class="th"><span class="mi">military_tech</span> Kinerja User</div>
             <div id="dLead"></div>
           </div>
           <div class="dtile dside hidden" id="dStreakTile">
@@ -778,7 +778,7 @@
             </div>
             <div class="dtile" style="grid-column:span 7">
               <div class="th"><span class="mi">leaderboard</span> Peringkat Performa</div>
-              <table><thead><tr><th></th><th>Teknisi</th><th>Selesai</th><th>Velocity 4 mgg</th><th>Beban</th><th style="text-align:right">%</th></tr></thead><tbody id="supRank"></tbody></table>
+              <table><thead><tr><th></th><th>User</th><th>Selesai</th><th>Velocity 4 mgg</th><th>Beban</th><th style="text-align:right">%</th></tr></thead><tbody id="supRank"></tbody></table>
             </div>
             <div class="dtile" style="grid-column:span 5">
               <div class="th"><span class="mi">insights</span> Throughput Tim · 8 minggu</div>
@@ -1073,7 +1073,7 @@
 <!-- Drill-down user (supervisor) -->
 <div class="sup-scrim" id="supScrim"></div>
 <aside class="sup-drawer" id="supDrawer">
-  <div class="sd-h"><span class="sup-ava" id="sdAva"></span><div><div class="sd-name" id="sdName"></div><div class="sd-role">Teknisi</div></div><md-icon-button class="sd-x" id="sdClose"><span>close</span></md-icon-button></div>
+  <div class="sd-h"><span class="sup-ava" id="sdAva"></span><div><div class="sd-name" id="sdName"></div><div class="sd-role">User</div></div><md-icon-button class="sd-x" id="sdClose"><span>close</span></md-icon-button></div>
   <div class="sd-b" id="sdBody"></div>
 </aside>
 
@@ -1480,7 +1480,7 @@ let SUP_USERS=[];
 async function loadSupervisor(name){
   let d;try{d=await api('/api/stats/supervisor');}catch(e){return;}
   SUP_USERS=d.users||[];
-  $('#supSub').textContent=`performa tim · ${d.summary.users_active}/${d.summary.users_total} teknisi aktif`;
+  $('#supSub').textContent=`performa tim · ${d.summary.users_active}/${d.summary.users_total} user aktif`;
   const m=d.summary;
   const wow=m.vel_prev>0?Math.round((m.vel_this-m.vel_prev)/m.vel_prev*100):0;
   const wowTxt=m.vel_prev>0?(wow>=0?`<span class="up">▲ ${wow}%</span>`:`<span class="down">▼ ${Math.abs(wow)}%</span>`):'<span class="flat">—</span>';
@@ -1498,7 +1498,7 @@ async function loadSupervisor(name){
     <span class="sup-ava" style="background:${SUP_COL[u.id%SUP_COL.length]}">${esc((u.name[0]||'?').toUpperCase())}</span>
     <div class="who"><div class="nm">${esc(u.name)}</div><div class="rs">${esc(u.reason||'perlu dipantau')}</div></div>
     <span class="spill ${u.health}"><span class="mi">${u.health==='b'?'trending_down':'schedule'}</span>${healthLabel(u.health)}</span></div>`).join('')
-    :'<p class="muted" style="padding:10px 4px">Semua teknisi on-track</p>';
+    :'<p class="muted" style="padding:10px 4px">Semua user on-track</p>';
   // bottleneck
   renderBottleneck($('#supBn'),d.bottleneck);
   // ranking
@@ -1509,7 +1509,7 @@ async function loadSupervisor(name){
       <td>${supSpark(u.vel,SUP_COL[0])} ${trArrow(u.vel)}</td>
       <td><div class="wl"><i style="width:${Math.min(100,u.load*11)}%;background:${wcol}"></i></div></td>
       <td style="text-align:right;font-weight:700">${u.pct}%</td></tr>`;}).join('')
-    :'<tr><td colspan="6" class="muted">Belum ada data teknisi.</td></tr>';
+    :'<tr><td colspan="6" class="muted">Belum ada data user.</td></tr>';
   // throughput
   const tp=d.throughput||[];const mx=Math.max(...tp,1);
   $('#supVbars').innerHTML=tp.map(v=>`<div class="b" style="height:${Math.round(v/mx*100)}%"><span>${v}</span></div>`).join('');
@@ -2002,10 +2002,11 @@ $('#tpl-do-register')&&$('#tpl-do-register').addEventListener('click',async()=>{
     $('#tpl-register').classList.add('hidden');$('#tpl-file').value='';$('#tpl-file-name').textContent='Belum ada file';toast('Terdaftar & aktif');loadTemplates();}catch(e){toast('Gagal: '+e.message);}});
 async function loadTemplates(){const rows=await api('/api/templates');
   $('#tpl-table').innerHTML=rows.map(t=>`<tr><td>${esc(t.name)}</td><td class="mono">${esc(t.sheet_log)}</td><td class="mono">${esc(t.sheet_detail)}</td>
-    <td>${t.active?'<span class="count">aktif</span>':''}</td><td style="text-align:right;white-space:nowrap">
+    <td>${t.active?'<span class="count">aktif</span>':''}</td><td style="text-align:right">
+    <div style="display:flex;align-items:center;gap:6px;justify-content:flex-end;flex-wrap:nowrap">
     <md-button variant="tonal" size="xs" onclick="openMapping(${t.id})">Mapping</md-button>${t.active?'':`<md-button variant="text" size="xs" onclick="activateTpl(${t.id})">Aktifkan</md-button>`}
     <md-icon-button size="xs" data-tip="Ganti nama" onclick="renameTpl(${t.id},'${esc(t.name).replace(/'/g,"\\'")}')"><span class="mi">edit</span></md-icon-button>
-    ${t.active?'':`<md-icon-button size="xs" data-tip="Hapus" onclick="deleteTpl(${t.id},'${esc(t.name).replace(/'/g,"\\'")}')"><span class="mi">delete</span></md-icon-button>`}</td></tr>`).join('')||'<tr><td colspan=5 class="muted">Belum ada template</td></tr>';
+    ${t.active?'':`<md-icon-button size="xs" data-tip="Hapus" onclick="deleteTpl(${t.id},'${esc(t.name).replace(/'/g,"\\'")}')"><span class="mi">delete</span></md-icon-button>`}</div></td></tr>`).join('')||'<tr><td colspan=5 class="muted">Belum ada template</td></tr>';
   bindTips();}
 window.activateTpl=async id=>{await api('/api/templates/'+id+'/activate',{method:'POST'});toast('Diaktifkan');loadTemplates();};
 window.renameTpl=(id,cur)=>{askInput('Ganti nama template',cur,async nv=>{const name=(nv||'').trim();if(!name||name===cur)return;
@@ -2043,7 +2044,7 @@ window.openMapping=async id=>{S.mapTplId=id;const tpl=await api('/api/templates/
 
 function renderMapPhotos(){const q=($('#map-photosearch').value||'').toLowerCase();
   $('#map-photos').innerHTML=MAP_PH.map((p,i)=>p.label.toLowerCase().includes(q)?
-    `<div class="map-photorow"><span class="lbl" title="${esc(p.label)}">${esc(p.label)}${p.ocr?' · <span style="color:var(--md-sys-color-primary);font-weight:700">OCR</span>':''}</span>
+    `<div class="map-photorow"><span class="lbl" title="${esc(p.label)}">${esc(p.label)}${p.ocr?' · <span data-tip="Kategori ini OCR-nya aktif (dari toggle OCR di Pengaturan → Field Photo). SN dibaca otomatis saat foto diunggah." style="color:var(--md-sys-color-primary);font-weight:700;cursor:help">OCR</span>':''}</span>
       <input class="maptab-inp map-photo-inp" data-i="${i}" placeholder="ketik / pilih" value="${esc(p.cell)}">
       <span class="st ${p.cell?'ok':'no'}">${p.cell?'✓ Terisi':'Belum'}</span>
       <button class="pickbtn" data-i="${i}" data-tip="Pilih sel dari sheet"><span class="mi">grid_on</span></button></div>`:'').join('')
@@ -2199,7 +2200,7 @@ function pcRow(c={}){return `<div class="ecard pc" data-pc>
   <div class="efields f3">
     <div class="field"><label>Kata kunci (koma)</label><input data-k="keywords" placeholder="mis. plang, depan" value="${esc((c.keywords||[]).join(', '))}"></div>
     <div class="field"><label>Prefix SN (koma)</label><input data-k="prefixes" placeholder="mis. KIT, KITX" value="${esc((c.prefixes||[]).join(', '))}"></div>
-    <div class="field snitem-f"${c.ocr?'':' style="display:none"'}><label><span class="mi" style="text-transform:none;font-size:15px;vertical-align:-2px">link</span> Auto-isi SN ke item</label><input data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}"><div class="fhint">Serial hasil OCR otomatis mengisi kolom SN/Tagging item ini di Inventory.</div></div>
+    <div class="field snitem-f"${c.ocr?'':' style="display:none"'}><label><span class="mi" style="text-transform:none;font-size:15px;vertical-align:-2px">link</span> Auto-isi SN ke item <span class="mi" data-tip="Serial hasil OCR otomatis mengisi kolom SN/Tagging item ini di Inventory." style="font-size:14px;vertical-align:-2px;cursor:help;color:var(--md-sys-color-on-surface-variant)">info</span></label><input data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}"></div>
   </div></div>`;}
 function renderPC(){$('#pc-list').innerHTML=(S.cats||[]).map(pcRow).join('');bindTips();}
 $('#pc-add').addEventListener('click',()=>{$('#pc-list').insertAdjacentHTML('beforeend',pcRow());bindTips();});
