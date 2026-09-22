@@ -1765,6 +1765,9 @@ async function commitDelete(id){pendingDel.delete(id);
 /* ---- editor: zoom + crop rasio ---- */
 let ed={};
 function openEditor(file,onDone){ed={onDone,aspect:'free',z:1,minZ:1,tx:0,ty:0};
+  // Reset tombol rasio ke 4:3 tiap kali editor dibuka (biar tampilan = crop, tak nyangkut dari foto sebelumnya)
+  $$('#ed-aspect button').forEach(b=>b.toggleAttribute('selected',b.dataset.value==='1.3333'));
+  $('#ed-zoom').value=1;
   const url=URL.createObjectURL(file);const img=$('#ed-img');img.onload=()=>{ed.iw=img.naturalWidth;ed.ih=img.naturalHeight;edLayout('1.3333');$('#edDlg').show();};img.src=url;}
 function edLayout(a){ed.aspect=a;const view=$('#ed-view');const VW=Math.min(420,view.clientWidth||420);
   const r=(a==='free')?ed.iw/ed.ih:parseFloat(a);const VH=Math.round(VW/r);
