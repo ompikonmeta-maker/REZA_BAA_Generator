@@ -225,7 +225,7 @@
   .md-select[data-menu-open] .arrow{transform:translateY(-50%) rotate(180deg)}
 
   /* Searchable location picker */
-  .locpick{position:relative;display:inline-flex;flex-direction:column;justify-content:center;min-width:230px;height:52px;
+  .locpick{position:relative;display:inline-flex;flex-direction:column;justify-content:center;min-width:280px;max-width:460px;height:52px;
     padding:6px 40px 6px 14px;border:1px solid var(--md-sys-color-outline);border-radius:11px;background:var(--md-sys-color-surface);
     color:var(--md-sys-color-on-surface);cursor:pointer;text-align:left;font:inherit;transition:border-color .15s}
   .locpick:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 4%,transparent)}
@@ -1410,7 +1410,7 @@ class LocationPicker{
   setValue(v){this.value=v==null?'':String(v);this._renderTrigger();return this;}
   getValue(){return this.value;}
   _renderTrigger(){const o=this.items.find(x=>x.value===this.value);const v=this.el.querySelector('.lp-val');
-    v.innerHTML=o?`<span class="lp-code">${esc(o.code)}</span> · ${esc(o.nama||'')}`:'— pilih lokasi —';v.classList.toggle('ph',!o);}
+    v.innerHTML=o?(`<span class="lp-code">${esc(o.code)}</span>`+(o.nama?` · ${esc(o.nama)}`:'')):'— pilih lokasi —';v.classList.toggle('ph',!o);}
   _position(){const r=this.el.getBoundingClientRect();const w=Math.max(300,r.width);
     const left=Math.min(r.left,window.innerWidth-w-8);
     this.panel.style.width=w+'px';this.panel.style.left=Math.max(8,left)+'px';this.panel.style.top=(r.bottom+6)+'px';}
@@ -1428,6 +1428,8 @@ class LocationPicker{
     [...this.list.querySelectorAll('.lp-opt')].forEach(el=>el.addEventListener('click',()=>this._choose(el.dataset.v)));
   }
   _choose(v){this.value=v;this._renderTrigger();this.close();this.onChange&&this.onChange(v);}
+  updateCurrentName(nama){if(!this.value)return;const o=this.items.find(x=>x.value===this.value);
+    if(o&&(o.nama||'')!==(nama||'')){o.nama=nama||'';this._renderTrigger();if(this.open)this._renderList();}}
   _key(e){const rows=this._filtered();
     if(e.key==='ArrowDown'){this.act=Math.min(this.act+1,rows.length-1);this._renderList();this._scrollAct();e.preventDefault();}
     else if(e.key==='ArrowUp'){this.act=Math.max(this.act-1,0);this._renderList();this._scrollAct();e.preventDefault();}
@@ -1883,7 +1885,8 @@ window.openMerkMenu=(el)=>{const tr=el.closest('.tr');const input=tr.querySelect
   openMenu(input,opts.map(o=>({icon:'label',label:o,fn:()=>{input.value=o;updateSummary();}})));};
 function collectInventory(){return $$('#inv-body .tr').map(tr=>{const o={};tr.querySelectorAll('[data-iv]').forEach(i=>o[i.dataset.iv]=i.value);return o;}).filter(o=>Object.values(o).some(v=>v&&v.trim()));}
 function collectData(){const d={};$$('[data-lf]').forEach(el=>d[el.dataset.lf]=el.value);return d;}
-$('#entry-form').addEventListener('input',updateSummary);
+$('#entry-form').addEventListener('input',e=>{updateSummary();
+  const nm=e.target.closest('[data-lf="nama_lokasi"]');if(nm&&pickerSel)pickerSel.updateCurrentName(nm.value.trim());});
 /* Highlight kartu aktif (andal walau field di dalam shadow DOM) */
 $('#entry-form').addEventListener('focusin',e=>{const card=e.target.closest('.entry-main .card');
   $$('#entry-form .entry-main .card').forEach(c=>c.classList.toggle('active-card',c===card));});
