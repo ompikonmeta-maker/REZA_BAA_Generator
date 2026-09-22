@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Opsi penempatan tombol Simpan</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#eef1f1;--pane:#fcfefe;--ink:#141a19;--mut:#586261;--ov:#d6dbda;--pri:#04726f;--sec:#cfe6e5;--onsec:#00413f;--cyan:#7de7e6;--disp:'Sora',system-ui;
+    --good:#1c7d46;--goodbg:#dcf0e2;--warn:#9a5b00;--warnbg:#fdeede;--maxw:860px}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#101413;--pane:#171b1b;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#2d3433;--pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec;--cyan:#123634;--good:#7ddc9f;--goodbg:#123522;--warn:#ffb95c;--warnbg:#3a2a10}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",Roboto,system-ui}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+  .picker{position:sticky;top:0;z-index:40;background:var(--pane);border-bottom:1px solid var(--ov);padding:12px 18px;display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+  .picker b{font-family:var(--disp);margin-right:6px}
+  .opt{border:1px solid var(--ov);background:transparent;border-radius:20px;padding:8px 13px;font-weight:700;color:var(--mut);cursor:pointer;font-size:13px}
+  .opt.on{background:var(--sec);color:var(--onsec);border-color:transparent}
+  .stage{max-width:var(--maxw);margin:18px auto;padding:0 18px 80px}
+  /* section topbar (sticky di dalam stage) */
+  .sbar{display:flex;align-items:center;gap:10px;margin-bottom:14px;padding:12px 16px;background:var(--pane);border:1px solid var(--ov);border-radius:14px}
+  .sbar.sticky{position:sticky;top:64px;z-index:20;box-shadow:0 4px 14px rgba(0,0,0,.06)}
+  .sbar h2{font-family:var(--disp);font-size:16px;margin:0}
+  .chip{display:inline-flex;align-items:center;gap:7px;font-weight:700;font-size:12.5px;padding:6px 11px;border-radius:20px}
+  .chip.ok{background:var(--goodbg);color:var(--good)}.chip.dirty{background:var(--warnbg);color:var(--warn)}
+  .chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+  .grow{flex:1}
+  .btn{border:0;border-radius:20px;padding:9px 16px;font-weight:800;font-size:13px;cursor:pointer;display:inline-flex;align-items:center;gap:7px;background:var(--ov);color:var(--mut);transition:.2s}
+  .btn.hot{background:var(--pri);color:#fff}
+  .btn.hot.pulse{animation:pulse 1.8s ease-in-out infinite}
+  @keyframes pulse{0%,100%{box-shadow:0 4px 14px color-mix(in srgb,var(--pri) 28%,transparent)}50%{box-shadow:0 4px 24px color-mix(in srgb,var(--pri) 55%,transparent)}}
+  .card{background:var(--pane);border:1px solid var(--ov);border-radius:18px;padding:16px 18px;position:relative}
+  .hd{display:flex;align-items:center;gap:9px;margin-bottom:14px}.hd .mi{color:var(--pri)}.hd h3{font-family:var(--disp);font-size:16px;margin:0}
+  .hd .right{margin-left:auto;display:flex;align-items:center;gap:8px}
+  .add{background:var(--cyan);color:#00514e;border:0;border-radius:20px;padding:8px 14px;font-weight:800;cursor:pointer}
+  .frow{display:flex;align-items:center;gap:14px;background:color-mix(in srgb,var(--ink) 3%,var(--pane));border-radius:12px;padding:10px 12px;margin-bottom:10px}
+  .frow .key{font-family:ui-monospace,Consolas,monospace;font-size:12px;color:var(--mut);background:var(--pane);border:1px solid var(--ov);border-radius:8px;padding:8px 10px;width:140px}
+  .frow .nm{font-weight:700;flex:1;min-width:0}
+  .tg{width:46px;height:26px;border-radius:20px;background:var(--ov);position:relative;cursor:pointer;flex:0 0 auto}
+  .tg.on{background:var(--pri)}.tg::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:.2s}.tg.on::after{left:23px}
+  .tglab{font-size:12.5px;color:var(--mut);width:40px}
+  /* FAB */
+  .fab{position:fixed;right:26px;bottom:26px;z-index:45;background:var(--pri);color:#fff;border:0;border-radius:18px;padding:14px 20px;font-weight:800;cursor:pointer;display:none;align-items:center;gap:9px;box-shadow:0 10px 26px color-mix(in srgb,var(--pri) 40%,transparent)}
+  .fab.show{display:inline-flex;animation:pop .3s cubic-bezier(.2,.9,.3,1.4)}
+  @keyframes pop{from{transform:scale(.7);opacity:0}to{transform:none;opacity:1}}
+  .desc{max-width:var(--maxw);margin:14px auto 0;color:var(--mut);font-size:12.5px}.desc b{color:var(--ink)}
+  .hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="picker"><b>Penempatan Simpan:</b>
+  <button class="opt on" data-o="header">Di header kartu</button>
+  <button class="opt" data-o="stickytop">Sticky top bar</button>
+  <button class="opt" data-o="fab">FAB mengambang</button>
+  <button class="opt" data-o="auto">Auto-save (tanpa tombol)</button>
+</div>
+
+<div class="stage">
+  <!-- STICKY TOP BAR (opsi 2) -->
+  <div class="sbar sticky hide" id="barTop">
+    <h2>Field Data Lokasi</h2><span class="grow"></span>
+    <span class="chip ok" id="chipTop"><span class="dot"></span><span>Tersimpan</span></span>
+    <button class="btn" id="saveTop"><span class="mi">save</span> Simpan</button>
+  </div>
+
+  <div class="card">
+    <div class="hd"><span class="mi">list_alt</span><h3>Field Data Lokasi</h3>
+      <div class="right">
+        <!-- HEADER (opsi 1) -->
+        <span class="chip ok hide" id="chipHd"><span class="dot"></span><span>Tersimpan</span></span>
+        <button class="add"><span class="mi">add</span> Field</button>
+        <button class="btn hide" id="saveHd"><span class="mi">save</span> Simpan</button>
+        <!-- AUTO (opsi 4) -->
+        <span class="chip ok hide" id="chipAuto"><span class="mi" style="font-size:15px">cloud_done</span><span id="autoTxt">Tersimpan otomatis</span></span>
+      </div>
+    </div>
+    <div id="rows"></div>
+  </div>
+
+  <p class="desc" id="desc"></p>
+</div>
+
+<!-- FAB (opsi 3) -->
+<button class="fab" id="fab"><span class="mi">save</span> Simpan perubahan</button>
+
+<script>
+  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+  const F=[['nama_lokasi','Nama Lokasi / Koperasi',true],['tanggal','Tanggal Aktivasi',false],['teknisi','Teknisi',false],['pic','PIC Lokasi',false]];
+  $('#rows').innerHTML=F.map((f,i)=>`<div class="frow"><span class="key">${f[0]}</span><span class="nm">${f[1]}</span><span class="tg ${f[2]?'on':''}" data-i="${i}"></span><span class="tglab">Wajib</span></div>`).join('');
+  let mode='header',dirty=false;
+  const DESC={
+    header:'<b>Di header kartu.</b> Tombol Simpan + status ada di kanan judul kartu — selalu terlihat di atas, sejajar tombol "+ Field". Paling ringkas, tanpa elemen mengambang.',
+    stickytop:'<b>Sticky top bar.</b> Judul + status + Simpan menempel di atas saat scroll. Cocok untuk daftar panjang; Simpan selalu terjangkau tanpa ke bawah.',
+    fab:'<b>FAB mengambang.</b> Tombol bundar kanan-bawah yang MUNCUL hanya saat ada perubahan (dengan animasi), lalu hilang setelah disimpan. Menarik perhatian tanpa memakan tempat.',
+    auto:'<b>Auto-save.</b> Tanpa tombol — setiap perubahan langsung tersimpan, status "Tersimpan otomatis" berkedip sebentak. Paling anti-lupa, tapi tak ada aksi eksplisit.'
+  };
+  function apply(){
+    ['barTop'].forEach(id=>$('#'+id).classList.toggle('hide',mode!=='stickytop'));
+    $('#chipHd').classList.toggle('hide',mode!=='header');$('#saveHd').classList.toggle('hide',mode!=='header');
+    $('#chipAuto').classList.toggle('hide',mode!=='auto');
+    $('#fab').classList.remove('show');
+    $('#desc').innerHTML=DESC[mode];
+    setDirty(false);
+  }
+  function setDirty(d){dirty=d;
+    // header
+    upd($('#chipHd'),d);$('#saveHd').classList.toggle('hot',d);$('#saveHd').classList.toggle('pulse',d);
+    // sticky top
+    upd($('#chipTop'),d);$('#saveTop').classList.toggle('hot',d);$('#saveTop').classList.toggle('pulse',d);
+    // fab
+    if(mode==='fab')$('#fab').classList.toggle('show',d);
+    // auto
+    if(mode==='auto'){const c=$('#autoTxt');c.textContent=d?'Menyimpan…':'Tersimpan otomatis';if(d)setTimeout(()=>{c.textContent='Tersimpan otomatis';dirty=false;},700);}
+  }
+  function upd(chip,d){if(!chip)return;chip.className='chip '+(d?'dirty':'ok');chip.querySelector('span:last-child').textContent=d?'Belum disimpan':'Tersimpan';}
+  $$('.tg').forEach(t=>t.addEventListener('click',()=>{t.classList.toggle('on');setDirty(true);}));
+  $$('.opt').forEach(o=>o.addEventListener('click',()=>{$$('.opt').forEach(x=>x.classList.remove('on'));o.classList.add('on');mode=o.dataset.o;apply();}));
+  ['saveHd','saveTop','fab'].forEach(id=>$('#'+id).addEventListener('click',()=>setDirty(false)));
+  apply();
+</script>
+</body>
+</html>
