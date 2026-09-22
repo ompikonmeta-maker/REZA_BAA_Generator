@@ -102,6 +102,19 @@
   /* Sub-view transisi konten Pengaturan */
   .setview{animation:setenter .34s var(--md-sys-motion-easing-emphasized) both}
   @keyframes setenter{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+  /* Kartu Simpan mengambang (selalu terlihat, kanan-atas) */
+  #lf-save,#di-save,#pc-save{display:none}   /* tombol simpan lama disembunyikan, diganti kartu mengambang */
+  .setfs{position:fixed;top:78px;right:24px;z-index:35;display:flex;align-items:center;gap:10px;
+    background:var(--md-sys-color-surface);border:1px solid var(--md-sys-color-outline-variant);border-radius:16px;
+    padding:8px 10px 8px 12px;box-shadow:var(--md-sys-elevation-level3)}
+  .setfs.hidden{display:none}
+  .setfs .setfs-chip{display:inline-flex;align-items:center;gap:7px;font:var(--md-sys-typescale-label-medium);font-weight:800;
+    padding:6px 11px;border-radius:20px;background:color-mix(in srgb,var(--md-sys-color-primary) 14%,transparent);color:var(--md-sys-color-primary)}
+  .setfs .setfs-chip .dot{width:8px;height:8px;border-radius:50%;background:currentColor}
+  .setfs.dirty .setfs-chip{background:color-mix(in srgb,var(--md-sys-color-error) 15%,transparent);color:var(--md-sys-color-error)}
+  .setfs.dirty{animation:setfsPulse 1.8s ease-in-out infinite}
+  @keyframes setfsPulse{0%,100%{box-shadow:var(--md-sys-elevation-level3)}50%{box-shadow:0 6px 26px color-mix(in srgb,var(--md-sys-color-primary) 45%,transparent)}}
+  @media(max-width:600px){.setfs{top:auto;bottom:16px;right:16px}}
   .nav-foot{margin-top:auto;display:flex;gap:4px;justify-content:center;padding-top:8px;border-top:1px solid var(--md-sys-color-outline-variant)}
 
   .canvas{flex:1 1 auto;min-width:0;background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level1);display:flex;flex-direction:column;overflow:hidden}
@@ -1020,6 +1033,10 @@
       </section>
 
       <section id="v-settings" class="hidden">
+        <div class="setfs hidden" id="setfs">
+          <span class="setfs-chip"><span class="dot"></span><span id="setfs-txt">Tersimpan</span></span>
+          <md-button variant="filled" icon="save" id="setfs-btn">Simpan</md-button>
+        </div>
         <div class="card setview hidden" id="set-lokasi">
           <div class="sec"><span class="mi acc">list_alt</span><h3>Field Data Lokasi</h3><span class="grow"></span>
             <md-button id="lf-add" variant="tonal" icon="add">Field</md-button></div>
@@ -1323,7 +1340,18 @@ function showSetSub(key){curSetSub=key;const cfg=SET_SUBS[key];
   $$('.subnav').forEach(s=>s.classList.toggle('active',s.dataset.sub===key));
   Object.values(SET_SUBS).forEach(c=>{const el=$('#'+c.id);if(el)el.classList.toggle('hidden',c.id!==cfg.id);});
   const active=$('#'+cfg.id);if(active){active.classList.remove('setview');void active.offsetWidth;active.classList.add('setview');}
-  $('#pageTitle').textContent='Pengaturan · '+cfg.title;}
+  $('#pageTitle').textContent='Pengaturan · '+cfg.title;setfsShow(key);}
+/* Kartu Simpan mengambang untuk submenu field (lokasi/inventory/photo) */
+const SETFS_SAVE={lokasi:'#lf-save',inventory:'#di-save',photo:'#pc-save'};
+function setfsShow(key){const el=$('#setfs');if(!el)return;
+  if(SETFS_SAVE[key]){el.classList.remove('hidden');setfsDirty(false);}else el.classList.add('hidden');}
+function setfsDirty(d){const el=$('#setfs');if(!el)return;el.classList.toggle('dirty',d);
+  $('#setfs-txt').textContent=d?'Belum disimpan':'Tersimpan';}
+(function(){const v=$('#v-settings');if(!v)return;
+  const mark=()=>{if(SETFS_SAVE[curSetSub])setfsDirty(true);};
+  v.addEventListener('input',mark);v.addEventListener('change',mark);
+  v.addEventListener('click',e=>{if(SETFS_SAVE[curSetSub]&&e.target.closest('.segt button,.ecard-del,#lf-add,#di-add,#pc-add'))mark();});
+  $('#setfs-btn').addEventListener('click',()=>{const sel=SETFS_SAVE[curSetSub];if(!sel)return;$(sel).click();setfsDirty(false);});})();
 /* sub yang mengarah ke view tersendiri (bukan kartu di v-settings) */
 const SET_VIEWS={users:{view:'users',title:'Users',load:()=>loadUsers()},templates:{view:'templates',title:'Template',load:()=>loadTemplates()}};
 function openSettings(sub){
