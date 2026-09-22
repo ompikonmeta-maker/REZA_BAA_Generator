@@ -1123,10 +1123,11 @@
 <md-dialog id="edDlg">
   <span slot="headline">Edit Foto</span>
   <div style="min-width:320px">
-    <div class="rowflex" style="margin-bottom:10px"><span class="muted">Rasio</span>
+    <div class="rowflex" style="margin-bottom:6px"><span class="muted">Rasio</span>
       <md-segmented-button id="ed-aspect">
-        <button data-value="free" selected>Bebas</button><button data-value="1">1:1</button><button data-value="1.3333">4:3</button><button data-value="0.75">3:4</button><button data-value="1.7778">16:9</button>
+        <button data-value="1.3333" selected>4:3</button><button data-value="free">Bebas</button><button data-value="1">1:1</button><button data-value="0.75">3:4</button><button data-value="1.7778">16:9</button>
       </md-segmented-button></div>
+    <p class="muted" style="margin:0 0 10px;font:var(--md-sys-typescale-label-small)"><span class="mi" style="font-size:14px;vertical-align:-2px;color:var(--md-sys-color-primary)">check_circle</span> 4:3 = pas dengan hasil Excel, tanpa bar putih.</p>
     <div id="ed-view" style="position:relative;width:100%;max-width:420px;height:300px;margin:0 auto;overflow:hidden;background:#111;border-radius:12px;touch-action:none;cursor:grab">
       <img id="ed-img" draggable="false" style="position:absolute;left:0;top:0;transform-origin:0 0;user-select:none;pointer-events:none">
     </div>
@@ -1764,7 +1765,7 @@ async function commitDelete(id){pendingDel.delete(id);
 /* ---- editor: zoom + crop rasio ---- */
 let ed={};
 function openEditor(file,onDone){ed={onDone,aspect:'free',z:1,minZ:1,tx:0,ty:0};
-  const url=URL.createObjectURL(file);const img=$('#ed-img');img.onload=()=>{ed.iw=img.naturalWidth;ed.ih=img.naturalHeight;edLayout('free');$('#edDlg').show();};img.src=url;}
+  const url=URL.createObjectURL(file);const img=$('#ed-img');img.onload=()=>{ed.iw=img.naturalWidth;ed.ih=img.naturalHeight;edLayout('1.3333');$('#edDlg').show();};img.src=url;}
 function edLayout(a){ed.aspect=a;const view=$('#ed-view');const VW=Math.min(420,view.clientWidth||420);
   const r=(a==='free')?ed.iw/ed.ih:parseFloat(a);const VH=Math.round(VW/r);
   view.style.height=VH+'px';ed.VW=VW;ed.VH=VH;
