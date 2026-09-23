@@ -147,6 +147,29 @@
   #userDlg{--urole:var(--md-sys-color-primary)}
   .udlg{display:flex;flex-direction:column;gap:12px;width:100%;min-width:0}
   #userDlg::part(dialog){max-width:440px}
+  /* ===== Ganti Password (Opsi B · security) ===== */
+  #pwDlg::part(dialog){max-width:400px}
+  .pwb-head{position:relative;overflow:hidden;margin:-24px -24px 6px;padding:26px 24px 20px;background:radial-gradient(120% 120% at 80% -10%,#0a3b39,#06211f);color:#eafaf9;border-radius:26px 26px 0 0}
+  .pwb-head .r{position:absolute;border:2px solid rgba(127,240,233,.22);border-radius:50%;pointer-events:none}
+  .pwb-head .r1{right:-30px;top:-30px;width:130px;height:130px}
+  .pwb-head .r2{right:-6px;top:-6px;width:80px;height:80px;border-color:rgba(127,240,233,.15)}
+  .pwb-lock{position:relative;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(135deg,#0aa39d,#04726f);color:#fff;font-size:26px;box-shadow:0 8px 24px rgba(10,163,157,.5);margin-bottom:12px}
+  .pwb-t{font:var(--md-sys-typescale-title-large);font-weight:800;margin:0;color:#eafaf9}
+  .pwb-sub{color:#8fd7d2;font:var(--md-sys-typescale-body-small);margin-top:3px}
+  .pwb-banner{display:flex;gap:9px;align-items:flex-start;background:var(--warn-bg);color:var(--warn);border-radius:12px;padding:9px 12px;font:var(--md-sys-typescale-label-medium);margin-bottom:6px}
+  .pwb-banner .mi{font-size:16px;margin-top:1px}
+  .pwf{position:relative;margin-top:12px}
+  .pwf-box{display:flex;align-items:center;gap:10px;background:var(--md-sys-color-surface-container-highest);border:1.5px solid transparent;border-radius:14px;padding:0 12px;height:54px;transition:border-color .25s,box-shadow .25s,background .25s}
+  .pwf-box:focus-within{border-color:var(--md-sys-color-primary);background:var(--md-sys-color-surface);box-shadow:0 0 0 4px color-mix(in srgb,var(--md-sys-color-primary) 14%,transparent)}
+  .pwf-box .lead{color:var(--md-sys-color-on-surface-variant);font-size:20px;transition:color .2s}
+  .pwf-box:focus-within .lead{color:var(--md-sys-color-primary)}
+  .pwf input{flex:1;min-width:0;border:0;background:transparent;color:var(--md-sys-color-on-surface);font-size:15px;outline:none;padding-top:12px}
+  .pwf-lab{position:absolute;left:42px;top:17px;color:var(--md-sys-color-on-surface-variant);pointer-events:none;transition:.16s;font-size:15px}
+  .pwf-box:focus-within+.pwf-lab,.pwf.filled .pwf-lab{top:8px;left:44px;font-size:11px;color:var(--md-sys-color-primary);font-weight:700}
+  .pwf .eye{color:var(--md-sys-color-on-surface-variant);cursor:pointer}
+  .pwb-str{height:5px;border-radius:4px;background:var(--md-sys-color-surface-container-highest);margin:9px 2px 0;overflow:hidden}
+  .pwb-str>i{display:block;height:100%;width:0;border-radius:4px;transition:width .3s,background .3s}
+  .pwb-hint{font:var(--md-sys-typescale-label-small);color:var(--md-sys-color-on-surface-variant);margin:5px 2px 0}
   .uhead{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;padding:16px;border-radius:18px;background:linear-gradient(135deg,color-mix(in srgb,var(--urole) 16%,var(--md-sys-color-surface)),var(--md-sys-color-surface));transition:background .45s}
   .uhead .uglow{position:absolute;right:-40px;top:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--urole) 40%,transparent),transparent 70%);transition:background .5s;pointer-events:none}
   .uava{position:relative;width:52px;height:52px;border-radius:16px;display:grid;place-items:center;color:#fff;font-size:26px;flex:0 0 auto;background:linear-gradient(135deg,var(--urole),color-mix(in srgb,var(--urole) 62%,#000 10%));box-shadow:0 8px 20px color-mix(in srgb,var(--urole) 38%,transparent);transition:.45s}
@@ -1359,13 +1382,21 @@
 </md-dialog>
 
 <md-dialog id="pwDlg">
-  <span slot="headline">Ganti Password</span>
-  <div style="display:flex;flex-direction:column;gap:10px;min-width:300px">
-    <div id="pwForce" class="hidden" style="color:var(--warn);font:var(--md-sys-typescale-body-small)">Login pertama — wajib ganti password.</div>
-    <md-text-field id="pw-old" variant="outlined" label="Password lama" type="password"></md-text-field>
-    <md-text-field id="pw-new" variant="outlined" label="Password baru" type="password"></md-text-field>
+  <div class="pwb">
+    <div class="pwb-head">
+      <span class="r r1"></span><span class="r r2"></span>
+      <div class="pwb-lock"><span class="mi">shield_lock</span></div>
+      <h3 class="pwb-t">Amankan Akun</h3>
+      <div class="pwb-sub">Perbarui kata sandi kamu</div>
+    </div>
+    <div class="pwb-body">
+      <div id="pwForce" class="pwb-banner hidden"><span class="mi">info</span> Login pertama — wajib ganti password.</div>
+      <div class="pwf"><div class="pwf-box"><span class="mi lead">lock_open</span><input id="pw-old" type="password" placeholder=" " autocomplete="current-password" oninput="pwFill(this)"><span class="mi eye" onclick="pwTog(this)">visibility</span></div><span class="pwf-lab">Password lama</span></div>
+      <div class="pwf"><div class="pwf-box"><span class="mi lead">lock</span><input id="pw-new" type="password" placeholder=" " autocomplete="new-password" oninput="pwFill(this);pwStr()"><span class="mi eye" onclick="pwTog(this)">visibility</span></div><span class="pwf-lab">Password baru</span></div>
+      <div class="pwb-str"><i id="pwBar"></i></div><div class="pwb-hint" id="pwHint">Minimal 4 karakter.</div>
+    </div>
   </div>
-  <div slot="actions"><md-button variant="text" id="pwCancel">Batal</md-button><md-button variant="filled" id="pwSave">Simpan</md-button></div>
+  <div slot="actions"><md-button variant="text" id="pwCancel">Batal</md-button><md-button variant="filled" id="pwSave" icon="check">Simpan</md-button></div>
 </md-dialog>
 
 <md-dialog id="galDlg">
@@ -2550,8 +2581,15 @@ async function delUser(u){if(u.id===S.user.id)return toast('Tidak bisa hapus aku
   try{await api('/api/users/'+u.id,{method:'DELETE'});toast('User dihapus');loadUsers();}catch(e){toast('Gagal: '+e.message);}}
 
 /* Ganti password + wajib ganti saat login pertama */
+window.pwFill=el=>{const f=el.closest('.pwf');if(f)f.classList.toggle('filled',!!el.value);};
+window.pwTog=icon=>{const inp=icon.parentElement.querySelector('input');const s=inp.type==='password';inp.type=s?'text':'password';icon.textContent=s?'visibility_off':'visibility';};
+window.pwStr=()=>{const v=$('#pw-new').value;let s=0;if(v.length>=4)s++;if(v.length>=8)s++;if(/[0-9]/.test(v)&&/[a-zA-Z]/.test(v))s++;if(/[^a-zA-Z0-9]/.test(v))s++;
+  $('#pwBar').style.width=[0,30,60,80,100][s]+'%';$('#pwBar').style.background=['','#a3312a','#9a5b00','#1c7d46','#04726f'][s];
+  $('#pwHint').textContent=v?['','Lemah','Cukup','Kuat','Sangat kuat'][s]:'Minimal 4 karakter.';};
 function openPw(force){$('#pwForce').classList.toggle('hidden',!force);$('#pwCancel').style.display=force?'none':'';
-  $('#pw-old').setAttribute('value','');$('#pw-new').setAttribute('value','');$('#pwDlg').show();}
+  ['#pw-old','#pw-new'].forEach(s=>{const el=$(s);el.value='';el.type='password';const f=el.closest('.pwf');if(f)f.classList.remove('filled');
+    const eye=f&&f.querySelector('.eye');if(eye)eye.textContent='visibility';});
+  pwStr();$('#pwDlg').show();setTimeout(()=>$('#pw-old').focus(),80);}
 $('#pwBtn').addEventListener('click',()=>openPw(false));
 $('#pwCancel').addEventListener('click',()=>$('#pwDlg').close());
 $('#pwSave').addEventListener('click',async()=>{try{
