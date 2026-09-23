@@ -26,7 +26,7 @@
   /* brand bf + label */
   .brand{position:absolute;top:6px;left:52px;display:flex;align-items:center;gap:11px;height:44px;
          transition:left var(--dur) var(--spring),transform var(--dur) var(--spring);transition-delay:var(--lead)}   /* expand: bf gerak duluan */
-  .side.rail .brand{left:50%;transform:translateX(-50%);transition-delay:0s}                                        /* collapse: bf nunggu menu, jadi delay pindah ke menu */
+  .side.rail .brand{left:50%;transform:translateX(-50%);gap:0;transition-delay:0s}                                  /* collapse: bf nunggu menu; gap:0 agar tile center */
   .brand .mark{width:44px;height:44px;flex:0 0 auto;display:block}
   .brand .txt{overflow:hidden;transition:opacity .32s ease,max-width var(--dur) var(--spring),transform var(--dur) var(--spring)}
   .brand .bt{font-size:20px;font-weight:800;letter-spacing:-.4px;white-space:nowrap;line-height:1}
