@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>BAA Generator</title>
+<title>BAA.flow — Berita Acara Aktivasi</title>
 <link rel="stylesheet" href="/assets/fonts.css">
 <link rel="stylesheet" href="/assets/md3-tokens.css">
 <link rel="stylesheet" href="/assets/mdmenu.css">
@@ -11,7 +11,7 @@
 <script defer src="/assets/md3-components.js"></script>
 <script defer src="/assets/mdmenu.js"></script>
 <style>
-  :root{ --nav-w:248px; --rail-w:76px; --warn:#9a5b00; --warn-bg:#fff3e0; --good:#1c7d46; --good-bg:#dcf0e2; --bad:#a3312a; --bad-bg:#fbe4e2; }
+  :root{ --nav-w:284px; --rail-w:76px; --warn:#9a5b00; --warn-bg:#fff3e0; --good:#1c7d46; --good-bg:#dcf0e2; --bad:#a3312a; --bad-bg:#fbe4e2; --brand-accent:#ec5a73; }
   :root[data-theme="dark"]{ --warn:#ffb877; --warn-bg:#3a2a12; --good:#7ddc9f; --good-bg:#123522; --bad:#ffb1a8; --bad-bg:#3a1714; }
   *{box-sizing:border-box}
   body{margin:0;background:var(--md-sys-color-surface-container-high);color:var(--md-sys-color-on-surface);font:var(--md-sys-typescale-body-medium);-webkit-font-smoothing:antialiased}
@@ -64,9 +64,18 @@
   .shell{display:flex;height:100vh;gap:16px;padding:16px}
   .nav{flex:0 0 auto;width:var(--nav-w);display:flex;flex-direction:column;gap:2px;background:var(--md-sys-color-surface-container-low);border-radius:24px;box-shadow:var(--md-sys-elevation-level1);padding:14px;overflow:hidden;transition:width var(--md-sys-motion-spring-default-spatial)}
   .shell.rail .nav{width:var(--rail-w)}
-  .nav-head{display:flex;align-items:center;gap:12px;height:52px;padding:0 8px;margin-bottom:6px;white-space:nowrap}
+  .nav-head{display:flex;align-items:center;gap:10px;height:52px;padding:0 6px;margin-bottom:6px;white-space:nowrap}
   .nav-head .name{font:var(--md-sys-typescale-title-large);margin-right:auto;overflow:hidden;transition:opacity .2s,max-width .3s;max-width:150px}
   .shell.rail .nav-head .name{opacity:0;max-width:0}
+  /* brand BAA.flow (wordmark C) */
+  .nav-brand{display:flex;align-items:center;gap:10px;margin-right:auto;overflow:hidden;min-width:0;transition:opacity .2s,max-width .3s;max-width:198px}
+  .nav-brand .mark{width:34px;height:34px;flex:0 0 auto;display:block}
+  .nav-brand .txt{min-width:0;overflow:hidden}
+  .nav-brand .bt{font:var(--md-sys-typescale-title-large);font-weight:800;letter-spacing:-.3px;line-height:1;white-space:nowrap}
+  .nav-brand .bt .dot{color:var(--brand-accent)}
+  .nav-brand .bt .flow{color:var(--md-sys-color-primary);font-weight:700}
+  .nav-brand .bs{display:block;font-size:9px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--md-sys-color-on-surface-variant);line-height:1;margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .shell.rail .nav-brand{opacity:0;max-width:0}
   .navitem{display:flex;align-items:center;gap:14px;height:50px;padding:0 16px;border-radius:14px;cursor:pointer;color:var(--md-sys-color-on-surface-variant);text-decoration:none;white-space:nowrap;position:relative;overflow:hidden}
   .navitem::before{content:'';position:absolute;inset:0;background:currentColor;opacity:0;transition:opacity .15s}
   .navitem:hover::before{opacity:.07}
@@ -794,8 +803,9 @@
   <div class="lg-iris" id="lgIris"></div>
   <div class="lg-greet" id="lgGreet"><h1 id="lgGreetTxt">Hi</h1></div>
   <form class="lgcard" id="lgCard" onsubmit="return false">
-    <span class="lg-logo mi" id="lgLogo">bolt</span>
-    <div class="lg-nm">BAA Generator</div>
+    <span class="lg-logo" id="lgLogo" style="font-weight:800;letter-spacing:-1px">bf</span>
+    <div class="lg-nm">BAA<span style="color:var(--brand-accent)">.</span><span style="color:#7ff0e9;font-weight:700">flow</span></div>
+    <div style="font-size:10px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#8fa8a6;margin-bottom:6px">Berita Acara Aktivasi</div>
     <p class="lg-sub" id="lgSub">Masuk untuk melanjutkan</p>
     <div class="lg-fld"><input id="lg-user" placeholder="Username" autocomplete="username"></div>
     <div class="lg-fld"><input id="lg-pass" type="password" placeholder="Password" autocomplete="current-password"><span class="mi eye" id="lgEye">visibility</span></div>
@@ -808,7 +818,10 @@
   <aside class="nav">
     <div class="nav-head">
       <md-icon-button id="railBtn" data-tip="Ciutkan menu"><span>menu</span></md-icon-button>
-      <span class="name">BAA Generator</span>
+      <span class="nav-brand">
+        <svg class="mark" viewBox="0 0 44 44" fill="none" aria-hidden="true"><defs><linearGradient id="bfg" x1="0" y1="0" x2="44" y2="44"><stop stop-color="#0aa39d"/><stop offset="1" stop-color="#04726f"/></linearGradient></defs><rect width="44" height="44" rx="14" fill="url(#bfg)"/><text x="22" y="30" font-family="system-ui,Segoe UI,Roboto,sans-serif" font-size="19" font-weight="800" fill="#fff" text-anchor="middle" letter-spacing="-1">bf</text><circle cx="33" cy="12.5" r="3" fill="#ec5a73"/></svg>
+        <span class="txt"><span class="bt">BAA<span class="dot">.</span><span class="flow">flow</span></span><span class="bs">Berita Acara Aktivasi</span></span>
+      </span>
     </div>
     <a class="navitem active" data-view="dashboard" data-tip="Dashboard"><span class="mi">dashboard</span><span class="lbl">Dashboard</span></a>
     <a class="navitem" data-view="entry" data-tip="Entry BAA"><span class="mi">edit_document</span><span class="lbl">Entry BAA</span></a>
@@ -1492,9 +1505,9 @@ async function boot(){paint();
 let lgPeekT=null,lgIsAdmin=false;
 function lgAmbience(){const u=$('#lg-user').value.trim();
   clearTimeout(lgPeekT);
-  if(!u){$('#login').classList.remove('danger');lgIsAdmin=false;$('#lgLogo').textContent='bolt';return;}
+  if(!u){$('#login').classList.remove('danger');lgIsAdmin=false;return;}
   lgPeekT=setTimeout(async()=>{try{const r=await api('/api/auth/peek',{method:'POST',body:JSON.stringify({username:u})});
-    lgIsAdmin=!!r.admin;$('#login').classList.toggle('danger',lgIsAdmin);$('#lgLogo').textContent=lgIsAdmin?'shield_person':'bolt';
+    lgIsAdmin=!!r.admin;$('#login').classList.toggle('danger',lgIsAdmin);   /* ambience admin via warna kartu; monogram tetap "bf" */
   }catch(e){/* diamkan */}},300);}
 $('#lg-user').addEventListener('input',lgAmbience);
 $('#lgEye').addEventListener('click',()=>{const p=$('#lg-pass');const s=p.type==='password';p.type=s?'text':'password';$('#lgEye').textContent=s?'visibility_off':'visibility';});
