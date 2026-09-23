@@ -741,6 +741,31 @@
   .ecard-del{border:none;background:transparent;color:var(--md-sys-color-on-surface-variant);cursor:pointer;width:34px;height:34px;border-radius:50%;display:grid;place-items:center}
   .ecard-del:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 8%,transparent);color:var(--warn)}
   .ecard-del .mi{font-size:19px}
+  /* ==== Field Photo & Capture: tabel terpadu (Opsi A) ==== */
+  .pctable{width:100%;overflow-x:auto}
+  .pcthead,.pctr{display:grid;grid-template-columns:34px minmax(150px,1.5fr) 132px minmax(150px,1.6fr) 74px minmax(90px,1fr) minmax(120px,1.1fr) 40px;gap:10px;align-items:center;min-width:760px}
+  .pcthead{padding:0 6px 10px;border-bottom:1.5px solid var(--md-sys-color-outline-variant)}
+  .pcthead>div{font:var(--md-sys-typescale-label-small);font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--md-sys-color-on-surface-variant);display:flex;align-items:center;gap:4px}
+  .pcthead .c-ocr,.pctr .c-ocr{justify-content:center;justify-self:center}
+  .pcthead .thelp{font-size:14px;cursor:help;color:var(--md-sys-color-on-surface-variant);opacity:.8}
+  .pctr{padding:9px 6px;border-radius:12px;animation:pcin .34s cubic-bezier(.2,.9,.3,1)}
+  .pctr:hover{background:var(--md-sys-color-surface-container-high)}
+  .pctr+.pctr{border-top:1px solid color-mix(in srgb,var(--md-sys-color-outline-variant) 55%,transparent)}
+  .pctr .pcno{color:var(--md-sys-color-on-surface-variant);font-weight:800;text-align:center;font:var(--md-sys-typescale-label-large)}
+  .pcinp{width:100%;border:1px solid transparent;background:var(--md-sys-color-surface-container-highest);border-radius:9px;padding:9px 11px;font:var(--md-sys-typescale-body-medium);color:var(--md-sys-color-on-surface);outline:none;
+    transition:border-color .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s cubic-bezier(.2,.8,.2,1),background .22s}
+  .pcinp:focus{border-color:var(--md-sys-color-primary);background:var(--md-sys-color-surface);box-shadow:0 0 0 3px color-mix(in srgb,var(--md-sys-color-primary) 14%,transparent)}
+  .pcinp.pclbl{background:transparent;font-weight:800}
+  .pcinp.pclbl:focus{background:var(--md-sys-color-surface-container-highest)}
+  .pckey{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--md-sys-color-on-surface-variant);background:var(--md-sys-color-surface-container-highest);border-radius:8px;padding:8px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  .pcocrlink{transition:opacity .3s cubic-bezier(.2,.8,.2,1),filter .3s}
+  .pcocrlink.off{opacity:.4;filter:grayscale(.4);pointer-events:none}
+  .pctr.removing{animation:pcout .3s cubic-bezier(.4,0,1,1) forwards}
+  @keyframes pcin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  @keyframes pcout{to{opacity:0;transform:translateX(24px);height:0;padding:0;margin:0}}
+  @media(prefers-reduced-motion:reduce){.pctr{animation:none}.pctr.removing{animation:none}}
+  .pctable .tg.pctg{background:transparent;padding:3px 0;gap:0;justify-content:center}
+  .pctable .tg.pctg.on{background:transparent}
   .tg{display:inline-flex;align-items:center;gap:7px;background:var(--md-sys-color-surface-container-high);border-radius:20px;padding:6px 12px 6px 10px;cursor:pointer;font:var(--md-sys-typescale-label-medium);font-weight:600;color:var(--md-sys-color-on-surface-variant);user-select:none;white-space:nowrap}
   .tg .sw{width:34px;height:20px;border-radius:20px;background:var(--md-sys-color-outline);position:relative;transition:background .18s;flex:0 0 auto}
   .tg .sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--md-sys-color-surface);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
@@ -1775,7 +1800,7 @@ function vwWow(m){if(!m.vel_prev)return '<span class="flat">—</span>';const w=
   return w>=0?`<span class="up">▲ ${w}%</span>`:`<span class="down">▼ ${Math.abs(w)}%</span>`;}
 function vwFeedIcon(a){return ({create:'add_location',update:'edit',save_inventory:'inventory_2',upload_photos:'photo_camera',delete:'delete',delete_photo:'delete',rename:'edit',register:'description',activate:'star'})[a]||'bolt';}
 
-function requiredCats(){const r=S.cats.filter(c=>c.required);return r.length?r:S.cats;} /* semua kategori wajib */
+function requiredCats(){return S.cats||[];} /* semua kategori wajib (konsep "required" dihapus) */
 
 /* ENTRY */
 async function refreshPicker(){const r=await api('/api/locations/options');const opts=r.options||[];
@@ -2498,21 +2523,47 @@ $('#lf-save').addEventListener('click',async()=>{const fields=$$('#lf-list .ecar
   return {key:(g('key').value||'').trim(),label:(g('label').value||'').trim(),type:seg?seg.dataset.v:'text',required:g('required').checked};}).filter(f=>f.key&&f.label);
   try{await api('/api/settings/location-fields',{method:'PUT',body:JSON.stringify({fields})});S.locFields=fields;toast('Field lokasi tersimpan');}catch(e){toast('Gagal: '+e.message);}});
 
-function pcRow(c={}){return `<div class="ecard pc" data-pc>
-  <div class="erow">
-    <input class="keyf" data-k="key" placeholder="key" value="${esc(c.key)}">
-    <input class="labelf" data-k="label" placeholder="Nama kategori" value="${esc(c.label)}">
-    ${pill('ocr','OCR',c.ocr)}${pill('required','Wajib',c.required)}${delBtnCell()}
-  </div>
-  <div class="efields f3">
-    <div class="field"><label>Kata kunci (koma)</label><input data-k="keywords" placeholder="mis. plang, depan" value="${esc((c.keywords||[]).join(', '))}"></div>
-    <div class="field"><label>Prefix SN (koma)</label><input data-k="prefixes" placeholder="mis. KIT, KITX" value="${esc((c.prefixes||[]).join(', '))}"></div>
-    <div class="field snitem-f"${c.ocr?'':' style="display:none"'}><label><span class="mi" style="text-transform:none;font-size:15px;vertical-align:-2px">link</span> Auto-isi SN ke item <span class="mi" data-tip="Serial hasil OCR otomatis mengisi kolom SN/Tagging item ini di Inventory." style="font-size:14px;vertical-align:-2px;cursor:help;color:var(--md-sys-color-on-surface-variant)">info</span></label><input data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}"></div>
-  </div></div>`;}
-function renderPC(){$('#pc-list').innerHTML=(S.cats||[]).map(pcRow).join('');bindTips();}
-$('#pc-add').addEventListener('click',()=>{$('#pc-list').insertAdjacentHTML('beforeend',pcRow());bindTips();});
-$('#pc-save').addEventListener('click',async()=>{const categories=$$('#pc-list .ecard').map(r=>{const g=k=>r.querySelector(`[data-k="${k}"]`);
-  return {key:(g('key').value||'').trim(),label:(g('label').value||'').trim(),ocr:g('ocr').checked,required:g('required').checked,
+/* Field Photo & Capture — tabel terpadu (Opsi A) */
+function pcSlug(s){let b=(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,24);return 'img_'+(b||'baru');}
+const PC_TIPS={
+  label:'Nama kategori foto yang tampil di Entry, checklist, dan hasil export.',
+  key:'Kode unik kategori (otomatis, berawalan img_). Dipakai sistem untuk mencocokkan foto — jadi tidak bisa diubah manual.',
+  keywords:'Saat unggah banyak foto sekaligus: bila nama file memuat salah satu kata ini, foto otomatis masuk ke kategori ini.',
+  ocr:'Bila aktif, nomor seri (SN) dibaca otomatis dari foto kategori ini.',
+  prefixes:'Awalan SN yang benar (mis. AP). Membantu memilih SN yang tepat jika OCR menemukan beberapa kandidat. Aktif saat OCR nyala.',
+  sn_item:'SN hasil OCR otomatis mengisi kolom SN/Tagging pada item Inventory yang namanya kamu tulis di sini. Aktif saat OCR nyala.'};
+function pcRowT(c={}){const isNew=!c.key;const off=c.ocr?'':' off';
+  return `<div class="pctr" data-pc${isNew?' data-new="1"':''}>
+    <div class="pcno"></div>
+    <div><input class="pcinp pclbl" data-k="label" placeholder="Nama kategori" value="${esc(c.label||'')}" oninput="pcLabel(this)"></div>
+    <div><span class="pckey" title="Key otomatis (read-only)">${esc(c.key||pcSlug(c.label||''))}</span><input type="hidden" data-k="key" value="${esc(c.key||'')}"></div>
+    <div><input class="pcinp" data-k="keywords" placeholder="mis. plang, depan" value="${esc((c.keywords||[]).join(', '))}"></div>
+    <div class="c-ocr"><label class="tg pctg"><input type="checkbox" data-k="ocr" ${c.ocr?'checked':''} hidden onchange="pcOcr(this)"><span class="sw"></span></label></div>
+    <div class="c-prefix pcocrlink${off}"><input class="pcinp" data-k="prefixes" placeholder="AP, TLSAT" value="${esc((c.prefixes||[]).join(', '))}"></div>
+    <div class="c-auto pcocrlink${off}"><input class="pcinp" data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}"></div>
+    <div><button type="button" class="ecard-del" data-tip="Hapus kategori" onclick="pcDel(this)"><span class="mi">close</span></button></div>
+  </div>`;}
+function pcHelp(k){return `<span class="mi thelp" data-tip="${esc(PC_TIPS[k])}">info</span>`;}
+function renderPC(){$('#pc-list').innerHTML=`<div class="pctable"><div class="pcthead">
+    <div>No</div>
+    <div>Label Kategori ${pcHelp('label')}</div>
+    <div>Key ${pcHelp('key')}</div>
+    <div>Kata kunci (koma) ${pcHelp('keywords')}</div>
+    <div class="c-ocr">OCR ${pcHelp('ocr')}</div>
+    <div class="c-prefix">Prefix SN ${pcHelp('prefixes')}</div>
+    <div class="c-auto">Auto-isi SN ${pcHelp('sn_item')}</div>
+    <div></div>
+  </div><div id="pc-rows"></div></div>`;
+  $('#pc-rows').innerHTML=(S.cats||[]).map(pcRowT).join('');pcRenumber();bindTips();}
+function pcRenumber(){$$('#pc-rows .pctr').forEach((r,i)=>r.querySelector('.pcno').textContent=i+1);}
+window.pcLabel=el=>{const tr=el.closest('.pctr');if(tr.dataset.new){const k=pcSlug(el.value);tr.querySelector('.pckey').textContent=k;tr.querySelector('[data-k="key"]').value=k;}};
+window.pcOcr=chk=>{const tr=chk.closest('.pctr');tr.querySelectorAll('.pcocrlink').forEach(c=>c.classList.toggle('off',!chk.checked));};
+window.pcDel=btn=>{const tr=btn.closest('.pctr');tr.classList.add('removing');setTimeout(()=>{tr.remove();pcRenumber();},300);};
+$('#pc-add').addEventListener('click',()=>{$('#pc-rows').insertAdjacentHTML('beforeend',pcRowT());pcRenumber();bindTips();
+  const rows=$$('#pc-rows .pctr');rows[rows.length-1].querySelector('.pclbl').focus();});
+$('#pc-save').addEventListener('click',async()=>{const categories=$$('#pc-rows .pctr').map(r=>{const g=k=>r.querySelector(`[data-k="${k}"]`);
+  const label=(g('label').value||'').trim();let key=(g('key').value||'').trim();if(!key)key=pcSlug(label);
+  return {key,label,ocr:g('ocr').checked,required:true,
     keywords:(g('keywords').value||'').split(',').map(s=>s.trim()).filter(Boolean),
     prefixes:(g('prefixes').value||'').split(',').map(s=>s.trim().toUpperCase()).filter(Boolean),
     sn_item:(g('sn_item').value||'').trim()};}).filter(c=>c.key&&c.label);
