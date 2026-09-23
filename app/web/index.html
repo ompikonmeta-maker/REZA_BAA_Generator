@@ -706,8 +706,9 @@
   .help .hrow{display:flex;gap:9px;align-items:baseline;margin:8px 0}.help .hrow .hdot{margin-top:5px;flex:0 0 auto}
   .help p{margin:8px 0;color:var(--md-sys-color-on-surface-variant)}.help b{color:var(--md-sys-color-on-surface)}
   .help hr{border:none;border-top:1px solid var(--md-sys-color-outline-variant);margin:12px 0}
-  .tip{position:fixed;z-index:9999;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);font:var(--md-sys-typescale-body-small);padding:6px 10px;border-radius:6px;pointer-events:none;max-width:280px;white-space:normal;text-align:center;line-height:1.35;transform-origin:top center;opacity:0;transform:translateX(-50%) scale(.85);transition:opacity .15s,transform .15s}
+  .tip{position:fixed;z-index:9999;background:var(--md-sys-color-surface);color:var(--md-sys-color-on-surface);border:1px solid var(--md-sys-color-outline-variant);box-shadow:0 8px 24px rgba(0,0,0,.18);font:var(--md-sys-typescale-body-small);padding:7px 11px;border-radius:10px;pointer-events:none;max-width:280px;white-space:normal;text-align:center;line-height:1.35;transform-origin:bottom center;opacity:0;transform:translateX(-50%) scale(.85);transition:opacity .15s,transform .15s}
   .tip.show{opacity:1;transform:translateX(-50%) scale(1)}
+  .tip.below{transform-origin:top center}
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);padding:12px 18px;border-radius:12px;z-index:9999;opacity:0;transition:opacity .2s;box-shadow:var(--md-sys-elevation-level3)}
   .toast.show{opacity:1}
   .rowflex{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -742,23 +743,25 @@
   .ecard-del:hover{background:color-mix(in srgb,var(--md-sys-color-on-surface) 8%,transparent);color:var(--warn)}
   .ecard-del .mi{font-size:19px}
   /* ==== Field Photo & Capture: tabel terpadu (Opsi A) ==== */
-  .pctable{width:100%;overflow-x:auto}
-  .pcthead,.pctr{display:grid;grid-template-columns:34px minmax(150px,1.5fr) 132px minmax(150px,1.6fr) 74px minmax(90px,1fr) minmax(120px,1.1fr) 40px;gap:10px;align-items:center;min-width:760px}
-  .pcthead{padding:0 6px 10px;border-bottom:1.5px solid var(--md-sys-color-outline-variant)}
-  .pcthead>div{font:var(--md-sys-typescale-label-small);font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--md-sys-color-on-surface-variant);display:flex;align-items:center;gap:4px}
+  .pctable{width:100%}
+  .pcthead,.pctr{display:grid;grid-template-columns:26px minmax(0,2.1fr) minmax(0,1.2fr) minmax(0,1.7fr) 54px minmax(0,1fr) minmax(0,1.2fr) 32px;gap:10px;align-items:center}
+  .pcthead{padding:0 4px 10px;border-bottom:1.5px solid var(--md-sys-color-outline-variant)}
+  .pcthead>div{font:var(--md-sys-typescale-label-small);font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--md-sys-color-on-surface-variant);display:flex;align-items:center;gap:4px;min-width:0}
   .pcthead .c-ocr,.pctr .c-ocr{justify-content:center;justify-self:center}
-  .pcthead .thelp{font-size:14px;cursor:help;color:var(--md-sys-color-on-surface-variant);opacity:.8}
-  .pctr{padding:9px 6px;border-radius:12px;animation:pcin .34s cubic-bezier(.2,.9,.3,1)}
+  .pcthead .thelp{font-size:13px;cursor:help;color:var(--md-sys-color-on-surface-variant);opacity:.8}
+  .pctr{padding:10px 4px;border-radius:12px;animation:pcin .34s cubic-bezier(.2,.9,.3,1)}
+  .pctr>div{min-width:0}
   .pctr:hover{background:var(--md-sys-color-surface-container-high)}
   .pctr+.pctr{border-top:1px solid color-mix(in srgb,var(--md-sys-color-outline-variant) 55%,transparent)}
-  .pctr .pcno{color:var(--md-sys-color-on-surface-variant);font-weight:800;text-align:center;font:var(--md-sys-typescale-label-large)}
-  .pcinp{width:100%;border:1px solid transparent;background:var(--md-sys-color-surface-container-highest);border-radius:9px;padding:9px 11px;font:var(--md-sys-typescale-body-medium);color:var(--md-sys-color-on-surface);outline:none;
+  .pctr .pcno{color:var(--md-sys-color-on-surface-variant);font-weight:700;text-align:center;font:var(--md-sys-typescale-label-large)}
+  .pcinp{width:100%;border:1px solid transparent;background:var(--md-sys-color-surface-container-highest);border-radius:9px;padding:9px 11px;font:var(--md-sys-typescale-body-medium);color:var(--md-sys-color-on-surface);outline:none;text-overflow:ellipsis;
     transition:border-color .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s cubic-bezier(.2,.8,.2,1),background .22s}
   .pcinp:focus{border-color:var(--md-sys-color-primary);background:var(--md-sys-color-surface);box-shadow:0 0 0 3px color-mix(in srgb,var(--md-sys-color-primary) 14%,transparent)}
-  .pcinp.pclbl{background:transparent;font-weight:800}
+  /* label: bobot sedang, boleh membungkus 2 baris agar nama utuh */
+  .pcinp.pclbl{background:transparent;font-weight:600;font-size:13.5px;line-height:1.25;white-space:normal}
   .pcinp.pclbl:focus{background:var(--md-sys-color-surface-container-highest)}
-  .pckey{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--md-sys-color-on-surface-variant);background:var(--md-sys-color-surface-container-highest);border-radius:8px;padding:8px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
-  .pcocrlink{transition:opacity .3s cubic-bezier(.2,.8,.2,1),filter .3s}
+  .pckey{font-family:ui-monospace,Consolas,monospace;font-size:11px;color:var(--md-sys-color-on-surface-variant);background:var(--md-sys-color-surface-container-highest);border-radius:8px;padding:8px 9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+  .pcocrlink{transition:opacity .3s cubic-bezier(.2,.8,.2,1),filter .3s;min-width:0}
   .pcocrlink.off{opacity:.4;filter:grayscale(.4);pointer-events:none}
   .pctr.removing{animation:pcout .3s cubic-bezier(.4,0,1,1) forwards}
   @keyframes pcin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
@@ -766,6 +769,14 @@
   @media(prefers-reduced-motion:reduce){.pctr{animation:none}.pctr.removing{animation:none}}
   .pctable .tg.pctg{background:transparent;padding:3px 0;gap:0;justify-content:center}
   .pctable .tg.pctg.on{background:transparent}
+  /* layar sempit: stacked jadi kartu (tetap tanpa scroll horizontal) */
+  @media(max-width:760px){
+    .pcthead{display:none}
+    .pctr{grid-template-columns:1fr 1fr;gap:8px 10px;padding:12px;border:1px solid var(--md-sys-color-outline-variant);border-radius:14px;margin-bottom:10px}
+    .pctr+.pctr{border-top:1px solid var(--md-sys-color-outline-variant)}
+    .pctr .c-label,.pctr .c-key,.pctr .c-kw{grid-column:1/-1}
+    .pctr .pcno{text-align:left}
+  }
   .tg{display:inline-flex;align-items:center;gap:7px;background:var(--md-sys-color-surface-container-high);border-radius:20px;padding:6px 12px 6px 10px;cursor:pointer;font:var(--md-sys-typescale-label-medium);font-weight:600;color:var(--md-sys-color-on-surface-variant);user-select:none;white-space:nowrap}
   .tg .sw{width:34px;height:20px;border-radius:20px;background:var(--md-sys-color-outline);position:relative;transition:background .18s;flex:0 0 auto}
   .tg .sw::after{content:"";position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:var(--md-sys-color-surface);transition:transform .2s cubic-bezier(.34,1.56,.64,1)}
@@ -1386,7 +1397,10 @@ function revealCards(scope){if(reduced)return;[...scope.querySelectorAll('.card'
 /* tooltip */
 const tip=$('#tip');let ttmr;
 function bindTips(){$$('[data-tip]').forEach(el=>{if(el._tip)return;el._tip=1;
-  const show=()=>{tip.textContent=el.getAttribute('data-tip');const r=el.getBoundingClientRect();tip.style.left=(r.left+r.width/2)+'px';tip.style.top=(r.bottom+8)+'px';clearTimeout(ttmr);ttmr=setTimeout(()=>tip.classList.add('show'),400);};
+  const show=()=>{tip.textContent=el.getAttribute('data-tip');const r=el.getBoundingClientRect();
+    tip.style.left=(r.left+r.width/2)+'px';const th=tip.offsetHeight;let top=r.top-th-8;
+    tip.classList.toggle('below',top<4);if(top<4)top=r.bottom+8;tip.style.top=top+'px';
+    clearTimeout(ttmr);ttmr=setTimeout(()=>tip.classList.add('show'),400);};
   const hide=()=>{clearTimeout(ttmr);tip.classList.remove('show');};
   el.addEventListener('mouseenter',show);el.addEventListener('mouseleave',hide);el.addEventListener('click',hide);});}
 
@@ -2535,10 +2549,10 @@ const PC_TIPS={
 function pcRowT(c={}){const isNew=!c.key;const off=c.ocr?'':' off';
   return `<div class="pctr" data-pc${isNew?' data-new="1"':''}>
     <div class="pcno"></div>
-    <div><input class="pcinp pclbl" data-k="label" placeholder="Nama kategori" value="${esc(c.label||'')}" oninput="pcLabel(this)"></div>
-    <div><span class="pckey" title="Key otomatis (read-only)">${esc(c.key||pcSlug(c.label||''))}</span><input type="hidden" data-k="key" value="${esc(c.key||'')}"></div>
-    <div><input class="pcinp" data-k="keywords" placeholder="mis. plang, depan" value="${esc((c.keywords||[]).join(', '))}"></div>
-    <div class="c-ocr"><label class="tg pctg"><input type="checkbox" data-k="ocr" ${c.ocr?'checked':''} hidden onchange="pcOcr(this)"><span class="sw"></span></label></div>
+    <div class="c-label"><input class="pcinp pclbl" data-k="label" placeholder="Nama kategori" value="${esc(c.label||'')}" oninput="pcLabel(this)"></div>
+    <div class="c-key"><span class="pckey" title="Key otomatis (read-only)">${esc(c.key||pcSlug(c.label||''))}</span><input type="hidden" data-k="key" value="${esc(c.key||'')}"></div>
+    <div class="c-kw"><input class="pcinp" data-k="keywords" placeholder="mis. plang, depan" value="${esc((c.keywords||[]).join(', '))}"></div>
+    <div class="c-ocr"><label class="tg pctg${c.ocr?' on':''}"><input type="checkbox" data-k="ocr" ${c.ocr?'checked':''} hidden onchange="pcOcr(this)"><span class="sw"></span></label></div>
     <div class="c-prefix pcocrlink${off}"><input class="pcinp" data-k="prefixes" placeholder="AP, TLSAT" value="${esc((c.prefixes||[]).join(', '))}"></div>
     <div class="c-auto pcocrlink${off}"><input class="pcinp" data-k="sn_item" placeholder="nama barang" value="${esc(c.sn_item||'')}"></div>
     <div><button type="button" class="ecard-del" data-tip="Hapus kategori" onclick="pcDel(this)"><span class="mi">close</span></button></div>
