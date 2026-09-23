@@ -120,14 +120,58 @@ _DEF_COL_CHARS = 8.43
 _DEF_ROW_PT = 15.0
 
 
-def _col_px(ws, col_idx: int) -> int:
-    """Lebar kolom (1-based) dalam piksel."""
+_MDW_CACHE: dict = {}
+# Maximum Digit Width (px) perkiraan bila font tak bisa diukur langsung.
+_MDW_LOOKUP = {
+    "calibri": 7.0, "aptos": 7.0, "aptos narrow": 6.0, "arial": 7.0,
+    "arial narrow": 6.0, "times new roman": 7.0, "verdana": 8.0,
+    "tahoma": 7.0, "segoe ui": 7.0,
+}
+
+
+def _mdw_px(font_name: str | None, size) -> float:
+    """Lebar digit maksimum (px @96dpi) untuk font+ukuran tertentu.
+    Diukur langsung via PIL (akurat di mesin yang punya fontnya), fallback tabel."""
+    name = (font_name or "Calibri").strip()
+    try:
+        size = float(size or 11.0)
+    except Exception:
+        size = 11.0
+    key = (name.lower(), round(size, 1))
+    if key in _MDW_CACHE:
+        return _MDW_CACHE[key]
+    val = None
+    try:
+        from PIL import ImageFont
+        px = int(round(size * 96.0 / 72.0))
+        for cand in (name, name + " Regular", name.replace(" ", ""), name.replace(" ", "") + "-Regular"):
+            for ext in ("", ".ttf", ".ttc", ".otf"):
+                try:
+                    fnt = ImageFont.truetype(cand + ext, px)
+                    val = max(fnt.getlength(str(d)) for d in range(10))
+                    break
+                except Exception:
+                    continue
+            if val:
+                break
+    except Exception:
+        val = None
+    if not val:
+        val = _MDW_LOOKUP.get(key[0], 7.0)
+    _MDW_CACHE[key] = val
+    return val
+
+
+def _col_px(ws, col_idx: int, mdw: float = 7.0) -> int:
+    """Lebar kolom (1-based) dalam piksel, memperhitungkan MDW font aktif."""
     from openpyxl.utils import get_column_letter
     dim = ws.column_dimensions.get(get_column_letter(col_idx))
     w = dim.width if (dim is not None and dim.width) else None
     if not w:
-        w = (ws.sheet_format.defaultColWidth or _DEF_COL_CHARS)
-    return int(round(w * 7 + 5))          # rumus lebar Excel (MDW=7, Calibri 11)
+        w = ws.sheet_format.defaultColWidth
+        if not w:
+            w = (ws.sheet_format.baseColWidth or 8) + 0.43   # perkiraan default Excel
+    return int(round(w * mdw)) + 5        # rumus lebar Excel (MDW sesuai font)
 
 
 def _row_px(ws, row_idx: int) -> int:
@@ -159,7 +203,12 @@ def _place_photo(ws, xi, anchor: str) -> None:
         ws.add_image(xi, anchor)
         return
 
-    area_w = sum(_col_px(ws, c) for c in range(rng.min_col, rng.max_col + 1))
+    try:
+        f = ws.cell(row=row, column=col).font
+        mdw = _mdw_px(f.name, f.sz)
+    except Exception:
+        mdw = 7.0
+    area_w = sum(_col_px(ws, c, mdw) for c in range(rng.min_col, rng.max_col + 1))
     area_h = sum(_row_px(ws, r) for r in range(rng.min_row, rng.max_row + 1))
     # Muatkan gambar ke dalam area merge (skala turun bila lebih besar), sisakan
     # sedikit margin, agar bisa benar-benar center vertikal + horizontal.
