@@ -706,8 +706,8 @@
   .help .hrow{display:flex;gap:9px;align-items:baseline;margin:8px 0}.help .hrow .hdot{margin-top:5px;flex:0 0 auto}
   .help p{margin:8px 0;color:var(--md-sys-color-on-surface-variant)}.help b{color:var(--md-sys-color-on-surface)}
   .help hr{border:none;border-top:1px solid var(--md-sys-color-outline-variant);margin:12px 0}
-  .tip{position:fixed;z-index:9999;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);font:var(--md-sys-typescale-body-small);padding:5px 9px;border-radius:6px;pointer-events:none;opacity:0;transition:opacity .12s;white-space:nowrap;transform:translateX(-50%)}
-  .tip.show{opacity:1}
+  .tip{position:fixed;z-index:9999;background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);font:var(--md-sys-typescale-body-small);padding:6px 10px;border-radius:6px;pointer-events:none;max-width:280px;white-space:normal;text-align:center;line-height:1.35;transform-origin:top center;opacity:0;transform:translateX(-50%) scale(.85);transition:opacity .15s,transform .15s}
+  .tip.show{opacity:1;transform:translateX(-50%) scale(1)}
   .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:var(--md-sys-color-inverse-surface);color:var(--md-sys-color-inverse-on-surface);padding:12px 18px;border-radius:12px;z-index:9999;opacity:0;transition:opacity .2s;box-shadow:var(--md-sys-elevation-level3)}
   .toast.show{opacity:1}
   .rowflex{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
@@ -1386,7 +1386,7 @@ function revealCards(scope){if(reduced)return;[...scope.querySelectorAll('.card'
 /* tooltip */
 const tip=$('#tip');let ttmr;
 function bindTips(){$$('[data-tip]').forEach(el=>{if(el._tip)return;el._tip=1;
-  const show=()=>{tip.textContent=el.getAttribute('data-tip');const r=el.getBoundingClientRect();tip.style.left=(r.left+r.width/2)+'px';tip.style.top=(r.bottom+8)+'px';clearTimeout(ttmr);ttmr=setTimeout(()=>tip.classList.add('show'),300);};
+  const show=()=>{tip.textContent=el.getAttribute('data-tip');const r=el.getBoundingClientRect();tip.style.left=(r.left+r.width/2)+'px';tip.style.top=(r.bottom+8)+'px';clearTimeout(ttmr);ttmr=setTimeout(()=>tip.classList.add('show'),400);};
   const hide=()=>{clearTimeout(ttmr);tip.classList.remove('show');};
   el.addEventListener('mouseenter',show);el.addEventListener('mouseleave',hide);el.addEventListener('click',hide);});}
 
