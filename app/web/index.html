@@ -2366,7 +2366,9 @@ window.openMapping=async id=>{S.mapTplId=id;const tpl=await api('/api/templates/
   MAP_PH=S.cats.map(c=>({key:c.key,label:c.label,ocr:c.ocr,cell:((map.detail.photos||{})[c.key]||'')}));
   $('#map-photosearch').value='';renderMapPhotos();
   $('#map-pw').value=map.detail.photo_max_w||320;$('#map-ph').value=map.detail.photo_max_h||240;
-  $('#map-pw').oninput=()=>{mapDirty();mapRatio();};$('#map-ph').oninput=()=>{mapDirty();mapRatio();};
+  const PMR=4/3;  // rasio terkunci 4:3
+  $('#map-pw').oninput=()=>{const w=parseInt($('#map-pw').value);if(w>0)$('#map-ph').value=Math.round(w/PMR);mapDirty();mapRatio();};
+  $('#map-ph').oninput=()=>{const h=parseInt($('#map-ph').value);if(h>0)$('#map-pw').value=Math.round(h*PMR);mapDirty();mapRatio();};
   renderRef('');mapRange();mapRatio();mapSteps();
   $('#tpltab-map').disabled=false;mapSwitchTab('map');mapSaved();
   window.scrollTo({top:0,behavior:'smooth'});};
