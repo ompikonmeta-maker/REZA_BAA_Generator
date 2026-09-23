@@ -15,6 +15,7 @@ from .. import config, db
 from ..deps import audit, current_user, get_db
 from ..services import excel as excel_svc
 from ..services import pdf as pdf_svc
+from ..services import xlsx2pdf
 
 router = APIRouter(prefix="/api/export", tags=["export"])
 
@@ -81,6 +82,53 @@ def _safe_name(s: str) -> str:
     return re.sub(r"\s+", " ", s) or "lokasi"
 
 
+def _active_template(conn: sqlite3.Connection):
+    """Template aktif + config, atau (None, None) bila tak ada / file hilang."""
+    tpl = conn.execute("SELECT * FROM templates WHERE active=1 ORDER BY id DESC LIMIT 1").fetchone()
+    if not tpl or not Path(tpl["path"]).exists():
+        return None, None
+    tcfg = json.loads(tpl["config_json"]) if tpl["config_json"] else {}
+    tcfg["sheet_log"] = tpl["sheet_log"]
+    tcfg["sheet_detail"] = tpl["sheet_detail"]
+    return tpl, tcfg
+
+
+def _template_pdf(tpl, tcfg, locs, out_pdf: Path) -> bool:
+    """Isi template -> xlsx (detail saja, tanpa LOG) -> konversi PDF (Excel/LO).
+    True bila berhasil; False agar pemanggil fallback ke reportlab."""
+    if not xlsx2pdf.available():
+        return False
+    import openpyxl
+    tmp_xlsx = out_pdf.with_suffix(".xlsx")
+    ok = False
+    try:
+        excel_svc.build_workbook(tpl["path"], tcfg, locs, str(tmp_xlsx))
+        wb = openpyxl.load_workbook(str(tmp_xlsx))
+        log_name = tcfg.get("sheet_log")
+        if log_name and log_name in wb.sheetnames and len(wb.sheetnames) > 1:
+            del wb[log_name]                  # PDF hanya halaman detail lokasi
+        wb.save(str(tmp_xlsx))
+        ok = xlsx2pdf.xlsx_to_pdf(str(tmp_xlsx), str(out_pdf))
+    except Exception:
+        ok = False
+    finally:
+        try:
+            tmp_xlsx.unlink()
+        except OSError:
+            pass
+    return bool(ok) and out_pdf.exists()
+
+
+def _render_pdf(conn, locs, out_pdf: Path, cats, title) -> str:
+    """PDF mengikuti template aktif bila memungkinkan; jika tidak, pakai
+    generator bawaan (reportlab). Mengembalikan 'template' atau 'builtin'."""
+    tpl, tcfg = _active_template(conn)
+    if tpl and _template_pdf(tpl, tcfg, locs, out_pdf):
+        return "template"
+    pdf_svc.build_pdf(locs, cats, str(out_pdf), app_title=title)
+    return "builtin"
+
+
 @router.get("/excel")
 def export_excel(scope: str = Query("one"), loc_id: int | None = None,
                  q: str = Query(""), status: str = Query("all"),
@@ -115,9 +163,11 @@ def export_pdf(scope: str = Query("one"), loc_id: int | None = None,
     cats = db.get_setting(conn, "photo_categories", [])
     title = db.get_setting(conn, "app_title", "Berita Acara Aktivasi")
     out = _stamp(locs[0]["code"] if scope == "one" else "BAA", "pdf")
-    pdf_svc.build_pdf(locs, cats, str(out), app_title=title)
+    mode = _render_pdf(conn, locs, out, cats, title)
     audit(conn, user, "export_pdf", "export", scope, out.name)
-    return FileResponse(str(out), filename=out.name, media_type="application/pdf")
+    resp = FileResponse(str(out), filename=out.name, media_type="application/pdf")
+    resp.headers["X-PDF-Mode"] = mode
+    return resp
 
 
 @router.get("/pdf-zip")
@@ -140,7 +190,7 @@ def export_pdf_zip(scope: str = Query("filter"), loc_id: int | None = None,
                 entry = f"{nm} ({i}).pdf"; i += 1
             used.add(entry.lower())
             tmp = config.OUTPUT_DIR / f"_tmp_{loc['id']}.pdf"
-            pdf_svc.build_pdf([loc], cats, str(tmp), app_title=title)
+            _render_pdf(conn, [loc], tmp, cats, title)
             zf.write(str(tmp), entry)
             try:
                 tmp.unlink()
