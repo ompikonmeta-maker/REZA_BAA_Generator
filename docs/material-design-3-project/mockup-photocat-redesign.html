@@ -1,0 +1,180 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Redesign Field Photo & Capture (tabel terpadu)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&family=Sora:wght@600;800&display=swap" rel="stylesheet">
+<style>
+  :root{--bg:#e8ebeb;--pane:#fcfefe;--ink:#141a19;--mut:#5a6462;--ov:#cdd3d2;--fieldbg:#f2f5f5;--pri:#04726f;--pri2:#0a9c97;--sec:#cfe6e5;--onsec:#00413f;--tert:#7a5cc0;--disp:'Sora',system-ui;--bad:#a3312a}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0e1212;--pane:#191d1d;--ink:#e6e9e8;--mut:#9fa8a7;--ov:#333b39;--fieldbg:#121616;--pri:#57d6d1;--sec:#0e3b39;--onsec:#9ff0ec}}
+  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.5 "Segoe UI",Roboto,system-ui}
+  .mi{font-family:"Material Symbols Outlined";font-style:normal;vertical-align:-3px}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px 18px 90px}
+  h1{font-family:var(--disp);font-size:20px;margin:0 0 3px}
+  .lead{color:var(--mut);margin:0 0 16px}
+  .tabs{display:inline-flex;background:var(--pane);border:1px solid var(--ov);border-radius:22px;padding:4px;margin-bottom:18px;gap:2px}
+  .tabs button{border:0;background:transparent;color:var(--mut);font-weight:800;font-size:13px;padding:8px 16px;border-radius:18px;cursor:pointer;transition:.2s}
+  .tabs button.on{background:var(--sec);color:var(--onsec)}
+  .card{background:var(--pane);border:1px solid var(--ov);border-radius:20px;padding:16px 18px}
+  .card-h{display:flex;align-items:center;gap:11px;margin-bottom:4px}
+  .card-h .ic{width:36px;height:36px;border-radius:11px;background:var(--sec);color:var(--onsec);display:grid;place-items:center}
+  .card-h h2{font-family:var(--disp);font-size:16px;margin:0;flex:1}
+  .addbtn{border:0;background:var(--pri);color:#fff;border-radius:20px;padding:9px 15px;font-weight:800;font-size:13px;cursor:pointer;display:inline-flex;gap:7px;align-items:center;transition:transform .12s,filter .2s}
+  .addbtn:active{transform:scale(.94)}.addbtn:hover{filter:brightness(1.06)}
+  .sub{color:var(--mut);font-size:12.5px;margin:0 0 14px}
+  .tip{cursor:help;color:var(--mut);font-size:14px;vertical-align:-2px}
+  .banner{display:flex;gap:8px;align-items:center;background:color-mix(in srgb,var(--tert) 12%,transparent);color:var(--ink);border-radius:12px;padding:9px 13px;font-size:12px;margin-bottom:14px}
+  .banner .mi{color:var(--tert)}
+
+  /* ===== toggle switch (dipertahankan) ===== */
+  .sw{width:46px;height:26px;border-radius:20px;background:var(--ov);position:relative;cursor:pointer;flex:0 0 auto;transition:background .25s}
+  .sw.on{background:var(--pri)}
+  .sw::after{content:'';position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .25s cubic-bezier(.34,1.4,.5,1)}
+  .sw.on::after{left:23px}
+  .keychip{font-family:ui-monospace,Consolas,monospace;font-size:11.5px;color:var(--mut);background:var(--fieldbg);border-radius:7px;padding:5px 9px;white-space:nowrap}
+  .inp{width:100%;border:1px solid transparent;background:var(--fieldbg);border-radius:9px;padding:9px 11px;font:inherit;font-size:13px;color:var(--ink);outline:none;transition:border-color .22s cubic-bezier(.2,.8,.2,1),box-shadow .22s cubic-bezier(.2,.8,.2,1),background .22s}
+  .inp:focus{border-color:var(--pri);background:var(--pane);box-shadow:0 0 0 3px color-mix(in srgb,var(--pri) 14%,transparent)}
+  .lbl-in{background:transparent;font-weight:800;font-size:14px;padding:8px 6px}
+  .lbl-in:focus{box-shadow:none;background:var(--fieldbg)}
+  .del{border:0;background:transparent;color:var(--mut);width:32px;height:32px;border-radius:9px;cursor:pointer;display:grid;place-items:center;transition:.15s}
+  .del:hover{background:color-mix(in srgb,var(--bad) 12%,transparent);color:var(--bad)}
+  /* OCR-linked cells */
+  .ocrlink{transition:opacity .3s cubic-bezier(.2,.8,.2,1),filter .3s}
+  .ocrlink.off{opacity:.4;filter:grayscale(.3);pointer-events:none}
+
+  /* ===== OPSI A: tabel terpadu ===== */
+  .tbl{width:100%}
+  .thead,.trow{display:grid;grid-template-columns:34px 1.5fr 118px 1.6fr 78px 1fr 1.1fr 40px;gap:10px;align-items:center}
+  .thead{padding:0 6px 10px;border-bottom:1.5px solid var(--ov)}
+  .thead>div{font-size:10.5px;font-weight:800;letter-spacing:.5px;text-transform:uppercase;color:var(--mut)}
+  .thead .c-ocr,.trow .c-ocr{justify-self:center}
+  .trow{padding:8px 6px;border-radius:12px;overflow:hidden;animation:rowin .34s cubic-bezier(.2,.9,.3,1)}
+  .trow:hover{background:var(--fieldbg)}
+  .trow+.trow{border-top:1px solid color-mix(in srgb,var(--ov) 55%,transparent)}
+  .rowno{color:var(--mut);font-weight:800;text-align:center;font-size:13px}
+  @keyframes rowin{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:none}}
+  .trow.removing{animation:rowout .3s cubic-bezier(.4,0,1,1) forwards}
+  @keyframes rowout{to{opacity:0;transform:translateX(24px);height:0;padding:0;margin:0}}
+
+  /* ===== OPSI B: baris ringkas + expand ===== */
+  .lrow{border:1px solid var(--ov);border-radius:14px;margin-bottom:10px;overflow:hidden;background:var(--pane);transition:box-shadow .2s,border-color .2s;animation:rowin .34s cubic-bezier(.2,.9,.3,1)}
+  .lrow.open{border-color:var(--pri);box-shadow:0 6px 22px color-mix(in srgb,var(--pri) 14%,transparent)}
+  .lhead{display:flex;align-items:center;gap:12px;padding:12px 14px;cursor:pointer}
+  .lhead .no{color:var(--mut);font-weight:800;width:18px;text-align:center}
+  .lhead .nm{flex:1;font-weight:800;font-size:14.5px}
+  .lhead .keychip{margin-right:2px}
+  .lhead .chev{color:var(--mut);transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+  .lrow.open .chev{transform:rotate(180deg)}
+  .ocrbadge{font-size:10.5px;font-weight:800;padding:3px 9px;border-radius:20px;background:var(--fieldbg);color:var(--mut);transition:.25s}
+  .ocrbadge.on{background:var(--sec);color:var(--onsec)}
+  .ldetail{display:grid;grid-template-rows:0fr;transition:grid-template-rows .34s cubic-bezier(.2,.8,.2,1)}
+  .lrow.open .ldetail{grid-template-rows:1fr}
+  .ldetail>.inner{overflow:hidden;min-height:0}
+  .ldetail .pad{padding:2px 14px 14px;display:grid;grid-template-columns:1.4fr 1fr 1.1fr;gap:12px;border-top:1px solid var(--ov)}
+  @media(max-width:720px){.ldetail .pad{grid-template-columns:1fr}.thead,.trow{grid-template-columns:28px 1.3fr 90px 60px 40px}.trow .c-kw,.trow .c-prefix,.trow .c-auto,.thead .c-kw,.thead .c-prefix,.thead .c-auto{display:none}}
+  .fld label{display:block;font-size:10.5px;font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--mut);margin:0 0 5px 2px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Redesign — Field Photo &amp; Capture</h1>
+  <p class="lead">Tabel terpadu (bukan kartu terpisah), tanpa toggle Wajib (semua kategori otomatis masuk progress), kolom Prefix SN &amp; Auto-isi aktif hanya saat OCR ON.</p>
+  <div class="tabs">
+    <button class="on" onclick="setOpt('a',this)">Opsi A · Tabel terpadu</button>
+    <button onclick="setOpt('b',this)">Opsi B · Baris ringkas + expand</button>
+  </div>
+
+  <!-- OPSI A -->
+  <div class="card" id="optA">
+    <div class="card-h"><span class="ic mi">photo_camera</span><h2>Kategori Foto &amp; Capture</h2>
+      <button class="addbtn" onclick="addA()"><span class="mi">add</span> Kategori</button></div>
+    <p class="sub">Klik sel untuk mengedit. Key dibuat otomatis dari Label (prefix <b>img_</b>) &amp; read-only.</p>
+    <div class="banner"><span class="mi">bolt</span> Kolom <b>Prefix SN</b> &amp; <b>Auto-isi SN ke item</b> otomatis aktif saat toggle <b>OCR</b> dinyalakan.</div>
+    <div class="tbl">
+      <div class="thead">
+        <div>No</div><div>Label Kategori</div><div>Key</div>
+        <div>Kata kunci (koma) <span class="mi tip" title="Nama file yang mengandung kata kunci ini otomatis masuk kategori saat unggah massal.">info</span></div>
+        <div class="c-ocr">OCR</div><div class="c-prefix">Prefix SN</div><div class="c-auto">Auto-isi SN ke item</div><div></div>
+      </div>
+      <div id="rowsA"></div>
+    </div>
+  </div>
+
+  <!-- OPSI B -->
+  <div class="card" id="optB" style="display:none">
+    <div class="card-h"><span class="ic mi">photo_camera</span><h2>Kategori Foto &amp; Capture</h2>
+      <button class="addbtn" onclick="addB()"><span class="mi">add</span> Kategori</button></div>
+    <p class="sub">Tiap kategori satu baris ringkas — klik untuk membuka detail (kata kunci, prefix, auto-isi).</p>
+    <div id="rowsB"></div>
+  </div>
+</div>
+
+<script>
+  const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+  const DATA=[
+    {label:'Capture Dashboard (STARMON)',key:'dashboard',kw:'dashboard, starmon',ocr:false,prefix:'',item:''},
+    {label:'Foto Tampak Depan / Plang Lokasi',key:'tampak_depan',kw:'plang, depan, tampak',ocr:false,prefix:'',item:''},
+    {label:'Foto SN Access Point',key:'img_sn_ap',kw:'sn_ap, accesspoint, access_point',ocr:true,prefix:'AP, TLSAT',item:'Access Point'},
+  ];
+  const slug=s=>'img_'+(s||'').toLowerCase().replace(/[^a-z0-9]+/g,'_').replace(/^_+|_+$/g,'').slice(0,24)||'img_baru';
+
+  /* ---------- OPSI A ---------- */
+  function rowA(c,i){const off=c.ocr?'':' off';
+    return `<div class="trow" data-i="${i}">
+      <div class="rowno">${i+1}</div>
+      <div><input class="inp lbl-in" value="${c.label}" oninput="onLabel(this,${i})"></div>
+      <div><span class="keychip" title="key read-only">${c.key}</span></div>
+      <div class="c-kw"><input class="inp" value="${c.kw}" placeholder="kata kunci…"></div>
+      <div class="c-ocr"><div class="sw${c.ocr?' on':''}" onclick="toggleA(this,${i})"></div></div>
+      <div class="c-prefix ocrlink${off}"><input class="inp" value="${c.prefix}" placeholder="AP, TLSAT"></div>
+      <div class="c-auto ocrlink${off}"><input class="inp" value="${c.item}" placeholder="nama barang"></div>
+      <div><button class="del" onclick="delA(this)"><span class="mi">close</span></button></div>
+    </div>`;}
+  function renderA(){$('#rowsA').innerHTML=DATA.map(rowA).join('');}
+  window.onLabel=(el,i)=>{DATA[i].label=el.value;const kc=el.closest('.trow').querySelector('.keychip');
+    // hanya kategori BARU yg key-nya mengikuti label; contoh: kalau key sudah 'img_' auto
+    if((DATA[i].key||'').startsWith('img_'))kc.textContent=slug(el.value);};
+  window.toggleA=(el,i)=>{el.classList.toggle('on');DATA[i].ocr=el.classList.contains('on');
+    const row=el.closest('.trow');row.querySelectorAll('.ocrlink').forEach(c=>c.classList.toggle('off',!DATA[i].ocr));};
+  window.delA=(btn)=>{const row=btn.closest('.trow');row.classList.add('removing');setTimeout(()=>{const i=+row.dataset.i;DATA.splice(i,1);renderA();},300);};
+  window.addA=()=>{DATA.push({label:'',key:'img_baru',kw:'',ocr:false,prefix:'',item:''});renderA();
+    const rows=$$('#rowsA .trow');rows[rows.length-1].querySelector('.lbl-in').focus();};
+
+  /* ---------- OPSI B ---------- */
+  function rowB(c,i){return `<div class="lrow" data-i="${i}">
+      <div class="lhead" onclick="if(!event.target.closest('.sw,.del'))this.parentElement.classList.toggle('open')">
+        <span class="no">${i+1}</span>
+        <span class="nm">${c.label||'(kategori baru)'}</span>
+        <span class="keychip">${c.key}</span>
+        <span class="ocrbadge${c.ocr?' on':''}">OCR</span>
+        <div class="sw${c.ocr?' on':''}" onclick="toggleB(this,${i})"></div>
+        <button class="del" onclick="delB(this)"><span class="mi">close</span></button>
+        <span class="mi chev">expand_more</span>
+      </div>
+      <div class="ldetail"><div class="inner"><div class="pad">
+        <div class="fld"><label>Label kategori</label><input class="inp" value="${c.label}" oninput="onLabelB(this,${i})"></div>
+        <div class="fld"><label>Kata kunci (koma) <span class="mi tip" title="Nama file mengandung kata kunci → auto masuk kategori.">info</span></label><input class="inp" value="${c.kw}"></div>
+        <div class="fld"><label>Key (otomatis)</label><input class="inp" value="${c.key}" readonly style="color:var(--mut)"></div>
+        <div class="fld ocrlink${c.ocr?'':' off'}"><label>Prefix SN (koma)</label><input class="inp" value="${c.prefix}" placeholder="AP, TLSAT"></div>
+        <div class="fld ocrlink${c.ocr?'':' off'}"><label>Auto-isi SN ke item</label><input class="inp" value="${c.item}" placeholder="nama barang"></div>
+      </div></div></div>
+    </div>`;}
+  function renderB(){$('#rowsB').innerHTML=DATA.map(rowB).join('');}
+  window.toggleB=(el,i)=>{event.stopPropagation();el.classList.toggle('on');DATA[i].ocr=el.classList.contains('on');
+    const row=el.closest('.lrow');row.querySelector('.ocrbadge').classList.toggle('on',DATA[i].ocr);
+    row.querySelectorAll('.ocrlink').forEach(c=>c.classList.toggle('off',!DATA[i].ocr));};
+  window.onLabelB=(el,i)=>{DATA[i].label=el.value;const row=el.closest('.lrow');row.querySelector('.nm').textContent=el.value||'(kategori baru)';
+    if((DATA[i].key||'').startsWith('img_')){DATA[i].key=slug(el.value);row.querySelector('.keychip').textContent=DATA[i].key;row.querySelector('[readonly]').value=DATA[i].key;}};
+  window.delB=(btn)=>{event.stopPropagation();const row=btn.closest('.lrow');row.style.transition='.28s';row.style.opacity=0;row.style.transform='translateX(24px)';
+    setTimeout(()=>{DATA.splice(+row.dataset.i,1);renderB();},280);};
+  window.addB=()=>{DATA.push({label:'',key:'img_baru',kw:'',ocr:false,prefix:'',item:''});renderB();
+    const rows=$$('#rowsB .lrow');const last=rows[rows.length-1];last.classList.add('open');};
+
+  function setOpt(o,btn){$$('.tabs button').forEach(b=>b.classList.remove('on'));btn.classList.add('on');
+    $('#optA').style.display=o==='a'?'block':'none';$('#optB').style.display=o==='b'?'block':'none';}
+  renderA();renderB();
+</script>
+</body>
+</html>
