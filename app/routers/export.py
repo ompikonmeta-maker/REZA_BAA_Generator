@@ -108,7 +108,8 @@ def _template_pdf(tpl, tcfg, locs, out_pdf: Path) -> bool:
         if log_name and log_name in wb.sheetnames and len(wb.sheetnames) > 1:
             del wb[log_name]                  # PDF hanya halaman detail lokasi
         wb.save(str(tmp_xlsx))
-        ok = xlsx2pdf.xlsx_to_pdf(str(tmp_xlsx), str(out_pdf))
+        anchors = list((tcfg.get("detail", {}).get("photos", {}) or {}).values())
+        ok = xlsx2pdf.xlsx_to_pdf(str(tmp_xlsx), str(out_pdf), anchors)
     except Exception:
         ok = False
     finally:
@@ -146,6 +147,12 @@ def export_excel(scope: str = Query("one"), loc_id: int | None = None,
     prefix = locs[0]["code"] if scope == "one" else "Log_BAA"
     out = _stamp(prefix, "xlsx")
     res = excel_svc.build_workbook(tpl["path"], tcfg, locs, str(out))
+    # Pusatkan foto secara akurat via Excel (bila tersedia) — bebas font/render
+    try:
+        anchors = list((tcfg.get("detail", {}).get("photos", {}) or {}).values())
+        xlsx2pdf.recenter_images_excel(str(out), anchors)
+    except Exception:
+        pass
     audit(conn, user, "export_excel", "export", scope, out.name)
     resp = FileResponse(str(out), filename=out.name,
                         media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet")
