@@ -93,7 +93,7 @@
   .navitem .pill{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary);border-radius:99px;font:var(--md-sys-typescale-label-small);padding:2px 8px}
   /* RAIL: item jadi kotak center => ikon tepat di tengah highlight */
   .shell.rail .navitem{width:48px;height:48px;padding:0;margin:0 auto;gap:0;justify-content:center;border-radius:16px}
-  .shell.rail .navitem .lbl,.shell.rail .navitem .pill{opacity:0;max-width:0}
+  .shell.rail .navitem .lbl,.shell.rail .navitem .pill{opacity:0;max-width:0;margin:0}
   /* Accordion sub-menu Pengaturan */
   .navgroup{position:relative}
   .navgroup .chev{margin-left:auto;font-size:20px;transition:transform .32s var(--md-sys-motion-easing-emphasized)}
@@ -101,9 +101,9 @@
   .shell.rail .navgroup .chev{display:none}
   /* Flyout Pengaturan saat rail (A: hover · C: klik) — fixed agar tak terpotong nav */
   .navfly{position:fixed;background:var(--md-sys-color-surface-container);border:1px solid var(--md-sys-color-outline-variant);border-radius:14px;box-shadow:var(--md-sys-elevation-level3);padding:8px;min-width:222px;
-    opacity:0;transform:translateX(-8px) scale(.97);transform-origin:left center;pointer-events:none;transition:opacity .16s,transform .2s var(--sp);z-index:6000;display:none}
+    opacity:0;pointer-events:none;transition:opacity .15s ease;z-index:6000;display:none}
   .navfly.show{display:block}
-  .navfly.on{opacity:1;transform:none;pointer-events:auto}
+  .navfly.on{opacity:1;pointer-events:auto}
   .navfly .fh{font:var(--md-sys-typescale-label-small);font-weight:800;letter-spacing:.4px;text-transform:uppercase;color:var(--md-sys-color-on-surface-variant);padding:6px 10px 8px}
   .navfly a{display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:9px;color:var(--md-sys-color-on-surface);cursor:pointer;font:var(--md-sys-typescale-label-large);text-decoration:none;white-space:nowrap}
   .navfly a .mi{font-size:19px;color:var(--md-sys-color-on-surface-variant)}
