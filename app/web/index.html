@@ -149,8 +149,8 @@
   .udlg{display:flex;flex-direction:column;gap:12px;width:100%;min-width:0}
   #userDlg::part(dialog){max-width:440px}
   /* ===== Ganti Password (Opsi B · security) ===== */
-  #pwDlg::part(dialog){max-width:400px}
-  .pwb-head{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;margin:-24px -24px 8px;padding:18px 24px 15px;border-radius:26px 26px 0 0;
+  #pwDlg::part(dialog){max-width:400px;overflow:hidden}
+  .pwb-head{position:relative;overflow:hidden;display:flex;align-items:center;gap:14px;margin:-24px -24px 0;padding:20px 24px 16px;
     background:linear-gradient(135deg,color-mix(in srgb,var(--md-sys-color-primary) 15%,var(--md-sys-color-surface)),var(--md-sys-color-surface))}
   .pwb-glow{position:absolute;right:-40px;top:-50px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--md-sys-color-primary) 36%,transparent),transparent 70%);pointer-events:none}
   .pwb-ava{position:relative;width:50px;height:50px;border-radius:15px;display:grid;place-items:center;color:#fff;font-size:24px;flex:0 0 auto;background:linear-gradient(135deg,var(--md-sys-color-primary),color-mix(in srgb,var(--md-sys-color-primary) 60%,#000 12%));box-shadow:0 8px 20px color-mix(in srgb,var(--md-sys-color-primary) 40%,transparent)}
@@ -1383,18 +1383,16 @@
 </md-dialog>
 
 <md-dialog id="pwDlg">
-  <div class="pwb">
-    <div class="pwb-head">
-      <span class="pwb-glow"></span>
-      <span class="pwb-ava"><span class="mi">password</span></span>
-      <div><h3 class="pwb-t">Ganti Password</h3><div class="pwb-sub">Amankan akunmu dengan kata sandi baru</div></div>
-    </div>
-    <div class="pwb-body">
-      <div id="pwForce" class="pwb-banner hidden"><span class="mi">info</span> Login pertama — wajib ganti password.</div>
-      <div class="pwf"><div class="pwf-box"><span class="mi lead">lock_open</span><input id="pw-old" type="password" placeholder=" " autocomplete="current-password" oninput="pwFill(this)"><span class="mi eye" onclick="pwTog(this)">visibility</span></div><span class="pwf-lab">Password lama</span></div>
-      <div class="pwf"><div class="pwf-box"><span class="mi lead">lock</span><input id="pw-new" type="password" placeholder=" " autocomplete="new-password" oninput="pwFill(this);pwStr()"><span class="mi eye" onclick="pwTog(this)">visibility</span></div><span class="pwf-lab">Password baru</span></div>
-      <div class="pwb-str"><i id="pwBar"></i></div><div class="pwb-hint" id="pwHint">Minimal 4 karakter.</div>
-    </div>
+  <div slot="headline" class="pwb-head">
+    <span class="pwb-glow"></span>
+    <span class="pwb-ava"><span class="mi">password</span></span>
+    <div class="pwb-ht"><h3 class="pwb-t">Ganti Password</h3><div class="pwb-sub">Amankan akunmu dengan kata sandi baru</div></div>
+  </div>
+  <div class="pwb-body">
+    <div id="pwForce" class="pwb-banner hidden"><span class="mi">info</span> Login pertama — wajib ganti password.</div>
+    <div class="pwf"><div class="pwf-box"><span class="mi lead">lock_open</span><input id="pw-old" type="password" placeholder=" " autocomplete="current-password" oninput="pwFill(this)"><span class="mi eye" onclick="pwTog(this)">visibility</span></div><span class="pwf-lab">Password lama</span></div>
+    <div class="pwf"><div class="pwf-box"><span class="mi lead">lock</span><input id="pw-new" type="password" placeholder=" " autocomplete="new-password" oninput="pwFill(this);pwStr()"><span class="mi eye" onclick="pwTog(this)">visibility</span></div><span class="pwf-lab">Password baru</span></div>
+    <div class="pwb-str"><i id="pwBar"></i></div><div class="pwb-hint" id="pwHint">Minimal 4 karakter.</div>
   </div>
   <div slot="actions"><md-button variant="text" id="pwCancel">Batal</md-button><md-button variant="filled" id="pwSave" icon="check">Simpan</md-button></div>
 </md-dialog>
