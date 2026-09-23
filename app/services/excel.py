@@ -161,8 +161,17 @@ def _place_photo(ws, xi, anchor: str) -> None:
 
     area_w = sum(_col_px(ws, c) for c in range(rng.min_col, rng.max_col + 1))
     area_h = sum(_row_px(ws, r) for r in range(rng.min_row, rng.max_row + 1))
-    off_x = max(0, (area_w - int(xi.width)) // 2)
-    off_y = max(0, (area_h - int(xi.height)) // 2)
+    # Muatkan gambar ke dalam area merge (skala turun bila lebih besar), sisakan
+    # sedikit margin, agar bisa benar-benar center vertikal + horizontal.
+    img_w, img_h = int(xi.width), int(xi.height)
+    avail_w, avail_h = max(1, area_w - 8), max(1, area_h - 8)
+    if img_w > avail_w or img_h > avail_h:
+        scale = min(avail_w / img_w, avail_h / img_h)
+        img_w = max(1, int(img_w * scale))
+        img_h = max(1, int(img_h * scale))
+        xi.width, xi.height = img_w, img_h
+    off_x = max(0, (area_w - img_w) // 2)
+    off_y = max(0, (area_h - img_h) // 2)
     marker = AnchorMarker(col=rng.min_col - 1, colOff=pixels_to_EMU(off_x),
                           row=rng.min_row - 1, rowOff=pixels_to_EMU(off_y))
     xi.anchor = OneCellAnchor(
