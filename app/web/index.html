@@ -861,10 +861,10 @@
   .uns-box{background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level5);width:100%;max-width:430px;padding:20px;
     opacity:0;transform:scale(.94) translateY(12px);transition:opacity .38s cubic-bezier(.4,0,.2,1),transform .42s cubic-bezier(.34,1.25,.5,1)}
   .uns-ov.on .uns-box{opacity:1;transform:none}
-  .uns-box .hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-  .uns-box .hd .mi{color:var(--warn)}
-  .uns-box h4{font:var(--md-sys-typescale-title-medium);font-weight:800;margin:0}
-  .uns-box p{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-medium);margin:0 0 18px}
+  .uns-box .hd{display:flex;align-items:center;gap:10px;margin-bottom:8px;text-align:left}
+  .uns-box .hd svg{flex:0 0 auto;color:var(--warn)}
+  .uns-box h4{font:var(--md-sys-typescale-title-small);font-weight:800;margin:0;text-align:left}
+  .uns-box p{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-medium);margin:0 0 18px;text-align:left}
   .uns-box p b{color:var(--md-sys-color-on-surface)}
   .uns-acts{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}
   .uns-btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:12px;padding:10px 14px;font:var(--md-sys-typescale-label-large);font-weight:700;cursor:pointer;transition:.15s}
@@ -1359,7 +1359,7 @@
 
 <!-- Guard: perubahan belum disimpan (Opsi B) -->
 <div class="uns-ov" id="unsOv"><div class="uns-box">
-  <div class="hd"><span class="mi">error</span><h4>Perubahan belum disimpan</h4></div>
+  <div class="hd"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.2 21 19H3L12 3.2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9.5v4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.8" r="1.15" fill="currentColor"/></svg><h4>Perubahan belum disimpan</h4></div>
   <p id="unsBody">Ada perubahan yang belum disimpan.</p>
   <div class="uns-acts">
     <button class="uns-btn stay" id="unsStay">Kembali</button>
