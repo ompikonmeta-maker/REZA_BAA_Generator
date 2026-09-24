@@ -853,6 +853,28 @@
   .segt{display:inline-flex;background:var(--md-sys-color-surface-container-high);border-radius:12px;padding:3px}
   .segt button{border:none;background:transparent;color:var(--md-sys-color-on-surface-variant);padding:7px 14px;border-radius:9px;cursor:pointer;font:var(--md-sys-typescale-label-medium);font-weight:600}
   .segt button.on{background:var(--md-sys-color-surface);color:var(--md-sys-color-primary);box-shadow:var(--md-sys-elevation-level1)}
+  /* ===== Guard: perubahan belum disimpan (Opsi B) ===== */
+  .uns-ov{position:fixed;inset:0;z-index:3000;display:none;align-items:center;justify-content:center;padding:18px;
+    background:color-mix(in srgb,var(--md-sys-color-scrim) 0%,transparent);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
+    pointer-events:none;transition:background .38s ease,backdrop-filter .38s ease}
+  .uns-ov.on{background:color-mix(in srgb,var(--md-sys-color-scrim) 45%,transparent);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);pointer-events:auto}
+  .uns-box{background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level5);width:100%;max-width:430px;padding:20px;
+    opacity:0;transform:scale(.94) translateY(12px);transition:opacity .38s cubic-bezier(.4,0,.2,1),transform .42s cubic-bezier(.34,1.25,.5,1)}
+  .uns-ov.on .uns-box{opacity:1;transform:none}
+  .uns-box .hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .uns-box .hd .mi{color:var(--warn)}
+  .uns-box h4{font:var(--md-sys-typescale-title-medium);font-weight:800;margin:0}
+  .uns-box p{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-medium);margin:0 0 18px}
+  .uns-box p b{color:var(--md-sys-color-on-surface)}
+  .uns-acts{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+  .uns-btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:12px;padding:10px 14px;font:var(--md-sys-typescale-label-large);font-weight:700;cursor:pointer;transition:.15s}
+  .uns-btn .mi{font-size:18px}
+  .uns-btn.stay{background:transparent;color:var(--md-sys-color-primary)}
+  .uns-btn.stay:hover{background:var(--md-sys-color-surface-container-high)}
+  .uns-btn.discard{background:transparent;color:var(--warn)}
+  .uns-btn.discard:hover{background:var(--warn-bg)}
+  .uns-btn.save{background:var(--md-sys-color-primary);color:var(--md-sys-color-on-primary)}
+  .uns-btn.save:hover{filter:brightness(1.06)}
 </style>
 </head>
 <body>
@@ -1335,6 +1357,17 @@
   <div class="sd-b" id="sdBody"></div>
 </aside>
 
+<!-- Guard: perubahan belum disimpan (Opsi B) -->
+<div class="uns-ov" id="unsOv"><div class="uns-box">
+  <div class="hd"><span class="mi">error</span><h4>Perubahan belum disimpan</h4></div>
+  <p id="unsBody">Ada perubahan yang belum disimpan.</p>
+  <div class="uns-acts">
+    <button class="uns-btn stay" id="unsStay">Kembali</button>
+    <button class="uns-btn discard" id="unsDiscard">Abaikan perubahan</button>
+    <button class="uns-btn save" id="unsSave"><span class="mi">save</span>Simpan &amp; lanjut</button>
+  </div>
+</div></div>
+
 <md-dialog id="helpDlg">
   <span slot="headline">Cara membaca Konsol Supervisor</span>
   <div class="help">
@@ -1616,14 +1649,37 @@ async function showApp(){$('#login').classList.add('hidden');$('#app').classList
   $('#app').classList.toggle('is-viewer',S.user.role==='viewer');
   refreshPicker();loadLocations();loadCreators();loadDashboard();if(S.user.role==='admin'){loadTemplates();loadUsers();}bindTips();
   if(S.user.must_change)setTimeout(()=>openPw(true),400);}
+/* ===== Guard: perubahan belum disimpan ===== */
+let entryDirty=false;
+function _visible(id){const el=$('#'+id);return el&&!el.classList.contains('hidden');}
+function isSetDirty(){return !!SETFS_SAVE[curSetSub]&&_visible('v-settings')&&$('#setSaveBtn')&&!$('#setSaveBtn').disabled;}
+function isEntryDirty(){return _visible('v-entry')&&entryDirty&&!!S.loc;}
+function dirtyCtx(){if(isEntryDirty())return 'entry';if(isSetDirty())return 'set';return null;}
+let _unsGo=null,_unsCtx=null;
+function guardLeave(go){const ctx=dirtyCtx();if(!ctx){go();return;}_unsGo=go;_unsCtx=ctx;
+  $('#unsBody').innerHTML=ctx==='entry'
+    ? 'Data BAA lokasi ini ada yang <b>belum disimpan</b>. Simpan dulu sebelum pindah?'
+    : 'Ada perubahan pengaturan yang <b>belum disimpan</b>. Simpan dulu sebelum pindah?';
+  const o=$('#unsOv');o.style.display='flex';requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('on')));}
+function _unsClose(){const o=$('#unsOv');o.classList.remove('on');setTimeout(()=>{o.style.display='none';},430);}
+$('#unsStay').addEventListener('click',()=>{_unsGo=null;_unsClose();});
+$('#unsDiscard').addEventListener('click',()=>{if(_unsCtx==='entry')entryDirty=false;else setSaveDirty(false);
+  const go=_unsGo;_unsGo=null;_unsClose();if(go)go();});
+$('#unsSave').addEventListener('click',()=>{if(_unsCtx==='entry'){entryDirty=false;$('#save-btn').click();}else{$('#setSaveBtn').click();}
+  const go=_unsGo;_unsGo=null;_unsClose();if(go)go();});
+$('#unsOv').addEventListener('click',e=>{if(e.target.id==='unsOv'){_unsGo=null;_unsClose();}});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#unsOv').classList.contains('on')){_unsGo=null;_unsClose();}});
+
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
-  $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
-  $('#setToggle').classList.remove('active');$('#navSettings').classList.remove('open');  /* tutup accordion Pengaturan */
-  const v=n.dataset.view;['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
-  $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');$('#setSaveWrap').classList.add('hidden');
-  $('#pageTitle').classList.toggle('hidden',v==='entry');$('#topGrow').classList.toggle('hidden',v==='entry');
-  if(v==='dashboard')loadDashboard();if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
-  revealCards($('#v-'+v));}));
+  const run=()=>{
+    $$('.navitem[data-view]').forEach(x=>x.classList.remove('active'));n.classList.add('active');
+    $('#setToggle').classList.remove('active');$('#navSettings').classList.remove('open');  /* tutup accordion Pengaturan */
+    const v=n.dataset.view;['dashboard','entry','locations','templates','users','settings'].forEach(x=>$('#v-'+x).classList.toggle('hidden',x!==v));
+    $('#pageTitle').textContent=n.querySelector('.lbl').textContent;$('#entryTools').classList.toggle('hidden',v!=='entry');$('#setSaveWrap').classList.add('hidden');
+    $('#pageTitle').classList.toggle('hidden',v==='entry');$('#topGrow').classList.toggle('hidden',v==='entry');
+    if(v==='dashboard')loadDashboard();if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
+    revealCards($('#v-'+v));};
+  if(n.classList.contains('active'))run(); else guardLeave(run);}));
 
 /* Sub-menu Pengaturan (accordion) */
 const SET_SUBS={lokasi:{id:'set-lokasi',title:'Field Data Lokasi'},inventory:{id:'set-inventory',title:'Field Inventory'},
@@ -1684,8 +1740,10 @@ $('#setToggle').addEventListener('click',e=>{
   const wasOpen=$('#navSettings').classList.contains('open')&&$('#setToggle').classList.contains('active');
   if(wasOpen){$('#navSettings').classList.remove('open');}   /* klik lagi -> lipat, tetap di halaman */
   else openSettings(curSetSub);});
-$$('.subnav').forEach(s=>s.addEventListener('click',()=>openSettings(s.dataset.sub)));
-window.flyGo=sub=>{flyHide(true);openSettings(sub);};
+$$('.subnav').forEach(s=>s.addEventListener('click',()=>{const sub=s.dataset.sub;
+  if(sub===curSetSub){openSettings(sub);return;}guardLeave(()=>openSettings(sub));}));
+window.flyGo=sub=>{const go=()=>{flyHide(true);openSettings(sub);};
+  if(sub===curSetSub)go();else guardLeave(go);};
 document.addEventListener('click',e=>{if(!e.target.closest('#navSettings')&&!e.target.closest('.navfly'))flyHide(true);});
 window.addEventListener('resize',()=>{if(_fly.classList.contains('on'))_flyPos();});
 function navTo(v){const n=document.querySelector('.navitem[data-view="'+v+'"]');if(n)n.click();}
@@ -1950,6 +2008,7 @@ async function openLoc(id){S.loc=await api('/api/locations/'+id);
   $('#entry-empty').classList.add('hidden');$('#entry-form').classList.remove('hidden');
   $('#entry-del').classList.remove('hidden');
   renderLocFields();renderInventory();renderPhotos();updateSummary();bindTips();lockEntry();
+  entryDirty=false;
   requestAnimationFrame(()=>revealCards($('#v-entry')));}
 /* Viewer: kunci semua field entry (read-only) — tombol tulis sudah disembunyikan via CSS */
 function lockEntry(){if(!S.user||S.user.role!=='viewer')return;
@@ -2029,7 +2088,7 @@ function invRow(it={}){
 function renderInventory(){let rows=S.loc.inventory;
   if(!rows.length)rows=(S.invItems.length?S.invItems:['','','']).map(n=>({nama_barang:n}));
   $('#inv-body').innerHTML=rows.map(invRow).join('');bindTips();}
-$('#inv-add').addEventListener('click',()=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow());bindTips();updateSummary();});
+$('#inv-add').addEventListener('click',()=>{$('#inv-body').insertAdjacentHTML('beforeend',invRow());bindTips();updateSummary();if(S.loc)entryDirty=true;});
 /* Combobox Merk/Type: selalu tampilkan SELURUH opsi item (MDMenu), tetap boleh ketik */
 window.openMerkMenu=(el)=>{const tr=el.closest('.tr');const input=tr.querySelector('[data-iv="merk_type"]');
   const name=(tr.querySelector('[data-iv="nama_barang"]').value||'').trim();const opts=merkOpts(name);
@@ -2037,8 +2096,9 @@ window.openMerkMenu=(el)=>{const tr=el.closest('.tr');const input=tr.querySelect
   openMenu(input,opts.map(o=>({icon:'label',label:o,fn:()=>{input.value=o;updateSummary();}})));};
 function collectInventory(){return $$('#inv-body .tr').map(tr=>{const o={};tr.querySelectorAll('[data-iv]').forEach(i=>o[i.dataset.iv]=i.value);return o;}).filter(o=>Object.values(o).some(v=>v&&v.trim()));}
 function collectData(){const d={};$$('[data-lf]').forEach(el=>d[el.dataset.lf]=el.value);return d;}
-$('#entry-form').addEventListener('input',e=>{updateSummary();
+$('#entry-form').addEventListener('input',e=>{if(S.loc)entryDirty=true;updateSummary();
   const nm=e.target.closest('[data-lf="nama_lokasi"]');if(nm&&pickerSel)pickerSel.updateCurrentName(nm.value.trim());});
+$('#entry-form').addEventListener('change',()=>{if(S.loc)entryDirty=true;});
 /* Highlight kartu aktif (andal walau field di dalam shadow DOM) */
 $('#entry-form').addEventListener('focusin',e=>{const card=e.target.closest('.entry-main .card');
   $$('#entry-form .entry-main .card').forEach(c=>c.classList.toggle('active-card',c===card));});
