@@ -858,7 +858,7 @@
     background:color-mix(in srgb,var(--md-sys-color-scrim) 0%,transparent);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
     pointer-events:none;transition:background .38s ease,backdrop-filter .38s ease}
   .uns-ov.on{background:color-mix(in srgb,var(--md-sys-color-scrim) 45%,transparent);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);pointer-events:auto}
-  .uns-box{background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level5);width:100%;max-width:430px;padding:20px;
+  .uns-box{background:var(--md-sys-color-surface);border-radius:24px;box-shadow:var(--md-sys-elevation-level5);width:100%;max-width:480px;padding:20px;
     opacity:0;transform:scale(.94) translateY(12px);transition:opacity .38s cubic-bezier(.4,0,.2,1),transform .42s cubic-bezier(.34,1.25,.5,1)}
   .uns-ov.on .uns-box{opacity:1;transform:none}
   .uns-box .hd{display:flex;align-items:center;gap:10px;margin-bottom:8px;text-align:left}
@@ -866,8 +866,9 @@
   .uns-box h4{font:var(--md-sys-typescale-title-small);font-weight:800;margin:0;text-align:left}
   .uns-box p{color:var(--md-sys-color-on-surface-variant);font:var(--md-sys-typescale-body-medium);margin:0 0 18px;text-align:left}
   .uns-box p b{color:var(--md-sys-color-on-surface)}
-  .uns-acts{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}
-  .uns-btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:12px;padding:10px 14px;font:var(--md-sys-typescale-label-large);font-weight:700;cursor:pointer;transition:.15s}
+  .uns-acts{display:flex;justify-content:flex-end;align-items:center;gap:6px;flex-wrap:nowrap}
+  @media(max-width:440px){.uns-acts{flex-wrap:wrap}}
+  .uns-btn{display:inline-flex;align-items:center;gap:6px;border:none;border-radius:12px;padding:9px 13px;font:var(--md-sys-typescale-label-medium);font-weight:700;white-space:nowrap;cursor:pointer;transition:.15s}
   .uns-btn .mi{font-size:18px}
   .uns-btn.stay{background:transparent;color:var(--md-sys-color-primary)}
   .uns-btn.stay:hover{background:var(--md-sys-color-surface-container-high)}
