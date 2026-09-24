@@ -1272,10 +1272,10 @@
                   <md-button id="map-baca" variant="tonal" icon="table_view">Baca header</md-button>
                 </div>
                 <div id="map-loghint" class="mreadbox"><span class="mi">lightbulb</span>
-                  <div>Klik <b>Baca header</b> untuk membaca sel di baris header (offline, dari file). Lalu tiap field BAA bisa dipetakan ke <b>Header</b> sheet, atau diambil dari <b>Field data</b> / <b>Inventory</b>.</div></div>
+                  <div>Klik <b>Baca header</b> untuk membaca sel di baris header (offline, dari file). Lalu tiap <b>header</b> yang terbaca dipetakan ke <b>field tool ini</b> (Data / Inventory).</div></div>
                 <div id="map-logmap" class="hidden">
                   <div class="map-sub"><div><div class="t"><span class="mi">conversion_path</span>Pemetaan kolom LOG</div>
-                    <div class="map-hint">Per field BAA: pilih sumber → header / field yang dituju → kolom tujuan.</div></div></div>
+                    <div class="map-hint">Tiap header di Log sheet → petakan ke field tool ini (Data / Inventory).</div></div></div>
                   <div class="mrows" id="map-logrows"></div>
                 </div>
               </div>
@@ -1608,10 +1608,13 @@ let pickerSel,tplLogSel,tplDetailSel,mapLogSel,mapDetailSel,roleSel;
 
 /* AUTH */
 async function boot(){paint();
-  pickerSel=new LocationPicker($('#picker'),{onChange:v=>{if(v)openLoc(+v);},onNew:()=>$('#entry-new').click()});
+  pickerSel=new LocationPicker($('#picker'),{onChange:v=>{if(!v)return;const id=+v;
+    if(isEntryDirty()&&S.loc&&id!==S.loc.id)
+      guardLeave(()=>openLoc(id),'lokasi lain',()=>{try{pickerSel.setValue(String(S.loc.id));}catch(e){}});
+    else openLoc(id);},onNew:()=>$('#entry-new').click()});
   tplLogSel=new MDSelect($('#tpl-log'),{label:'Worksheet LOG'});
   tplDetailSel=new MDSelect($('#tpl-detail'),{label:'Worksheet Detail'});
-  mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG',onChange:()=>{if(typeof mapDirty==='function'){mapDirty();mapSteps();if($('#map-logmap')&&!$('#map-logmap').classList.contains('hidden'))renderLogRows();}}});
+  mapLogSel=new MDSelect($('#map-log'),{label:'Sheet LOG',onChange:()=>{if(typeof mapDirty==='function'){mapDirty();mapSteps();if($('#map-logmap')&&!$('#map-logmap').classList.contains('hidden'))bacaHeader();}}});
   mapDetailSel=new MDSelect($('#map-detail'),{label:'Sheet Detail',onChange:()=>{if(typeof mapDirty==='function'){mapDirty();mapSteps();}}});
   // role user kini via kartu (uRoles), bukan dropdown
   locCreatorSel=new MDSelect($('#loc-creator'),{label:'Pembuat',placeholder:'Semua pembuat',onChange:()=>loadLocations()});locCreatorSel.setOptions([{value:'',label:'Semua pembuat'}]).setValue('');
@@ -1656,19 +1659,20 @@ function _visible(id){const el=$('#'+id);return el&&!el.classList.contains('hidd
 function isSetDirty(){return !!SETFS_SAVE[curSetSub]&&_visible('v-settings')&&$('#setSaveBtn')&&!$('#setSaveBtn').disabled;}
 function isEntryDirty(){return _visible('v-entry')&&entryDirty&&!!S.loc;}
 function dirtyCtx(){if(isEntryDirty())return 'entry';if(isSetDirty())return 'set';return null;}
-let _unsGo=null,_unsCtx=null;
-function guardLeave(go,dest){const ctx=dirtyCtx();if(!ctx){go();return;}_unsGo=go;_unsCtx=ctx;
+let _unsGo=null,_unsCtx=null,_unsCancel=null;
+function guardLeave(go,dest,onCancel){const ctx=dirtyCtx();if(!ctx){go();return;}_unsGo=go;_unsCtx=ctx;_unsCancel=onCancel||null;
   const to=dest?(' ke <b>'+esc(dest)+'</b>'):'';
   $('#unsBody').innerHTML='Kamu punya perubahan di halaman ini yang belum disimpan. Simpan dulu sebelum pindah'+to+'?';
   const o=$('#unsOv');o.style.display='flex';requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('on')));}
 function _unsClose(){const o=$('#unsOv');o.classList.remove('on');setTimeout(()=>{o.style.display='none';},430);}
-$('#unsStay').addEventListener('click',()=>{_unsGo=null;_unsClose();});
+function _unsStay(){const cb=_unsCancel;_unsGo=null;_unsCancel=null;_unsClose();if(cb)cb();}
+$('#unsStay').addEventListener('click',_unsStay);
 $('#unsDiscard').addEventListener('click',()=>{if(_unsCtx==='entry')entryDirty=false;else setSaveDirty(false);
-  const go=_unsGo;_unsGo=null;_unsClose();if(go)go();});
+  const go=_unsGo;_unsGo=null;_unsCancel=null;_unsClose();if(go)go();});
 $('#unsSave').addEventListener('click',()=>{if(_unsCtx==='entry'){entryDirty=false;$('#save-btn').click();}else{$('#setSaveBtn').click();}
-  const go=_unsGo;_unsGo=null;_unsClose();if(go)go();});
-$('#unsOv').addEventListener('click',e=>{if(e.target.id==='unsOv'){_unsGo=null;_unsClose();}});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#unsOv').classList.contains('on')){_unsGo=null;_unsClose();}});
+  const go=_unsGo;_unsGo=null;_unsCancel=null;_unsClose();if(go)go();});
+$('#unsOv').addEventListener('click',e=>{if(e.target.id==='unsOv')_unsStay();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#unsOv').classList.contains('on'))_unsStay();});
 
 $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
   const run=()=>{
@@ -1993,14 +1997,16 @@ async function refreshPicker(){const r=await api('/api/locations/options');const
   $('#loc-count').textContent=r.total||'';
   pickerSel.setOptions(opts.map(l=>({value:String(l.id),code:l.code,nama:l.nama||'',status:l.status||'draft'})));
   if(S.loc)pickerSel.setValue(String(S.loc.id));}
-$('#entry-new').addEventListener('click',async()=>{const btn=$('#entry-new');
-  if(btn.hasAttribute('disabled'))return;btn.setAttribute('disabled','');
-  try{if(S.settingsReady)await S.settingsReady;                 /* tunggu settings siap (first-run) */
-    const loc=await api('/api/locations',{method:'POST',body:JSON.stringify({name:'',data:{},status:'draft'})});
-    await refreshPicker();                                       /* pastikan opsi dropdown termasuk lokasi baru dulu */
-    await openLoc(loc.id);                                       /* baru set aktif -> dropdown sinkron dgn kode lokasi */
-    loadLocations();toast('Lokasi '+loc.code+' dibuat');
-  }catch(e){toast('Gagal: '+e.message);}finally{btn.removeAttribute('disabled');}});
+$('#entry-new').addEventListener('click',()=>{const btn=$('#entry-new');
+  if(btn.hasAttribute('disabled'))return;
+  const run=async()=>{btn.setAttribute('disabled','');
+    try{if(S.settingsReady)await S.settingsReady;               /* tunggu settings siap (first-run) */
+      const loc=await api('/api/locations',{method:'POST',body:JSON.stringify({name:'',data:{},status:'draft'})});
+      await refreshPicker();                                     /* pastikan opsi dropdown termasuk lokasi baru dulu */
+      await openLoc(loc.id);                                     /* baru set aktif -> dropdown sinkron dgn kode lokasi */
+      loadLocations();toast('Lokasi '+loc.code+' dibuat');
+    }catch(e){toast('Gagal: '+e.message);}finally{btn.removeAttribute('disabled');}};
+  guardLeave(run,'lokasi baru');});
 $('#entry-del').addEventListener('click',()=>{if(S.loc)confirmDelete(S.loc.id,S.loc.code,true);});
 
 async function openLoc(id){S.loc=await api('/api/locations/'+id);
@@ -2526,7 +2532,8 @@ $$('.mstep').forEach(s=>s.addEventListener('click',()=>{$$('.mstep').forEach(z=>
 function mapDirty(){$('#tpl-save').classList.add('dirty');$('#tpl-saveTxt').textContent='Perubahan belum disimpan';}
 function mapSaved(){$('#tpl-save').classList.remove('dirty');$('#tpl-saveTxt').textContent='Semua perubahan tersimpan';}
 
-let MAP_LOG=[];  // [{field,src:'hdr'|'data'|'inv',ref,col}]
+let MAP_LOGH=[]; // [{col,text,target}] — header Log sheet -> field tool ('f:<logfield>' | 'd:<datakey>' | '')
+let _logRev={};  // reverse map dari config: kolom -> target
 let MAP_TXT=[];  // [{kind:'inv'|'data'|'text',ref,cell}]
 let MAP_IMG=[];  // [{key,label,ocr,cell}]
 
@@ -2544,11 +2551,11 @@ window.openMapping=async id=>{S.mapTplId=id;const tpl=await api('/api/templates/
   const opts=S.sheets.map(s=>({value:s.name,label:s.name}));mapLogSel.setOptions(opts).setValue(tpl.sheet_log);mapDetailSel.setOptions(opts).setValue(tpl.sheet_detail);
   $('#map-headerrow').value=map.log.header_row||2;$('#map-logstart').value=map.log.start_row||3;
   $('#map-headerrow').oninput=mapDirty;$('#map-logstart').oninput=mapDirty;
-  MAP_LOG=LOG_FIELDS.map(f=>({field:f,src:(map.log.sources&&map.log.sources[f])||'hdr',
-    ref:(map.log.value&&map.log.value[f])||'',col:(map.log.columns&&map.log.columns[f])||''}));
-  const hasLog=MAP_LOG.some(r=>r.col||r.ref);
+  _logRev=logRevFromCfg(map);
+  const hasLog=Object.keys(_logRev).length>0;
   $('#map-loghint').classList.toggle('hidden',hasLog);$('#map-logmap').classList.toggle('hidden',!hasLog);
-  if(hasLog)renderLogRows();
+  if(hasLog){MAP_LOGH=detectedHeaders().map(h=>({col:h.col,text:h.text,target:_logRev[h.col]||''}));renderLogRows();}
+  else MAP_LOGH=[];
   MAP_TXT=[];
   INV_FIELDS.forEach(f=>MAP_TXT.push({kind:'inv',ref:f,cell:(map.detail.inventory.cols&&map.detail.inventory.cols[f])||''}));
   Object.entries(map.detail.location_cells||{}).forEach(([cell,field])=>MAP_TXT.push({kind:'data',ref:field,cell}));
@@ -2567,39 +2574,34 @@ window.openMapping=async id=>{S.mapTplId=id;const tpl=await api('/api/templates/
   $$('.mstep').forEach((z,k)=>z.classList.toggle('on',k===0));
   window.scrollTo({top:0,behavior:'smooth'});};
 
-/* ---- Sheet Log: baca header + baris pemetaan ---- */
+/* ---- Sheet Log: header Log sheet -> field tool ---- */
+const LOG_STD_DATA=[['no','No'],['lokasi','Lokasi'],['foto_lengkap','Foto Lengkap']];
+function logRevFromCfg(map){const rev={},cols=(map.log&&map.log.columns)||{},src=(map.log&&map.log.sources)||{},val=(map.log&&map.log.value)||{};
+  Object.keys(cols).forEach(f=>{const c=(cols[f]||'').toUpperCase();if(!c)return;
+    rev[c]=(src[f]==='data')?('d:'+(val[f]||f)):('f:'+f);});return rev;}
+function logTargetOpts(sel){
+  const data=LOG_STD_DATA.map(([k,l])=>['f:'+k,l]).concat((S.locFields||[]).map(x=>['d:'+x.key,x.label]));
+  const inv=INV_FIELDS.map(f=>['f:'+f,INV_LABELS[f]||f]);
+  const grp=(lbl,items)=>`<optgroup label="${lbl}">`+items.map(([v,l])=>`<option value="${v}" ${v===sel?'selected':''}>${esc(l)}</option>`).join('')+`</optgroup>`;
+  return `<option value="">— (abaikan) —</option>`+grp('Data / umum',data)+grp('Inventory',inv);}
 function bacaHeader(){
   const heads=detectedHeaders();
   const rx={no:/^no\.?$|nomor/,lokasi:/lokasi|site/,nama_barang:/nama|barang|item|perangkat/,merk_type:/merk|type|tipe|model/,jumlah:/qty|jumlah|jml|quantity/,sn_tagging:/\bsn\b|serial|tagging/,keterangan:/ket|remark|catatan/,foto_lengkap:/foto/};
-  MAP_LOG.forEach(r=>{if(r.src==='hdr'&&!r.col){const lbl=(LOG_LABELS[r.field]||r.field).toLowerCase();
-    const hit=heads.find(h=>{const t=h.text.toLowerCase();return t.includes(lbl)||lbl.includes(t)||(rx[r.field]&&rx[r.field].test(t));});
-    if(hit)r.col=hit.col;}});
+  const prev={};MAP_LOGH.forEach(r=>{if(r.target)prev[r.col]=r.target;});
+  const guess=h=>{if(prev[h.col])return prev[h.col];if(_logRev[h.col])return _logRev[h.col];
+    const t=(h.text||'').toLowerCase();for(const k in rx){if(rx[k].test(t))return 'f:'+k;}return '';};
+  MAP_LOGH=heads.map(h=>({col:h.col,text:h.text,target:guess(h)}));
   $('#map-loghint').classList.add('hidden');$('#map-logmap').classList.remove('hidden');
   renderLogRows();mapDirty();mapSteps();
   toast(heads.length?heads.length+' header terbaca':'Tak ada teks di baris header itu — cek nomornya');}
 $('#map-baca')&&$('#map-baca').addEventListener('click',bacaHeader);
 
 function renderLogRows(){
-  const heads=detectedHeaders();
-  const hopts=sel=>{let o=`<option value="">— pilih header —</option>`+heads.map(h=>`<option value="${h.col}" ${h.col===sel?'selected':''}>${esc(h.col)} — ${esc(h.text)}</option>`).join('');
-    if(sel&&!heads.some(h=>h.col===sel))o+=`<option value="${esc(sel)}" selected>${esc(sel)} — (kolom manual)</option>`;return o;};
-  const dopts=sel=>`<option value="">— pilih field —</option>`+(S.locFields||[]).map(f=>`<option value="${esc(f.key)}" ${f.key===sel?'selected':''}>${esc(f.label)}</option>`).join('');
-  const iopts=sel=>`<option value="">— pilih field —</option>`+INV_FIELDS.map(f=>`<option value="${f}" ${f===sel?'selected':''}>${esc(INV_LABELS[f]||f)}</option>`).join('');
-  $('#map-logrows').innerHTML=MAP_LOG.map((r,i)=>{
-    const tag=r.src==='data'?'<span class="mtag data">Data</span>':r.src==='inv'?'<span class="mtag inv">Inv</span>':'<span class="mtag hdr">Hdr</span>';
-    const val=r.src==='hdr'
-      ? `<select class="msel" data-i="${i}" data-role="hdr">${hopts(r.col)}</select>`
-      : `<select class="msel" data-i="${i}" data-role="ref">${(r.src==='data'?dopts:iopts)(r.ref)}</select><input class="maptab-inp" data-i="${i}" data-role="col" placeholder="kolom" value="${esc(r.col)}" style="width:80px">`;
-    return `<div class="mrow"><div class="mk"><span class="kt">${esc(LOG_LABELS[r.field]||r.field)}</span></div>
-      <div class="mv"><select class="msel msrc" data-i="${i}" data-role="src">
-        <option value="hdr" ${r.src==='hdr'?'selected':''}>Header</option>
-        <option value="data" ${r.src==='data'?'selected':''}>Field data</option>
-        <option value="inv" ${r.src==='inv'?'selected':''}>Inventory</option></select>
-      <span class="mi arrow">arrow_forward</span>${tag}${val}</div></div>`;}).join('');
-  $$('#map-logrows [data-role=src]').forEach(s=>s.onchange=()=>{const i=+s.dataset.i;MAP_LOG[i].src=s.value;if(s.value!=='hdr')MAP_LOG[i].col='';renderLogRows();mapDirty();mapSteps();});
-  $$('#map-logrows [data-role=hdr]').forEach(s=>s.onchange=()=>{MAP_LOG[+s.dataset.i].col=s.value;mapDirty();mapSteps();});
-  $$('#map-logrows [data-role=ref]').forEach(s=>s.onchange=()=>{MAP_LOG[+s.dataset.i].ref=s.value;mapDirty();mapSteps();});
-  $$('#map-logrows [data-role=col]').forEach(inp=>inp.oninput=()=>{MAP_LOG[+inp.dataset.i].col=inp.value.trim().toUpperCase();mapDirty();mapSteps();});}
+  $('#map-logrows').innerHTML=MAP_LOGH.map((r,i)=>
+    `<div class="mrow"><div class="mk"><span class="mtag hdr">Hdr</span><span class="kt" title="${esc(r.col)} — ${esc(r.text)}">${esc(r.col)} — ${esc(r.text)}</span></div>
+      <div class="mv"><span class="mi arrow">arrow_forward</span><select class="msel map-to" data-i="${i}">${logTargetOpts(r.target)}</select></div></div>`).join('')
+    ||'<p class="muted" style="font:var(--md-sys-typescale-label-small)">Tak ada header terbaca. Cek nomor baris header lalu klik Baca header.</p>';
+  $$('#map-logrows .map-to').forEach(s=>s.onchange=()=>{MAP_LOGH[+s.dataset.i].target=s.value;mapDirty();mapSteps();});}
 
 /* ---- Sheet Detail: Text mapping ---- */
 function renderTxtRows(){
@@ -2636,13 +2638,13 @@ function mapRatio(){const w=parseInt($('#map-pw').value)||1,h=parseInt($('#map-p
   const g=(a,b)=>b?g(b,a%b):a,d=g(w,h)||1;$('#map-ratio').textContent=`${w/d}:${h/d}`;mapSteps();}
 
 function mapSteps(){
-  const logT=MAP_LOG.length,logDone=MAP_LOG.filter(r=>r.col&&(r.src==='hdr'||r.ref)).length;
+  const logT=MAP_LOGH.length,logDone=MAP_LOGH.filter(r=>r.target).length;
   const txtT=MAP_TXT.length,txtDone=MAP_TXT.filter(r=>r.cell&&r.ref!=='').length;
   const phN=MAP_IMG.filter(p=>p.cell).length,phT=MAP_IMG.length;
   $('#mstep1').textContent=(mapLogSel.getValue()||'?')+' · '+(mapDetailSel.getValue()||'?');
-  $('#mstep2').textContent=logDone+'/'+logT+' kolom';
+  $('#mstep2').textContent=logT?logDone+'/'+logT+' header':'belum baca';
   $('#mstep3').textContent=(txtDone)+' teks · '+phN+'/'+phT+' foto';
-  $('.mstep[data-go=ms2]').classList.toggle('done',logT>0&&logDone===logT);
+  $('.mstep[data-go=ms2]').classList.toggle('done',logDone>0);
   $('.mstep[data-go=ms3]').classList.toggle('done',phT>0&&phN===phT);
   const filled=logDone+txtDone+phN,total=(logT+txtT+phT)||1,pct=Math.round(filled/total*100);
   $('#map-pct').textContent=pct+'% terisi';
@@ -2651,7 +2653,9 @@ function mapSteps(){
 $('#map-save')&&$('#map-save').addEventListener('click',async()=>{const cfg=structuredClone(DEFAULT_MAP);
   cfg.log.header_row=parseInt($('#map-headerrow').value)||2;cfg.log.start_row=parseInt($('#map-logstart').value)||3;
   cfg.log.columns={};cfg.log.sources={};cfg.log.value={};
-  MAP_LOG.forEach(r=>{cfg.log.columns[r.field]=(r.col||'').toUpperCase();cfg.log.sources[r.field]=r.src;if(r.src!=='hdr'&&r.ref)cfg.log.value[r.field]=r.ref;});
+  MAP_LOGH.forEach(r=>{if(!r.target)return;const p=r.target.indexOf(':'),kind=r.target.slice(0,p),key=r.target.slice(p+1);
+    if(!key)return;cfg.log.columns[key]=(r.col||'').toUpperCase();
+    if(kind==='d'){cfg.log.sources[key]='data';cfg.log.value[key]=key;}});
   cfg.detail.inventory.cols={};cfg.detail.location_cells={};cfg.detail.static_cells={};
   MAP_TXT.forEach(r=>{
     if(r.kind==='inv'){if(r.ref&&r.cell)cfg.detail.inventory.cols[r.ref]=r.cell.toUpperCase();}
