@@ -167,8 +167,7 @@
       </div>
 
       <div id="logmap" style="display:none">
-        <div class="chips" id="detected"></div>
-        <div class="sub"><div class="lbl"><span class="mi">conversion_path</span>Pemetaan kolom LOG</div>
+        <div class="sub" style="margin-top:18px"><div class="lbl"><span class="mi">conversion_path</span>Pemetaan kolom LOG</div>
           <div class="hint">Per field BAA: pilih sumber → lalu header / field yang dituju.</div></div>
         <div class="rows" id="logrows"></div>
       </div>
@@ -260,8 +259,6 @@
   function readHeader(){
     $('#loghint').style.display='none';
     $('#logmap').style.display='block';
-    $('#detected').innerHTML='<span class="chip" style="color:var(--faint);border:none;background:transparent;padding-left:0">Header terbaca:</span>'+
-      DETECTED.map(([c,t])=>`<span class="chip"><b>${c}</b>${t}</span>`).join('');
     $('#logrows').innerHTML=LOG_FIELDS.map(([k,lbl])=>{
       const g=GUESS[k]||'';
       return `<div class="row" data-guess="${g}">
