@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Mockup — Template Mapping v2 (minimalis)</title>
+<title>Mockup — Template Mapping v2 (rail + progress)</title>
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20,400,0,0&display=swap" rel="stylesheet">
 <style>
   :root{
@@ -15,215 +15,236 @@
   }
   *{box-sizing:border-box}
   body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 "Segoe UI",Roboto,system-ui;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:880px;margin:0 auto;padding:26px 18px 120px}
+  .wrap{max-width:1080px;margin:0 auto;padding:22px 18px 40px}
   .mi{font-family:"Material Symbols Outlined";font-size:20px;line-height:1;vertical-align:middle}
 
-  /* page head */
-  .phead{margin:0 0 22px}
-  .phead h1{font-family:'Sora';font-size:19px;font-weight:800;margin:0 0 4px;letter-spacing:-.2px}
-  .phead p{color:var(--mut);margin:0;font-size:13px}
-  .crumb{display:flex;align-items:center;gap:7px;color:var(--faint);font-size:12px;font-weight:600;margin-bottom:14px}
+  .crumb{display:flex;align-items:center;gap:7px;color:var(--faint);font-size:12px;font-weight:600;margin-bottom:16px}
   .crumb b{color:var(--pri)}
   .crumb .mi{font-size:15px}
 
-  /* section */
-  .sec{background:var(--pane);border:1px solid var(--line);border-radius:22px;margin-bottom:14px;overflow:hidden;transition:border-color .25s}
-  .sec.open{border-color:#dbe2e1}
-  .sec-h{display:flex;align-items:center;gap:14px;padding:17px 20px;cursor:pointer;user-select:none}
-  .sec-h .ix{width:30px;height:30px;border-radius:10px;background:var(--field);color:var(--pri);display:grid;place-items:center;flex:0 0 auto;transition:.25s}
-  .sec.open .sec-h .ix{background:var(--sec);color:var(--onsec)}
+  /* layout: rail kiri + konten kanan */
+  .layout{display:grid;grid-template-columns:250px 1fr;gap:20px;align-items:start}
+  @media(max-width:820px){.layout{grid-template-columns:1fr}}
+
+  /* ===== RAIL (kartu step + progress + simpan menyatu) ===== */
+  .rail{position:sticky;top:22px;background:var(--pane);border:1px solid var(--line);border-radius:20px;padding:8px;box-shadow:0 2px 10px rgba(20,30,29,.04)}
+  @media(max-width:820px){.rail{position:static}}
+  .rail .rtitle{font-family:'Sora';font-weight:800;font-size:13px;padding:12px 12px 8px;letter-spacing:-.1px}
+  .steps{display:flex;flex-direction:column;gap:2px}
+  .step{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:14px;cursor:pointer;transition:.18s;border:1.5px solid transparent}
+  .step:hover{background:var(--field)}
+  .step.active{background:var(--sec);border-color:#c7e2df}
+  .step .n{width:26px;height:26px;border-radius:50%;background:var(--field);color:var(--mut);display:grid;place-items:center;font-weight:800;font-size:12.5px;flex:0 0 auto;transition:.18s}
+  .step.active .n{background:var(--pri);color:#fff}
+  .step.done .n{background:var(--pri2);color:#fff}
+  .step .lbl{font-weight:700;font-size:13px;line-height:1.2}
+  .step .sub{font-size:11px;color:var(--faint);margin-top:2px}
+  .step.active .sub{color:var(--onsec);opacity:.75}
+
+  .raildiv{height:1px;background:var(--line2);margin:8px 4px}
+
+  /* progress ring + info */
+  .rprog{display:flex;align-items:center;gap:12px;padding:8px 12px 4px}
+  .ring{--p:64;width:44px;height:44px;flex:0 0 auto;border-radius:50%;
+    background:conic-gradient(var(--pri) calc(var(--p)*1%),var(--field) 0);display:grid;place-items:center}
+  .ring::before{content:"";position:absolute;width:32px;height:32px;border-radius:50%;background:var(--pane)}
+  .ring b{position:relative;font-size:11px;font-weight:800;color:var(--pri)}
+  .rprog .pt{font-size:12px}
+  .rprog .pt b{display:block;font-size:13px;font-weight:800}
+  .rprog .pt span{color:var(--faint)}
+
+  .railbtns{padding:10px 10px 8px;display:flex;flex-direction:column;gap:8px}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:7px;border:none;border-radius:13px;padding:11px 16px;font:700 13px/1 inherit;cursor:pointer;transition:.18s;width:100%}
+  .btn.fill{background:var(--pri);color:#fff}.btn.fill:hover{background:#065c59}
+  .btn.out{background:var(--pane);border:1px solid var(--line);color:var(--ink)}
+  .btn.out:hover{border-color:#cfd8d7;background:var(--field)}
+  .btn.ghost{background:transparent;color:var(--mut)}.btn.ghost:hover{background:var(--field)}
+  .btn:active{transform:translateY(1px)}
+  .btn .mi{font-size:18px}
+  .btn.sm{padding:9px 13px;font-size:12.5px;border-radius:11px;width:auto}
+  .btn.tone{background:var(--sec);color:var(--onsec);width:auto}.btn.tone:hover{background:#d3e8e6}
+
+  /* ===== KONTEN ===== */
+  .phead{margin:0 0 14px}
+  .phead h1{font-family:'Sora';font-size:18px;font-weight:800;margin:0 0 3px;letter-spacing:-.2px}
+  .phead p{color:var(--mut);margin:0;font-size:13px}
+
+  .sec{background:var(--pane);border:1px solid var(--line);border-radius:20px;margin-bottom:14px;overflow:hidden;scroll-margin-top:22px}
+  .sec-h{display:flex;align-items:center;gap:13px;padding:16px 20px}
+  .sec-h .ix{width:30px;height:30px;border-radius:10px;background:var(--sec);color:var(--onsec);display:grid;place-items:center;flex:0 0 auto}
   .sec-h .tt{font-family:'Sora';font-weight:700;font-size:14.5px;letter-spacing:-.1px}
   .sec-h .st{color:var(--faint);font-size:12px;margin-top:1px}
-  .sec-h .chev{margin-left:auto;color:var(--faint);transition:transform .35s cubic-bezier(.34,1.2,.64,1)}
-  .sec.open .chev{transform:rotate(180deg)}
-  .sec-b{max-height:0;overflow:hidden;transition:max-height .5s cubic-bezier(.4,0,.2,1),opacity .35s}
-  .sec.open .sec-b{max-height:3000px}
-  .sec-b-inner{padding:4px 20px 22px}
-  .divln{height:1px;background:var(--line2);margin:0 20px}
-
-  .status{margin-left:auto;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
-  .status .dot{width:6px;height:6px;border-radius:50%}
+  .sec-h .status{margin-left:auto;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;display:inline-flex;align-items:center;gap:5px}
+  .sec-h .status .dot{width:6px;height:6px;border-radius:50%}
   .status.todo{background:#fbf1e8;color:#a5622a}.status.todo .dot{background:#d98a45}
   .status.done{background:#e2f2ec;color:#0a7a4f}.status.done .dot{background:#12a566}
-  .sec-h .chev{margin-left:14px}
+  .divln{height:1px;background:var(--line2);margin:0 20px}
+  .sec-b-inner{padding:16px 20px 22px}
 
-  /* fields */
   label.fl{display:block;font-size:11px;font-weight:700;letter-spacing:.4px;color:var(--mut);text-transform:uppercase;margin:0 0 6px}
   .inp,select.inp{width:100%;background:var(--field);border:1px solid transparent;border-radius:13px;padding:11px 13px;font:14px/1.4 inherit;color:var(--ink);transition:.18s}
   .inp:hover,select.inp:hover{background:#eef2f2}
   .inp:focus,select.inp:focus{outline:none;background:var(--pane);border-color:var(--pri2);box-shadow:0 0 0 3px rgba(10,163,157,.14)}
   .grid2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
   .grid3{display:grid;grid-template-columns:1fr 1fr auto;gap:12px;align-items:end}
-  @media(max-width:620px){.grid2,.grid3{grid-template-columns:1fr}.grid3 .btn{width:100%}}
-  .fld{margin-bottom:0}
+  @media(max-width:560px){.grid2,.grid3{grid-template-columns:1fr}.grid3 .btn{width:100%}}
 
-  .btn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:13px;padding:11px 16px;font:600 13px/1 inherit;cursor:pointer;transition:.18s}
-  .btn.fill{background:var(--pri);color:#fff}.btn.fill:hover{background:#065c59}
-  .btn.tone{background:var(--sec);color:var(--onsec)}.btn.tone:hover{background:#d3e8e6}
-  .btn.ghost{background:transparent;color:var(--pri);padding:9px 12px}
-  .btn.ghost:hover{background:var(--field)}
-  .btn.out{background:var(--pane);border:1px solid var(--line);color:var(--ink)}
-  .btn.out:hover{border-color:#cfd8d7;background:var(--field)}
-  .btn.sm{padding:9px 13px;font-size:12.5px;border-radius:11px}
-  .btn:active{transform:translateY(1px)}
-  .btn .mi{font-size:18px}
-
-  .sub{margin:20px 0 6px}
+  .sub{margin:20px 0 6px;display:flex;align-items:flex-end;justify-content:space-between;gap:10px}
   .sub .lbl{font-family:'Sora';font-weight:700;font-size:13px;display:flex;align-items:center;gap:8px}
   .sub .lbl .mi{color:var(--pri);font-size:18px}
-  .sub .hint{color:var(--mut);font-size:12px;margin:3px 0 0 26px}
+  .hint{color:var(--mut);font-size:12px;margin:3px 0 0 26px}
 
-  /* mapping rows (card-list, bukan tabel padat) */
   .rows{margin-top:12px;display:flex;flex-direction:column;gap:8px}
   .row{display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:14px;background:var(--field);transition:.18s}
   .row:hover{background:#eef2f2}
-  .row .k{flex:0 0 34%;font-weight:600;font-size:13.5px;display:flex;align-items:center;gap:9px;min-width:0}
-  .row .k .tag{flex:0 0 auto}
+  .row .k{flex:0 0 32%;font-weight:600;font-size:13.5px;display:flex;align-items:center;gap:9px;min-width:0}
   .row .k .kt{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
   .row .v{flex:1;display:flex;align-items:center;gap:8px;min-width:0}
-  .row .v .selmini,.row .v .cellin{min-width:0}
-  @media(max-width:620px){.row{flex-wrap:wrap}.row .k{flex-basis:100%}}
+  @media(max-width:560px){.row{flex-wrap:wrap}.row .k{flex-basis:100%}}
 
-  .tag{font-size:10px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;padding:3px 8px;border-radius:7px;color:#fff}
+  .tag{font-size:10px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;padding:3px 8px;border-radius:7px;color:#fff;flex:0 0 auto}
   .tag.hdr{background:var(--src-hdr)}.tag.data{background:var(--src-data)}
   .tag.inv{background:var(--src-inv)}.tag.text{background:var(--src-text)}.tag.img{background:var(--src-img)}
-  .tag.soft{background:var(--sec);color:var(--onsec)}
 
   .selmini,.cellin{background:var(--pane);border:1px solid var(--line);border-radius:10px;padding:8px 11px;font:13px inherit;color:var(--ink);transition:.15s}
-  .selmini{flex:1}
+  .selmini{flex:1;min-width:0}
   .selmini:focus,.cellin:focus{outline:none;border-color:var(--pri2);box-shadow:0 0 0 3px rgba(10,163,157,.13)}
   .cellin{width:70px;text-align:center;text-transform:uppercase;flex:0 0 auto}
   .arrow{color:var(--faint);flex:0 0 auto}
-  .srcpick{width:130px;flex:0 0 auto}
+  .srcpick{width:128px;flex:0 0 auto}
   .del{border:none;background:transparent;color:var(--faint);cursor:pointer;border-radius:9px;padding:6px;flex:0 0 auto;transition:.15s}
   .del:hover{color:var(--accent);background:#fceef1}
-
   .addbar{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
 
   .readbox{background:var(--field);border-radius:14px;padding:14px 16px;margin-top:12px;font-size:13px;color:var(--mut);display:flex;gap:11px;align-items:flex-start}
   .readbox .mi{color:var(--pri2);margin-top:1px}
-  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 4px}
-  .chip{background:var(--pane);border:1px solid var(--line);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600;color:var(--mut)}
-  .chip b{color:var(--pri);margin-right:3px}
-
-  /* footer sticky */
-  .foot{position:fixed;left:0;right:0;bottom:0;padding:16px 18px;background:linear-gradient(180deg,transparent,var(--bg) 42%);pointer-events:none}
-  .footbar{max-width:880px;margin:0 auto;background:var(--pane);border:1px solid var(--line);border-radius:18px;padding:12px 16px;display:flex;align-items:center;gap:14px;box-shadow:0 8px 28px rgba(20,30,29,.10);pointer-events:auto}
-  .meter{flex:1;min-width:60px}
-  .meter .bar{height:7px;border-radius:8px;background:var(--field);overflow:hidden}
-  .meter .bar i{display:block;height:100%;background:linear-gradient(90deg,var(--pri2),var(--pri));width:0;transition:width .6s cubic-bezier(.34,1.2,.64,1)}
-  .meter .t{font-size:11.5px;color:var(--mut);margin-top:5px;font-weight:600}
-  @media(max-width:620px){.footbar{flex-wrap:wrap}.meter{flex-basis:100%}}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0 2px}
+  .chip{background:var(--field);border-radius:20px;padding:5px 11px;font-size:12px;font-weight:600;color:var(--mut)}
 </style>
 </head>
 <body>
 <div class="wrap">
   <div class="crumb"><span class="mi">grid_view</span>Template<span class="mi" style="font-size:14px">chevron_right</span><b>BAA Starlink 2024</b><span class="mi" style="font-size:14px">chevron_right</span>Mapping</div>
-  <div class="phead">
-    <h1>Atur pemetaan template</h1>
-    <p>Hubungkan field BAA ke sel/kolom di file Excel. Semua manual & terkontrol.</p>
-  </div>
 
-  <!-- 1 · WORKSHEET -->
-  <div class="sec open" data-sec>
-    <div class="sec-h" onclick="tog(this)">
-      <span class="ix mi">tab</span>
-      <div><div class="tt">Worksheet</div><div class="st">Nama & pilih sheet</div></div>
-      <span class="chev mi">expand_more</span>
-    </div>
-    <div class="divln"></div>
-    <div class="sec-b"><div class="sec-b-inner">
-      <div class="fld" style="margin:14px 0"><label class="fl">Nama Template</label>
-        <input class="inp" value="BAA Starlink 2024"></div>
-      <div class="grid2">
-        <div class="fld"><label class="fl">Sheet Log</label>
-          <select class="inp"><option>LOG</option><option>DETAIL</option><option>REKAP</option></select></div>
-        <div class="fld"><label class="fl">Sheet Detail</label>
-          <select class="inp"><option>DETAIL</option><option>LOG</option><option>REKAP</option></select></div>
-      </div>
-      <div class="chips"><span class="chip" style="color:var(--faint);border:none;background:transparent;padding-left:0">Terdeteksi:</span>
-        <span class="chip">LOG</span><span class="chip">DETAIL</span><span class="chip">REKAP</span></div>
-    </div></div>
-  </div>
-
-  <!-- 2 · SHEET LOG -->
-  <div class="sec open" data-sec>
-    <div class="sec-h" onclick="tog(this)">
-      <span class="ix mi">table_rows</span>
-      <div><div class="tt">Sheet Log</div><div class="st">Baris header, baris data & pemetaan field</div></div>
-      <span id="logstat" class="status todo"><span class="dot"></span>belum</span>
-      <span class="chev mi">expand_more</span>
-    </div>
-    <div class="divln"></div>
-    <div class="sec-b"><div class="sec-b-inner">
-      <div class="grid3" style="margin:14px 0 0">
-        <div class="fld"><label class="fl">Baris Header</label><input class="inp" id="hrow" value="2"></div>
-        <div class="fld"><label class="fl">Baris mulai data</label><input class="inp" id="drow" value="3"></div>
-        <button class="btn tone" onclick="readHeader()"><span class="mi">auto_read</span>Baca header</button>
+  <div class="layout">
+    <!-- ===== RAIL KIRI ===== -->
+    <aside class="rail">
+      <div class="rtitle">Langkah</div>
+      <div class="steps">
+        <div class="step active" onclick="goStep(this,'s1')">
+          <span class="n">1</span><div><div class="lbl">Worksheet</div><div class="sub">LOG · DETAIL</div></div></div>
+        <div class="step" onclick="goStep(this,'s2')">
+          <span class="n">2</span><div><div class="lbl">Sheet Log</div><div class="sub" id="rs2">0/8 kolom</div></div></div>
+        <div class="step" onclick="goStep(this,'s3')">
+          <span class="n">3</span><div><div class="lbl">Sheet Detail</div><div class="sub" id="rs3">4/8 sel</div></div></div>
       </div>
 
-      <div id="loghint" class="readbox"><span class="mi">lightbulb</span>
-        <div>Klik <b>Baca header</b> — tool membaca sel di baris header (offline, dari file). Lalu tiap field BAA bisa dipetakan ke <b>Header</b> sheet, atau ambil dari <b>Field data</b> / <b>Inventory</b>.</div>
+      <div class="raildiv"></div>
+      <div class="rprog">
+        <div class="ring" id="ring" style="position:relative"><b id="ringp">0%</b></div>
+        <div class="pt"><b id="ptbig">0% terisi</b><span>kelengkapan mapping</span></div>
+      </div>
+      <div class="railbtns">
+        <button class="btn out"><span class="mi">science</span>Uji Export</button>
+        <button class="btn fill"><span class="mi">save</span>Simpan mapping</button>
+        <button class="btn ghost">Tutup</button>
+      </div>
+    </aside>
+
+    <!-- ===== KONTEN KANAN ===== -->
+    <main>
+      <div class="phead">
+        <h1>Atur pemetaan template</h1>
+        <p>Hubungkan field BAA ke sel/kolom di file Excel. Semua manual & terkontrol.</p>
       </div>
 
-      <div id="logmap" style="display:none">
-        <div class="sub" style="margin-top:18px"><div class="lbl"><span class="mi">conversion_path</span>Pemetaan kolom LOG</div>
-          <div class="hint">Per field BAA: pilih sumber → lalu header / field yang dituju.</div></div>
-        <div class="rows" id="logrows"></div>
-      </div>
-    </div></div>
-  </div>
+      <!-- 1 WORKSHEET -->
+      <section class="sec" id="s1">
+        <div class="sec-h"><span class="ix mi">tab</span>
+          <div><div class="tt">1 · Worksheet</div><div class="st">Nama & pilih sheet</div></div></div>
+        <div class="divln"></div>
+        <div class="sec-b-inner">
+          <div class="fld" style="margin-bottom:14px"><label class="fl">Nama Template</label>
+            <input class="inp" value="BAA Starlink 2024"></div>
+          <div class="grid2">
+            <div class="fld"><label class="fl">Sheet Log</label>
+              <select class="inp"><option>LOG</option><option>DETAIL</option><option>REKAP</option></select></div>
+            <div class="fld"><label class="fl">Sheet Detail</label>
+              <select class="inp"><option>DETAIL</option><option>LOG</option><option>REKAP</option></select></div>
+          </div>
+          <div class="chips"><span class="chip" style="background:transparent;color:var(--faint);padding-left:0">Terdeteksi:</span>
+            <span class="chip">LOG</span><span class="chip">DETAIL</span><span class="chip">REKAP</span></div>
+        </div>
+      </section>
 
-  <!-- 3 · SHEET DETAIL -->
-  <div class="sec open" data-sec>
-    <div class="sec-h" onclick="tog(this)">
-      <span class="ix mi">description</span>
-      <div><div class="tt">Sheet Detail</div><div class="st">Text mapping & Image mapping</div></div>
-      <span class="chev mi">expand_more</span>
-    </div>
-    <div class="divln"></div>
-    <div class="sec-b"><div class="sec-b-inner">
+      <!-- 2 SHEET LOG -->
+      <section class="sec" id="s2">
+        <div class="sec-h"><span class="ix mi">table_rows</span>
+          <div><div class="tt">2 · Sheet Log</div><div class="st">Baris header, baris data & pemetaan field</div></div>
+          <span id="logstat" class="status todo"><span class="dot"></span>belum</span></div>
+        <div class="divln"></div>
+        <div class="sec-b-inner">
+          <div class="grid3">
+            <div class="fld"><label class="fl">Baris Header</label><input class="inp" value="2"></div>
+            <div class="fld"><label class="fl">Baris mulai data</label><input class="inp" value="3"></div>
+            <button class="btn tone" onclick="readHeader()"><span class="mi">auto_read</span>Baca header</button>
+          </div>
+          <div id="loghint" class="readbox"><span class="mi">lightbulb</span>
+            <div>Klik <b>Baca header</b> — tool membaca sel di baris header (offline, dari file). Lalu tiap field BAA bisa dipetakan ke <b>Header</b> sheet, atau ambil dari <b>Field data</b> / <b>Inventory</b>.</div></div>
+          <div id="logmap" style="display:none">
+            <div class="sub" style="margin-top:18px"><div><div class="lbl"><span class="mi">conversion_path</span>Pemetaan kolom LOG</div>
+              <div class="hint">Per field BAA: pilih sumber → header / field yang dituju.</div></div></div>
+            <div class="rows" id="logrows"></div>
+          </div>
+        </div>
+      </section>
 
-      <!-- TEXT -->
-      <div class="sub" style="margin-top:16px"><div class="lbl"><span class="mi">match_case</span>Text mapping</div>
-        <div class="hint">Nilai teks → sel tujuan. Sumber: Inventory, Field data, atau teks statis.</div></div>
-      <div class="rows" id="txtrows"></div>
-      <div class="addbar">
-        <button class="btn out sm" onclick="addTxt('inv')"><span class="mi">inventory_2</span>Field Inventory</button>
-        <button class="btn out sm" onclick="addTxt('data')"><span class="mi">badge</span>Field data</button>
-        <button class="btn out sm" onclick="addTxt('text')"><span class="mi">text_fields</span>Teks statis</button>
-      </div>
+      <!-- 3 SHEET DETAIL -->
+      <section class="sec" id="s3">
+        <div class="sec-h"><span class="ix mi">description</span>
+          <div><div class="tt">3 · Sheet Detail</div><div class="st">Text mapping & Image mapping</div></div></div>
+        <div class="divln"></div>
+        <div class="sec-b-inner">
+          <div class="sub" style="margin-top:2px"><div><div class="lbl"><span class="mi">match_case</span>Text mapping</div>
+            <div class="hint">Nilai teks → sel tujuan. Sumber: Inventory, Field data, atau teks statis.</div></div></div>
+          <div class="rows" id="txtrows"></div>
+          <div class="addbar">
+            <button class="btn out sm" onclick="addTxt('inv')"><span class="mi">inventory_2</span>Field Inventory</button>
+            <button class="btn out sm" onclick="addTxt('data')"><span class="mi">badge</span>Field data</button>
+            <button class="btn out sm" onclick="addTxt('text')"><span class="mi">text_fields</span>Teks statis</button>
+          </div>
 
-      <!-- IMAGE -->
-      <div class="sub" style="margin-top:24px"><div class="lbl"><span class="mi">image</span>Image mapping</div>
-        <div class="hint">Kategori dari Pengaturan → Field Photo & Capture. Anchor diisi manual.</div></div>
-      <div class="rows" id="imgrows"></div>
-      <div class="addbar">
-        <button class="btn out sm" onclick="addImg()"><span class="mi">add_photo_alternate</span>Tambah kategori</button>
-      </div>
+          <div class="sub" style="margin-top:24px"><div><div class="lbl"><span class="mi">image</span>Image mapping</div>
+            <div class="hint">Kategori dari Pengaturan → Field Photo & Capture. Anchor manual.</div></div></div>
+          <div class="rows" id="imgrows"></div>
+          <div class="addbar">
+            <button class="btn out sm" onclick="addImg()"><span class="mi">add_photo_alternate</span>Tambah kategori</button>
+          </div>
 
-      <!-- UKURAN -->
-      <div class="sub" style="margin-top:24px"><div class="lbl"><span class="mi">aspect_ratio</span>Ukuran foto</div>
-        <div class="hint">Foto di-letterbox & center di anchor. Rasio 4:3 (opsional).</div></div>
-      <div class="grid2" style="margin-top:12px">
-        <div class="fld"><label class="fl">Lebar maks (px)</label><input class="inp" value="320"></div>
-        <div class="fld"><label class="fl">Tinggi maks (px)</label><input class="inp" value="240"></div>
-      </div>
-
-    </div></div>
+          <div class="sub" style="margin-top:24px"><div><div class="lbl"><span class="mi">aspect_ratio</span>Ukuran foto</div>
+            <div class="hint">Foto di-letterbox & center di anchor. Rasio 4:3 (opsional).</div></div></div>
+          <div class="grid2" style="margin-top:12px">
+            <div class="fld"><label class="fl">Lebar maks (px)</label><input class="inp" value="320"></div>
+            <div class="fld"><label class="fl">Tinggi maks (px)</label><input class="inp" value="240"></div>
+          </div>
+        </div>
+      </section>
+    </main>
   </div>
 </div>
 
-<!-- footer -->
-<div class="foot"><div class="footbar">
-  <div class="meter"><div class="bar"><i id="bar"></i></div><div class="t" id="bartxt">Kelengkapan 0%</div></div>
-  <button class="btn out"><span class="mi">science</span>Uji Export</button>
-  <button class="btn fill"><span class="mi">check</span>Simpan & Aktifkan</button>
-</div></div>
-
 <script>
   const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
-  function tog(h){h.closest('[data-sec]').classList.toggle('open')}
+  function goStep(el,id){
+    $$('.step').forEach(s=>s.classList.remove('active')); el.classList.add('active');
+    document.getElementById(id).scrollIntoView({behavior:'smooth',block:'start'});
+  }
+  // sinkron rail saat scroll
+  const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
+    const i=['s1','s2','s3'].indexOf(e.target.id);
+    $$('.step').forEach((s,k)=>s.classList.toggle('active',k===i));
+  }})},{rootMargin:'-20% 0 -70% 0'});
+  ['s1','s2','s3'].forEach(id=>io.observe(document.getElementById(id)));
 
   const LOG_FIELDS=[["no","No"],["lokasi","Lokasi"],["nama_barang","Nama Barang"],
     ["merk_type","Merk / Type"],["jumlah","Jumlah"],["sn_tagging","SN / Tagging"],
@@ -238,11 +259,9 @@
   const dataOpts=`<option value="">— pilih field —</option>`+DATA_FIELDS.map(t=>`<option>${t}</option>`).join('');
   const invOpts=`<option value="">— pilih field —</option>`+INV_FIELDS.map(t=>`<option>${t}</option>`).join('');
 
-  // second control per source (untuk baris LOG)
   function valControl(src,guess){
     if(src==='data') return `<span class="tag data">Data</span><select class="selmini">${dataOpts}</select>`;
     if(src==='inv')  return `<span class="tag inv">Inv</span><select class="selmini">${invOpts}</select>`;
-    // header
     const o = guess? hdrOpts.replace(`value="${guess}"`,`value="${guess}" selected`) : hdrOpts;
     return `<span class="tag hdr">Hdr</span><select class="selmini">${o}</select>`;
   }
@@ -252,71 +271,47 @@
   }
   window.swapSrc=function(sel){
     const row=sel.closest('.row'); const g=row.dataset.guess||'';
-    row.querySelector('.v .rest').innerHTML=valControl(sel.value,g);
-    recalc();
+    row.querySelector('.v .rest').innerHTML=valControl(sel.value,g); recalc();
   };
 
   function readHeader(){
-    $('#loghint').style.display='none';
-    $('#logmap').style.display='block';
+    $('#loghint').style.display='none'; $('#logmap').style.display='block';
     $('#logrows').innerHTML=LOG_FIELDS.map(([k,lbl])=>{
       const g=GUESS[k]||'';
-      return `<div class="row" data-guess="${g}">
-        <div class="k"><span class="kt">${lbl}</span></div>
-        <div class="v">${srcSelect('hdr')}<span class="arrow mi">arrow_forward</span><span class="rest" style="display:flex;gap:8px;flex:1;min-width:0;align-items:center">${valControl('hdr',g)}</span></div>
-      </div>`;
+      return `<div class="row" data-guess="${g}"><div class="k"><span class="kt">${lbl}</span></div>
+        <div class="v">${srcSelect('hdr')}<span class="arrow mi">arrow_forward</span>
+        <span class="rest" style="display:flex;gap:8px;flex:1;min-width:0;align-items:center">${valControl('hdr',g)}</span></div></div>`;
     }).join('');
     const s=$('#logstat'); s.className='status done'; s.innerHTML='<span class="dot"></span>terbaca';
     recalc();
   }
 
   function delBtn(){return `<button class="del" onclick="this.closest('.row').remove();recalc()"><span class="mi">close</span></button>`;}
-
   function addTxt(kind){
     const r=document.createElement('div'); r.className='row';
-    if(kind==='inv'){
-      r.innerHTML=`<div class="k"><span class="tag inv">Inv</span><select class="selmini">${invOpts}</select></div>
-        <div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" placeholder="C5">${delBtn()}</div>`;
-    }else if(kind==='data'){
-      r.innerHTML=`<div class="k"><span class="tag data">Data</span><select class="selmini">${dataOpts}</select></div>
-        <div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" placeholder="C5">${delBtn()}</div>`;
-    }else{
-      r.innerHTML=`<div class="k"><span class="tag text">Teks</span><input class="selmini" placeholder="mis. Telkomsat"></div>
-        <div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" placeholder="A1">${delBtn()}</div>`;
-    }
+    if(kind==='inv')      r.innerHTML=`<div class="k"><span class="tag inv">Inv</span><select class="selmini">${invOpts}</select></div><div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" placeholder="C5">${delBtn()}</div>`;
+    else if(kind==='data')r.innerHTML=`<div class="k"><span class="tag data">Data</span><select class="selmini">${dataOpts}</select></div><div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" placeholder="C5">${delBtn()}</div>`;
+    else                  r.innerHTML=`<div class="k"><span class="tag text">Teks</span><input class="selmini" placeholder="mis. Telkomsat"></div><div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" placeholder="A1">${delBtn()}</div>`;
     $('#txtrows').appendChild(r); recalc();
   }
-
   function seedTxt(){
-    // baris default dari Inventory (otomatis)
     const seed=[["Nama Barang","B"],["Merk / Type","C"],["Jumlah","D"],["SN / Tagging","E"]];
-    $('#txtrows').innerHTML=seed.map(([n,c])=>`<div class="row">
-      <div class="k"><span class="tag inv">Inv</span><span class="kt">${n}</span></div>
-      <div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" value="${c}"></div></div>`).join('');
+    $('#txtrows').innerHTML=seed.map(([n,c])=>`<div class="row"><div class="k"><span class="tag inv">Inv</span><span class="kt">${n}</span></div><div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" value="${c}"></div></div>`).join('');
   }
-
-  function imgRow(cat,tag,cell){
-    return `<div class="row"><div class="k"><span class="tag img">${tag}</span><span class="kt">${cat}</span></div>
-      <div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" value="${cell||''}" placeholder="B10">${delBtn()}</div></div>`;
-  }
-  function seedImg(){
-    $('#imgrows').innerHTML=[["Foto Perangkat","Foto","B10"],["Foto Lokasi","Foto","H10"],
-      ["Speedtest","Cap","B24"],["Foto Teknisi","Cust",""]].map(a=>imgRow(...a)).join('');
-  }
-  function addImg(){
-    const name=prompt('Kategori foto (dari Pengaturan → Field Photo & Capture):','Foto Tambahan');
-    if(!name) return;
-    $('#imgrows').insertAdjacentHTML('beforeend',imgRow(name.replace(/</g,'&lt;'),'Cust',''));
-    recalc();
-  }
+  function imgRow(cat,tag,cell){return `<div class="row"><div class="k"><span class="tag img">${tag}</span><span class="kt">${cat}</span></div><div class="v"><span class="arrow mi">arrow_forward</span><input class="cellin" value="${cell||''}" placeholder="B10">${delBtn()}</div></div>`;}
+  function seedImg(){$('#imgrows').innerHTML=[["Foto Perangkat","Foto","B10"],["Foto Lokasi","Foto","H10"],["Speedtest","Cap","B24"],["Foto Teknisi","Cust",""]].map(a=>imgRow(...a)).join('');}
+  function addImg(){const n=prompt('Kategori foto (dari Pengaturan → Field Photo & Capture):','Foto Tambahan');if(!n)return;$('#imgrows').insertAdjacentHTML('beforeend',imgRow(n.replace(/</g,'&lt;'),'Cust',''));recalc();}
 
   function recalc(){
-    let filled=0,total=0;
-    $$('#logrows .row .rest select').forEach(s=>{total++; if(s.value) filled++;});
-    $$('#txtrows .cellin, #imgrows .cellin').forEach(i=>{total++; if(i.value.trim()) filled++;});
-    if(!total) total=1;
-    const pct=Math.round(filled/total*100);
-    $('#bar').style.width=pct+'%'; $('#bartxt').textContent='Kelengkapan '+pct+'%';
+    let lf=0,lt=0; $$('#logrows .row .rest select').forEach(s=>{lt++;if(s.value)lf++;});
+    let df=0,dt=0; $$('#txtrows .cellin, #imgrows .cellin').forEach(i=>{dt++;if(i.value.trim())df++;});
+    const filled=lf+df, total=(lt+dt)||1, pct=Math.round(filled/total*100);
+    $('#ring').style.setProperty('--p',pct); $('#ringp').textContent=pct+'%';
+    $('#ptbig').textContent=pct+'% terisi';
+    $('#rs2').textContent=lt?`${lf}/${lt} kolom`:'0/8 kolom';
+    const dfCell=$$('#txtrows .cellin, #imgrows .cellin').filter(i=>i.value.trim()).length;
+    $('#rs3').textContent=`${dfCell}/${dt} sel`;
+    $$('.step')[1].classList.toggle('done',lt>0&&lf===lt);
   }
   document.addEventListener('input',e=>{ if(e.target.matches('.cellin,.selmini')) recalc(); });
   seedTxt(); seedImg(); recalc();
