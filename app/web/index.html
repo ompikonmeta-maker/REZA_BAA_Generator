@@ -2468,8 +2468,9 @@ $('#loc-more-btn').addEventListener('click',loadMoreLoc);
 let locCreatorSel=null;
 async function loadCreators(){if(!locCreatorSel)return;
   try{const d=await api('/api/locations/creators');
+    const ids=(d.creators||[]).map(c=>String(c.id));
     locCreatorSel.setOptions([{value:'',label:'Semua pembuat'}].concat((d.creators||[]).map(c=>({value:String(c.id),label:c.name+' ('+c.n+')'}))));
-    if(!locCreatorSel.getValue())locCreatorSel.setValue('');}catch(e){}}
+    const cur=locCreatorSel.getValue();if(cur&&!ids.includes(cur))locCreatorSel.setValue('');else locCreatorSel.setValue(cur||'');}catch(e){}}
 window.locMenu=(btn,l)=>{const items=[
   {icon:'edit',label:'Buka / Edit',fn:()=>{gotoEntry();openLoc(l.id);}},
   {icon:'grid_on',label:'Export Excel',fn:()=>location.href='/api/export/excel?scope=one&loc_id='+l.id},
@@ -2486,7 +2487,7 @@ function confirmDelete(id,code,fromEntry){delTarget=id;delFromEntry=fromEntry;
 $('#delCancel').addEventListener('click',()=>$('#delDlg').close());
 $('#delOk').addEventListener('click',async()=>{try{await api('/api/locations/'+delTarget,{method:'DELETE'});$('#delDlg').close();toast('Entry dihapus');
   if(delFromEntry){S.loc=null;$('#entry-form').classList.add('hidden');$('#entry-empty').classList.remove('hidden');$('#entry-del').classList.add('hidden');}
-  refreshPicker();loadLocations();}catch(e){toast('Gagal: '+e.message);$('#delDlg').close();}});
+  refreshPicker();loadLocations();loadCreators();loadDashboard();}catch(e){toast('Gagal: '+e.message);$('#delDlg').close();}});
 
 /* Dialog konfirmasi & input generik */
 let _cfmFn=null,_inpFn=null;
