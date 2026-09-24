@@ -193,7 +193,7 @@
             <div>Klik <b>Baca header</b> — tool membaca sel di baris header (offline, dari file). Lalu tiap field BAA bisa dipetakan ke <b>Header</b> sheet, atau ambil dari <b>Field data</b> / <b>Inventory</b>.</div></div>
           <div id="logmap" style="display:none">
             <div class="sub" style="margin-top:18px"><div><div class="lbl"><span class="mi">conversion_path</span>Pemetaan kolom LOG</div>
-              <div class="hint">Per field BAA: pilih sumber → header / field yang dituju.</div></div></div>
+              <div class="hint">Tiap header di Log sheet → petakan ke field tool ini (Data / Inventory).</div></div></div>
             <div class="rows" id="logrows"></div>
           </div>
         </div>
@@ -243,7 +243,7 @@
   const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){
     const i=['s1','s2','s3'].indexOf(e.target.id);
     $$('.step').forEach((s,k)=>s.classList.toggle('active',k===i));
-  }})},{rootMargin:'-20% 0 -70% 0'});
+  }})},{rootMargin:'-120px 0px -600px 0px'});
   ['s1','s2','s3'].forEach(id=>io.observe(document.getElementById(id)));
 
   const LOG_FIELDS=[["no","No"],["lokasi","Lokasi"],["nama_barang","Nama Barang"],
@@ -255,36 +255,39 @@
   const DATA_FIELDS=["Nama Lokasi","Kode Lokasi","Tanggal","Teknisi","PIC","Alamat"];
   const INV_FIELDS=["Nama Barang","Merk / Type","Jumlah","SN / Tagging","Keterangan"];
 
-  const hdrOpts=`<option value="">— pilih header —</option>`+DETECTED.map(([c,t])=>`<option value="${c}">${c} — ${t}</option>`).join('');
+  // Target field tool ini (dikelompokkan) — header sheet dipetakan ke salah satu ini
+  const TARGETS=[
+    {group:'Data / umum',items:[['no','No'],['lokasi','Lokasi'],['foto_lengkap','Foto Lengkap'],['tanggal','Tanggal'],['teknisi','Teknisi'],['pic','PIC']]},
+    {group:'Inventory',items:[['nama_barang','Nama Barang'],['merk_type','Merk / Type'],['jumlah','Jumlah'],['sn_tagging','SN / Tagging'],['keterangan','Keterangan']]}
+  ];
+  function targetOpts(sel){
+    let o=`<option value="">— (abaikan) —</option>`;
+    TARGETS.forEach(g=>{o+=`<optgroup label="${g.group}">`+g.items.map(([v,l])=>`<option value="${v}" ${v===sel?'selected':''}>${l}</option>`).join('')+`</optgroup>`;});
+    return o;
+  }
   const dataOpts=`<option value="">— pilih field —</option>`+DATA_FIELDS.map(t=>`<option>${t}</option>`).join('');
   const invOpts=`<option value="">— pilih field —</option>`+INV_FIELDS.map(t=>`<option>${t}</option>`).join('');
-
-  function valControl(src,guess){
-    if(src==='data') return `<span class="tag data">Data</span><select class="selmini">${dataOpts}</select>`;
-    if(src==='inv')  return `<span class="tag inv">Inv</span><select class="selmini">${invOpts}</select>`;
-    const o = guess? hdrOpts.replace(`value="${guess}"`,`value="${guess}" selected`) : hdrOpts;
-    return `<span class="tag hdr">Hdr</span><select class="selmini">${o}</select>`;
-  }
-  function srcSelect(cur){
-    const mk=(v,l)=>`<option value="${v}" ${v===cur?'selected':''}>${l}</option>`;
-    return `<select class="selmini srcpick" onchange="swapSrc(this)">${mk('hdr','Header')}${mk('data','Field data')}${mk('inv','Inventory')}</select>`;
-  }
-  window.swapSrc=function(sel){
-    const row=sel.closest('.row'); const g=row.dataset.guess||'';
-    row.querySelector('.v .rest').innerHTML=valControl(sel.value,g); recalc();
-  };
+  const INV_KEYS=new Set(['nama_barang','merk_type','jumlah','sn_tagging','keterangan']);
+  // tebakan awal: kolom header -> field tool
+  const GUESS_T={A:'no',B:'lokasi',C:'nama_barang',D:'merk_type',E:'jumlah',F:'sn_tagging',G:'keterangan',H:'foto_lengkap'};
 
   function readHeader(){
     $('#loghint').style.display='none'; $('#logmap').style.display='block';
-    $('#logrows').innerHTML=LOG_FIELDS.map(([k,lbl])=>{
-      const g=GUESS[k]||'';
-      return `<div class="row" data-guess="${g}"><div class="k"><span class="kt">${lbl}</span></div>
-        <div class="v">${srcSelect('hdr')}<span class="arrow mi">arrow_forward</span>
-        <span class="rest" style="display:flex;gap:8px;flex:1;min-width:0;align-items:center">${valControl('hdr',g)}</span></div></div>`;
+    // KIRI: header terbaca dari Log sheet · KANAN: petakan ke field tool ini
+    $('#logrows').innerHTML=DETECTED.map(([col,txt])=>{
+      const g=GUESS_T[col]||'';
+      return `<div class="row"><div class="k"><span class="tag hdr">Hdr</span><span class="kt" title="${col} — ${txt}">${col} — ${txt}</span></div>
+        <div class="v"><span class="arrow mi">arrow_forward</span><select class="selmini map-to" onchange="tagTarget(this);recalc()">${targetOpts(g)}</select></div></div>`;
     }).join('');
+    $$('#logrows .map-to').forEach(tagTarget);
     const s=$('#logstat'); s.className='status done'; s.innerHTML='<span class="dot"></span>terbaca';
     recalc();
   }
+  window.tagTarget=function(sel){
+    // beri tag warna (Data/Inv) di kanan sesuai grup target terpilih
+    const v=sel.value; let cls='',lbl='';
+    if(v){ if(INV_KEYS.has(v)){cls='inv';lbl='Inv';} else {cls='data';lbl='Data';} }
+  };
 
   function delBtn(){return `<button class="del" onclick="this.closest('.row').remove();recalc()"><span class="mi">close</span></button>`;}
   function addTxt(kind){
@@ -303,7 +306,7 @@
   function addImg(){const n=prompt('Kategori foto (dari Pengaturan → Field Photo & Capture):','Foto Tambahan');if(!n)return;$('#imgrows').insertAdjacentHTML('beforeend',imgRow(n.replace(/</g,'&lt;'),'Cust',''));recalc();}
 
   function recalc(){
-    let lf=0,lt=0; $$('#logrows .row .rest select').forEach(s=>{lt++;if(s.value)lf++;});
+    let lf=0,lt=0; $$('#logrows .map-to').forEach(s=>{lt++;if(s.value)lf++;});
     let df=0,dt=0; $$('#txtrows .cellin, #imgrows .cellin').forEach(i=>{dt++;if(i.value.trim())df++;});
     const filled=lf+df, total=(lt+dt)||1, pct=Math.round(filled/total*100);
     $('#ring').style.setProperty('--p',pct); $('#ringp').textContent=pct+'%';
@@ -315,6 +318,7 @@
   }
   document.addEventListener('input',e=>{ if(e.target.matches('.cellin,.selmini')) recalc(); });
   seedTxt(); seedImg(); recalc();
+  if(location.hash==='#baca') readHeader();
 </script>
 </body>
 </html>
