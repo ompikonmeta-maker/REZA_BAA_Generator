@@ -1359,7 +1359,7 @@
 
 <!-- Guard: perubahan belum disimpan (Opsi B) -->
 <div class="uns-ov" id="unsOv"><div class="uns-box">
-  <div class="hd"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3.2 21 19H3L12 3.2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/><path d="M12 9.5v4.2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.8" r="1.15" fill="currentColor"/></svg><h4>Perubahan belum disimpan</h4></div>
+  <div class="hd"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="2"/><path d="M12 7v6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><circle cx="12" cy="16.4" r="1.15" fill="currentColor"/></svg><h4>Perubahan belum disimpan</h4></div>
   <p id="unsBody">Ada perubahan yang belum disimpan.</p>
   <div class="uns-acts">
     <button class="uns-btn stay" id="unsStay">Kembali</button>
@@ -1656,10 +1656,9 @@ function isSetDirty(){return !!SETFS_SAVE[curSetSub]&&_visible('v-settings')&&$(
 function isEntryDirty(){return _visible('v-entry')&&entryDirty&&!!S.loc;}
 function dirtyCtx(){if(isEntryDirty())return 'entry';if(isSetDirty())return 'set';return null;}
 let _unsGo=null,_unsCtx=null;
-function guardLeave(go){const ctx=dirtyCtx();if(!ctx){go();return;}_unsGo=go;_unsCtx=ctx;
-  $('#unsBody').innerHTML=ctx==='entry'
-    ? 'Data BAA lokasi ini ada yang <b>belum disimpan</b>. Simpan dulu sebelum pindah?'
-    : 'Ada perubahan pengaturan yang <b>belum disimpan</b>. Simpan dulu sebelum pindah?';
+function guardLeave(go,dest){const ctx=dirtyCtx();if(!ctx){go();return;}_unsGo=go;_unsCtx=ctx;
+  const to=dest?(' ke <b>'+esc(dest)+'</b>'):'';
+  $('#unsBody').innerHTML='Kamu punya perubahan di halaman ini yang belum disimpan. Simpan dulu sebelum pindah'+to+'?';
   const o=$('#unsOv');o.style.display='flex';requestAnimationFrame(()=>requestAnimationFrame(()=>o.classList.add('on')));}
 function _unsClose(){const o=$('#unsOv');o.classList.remove('on');setTimeout(()=>{o.style.display='none';},430);}
 $('#unsStay').addEventListener('click',()=>{_unsGo=null;_unsClose();});
@@ -1679,7 +1678,7 @@ $$('.navitem[data-view]').forEach(n=>n.addEventListener('click',()=>{
     $('#pageTitle').classList.toggle('hidden',v==='entry');$('#topGrow').classList.toggle('hidden',v==='entry');
     if(v==='dashboard')loadDashboard();if(v==='locations')loadLocations();if(v==='templates')loadTemplates();
     revealCards($('#v-'+v));};
-  if(n.classList.contains('active'))run(); else guardLeave(run);}));
+  if(n.classList.contains('active'))run(); else guardLeave(run,n.querySelector('.lbl').textContent.trim());}));
 
 /* Sub-menu Pengaturan (accordion) */
 const SET_SUBS={lokasi:{id:'set-lokasi',title:'Field Data Lokasi'},inventory:{id:'set-inventory',title:'Field Inventory'},
@@ -1740,10 +1739,11 @@ $('#setToggle').addEventListener('click',e=>{
   const wasOpen=$('#navSettings').classList.contains('open')&&$('#setToggle').classList.contains('active');
   if(wasOpen){$('#navSettings').classList.remove('open');}   /* klik lagi -> lipat, tetap di halaman */
   else openSettings(curSetSub);});
+function _subTitle(sub){return (SET_SUBS[sub]||SET_VIEWS[sub]||{}).title||'menu lain';}
 $$('.subnav').forEach(s=>s.addEventListener('click',()=>{const sub=s.dataset.sub;
-  if(sub===curSetSub){openSettings(sub);return;}guardLeave(()=>openSettings(sub));}));
+  if(sub===curSetSub){openSettings(sub);return;}guardLeave(()=>openSettings(sub),_subTitle(sub));}));
 window.flyGo=sub=>{const go=()=>{flyHide(true);openSettings(sub);};
-  if(sub===curSetSub)go();else guardLeave(go);};
+  if(sub===curSetSub)go();else guardLeave(go,_subTitle(sub));};
 document.addEventListener('click',e=>{if(!e.target.closest('#navSettings')&&!e.target.closest('.navfly'))flyHide(true);});
 window.addEventListener('resize',()=>{if(_fly.classList.contains('on'))_flyPos();});
 function navTo(v){const n=document.querySelector('.navitem[data-view="'+v+'"]');if(n)n.click();}
