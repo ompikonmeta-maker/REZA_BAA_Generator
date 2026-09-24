@@ -20,8 +20,10 @@ DEFAULT_CONFIG = {
         },
     },
     "detail": {
-        # sel judul lokasi (opsional) — diisi nama lokasi
+        # sel judul lokasi (opsional) — diisi nilai field data lokasi {cell: field}
         "location_cells": {},
+        # sel teks statis (opsional) — diisi teks tetap {cell: text}
+        "static_cells": {},
         "inventory": {
             "start_row": 32, "max_rows": 5,
             "cols": {"nama_barang": "B", "merk_type": "C", "jumlah": "E",
@@ -255,6 +257,8 @@ def build_workbook(template_path: str, template_config: dict, locations: list[di
     warnings = []
     log_row = cfg["log"]["start_row"]
     log_cols = cfg["log"]["columns"]
+    log_sources = cfg["log"].get("sources", {}) or {}
+    log_value = cfg["log"].get("value", {}) or {}
     used_titles: set = set()
     _img_keep: list = []          # tahan buffer gambar sampai workbook disimpan
 
@@ -281,6 +285,13 @@ def build_workbook(template_path: str, template_config: dict, locations: list[di
             _set(log_row, "jumlah", item.get("jumlah", ""))
             _set(log_row, "sn_tagging", item.get("sn_tagging", ""))
             _set(log_row, "keterangan", item.get("keterangan", ""))
+            # Override nilai kolom LOG bila admin memilih sumber non-default
+            # (Field data / Inventory) di menu Mapping. 'hdr' = biarkan default.
+            for _f, _src in log_sources.items():
+                if _src == "data":
+                    _set(log_row, _f, data.get(log_value.get(_f, _f), ""))
+                elif _src == "inv":
+                    _set(log_row, _f, item.get(log_value.get(_f, _f), ""))
             log_row += 1
 
         # --- sheet detail per lokasi (duplikasi template) ---
@@ -292,6 +303,12 @@ def build_workbook(template_path: str, template_config: dict, locations: list[di
         for cell, field in cfg["detail"].get("location_cells", {}).items():
             try:
                 ws[cell] = data.get(field, "")
+            except Exception:
+                pass
+
+        for cell, text in cfg["detail"].get("static_cells", {}).items():
+            try:
+                ws[cell] = text
             except Exception:
                 pass
 
