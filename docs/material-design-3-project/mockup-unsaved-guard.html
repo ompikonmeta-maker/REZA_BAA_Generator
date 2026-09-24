@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mockup — Guard perubahan belum disimpan</title>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#f4f6f6;--pane:#ffffff;--ink:#161c1b;--mut:#697472;--faint:#98a3a1;
+    --line:#e8ecec;--field:#f6f8f8;--pri:#04726f;--pri2:#0aa39d;--sec:#e2efee;--onsec:#00413f;
+    --warn:#b3541e;--warnbg:#fbead9;--accent:#ec5a73;--scrim:8,14,13;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.55 "Segoe UI",Roboto,system-ui}
+  .wrap{max-width:960px;margin:0 auto;padding:22px 18px 60px}
+  .mi{font-family:"Material Symbols Outlined";font-size:20px;line-height:1;vertical-align:middle}
+  h1{font-family:'Sora';font-size:19px;font-weight:800;margin:0 0 3px}
+  .lead{color:var(--mut);margin:0 0 18px;font-size:13px}
+
+  .picker{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+  .seg{display:inline-flex;background:var(--pane);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .seg button{border:none;background:transparent;padding:9px 14px;font:600 13px inherit;cursor:pointer;color:var(--mut)}
+  .seg button.on{background:var(--sec);color:var(--onsec)}
+
+  /* fake settings layout */
+  .demo{display:grid;grid-template-columns:190px 1fr;gap:16px;background:var(--pane);border:1px solid var(--line);border-radius:20px;overflow:hidden;min-height:360px}
+  @media(max-width:640px){.demo{grid-template-columns:1fr}}
+  .nav{background:var(--field);padding:12px;display:flex;flex-direction:column;gap:3px}
+  .nav .it{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:11px;cursor:pointer;color:var(--mut);font-weight:600;font-size:13px}
+  .nav .it:hover{background:#eaeeee}
+  .nav .it.on{background:var(--sec);color:var(--onsec)}
+  .body{padding:18px 20px;position:relative;min-width:0}
+  .body h3{font-family:'Sora';font-weight:700;font-size:15px;margin:0 0 12px}
+  label.fl{display:block;font-size:11px;font-weight:700;letter-spacing:.3px;color:var(--mut);text-transform:uppercase;margin:0 0 5px}
+  .inp{width:100%;background:var(--field);border:1px solid transparent;border-radius:12px;padding:10px 12px;font:14px inherit;color:var(--ink);margin-bottom:12px}
+  .inp:focus{outline:none;background:var(--pane);border-color:var(--pri2);box-shadow:0 0 0 3px rgba(10,163,157,.14)}
+
+  /* save bar */
+  .savebar{display:flex;align-items:center;gap:10px;margin-top:6px;padding:10px 12px;border-radius:12px;background:var(--field);transition:.2s}
+  .savebar.dirty{background:var(--warnbg)}
+  .savebar .st{font-size:12.5px;font-weight:600;color:var(--mut);display:flex;align-items:center;gap:6px}
+  .savebar.dirty .st{color:var(--warn)}
+  .savebar .grow{flex:1}
+  .btn{display:inline-flex;align-items:center;gap:7px;border:none;border-radius:12px;padding:10px 15px;font:700 13px inherit;cursor:pointer;transition:.15s}
+  .btn.fill{background:var(--pri);color:#fff}.btn.fill:hover{background:#065c59}
+  .btn.fill:disabled{background:#cfd8d7;color:#fff;cursor:not-allowed}
+  .btn.tone{background:var(--sec);color:var(--onsec)}.btn.tone:hover{background:#d3e8e6}
+  .btn.text{background:transparent;color:var(--pri)}.btn.text:hover{background:var(--field)}
+  .btn.ghostwarn{background:transparent;color:var(--warn)}.btn.ghostwarn:hover{background:var(--warnbg)}
+  .btn.sm{padding:8px 12px;font-size:12.5px}
+  .btn .mi{font-size:18px}
+  .tip{margin-top:14px;color:var(--faint);font-size:12px}
+
+  /* ===== overlay (dim + blur + spring) ===== */
+  .ov{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;padding:18px;
+    background:rgba(var(--scrim),0);backdrop-filter:blur(0);-webkit-backdrop-filter:blur(0);
+    pointer-events:none;transition:background .38s ease,backdrop-filter .38s ease}
+  .ov.open{background:rgba(var(--scrim),.5);backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);pointer-events:auto}
+  .ov.bottom{align-items:flex-end;justify-content:center}
+  .box{background:var(--pane);border-radius:24px;box-shadow:0 24px 60px rgba(20,30,29,.28);width:100%;max-width:420px;
+    opacity:0;transform:scale(.94) translateY(12px);transition:opacity .38s cubic-bezier(.4,0,.2,1),transform .42s cubic-bezier(.34,1.25,.5,1)}
+  .ov.open .box{opacity:1;transform:none}
+  .ov.bottom .box{max-width:520px;border-radius:26px 26px 0 0;transform:translateY(30px)}
+  .ov.bottom.open .box{transform:none}
+
+  /* Variant A — dialog + ikon */
+  .dA{padding:24px 22px 18px;text-align:center}
+  .dA .ic{width:56px;height:56px;border-radius:50%;background:var(--warnbg);color:var(--warn);display:grid;place-items:center;margin:0 auto 14px}
+  .dA .ic .mi{font-size:28px}
+  .dA h4{font-family:'Sora';font-weight:800;font-size:17px;margin:0 0 6px}
+  .dA p{color:var(--mut);font-size:13.5px;margin:0 0 20px}
+  .dA .acts{display:flex;flex-direction:column;gap:8px}
+  .dA .acts .btn{width:100%;justify-content:center;padding:12px}
+  .dA .row2{display:flex;gap:8px}.dA .row2 .btn{flex:1}
+
+  /* Variant B — kompak, kiri-rata, 3 tombol sebaris */
+  .dB{padding:20px}
+  .dB .hd{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .dB .hd .mi{color:var(--warn)}
+  .dB h4{font-family:'Sora';font-weight:800;font-size:15.5px;margin:0}
+  .dB p{color:var(--mut);font-size:13px;margin:0 0 18px}
+  .dB .acts{display:flex;justify-content:flex-end;gap:6px;flex-wrap:wrap}
+
+  /* Variant C — bottom sheet + handle */
+  .dC{padding:8px 20px 20px}
+  .dC .handle{width:40px;height:4px;border-radius:4px;background:var(--line);margin:8px auto 14px}
+  .dC .hd{display:flex;align-items:flex-start;gap:12px;margin-bottom:16px}
+  .dC .hd .ic{width:42px;height:42px;border-radius:12px;background:var(--warnbg);color:var(--warn);display:grid;place-items:center;flex:0 0 auto}
+  .dC h4{font-family:'Sora';font-weight:800;font-size:16px;margin:0 0 3px}
+  .dC .hd p{color:var(--mut);font-size:13px;margin:0}
+  .dC .acts{display:flex;gap:8px}.dC .acts .btn{flex:1;justify-content:center;padding:12px}
+
+  .labels{background:var(--pane);border:1px solid var(--line);border-radius:16px;padding:16px 18px;margin-top:18px}
+  .labels h3{font-family:'Sora';font-size:14px;margin:0 0 10px}
+  .labels table{width:100%;border-collapse:collapse;font-size:13px}
+  .labels td{padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+  .labels td:first-child{color:var(--mut);white-space:nowrap;font-weight:600;width:130px}
+  .labels tr:last-child td{border-bottom:none}
+  .chip{display:inline-block;background:var(--field);border-radius:8px;padding:3px 9px;margin:2px 4px 2px 0;font-size:12.5px}
+  .chip.rec{background:var(--sec);color:var(--onsec);font-weight:700}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Guard "perubahan belum disimpan"</h1>
+  <p class="lead">Muncul saat kamu pindah submenu sementara tombol Simpan masih aktif (ada perubahan). Pilih gaya dialog di bawah, ubah field lalu klik menu lain untuk mencoba.</p>
+
+  <div class="picker">
+    <div class="seg" id="seg">
+      <button class="on" data-v="A">Opsi A · Dialog + ikon</button>
+      <button data-v="B">Opsi B · Kompak</button>
+      <button data-v="C">Opsi C · Bottom sheet</button>
+    </div>
+  </div>
+
+  <div class="demo">
+    <nav class="nav" id="nav">
+      <div class="it on" data-m="Field Data Lokasi"><span class="mi">list_alt</span>Field Data Lokasi</div>
+      <div class="it" data-m="Field Inventory"><span class="mi">inventory_2</span>Field Inventory</div>
+      <div class="it" data-m="Field Photo & Capture"><span class="mi">photo_library</span>Field Photo</div>
+      <div class="it" data-m="Template"><span class="mi">description</span>Template</div>
+    </nav>
+    <div class="body">
+      <h3 id="secTitle">Field Data Lokasi</h3>
+      <label class="fl">Nama field</label>
+      <input class="inp" id="f1" value="Nama Lokasi" oninput="markDirty()">
+      <label class="fl">Label tampil</label>
+      <input class="inp" id="f2" value="Nama Lokasi" oninput="markDirty()">
+
+      <div class="savebar" id="savebar">
+        <span class="st" id="savest"><span class="mi" style="font-size:16px">check_circle</span>Semua perubahan tersimpan</span>
+        <span class="grow"></span>
+        <button class="btn fill" id="saveBtn" onclick="doSave()" disabled><span class="mi">save</span>Simpan</button>
+      </div>
+      <p class="tip">Coba: ubah salah satu field → tombol Simpan aktif & bar jadi kuning → klik menu lain di kiri.</p>
+    </div>
+  </div>
+
+  <!-- Label suggestions -->
+  <div class="labels">
+    <h3>Saran label tombol (pilih favoritmu)</h3>
+    <table>
+      <tr><td>Simpan</td><td><span class="chip rec">Simpan &amp; lanjut</span><span class="chip">Simpan perubahan</span><span class="chip">Simpan dulu</span></td></tr>
+      <tr><td>Buang perubahan</td><td><span class="chip rec">Buang perubahan</span><span class="chip">Lanjut tanpa simpan</span><span class="chip">Abaikan perubahan</span></td></tr>
+      <tr><td>Tetap di sini</td><td><span class="chip rec">Kembali</span><span class="chip">Batal</span><span class="chip">Tetap di halaman</span></td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- OVERLAY -->
+<div class="ov" id="ov"><div class="box" id="box"></div></div>
+
+<script>
+  const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+  let variant='A', dirty=false, pendingMenu=null, curMenu='Field Data Lokasi';
+
+  $$('#seg button').forEach(b=>b.onclick=()=>{$$('#seg button').forEach(x=>x.classList.remove('on'));b.classList.add('on');variant=b.dataset.v;});
+
+  function markDirty(){dirty=true;$('#saveBtn').disabled=false;
+    const sb=$('#savebar');sb.classList.add('dirty');
+    $('#savest').innerHTML='<span class="mi" style="font-size:16px">edit</span>Perubahan belum disimpan';}
+  function markSaved(){dirty=false;$('#saveBtn').disabled=true;
+    const sb=$('#savebar');sb.classList.remove('dirty');
+    $('#savest').innerHTML='<span class="mi" style="font-size:16px">check_circle</span>Semua perubahan tersimpan';}
+  function doSave(){markSaved();}
+
+  // navigation with guard
+  $$('#nav .it').forEach(it=>it.onclick=()=>{
+    const target=it.dataset.m;
+    if(target===curMenu) return;
+    if(dirty){ pendingMenu=target; openGuard(); return; }
+    switchTo(target);
+  });
+  function switchTo(m){
+    curMenu=m; $$('#nav .it').forEach(x=>x.classList.toggle('on',x.dataset.m===m));
+    $('#secTitle').textContent=m; markSaved();
+  }
+
+  const TXT={title:'Perubahan belum disimpan',
+    body:m=>`Kamu punya perubahan di halaman ini yang belum disimpan. Simpan dulu sebelum pindah ke <b>${m}</b>?`,
+    save:'Simpan &amp; lanjut', discard:'Buang perubahan', stay:'Kembali'};
+
+  function tpl(){
+    const b=TXT.body(pendingMenu);
+    if(variant==='A') return `<div class="dA">
+      <div class="ic"><span class="mi">error</span></div>
+      <h4>${TXT.title}</h4><p>${b}</p>
+      <div class="acts">
+        <button class="btn fill" onclick="guard('save')"><span class="mi">save</span>${TXT.save}</button>
+        <div class="row2">
+          <button class="btn tone" onclick="guard('stay')">${TXT.stay}</button>
+          <button class="btn ghostwarn" onclick="guard('discard')">${TXT.discard}</button>
+        </div>
+      </div></div>`;
+    if(variant==='B') return `<div class="dB">
+      <div class="hd"><span class="mi">error</span><h4>${TXT.title}</h4></div>
+      <p>${b}</p>
+      <div class="acts">
+        <button class="btn text" onclick="guard('stay')">${TXT.stay}</button>
+        <button class="btn ghostwarn sm" onclick="guard('discard')">${TXT.discard}</button>
+        <button class="btn fill sm" onclick="guard('save')"><span class="mi">save</span>${TXT.save}</button>
+      </div></div>`;
+    return `<div class="dC">
+      <div class="handle"></div>
+      <div class="hd"><span class="ic"><span class="mi">save_as</span></span>
+        <div><h4>${TXT.title}</h4><p>${b}</p></div></div>
+      <div class="acts">
+        <button class="btn tone" onclick="guard('stay')">${TXT.stay}</button>
+        <button class="btn ghostwarn" onclick="guard('discard')">${TXT.discard}</button>
+        <button class="btn fill" onclick="guard('save')"><span class="mi">save</span>Simpan</button>
+      </div></div>`;
+  }
+  function openGuard(){
+    const ov=$('#ov');ov.classList.toggle('bottom',variant==='C');
+    $('#box').innerHTML=tpl();ov.style.display='flex';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>ov.classList.add('open')));
+  }
+  function closeGuard(){const ov=$('#ov');ov.classList.remove('open');setTimeout(()=>ov.style.display='none',430);}
+  window.guard=function(action){
+    if(action==='save'){doSave();closeGuard();switchTo(pendingMenu);}
+    else if(action==='discard'){closeGuard();switchTo(pendingMenu);}
+    else{closeGuard();} // stay
+    pendingMenu=null;
+  };
+  $('#ov').addEventListener('click',e=>{if(e.target.id==='ov')guard('stay');});
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#ov').classList.contains('open'))guard('stay');});
+  // demo: auto-buka salah satu opsi via hash (#A/#B/#C) untuk snapshot
+  (function(){const v=(location.hash||'').slice(1).toUpperCase();if(['A','B','C'].includes(v)){
+    variant=v;$$('#seg button').forEach(x=>x.classList.toggle('on',x.dataset.v===v));
+    markDirty();pendingMenu='Field Inventory';openGuard();}})();
+</script>
+</body>
+</html>
